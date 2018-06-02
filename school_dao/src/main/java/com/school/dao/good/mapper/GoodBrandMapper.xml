@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.school.dao.good.GoodBrandMapper" >
+  <resultMap id="BaseResultMap" type="com.school.domain.entity.good.GoodBrand" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="logo_path" property="logoPath" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, brand_name, logo_path, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from good_brand
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from good_brand
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.school.domain.entity.good.GoodBrand" >
+    insert into good_brand (id, brand_name, logo_path, 
+      create_time)
+    values (#{id,jdbcType=BIGINT}, #{brandName,jdbcType=VARCHAR}, #{logoPath,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.school.domain.entity.good.GoodBrand" >
+    insert into good_brand
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="brandName != null" >
+        brand_name,
+      </if>
+      <if test="logoPath != null" >
+        logo_path,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="brandName != null" >
+        #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="logoPath != null" >
+        #{logoPath,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.school.domain.entity.good.GoodBrand" >
+    update good_brand
+    <set >
+      <if test="brandName != null" >
+        brand_name = #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="logoPath != null" >
+        logo_path = #{logoPath,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.school.domain.entity.good.GoodBrand" >
+    update good_brand
+    set brand_name = #{brandName,jdbcType=VARCHAR},
+      logo_path = #{logoPath,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="queryPage" resultType="com.school.domain.entity.good.GoodBrand" parameterType="map">
+		select gb.* from good_brand gb
+		<where>
+			<if test="status != null and status != '' ">
+				and gb.status = #{status}
+			</if>
+			<if test="keyword != null and keyword != '' ">
+				and (gb.brand_name like concat('%',#{keyword},'%')
+				or gb.logo_path like concat('%',#{keyword},'%'))
+			</if>
+		</where>
+		ORDER BY gb.id asc
+	</select>
+	
+	<select id="getAll" resultType="com.school.domain.entity.good.GoodBrand">
+		select gb.* from good_brand gb
+	</select>
+</mapper>

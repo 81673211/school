@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.school.dao.security.RoleMapper">
+	<resultMap id="BaseResultMap" type="com.school.domain.entity.security.Role">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="role_name" property="roleName" jdbcType="VARCHAR" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, role_name, remark
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from role
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from role
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert" parameterType="com.school.domain.entity.security.Role" useGeneratedKeys="true" keyProperty="id">
+		insert into role (id, role_name, remark
+		)
+		values (#{id,jdbcType=BIGINT}, #{roleName,jdbcType=VARCHAR},
+		#{remark,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.school.domain.entity.security.Role" useGeneratedKeys="true" keyProperty="id">
+		insert into role
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="roleName != null">
+				role_name,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="roleName != null">
+				#{roleName,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.school.domain.entity.security.Role">
+		update role
+		<set>
+			<if test="roleName != null">
+				role_name = #{roleName,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.school.domain.entity.security.Role">
+		update role
+		set role_name = #{roleName,jdbcType=VARCHAR},
+		remark = #{remark,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<!-- 分页查询角色组信息 -->
+	<select id="queryPage" parameterType="map" resultType="com.school.domain.entity.security.Role">
+		SELECT id,role_name,remark
+		FROM role r
+		<where>
+			<if test="keyword != null and keyword != '' ">
+				and r.role_name like concat('%',#{keyword},'%')
+			</if>
+		</where>
+		ORDER BY id
+	</select>
+	
+	<select id="getAll" resultType="com.school.domain.entity.security.Role">
+		select r.*
+		from role r
+		ORDER BY r.id
+	</select>
+	
+	<select id="getZNodes" parameterType="map" resultType="com.school.domain.vo.security.MenuJson">
+		(select mi.id,mi.pid p_id,mi.resource_name name,NULL res_id,0 checked
+		from menu_info mi)
+		union all
+		(select NULL id,ri.menu_id p_id,ri.res_name name,ri.id res_id,
+		<if test="roleId != null and roleId != ''">
+			(select IF(count(1)>0,1,0)
+			from role_resource rr
+			where rr.role_id = #{roleId} and rr.resource_id = res_id
+			) checked
+		</if>
+		<if test="roleId == null or roleId == ''">
+			0 checked
+		</if>
+		from resource_info ri)
+	</select>
+	
+	<delete id="delResourceByRoleId" parameterType="java.lang.Long">
+		delete from role_resource
+		where role_id = #{roleId}
+	</delete>
+	
+	<insert id="saveRoleResource" parameterType="map">
+		insert into role_resource (role_id, resource_id)
+		values (#{roleId,jdbcType=BIGINT},#{resourceId,jdbcType=BIGINT})
+	</insert>
+	
+	<insert id="saveRoleResourceOnce" parameterType="map">
+		insert into role_resource (role_id,resource_id)
+		values
+		<foreach collection ="list" item="resId" index= "index" separator =",">
+            (#{roleId,jdbcType=BIGINT}, #{resId,jdbcType=BIGINT})
+        </foreach >
+	</insert>
+	
+	<select id="checkIsNotExist" parameterType="java.lang.String" resultType="java.lang.Boolean">
+		select IF(count(1)>0,0,1)
+		from role r
+		where r.role_name = #{roleName}
+	</select>
+</mapper>
