@@ -1,0 +1,64 @@
+.dataTables_wrapper .dataTables_length{float:left;padding-top:10px;padding-left: 20px;}
+.label-L{width: 90px;float: left;position: relative;text-align: right;}
+.con-r{margin-left: 90px;}
+.caseInfo li{float: left;width: 50%;}
+.col-sm-2 ,.col-sm-1,.col-sm-3,.col-sm-9,.col-sm-7,.col-sm-10,.col-sm-4,.col-sm-6,.col-sm-11{padding-right: 0;padding-left: 0;}
+.rowNh{background-color: #f5f5f5;padding: 10px 0 25px 0;}
+.row{margin-left: 15px;margin-right: 15px;}
+.cld-bg{background-color: #fff;border: 1px solid #eee;margin: 10px 20px 0 20px;padding:15px;}
+.tab-tit {  border-color: #ddd;  background-color: #f5f5f5;  color: #444;  }
+.ts-err label.error{right: 45px;}
+.iput-dis{display: inline-block;background-color: #eee}
+
+
+/***分页***/
+.pag-box{width:100%;overflow:hidden;margin-top:20px;}
+.yhl-pags {
+  width: 100%;
+  overflow:hidden;
+  font-size: 12px;
+  color: #666;
+  margin:0 auto;
+  clear:both;
+  /* span{padding:0 5px;} */ }
+.yhl-pags .yhl-pags-box {float:right;}
+.yhl-pags span, .yhl-pags a {
+  float: left; }
+
+.yhl-pags .pag-last:hover, .yhl-pags .pag-home:hover {
+  color: #6a96df; }
+.yhl-pags .pag-left, .yhl-pags .pag-right,.yhl-pags .pag-number,.yhl-pags .pag-last, .yhl-pags .pag-home {
+  line-height: 26px;
+  height: 26px;
+  margin: 0 3px 6px;
+  padding: 0 10px;
+  border:1px solid #ccc;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  text-decoration:none;
+   color: #666;
+  }
+
+.yhl-pags .pag-number:hover {border-color:#ddd;}
+.yhl-pags .pag-sum{padding-left:10px;line-height: 26px;height: 26px;}
+.yhl-pags .pag-left:hover, .yhl-pags .pag-right:hover {border-color:#ddd;}
+.yhl-pack-box .pack-div:hover {border-color:#ddd;}
+.yhl-pags .pag-number.on {border:0;font-weight:600;color:#444;}
+.yhl-pags .pag-last:hover, .yhl-pags .pag-home:hover {border-color:#ddd;color:#666;}
+.yn-pg-oth .yhl-pags .pag-left, .yn-pg-oth .yhl-pags .pag-right{height: 26px;margin: 0 5px;}
+.yn-pg-oth .yhl-pags .pag-number{line-height: 26px;height: 26px;}
+label.error{z-index: 1000}
+
+/*login*/
+.loginTop{height: 457px;background: url("../image/login_bg.png") center no-repeat #245fa9;}
+.loginBox{padding:70px 0;width: 370px; margin: 0 auto;}
+.footerLogoin{border-top:1px solid #eaeaea;background-color: #f6f7fb;height: 90px;text-align:center;line-height: 90px;position: absolute;bottom: 0;width: 100%;}
+
+
+
+
+
+
+
+

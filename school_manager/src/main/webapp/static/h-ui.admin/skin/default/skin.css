@@ -1,0 +1,59 @@
+@charset "utf-8";
+/* 默认 黑色 */	
+/*全站默认字体颜色*/
+a{color:#333}a:hover,a:focus,.maincolor,.maincolor a{color:#06c}
+.navbar{ background:#2e81d1}/*顶部导航*/
+	.navbar-logo,.navbar-logo-m,.navbar-slogan,.navbar-userbar{color:#fff}/*logo 及 用户信息文字颜色*/
+	.navbar-logo:hover,.navbar-logo-m:hover{color:#fff;text-decoration: none}
+	
+.navbar-nav > ul > li, .navbar-nav > ul > li > a{ color:#fff}/*顶部导航文字颜色*/
+.navbar-userbar > ul> > li,.navbar-userbar > ul> > li > a{ color:#fff}
+
+.Hui-aside{}/*侧边栏*/
+	.Hui-aside .menu_dropdown dt{font-size:14px;}/*左侧二级导航菜单*/
+	.Hui-aside .menu_dropdown dt.selected{color:#2e81d1}
+	.Hui-aside .menu_dropdown dt:hover{}
+	.Hui-aside .menu_dropdown dt:hover [class^="icon-"]{ color:#7e8795}
+	.Hui-aside .menu_dropdown li a{border-bottom: 1px solid #e0e8ed;}
+	.Hui-aside .menu_dropdown li a:hover,.Hui-aside .menu_dropdown li.on{color:#fff;background-color:#5a98de}
+	.Hui-aside .menu_dropdown li.on a{color:#fff}
+	.Hui-aside .menu_dropdown li.current a,.menu_dropdown li.current a:hover{color:#148cf1}
+	/*.Hui-aside .menu_dropdown dt .Hui-iconfont{ color:#a0a7b1}*/
+	.Hui-aside .menu_dropdown dt .menu_dropdown-arrow{ color:#b6b7b8}	
+	.dislpayArrow a{background:url(icon_arrow.png) no-repeat 0 0}
+/*main icon*/
+/*案件*/
+.yg-icon {background-image: url(icon_main.png);background-repeat: no-repeat;display: inline-block;position: relative;display: inline-block;width: 28px;height: 28px;vertical-align: middle;}
+.caseMa-icon {background-position: 0 0;}
+.review-icon {background-position: 0 -29px;}
+.stat-icon {background-position: 0 -58px;}
+.book-icon {background-position: 0 -87px;}
+.user-icon {background-position: 0 -116px;}
+.news-icon {background-position: 0 -145px;}
+.juri-icon {background-position: 0 -174px;}
+.yztc-icon {background-position: -87px -174px;}
+/*催收*/
+.csgl-icon {background-position: -29px 0;}
+.sjgl-icon {background-position: -29px -29px;}
+.xcgl-icon {background-position: -29px -58px;}
+.wfgl-icon {background-position: -29px -87px;}
+.xtgl-icon {background-position: -29px -116px;}
+/*OA*/
+.dp-lc-icon {background-position: -58px 0;}
+.dp-bg-icon {background-position: -58px -29px;}
+.dp-rs-icon {background-position: -58px -58px;}
+.dp-cw-icon {background-position: -58px -87px;}
+.dp-yd-icon {background-position: -58px -116px;}
+.dp-news-icon {background-position: -58px -145px;}
+
+.td-xz-icon {background-position: -87px 0;}
+.td-rs-icon {background-position: -87px -29px;}
+.td-cw-icon {background-position: -87px -58px;}
+
+.xt-lc-icon {background-position: -116px 0;}
+.xt-bd-icon {background-position: -116px -29px;}
+.xt-nr-icon {background-position: -116px -58px;}
+.xt-jg-icon {background-position: -116px -87px;}
+.xt-jggl-icon {background-position: -116px -116px;}
+.xt-qx-icon {background-position: -116px -145px;}
+.xt-gs-icon {background-position: -116px -174px;}
