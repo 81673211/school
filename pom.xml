@@ -41,8 +41,8 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>com.postsr</groupId>
-				<artifactId>postsr_dao</artifactId>
+				<groupId>com.2rm1</groupId>
+				<artifactId>school_dao</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 
@@ -568,6 +568,6 @@
 				<filtering>false</filtering>
 			</resource>
 		</resources>
-		<finalName>postsr</finalName>
+		<finalName>school</finalName>
 	</build>
 </project>

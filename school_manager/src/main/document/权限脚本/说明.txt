@@ -1,0 +1,25 @@
+※※※※※※※※※※※※※※※※※※※※※※※※※※※※※※※※※※※※※※※
+注：该文件夹为目录和资源初始化脚本，如项目的目录和资源有变动，请及时更新此处。
+※※※※※※※※※※※※※※※※※※※※※※※※※※※※※※※※※※※※※※※
+
+1.权限控制原理：
+	admin_user中role_id --> role_resource --> resource_info
+	描述：根据当前登录人的角色id找到该角色对应的资源。
+	
+2.菜单权限：
+    resource_info中menu_id --> menu_info
+	当操作员登录后，可以获取登录人的角色，进而得到登录人所拥有的资源。而资源中有menu_id，即可以得到资源对应的目录。
+	注：由于资源意味着具体的某个操作，所以那些拥有二级菜单的一级菜单并不在资源列表中（这些一级菜单的作用只是为了统一它的二级菜单，并不是具体的操作）。
+	所以，通过resource中的menu_id找到相应的菜单后，还应该找出它们的一级菜单（如果有的话）。
+	
+3.其他说明：
+	对于resource_info表，同一个菜单下的resource的menu_id应该一致。
+	对于resource_info表中的parent_res_id，所有列表性质（即页面）的resource的parent_res_id都应为0，其他该页面的操作resource的parent_res_id都
+   应为该页面resource的id。
+	对于menu_info，所有一级菜单的pid为0，mindex决定菜单的排序。
+	
+4.关于过滤器和拦截器
+	LoginUserFilter：加入过滤器来过滤请求地址。
+	AuthorizationInterceptor：拦截器对所有 *.do 的请求进行拦截，并判断是否具有权限。
+
+如有疑问，请联系开发人员zhouylard。
