@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+         xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd">  
+     <diskStore path="java.io.tmpdir"/>
+    <cache name="cache"
+        maxElementsInMemory="19"
+        eternal="false"
+       timeToIdleSeconds="120"
+        timeToLiveSeconds="120"
+        overflowToDisk="true">
+      
+      <cacheEventListenerFactory
+        class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+        properties="replicateAsynchronously=true,replicatePuts=true, replicateUpdates=true,replicateUpdatesViaCopy=false,replicateRemovals=true"/> 
+    </cache>
+    
+      <cacheManagerPeerListenerFactory class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory"
+				properties="hostName=127.0.0.1, port=40000,socketTimeoutMillis=2000"/>
+      <cacheManagerPeerProviderFactory class="net.sf.ehcache.distribution.RMICacheManagerPeerProviderFactory"
+        properties="peerDiscovery=manual,rmiUrls=//127.0.0.1:40001/cache,timeToLive=32" /> 
+    <defaultCache
+        maxElementsInMemory="1000"
+        eternal="false"
+        timeToIdleSeconds="120"
+        timeToLiveSeconds="120"
+        overflowToDisk="true"
+      />
+      </ehcache>
