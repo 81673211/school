@@ -9,6 +9,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
+	<groupId>com.2rm1</groupId>
 	<artifactId>school_dao</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>school_dao</name>
