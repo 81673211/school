@@ -1,0 +1,4 @@
+中英词汇表：
+快件：express
+订单：order
+智能柜：smart cabinet
