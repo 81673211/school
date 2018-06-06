@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+
+	<description>扩展的applicationContext文件列表</description>
+
+<!-- 	<import resource="ehcache/applicationContext-ehcache.xml" /> -->
+
+	<import resource="cache/applicationContext-cache.xml" />
+	
+	<import resource="profile/applicationContext-profile.xml" />
+	
+<!-- 	<import resource="schedule/applicationContext-quartz.xml" /> -->
+
+</beans>

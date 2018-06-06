@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+
+	<!-- 数据库驱动包位置 -->
+<!--	<classPathEntry location="D:\mvnlib\mysql\mysql-connector-java\5.1.27\mysql-connector-java-5.1.27.jar" /> -->
+ 	<classPathEntry location="D:\MavenRepo\mysql\mysql-connector-java\5.1.27\mysql-connector-java-5.1.27.jar" />
+<!-- 	<classPathEntry location="D:\OpenSource\repository\mysql\mysql-connector-java\5.1.27\mysql-connector-java-5.1.27.jar" /> -->
+
+	<context id="orcle" targetRuntime="MyBatis3">
+	
+		<property name="javaFileEncoding" value="UTF-8"/>
+    	<!-- 格式化java代码 -->
+    	<property name="javaFormatter" value="org.mybatis.generator.api.dom.DefaultJavaFormatter"/>
+    	<!-- 格式化XML代码 -->
+    	<property name="xmlFormatter" value="org.mybatis.generator.api.dom.DefaultXmlFormatter"/>
+		
+		<!-- 不需要注释 -->
+		<commentGenerator>
+			<property name="suppressAllComments" value="true" />
+		</commentGenerator>
+		
+		<!-- 数据库链接URL、用户名、密码 -->
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://192.168.20.213:3306/casemanager" userId="root" password="root">
+		</jdbcConnection>
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+		<!-- 生成模型的包名和位置 -->
+		<javaModelGenerator targetPackage="com.justitia.domain.entity.casemanage" targetProject="justitia_case_manager\src\main\java">
+			<property name="enableSubPackages" value="true" />
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+		<!-- 生成的映射文件包名和位置 -->
+		<sqlMapGenerator targetPackage="com.justitia.dao.casemanage.mapper" targetProject="justitia_case_manager\src\main\java">
+			<property name="enableSubPackages" value="true" />
+		</sqlMapGenerator>
+		<!-- 生成DAO的包名和位置 -->
+		<javaClientGenerator type="XMLMAPPER" targetPackage="com.justitia.dao.casemanage" targetProject="justitia_case_manager\src\main\java">
+			<property name="enableSubPackages" value="true" />
+		</javaClientGenerator>
+		
+
+	<table tableName="case_info" domainObjectName="CaseInfo" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+	<!-- case
+ 	<table tableName="case_case_file" domainObjectName="CaseCaseFile" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="case_person" domainObjectName="CasePerson" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="case_guaranty" domainObjectName="CaseGuaranty" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="case_type" domainObjectName="CaseType" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	 -->
+ 	
+
+ 	
+ 	<!-- caseAuth 
+ 	<table tableName="case_auth" domainObjectName="CaseAuth" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="case_auth_commission" domainObjectName="CaseAuthCommission" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="case_auth_managefee" domainObjectName="CaseAuthManagefee" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="case_auth_merge" domainObjectName="CaseAuthMerge" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="case_auth_topad" domainObjectName="CaseAuthTopad" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	 -->
+ 	
+ 	<!-- caseflow
+ 	<table tableName="case_flow" domainObjectName="CaseFlow" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="case_flow_compromise" domainObjectName="CaseFlowCompromise" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="case_flow_conservation" domainObjectName="CaseFlowConservation" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="case_flow_disposefortune" domainObjectName="CaseFlowDisposefortune" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="case_flow_drop" domainObjectName="CaseFlowDrop" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="case_flow_endimplement" domainObjectName="CaseFlowEndimplement" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="case_flow_frozen" domainObjectName="CaseFlowFrozen" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="case_flow_intervene" domainObjectName="CaseFlowIntervene" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="case_flow_intervene_file" domainObjectName="CaseFlowInterveneFile" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="case_flow_judgment" domainObjectName="CaseFlowJudgment" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="case_flow_notice" domainObjectName="CaseFlowNotice" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="case_flow_opposition" domainObjectName="CaseFlowOpposition" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="case_flow_payment" domainObjectName="CaseFlowPayment" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="case_flow_proof" domainObjectName="CaseFlowProof" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="case_flow_proof_file" domainObjectName="CaseFlowProofFile" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="case_flow_receiptimplement" domainObjectName="CaseFlowReceiptimplement" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="case_flow_resumeimplement" domainObjectName="CaseFlowResumeimplement" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="case_flow_session" domainObjectName="CaseFlowSession" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="case_flow_stopimplement" domainObjectName="CaseFlowStopimplement" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="case_bank_loan" domainObjectName="CaseBankLoan" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="case_flow_avoid" domainObjectName="CaseFlowAvoid" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="case_criminal_flow" domainObjectName="CaseCriminalFlow" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="case_flow_nodes" domainObjectName="CaseFlowNodes" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	 -->
+ 	
+ 	<!-- security
+ 	<table tableName="case_menus" domainObjectName="CaseMenus" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+	<table tableName="case_role" domainObjectName="CaseRole" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="case_menu_role" domainObjectName="CaseMenuRole" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="case_role_member" domainObjectName="CaseRoleMember" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	 -->
+ 	
+ 	<!-- message
+ 	<table tableName="case_message" domainObjectName="CaseMessage" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="case_notice" domainObjectName="CaseNotice" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="case_notice_department" domainObjectName="CaseNoticeDepartment" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	 -->
+ 	 	
+ 	<!-- cms 
+ 	<table tableName="case_files" domainObjectName="CaseFiles" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="case_custinfo" domainObjectName="CaseCustinfo" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	 -->
+ 	
+ 	<!-- account
+ 	<table tableName="account_info" domainObjectName="AccountInfo" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="account_credential" domainObjectName="AccountCredential" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="account_online" domainObjectName="AccountOnline" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="party_entity" domainObjectName="PartyEntity" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="party_struct" domainObjectName="PartyStruct" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="case_contract_info" domainObjectName="CaseContractInfo" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	<table tableName="company" domainObjectName="Company" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+ 	-->
+ 	
+ 	
+ </context>
+</generatorConfiguration>
