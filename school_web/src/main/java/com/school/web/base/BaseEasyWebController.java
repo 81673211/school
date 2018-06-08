@@ -131,7 +131,7 @@ public abstract class BaseEasyWebController {
         dateFormat = "yyyy-MM-dd HH:mm:ss";
         mapping.put(Date.class, new SimpleDateFormatSerializer(dateFormat));
     }
-	
+
 	/**
 	 * 设置默认函数为list()
 	 */
@@ -139,7 +139,7 @@ public abstract class BaseEasyWebController {
 //	public ModelAndView index(@RequestParam(value = "pageNo", defaultValue = "1") int pageNumber,
 //			@RequestParam(value = "pageSize", defaultValue = PAGE_SIZE) int pageSize,HttpServletRequest request,
 //			HttpServletResponse response) throws FuBusinessException {
-//		
+//
 //		return list(pageNumber,pageSize,request);
 //	}
 
