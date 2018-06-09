@@ -51,6 +51,13 @@ public class ConstantUrl {
 	// 商品审核
 	public static final String GOOD_INFO_AUTH_URL = "/good/goodAuth/auth.do";
 	
+	/** 订单管理 */
+	/**
+	 * 商品类型
+	 */
+	// 订单详情
+	public static final String ORDER_DETAIL_URL = "/order/detail.do";
+	
 	
 	/** 权限管理 */
 	/**
@@ -83,88 +90,4 @@ public class ConstantUrl {
 	// 资源删除
 	public static final String RESOURCE_INFO_DEL_URL = "/permission/resourceInfo/del.do";
 	
-	/**
-	 * 充值管理
-	 */
-	// 充值详情
-	public static final String RECHARGE_DETAIL_URL = "/recharge/detail.do";
-	
-	/**
-	 * 短信管理
-	 */
-	public static final String SHORT_MESSAGE_DETAIL_URL = "/shortMessage/detail.do";
-	
-	/**
-	 * 经销商管理
-	 */
-	// 经销商详情
-	public static final String MERCHANT_INFO_DETAIL_URL = "/merchant/merchantInfo/detail.do";
-	// 经销商编辑
-	public static final String MERCHANT_INFO_EDIT_URL = "/merchant/merchantInfo/edit.do";
-	// 经销商删除
-	public static final String MERCHANT_INFO_DEL_URL = "/merchant/merchantInfo/del.do";
-	
-	
-	
-	
-	
-	public static final String APP_VERSION_DETAIL_URL = "/app/appVersionInfo/detail.do";
-	// appversion
-	public static final String APP_VERSION_EDIT_URL = "/app/appVersionInfo/edit.do";
-	// appversion
-	public static final String APP_VERSION_DEL_URL = "/app/appVersionInfo/del.do";
-	public static final String APP_VERSION_FORCE_URL = "/app/appVersionInfo/isForce.do";
-	public static final String APP_VERSION_CACLE_FORCE_URL = "/app/appVersionInfo/cacleForce.do";
-	// appversion============================
-
-
-	// black==================================
-	public static final String BLACK_DETAIL_URL = "/user/black/detail.do";
-	// black
-	public static final String BLACK_DISABLE_URL = "/user/black/disable.do";
-	// black
-	public static final String BLACK_ENABLE_URL = "/user/black/enable.do";
-	// black==================================
-
-	// userpoints=============================
-	public static final String USERPOINTS_DETAIL_URL = "/user/userPointsInfo/detail.do";
-	// userpoints
-	public static final String USERPOINTS_ADD_URL = "/user/userInfo/toAddScore.do";
-	// userpoints=============================
-
-
-	// userInfo===============================
-	public static final String USERINFO_DETAIL_URL = "/user/userInfo/detail.do";
-	// black
-	public static final String USERINFO_DISABLE_URL = "/user/userInfo/disable.do";
-	// black
-	public static final String USERINFO_ENABLE_URL = "/user/userInfo/enable.do";
-	public static final String USERINFO_ADDBLACK_URL = "/user/userInfo/addBlack.do";
-	// userInfo===============================
-
-	// userPostInfo===============================
-	public static final String USERPOSTINFO_DETAIL_URL = "/user/userPostInfo/detail.do";
-	// userPostInfo===============================
-
-	// notice=====================
-	public static final String NOTICE_DETAIL_URL = "/content/notice/detail.do";
-	public static final String NOTICE_EDIT_URL = "/content/notice/edit.do";
-	public static final String NOTICE_DEL_URL = "/content/notice/del.do";
-	public static final String NOTICE_SHOW_URL = "/content/notice/show.do";
-	public static final String NOTICE_HIDE_URL = "/content/notice/hide.do";
-	// notice=====================
-
-	// notice=====================
-	public static final String QUESTION_DETAIL_URL = "/content/question/detail.do";
-	public static final String QUESTION_DEL_URL = "/content/question/del.do";
-	public static final String QUESTION_ANSWER_URL = "/content/question/toAnswer.do";
-	// notice=====================
-	// notice=====================
-	public static final String BANNER_DETAIL_URL = "/content/banner/detail.do";
-	public static final String BANNER_DEL_URL = "/content/questbannerion/del.do";
-	public static final String BANNER_EDIT_URL = "/content/banner/edit.do";
-	public static final String BANNER_HIDE_URL = "/content/banner/hide.do";
-	public static final String BANNER_SHOWURL = "/content/banner/show.do";
-	// notice=====================
-
 }
