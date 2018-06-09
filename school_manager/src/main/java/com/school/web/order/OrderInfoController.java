@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSON;
 import com.school.constant.ConstantUrl;
 import com.school.domain.entity.order.OrderInfo;
+import com.school.enumeration.OrderStatusEnum;
 import com.school.service.order.OrderInfoService;
 import com.school.util.core.exception.FuBusinessException;
 import com.school.util.core.pager.PageInfo;
@@ -39,7 +40,7 @@ public class OrderInfoController extends BaseEasyWebController {
 			ModelAndView mav) throws FuBusinessException {
 		try {
 			mav.addObject("listData",JSON.toJSON(orderInfoService.queryPage(searchParams)));
-//			mav.addObject("orderStatusMap",JSON.toJSON(StatusManage.orderStatusMap));
+			mav.addObject("orderStatusMap",JSON.toJSON(OrderStatusEnum.getAllStatusEnum()));
 			mav.addObject(PAGE_PARAM_PAGECOUNT, pageInfo.getTotalPage());
 			mav.addObject(PAGE_PARAM_TOTALCOUNT, pageInfo.getTotalRecord());
 			
@@ -59,7 +60,7 @@ public class OrderInfoController extends BaseEasyWebController {
     		ModelAndView mv = new ModelAndView("order/orderDetail");
     		OrderInfo orderInfo = orderInfoService.get(id);
     		mv.addObject("order", JSON.toJSON(orderInfo));
-//    		mv.addObject("orderStatusMap",JSON.toJSON(StatusManage.orderStatusMap));
+    		mv.addObject("orderStatusMap",JSON.toJSON(OrderStatusEnum.getAllStatusEnum()));
     		return mv;
     	}catch(Exception e){
     		throw webExp(e);

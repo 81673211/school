@@ -10,7 +10,7 @@
       var vm_orderManage=avalon.define({
           $id:'orderManage',
           data:${listData},
-//           orderStatusMap:${orderStatusMap},
+          orderStatusMap:${orderStatusMap},
           inputStatus:"${searchParams.status}",
           inputText:"${searchParams.keyword}",
           methods:{
@@ -61,10 +61,10 @@
                         <td>{{el.expressId}}</td>
                         <td>{{el.amount}}</td>
                         <td>{{el.isFinished}}</td>
-<!--                         <td>{{@orderStatusMap[el.status]}}</td> -->
                         <td>{{el.createdTime}}</td>
                         <td>{{el.modifiedTime}}</td>
-                        <td>{{el.status}}</td>
+                        <td>{{@orderStatusMap[el.status]}}</td>
+<!--                         <td>{{el.status}}</td> -->
                         <td class="but_xq">
                         	<btn:hasUrlPerm link="${detailUrl}">
 	                           	<a class="btn btn-primary-outline size-S radius" :click="@methods.detail(el.id,@methods.detailUrl)">详情</a>
