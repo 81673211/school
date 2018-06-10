@@ -5,7 +5,7 @@
 <html>
 <head>
 	<%@include file="/WEB-INF/view/common/common.jsp"%>
-	<title>邮政扫码-管理系统</title>
+	<title>快递管理系统</title>
 	<style type="text/css">
 		.msg-tips{
 			width: 10px;
