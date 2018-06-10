@@ -28,15 +28,20 @@
     <div class="navbar navbar-fixed-top">
         <div class="container-fluid cl"> 
 <!--         	<a class="logo navbar-logo f-l mr-10 hidden-xs" href="/aboutHui.shtml"><img src="../../static/image/logo.png"></a> -->
-            <a class="logo navbar-logo f-l mr-10 hidden-xs" href="javascript:void(0);">邮政扫码-管理系统</a>
+            <a class="logo navbar-logo f-l mr-10 hidden-xs" href="javascript:void(0);">快递管理系统</a>
             <nav id="Hui-userbar" class="nav navbar-nav navbar-userbar hidden-xs">
                 <ul class="cl">
-<%--                     <li>${sessionScope.adminMerchant.adminName}</li> --%>
-                    <li class="dropDown dropDown_hover"> <a href="#" class="dropDown_A"><c:if test="${!empty sessionScope.adminMerchant}">${sessionScope.adminMerchant.adminName}</c:if><i class="Hui-iconfont">&#xe6d5;</i></a>
+<%--                     <li>${sessionScope.adminUser.adminName}</li> --%>
+                    <li class="dropDown dropDown_hover"> <a href="#" class="dropDown_A"><c:if test="${!empty sessionScope.adminUser}">${sessionScope.adminUser.adminName}</c:if><i class="Hui-iconfont">&#xe6d5;</i></a>
                         <ul class="dropDown-menu menu radius box-shadow">
                             <li><a href="javascript:void(0);" :click="@alterPwd()">修改密码</a></li>
                             <li><a href="${ctx}/managers/user/logout.htm">退出系统</a></li>
                         </ul>
+                    </li>
+                    <li id="Hui-msg"> 
+                    	<a href="#" title="消息">
+                    		<span class="badge badge-danger">1</span><i class="Hui-iconfont" style="font-size:18px">&#xe68a;</i>
+                    	</a>
                     </li>
                 </ul>
             </nav>
