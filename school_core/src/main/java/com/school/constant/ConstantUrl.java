@@ -58,6 +58,28 @@ public class ConstantUrl {
 	// 订单详情
 	public static final String ORDER_DETAIL_URL = "/order/detail.do";
 	
+	/** 快递公司管理 */
+	/**
+	 * 快递公司
+	 */
+	// 快递公司详情
+	public static final String EXPRESS_COMPANY_DETAIL_URL = "/expressCompany/detail.do";
+	// 快递公司编辑
+	public static final String EXPRESS_COMPANY_EDIT_URL = "/expressCompany/edit.do";
+	// 快递公司删除
+	public static final String EXPRESS_COMPANY_DEL_URL = "/expressCompany/del.do";
+	
+	/** 客户管理 */
+	/**
+	 * 客户
+	 */
+	// 客户详情
+	public static final String CUSTOMER_DETAIL_URL = "/customer/detail.do";
+	// 客户编辑
+	public static final String CUSTOMER_EDIT_URL = "/customer/edit.do";
+	// 客户删除
+	public static final String CUSTOMER_DEL_URL = "/customer/del.do";
+	
 	
 	/** 权限管理 */
 	/**
