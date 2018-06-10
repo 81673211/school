@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.school.dao.express.ExpressReceiveMapper">
+    <resultMap id="BaseResultMap" type="com.school.domain.entity.express.ExpressReceive">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="code" property="orderNo" jdbcType="VARCHAR"/>
+        <result column="sender_phone" property="senderPhone" jdbcType="VARCHAR"/>
+        <result column="sender_name" property="senderName" jdbcType="VARCHAR"/>
+        <result column="sender_addr" property="senderAddr" jdbcType="VARCHAR"/>
+        <result column="receiver_phone" property="receiverPhone" jdbcType="VARCHAR"/>
+        <result column="receiver_name" property="receiverName" jdbcType="VARCHAR"/>
+        <result column="sender_province_id" property="senderProvinceId" jdbcType="BIGINT"/>
+        <result column="sender_city_id" property="senderCityId" jdbcType="BIGINT"/>
+        <result column="sender_district_id" property="senderDistrictId" jdbcType="BIGINT"/>
+        <result column="company_id" property="companyId" jdbcType="BIGINT"/>
+        <result column="company_code" property="companyCode" jdbcType="VARCHAR"/>
+        <result column="company_name" property="companyName" jdbcType="VARCHAR"/>
+        <result column="creator" property="creator" jdbcType="BIGINT"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+        <result column="is_deleted" property="isDeleted" jdbcType="BIT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,
+        code,
+        sender_phone,
+        sender_name,
+        sender_addr,
+        receiver_phone,
+        receiver_name,
+        sender_province_id,
+        sender_city_id,
+        sender_district_id,
+        company_id,
+        company_code,
+        company_name,
+        creator,
+        created_time,
+        is_deleted
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from express_receive
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from express_receive
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+    <insert id="insert" parameterType="com.school.domain.entity.express.ExpressReceive">
+
+    </insert>
+    <insert id="insertSelective" parameterType="com.school.domain.entity.express.ExpressReceive">
+        insert into express_receive
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="code != null">
+                code,
+            </if>
+            <if test="senderPhone != null">
+                sender_phone,
+            </if>
+            <if test="senderName != null">
+                sender_name,
+            </if>
+            <if test="senderAddr != null">
+                sender_addr,
+            </if>
+            <if test="receiverPhone != null">
+                receiver_phone,
+            </if>
+            <if test="receiverName != null">
+                receiver_name,
+            </if>
+            <if test="senderProvinceId != null and senderProvinceId != 0">
+                sender_province_id,
+            </if>
+            <if test="senderCityId != null and senderCityId !=0">
+                sender_city_id,
+            </if>
+            <if test="senderDistrictId != null and senderDistrictId != 0">
+                sender_district_id,
+            </if>
+            <if test="companyId != null and companyId != 0">
+                company_id,
+            </if>
+            <if test="companyCode != null">
+                company_code,
+            </if>
+            <if test="companyName != null">
+                company_name,
+            </if>
+            <if test="creator != null and creator != 0">
+                creator,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="code != null">
+                #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="senderPhone != null">
+                #{senderPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="senderName != null">
+                #{senderName,jdbcType=VARCHAR},
+            </if>
+            <if test="senderAddr != null">
+                #{senderAddr,jdbcType=VARCHAR},
+            </if>
+            <if test="receiverPhone != null">
+                #{receiverPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="receiverName != null">
+                #{receiverName,jdbcType=VARCHAR},
+            </if>
+            <if test="senderProvinceId != null and senderProvinceId != 0">
+                #{senderProvinceId,jdbcType=BIGINT},
+            </if>
+            <if test="senderCityId != null and senderCityId != 0">
+                #{senderCityId,jdbcType=BIGINT},
+            </if>
+            <if test="senderDistrictId != null and senderDistrictId != 0">
+                #{senderDistrictId,jdbcType=BIGINT},
+            </if>
+            <if test="companyId != null and companyId != 0">
+                #{companyId,jdbcType=BIGINT},
+            </if>
+            <if test="companyCode != null">
+                #{companyCode,jdbcType=VARCHAR},
+            </if>
+            <if test="companyName != null">
+                #{companyName,jdbcType=VARCHAR},
+            </if>
+            <if test="creator != null">
+                #{creator,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.school.domain.entity.express.ExpressReceive">
+        update express_receive
+        <set>
+            <if test="senderPhone != null">
+                sender_phone = #{senderPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="senderName != null">
+                sender_name = #{senderName,jdbcType=VARCHAR},
+            </if>
+            <if test="senderAddr != null">
+                sender_addr = #{senderAddr,jdbcType=VARCHAR},
+            </if>
+            <if test="receiverPhone != null">
+                receiver_phone = #{receiverPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="receiverName != null">
+                receiver_name = #{receiverName,jdbcType=VARCHAR},
+            </if>
+            <if test="senderProvinceId != null and senderProvinceId != 0">
+                sender_province_id = #{senderProvinceId,jdbcType=BIGINT},
+            </if>
+            <if test="senderCityId != null and senderCityId != 0">
+                sender_city_id = #{senderCityId,jdbcType=BIGINT},
+            </if>
+            <if test="senderDistrictId != null and senderDistrictId != 0">
+                sender_district_id = #{senderDistrictId,jdbcType=BIGINT},
+            </if>
+            <if test="companyId != null and companyId != 0">
+                company_id = #{companyId,jdbcType=BIGINT},
+            </if>
+            <if test="companyCode != null">
+                company_code = #{companyCode,jdbcType=VARCHAR},
+            </if>
+            <if test="companyName != null">
+                company_name = #{companyName,jdbcType=VARCHAR},
+            </if>
+            <if test="isDeleted != null">
+                is_deleted = #{isDeleted,jdbcType=BIT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.school.domain.entity.express.ExpressReceive">
+
+    </update>
+
+    <select id="queryPage" resultType="com.school.domain.entity.express.ExpressReceive" parameterType="map">
+
+    </select>
+</mapper>

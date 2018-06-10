@@ -5,13 +5,12 @@ import com.school.dao.base.BaseDao;
 import com.school.service.base.BaseService;
 import com.school.util.core.exception.FuServiceException;
 import com.school.util.core.utils.GenericsUtils;
-
+import com.school.vo.request.BaseVo;
 import lombok.extern.slf4j.Slf4j;
-
 import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-
 
 
 /**
@@ -26,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @SuppressWarnings("unchecked")
 @Transactional(rollbackFor = Exception.class)
-public class BaseServiceImpl<M,T> implements BaseService<M, T>{
+public class BaseServiceImpl<M,T> implements BaseService<M, T> {
 	
 	@Autowired
 	private SqlSessionTemplate sessionTemplate;
@@ -36,7 +35,7 @@ public class BaseServiceImpl<M,T> implements BaseService<M, T>{
 	 * @return void  
 	 * @throws FuServiceException
 	 */
-    public M save(M m) throws FuServiceException{
+    public M save(M m) throws FuServiceException {
     	try {
 			
 			BaseDao daoImpl = (BaseDao) sessionTemplate.getMapper(GenericsUtils.getSuperClassGenricType(getClass(), 1));
@@ -54,7 +53,7 @@ public class BaseServiceImpl<M,T> implements BaseService<M, T>{
 	 * @return 更新实体  
 	 * @throws FuServiceException
 	 */
-    public M update(M m) throws FuServiceException{
+    public M update(M m) throws FuServiceException {
     	try {
 			
     		BaseDao daoImpl = (BaseDao) sessionTemplate.getMapper(GenericsUtils.getSuperClassGenricType(getClass(), 1));
@@ -106,5 +105,16 @@ public class BaseServiceImpl<M,T> implements BaseService<M, T>{
 		 return FuServiceException.createErr(910000);
 	}
 
+	/**
+	 * 将vo对象转换为可持久化po对象
+	 *
+	 * @param vo
+	 * @return
+	 */
+	public M converterVo2Po(BaseVo vo, Class<M> po) throws IllegalAccessException, InstantiationException {
+		M m = po.newInstance();
+		BeanUtils.copyProperties(vo, m);
+		return m;
+	}
 
 }

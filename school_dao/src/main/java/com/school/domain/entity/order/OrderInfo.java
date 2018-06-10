@@ -4,9 +4,9 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class OrderInfo {
-	/**
-	 * 主键ID
-	 */
+    /**
+     * 主键ID
+     */
     private Long id;
 
     /**
@@ -18,6 +18,10 @@ public class OrderInfo {
      * 快递ID
      */
     private Long expressId;
+    /**
+     * 快递TYPE,0寄件，1收件
+     */
+    private Integer expressType;
 
     /**
      * 订单状态，参考com.school.common.OrderStatusEnum
@@ -63,6 +67,30 @@ public class OrderInfo {
      * 是否已删除：0-否，1-是
      */
     private Boolean isDeleted;
+
+    public Integer getExpressType() {
+        return expressType;
+    }
+
+    public void setExpressType(Integer expressType) {
+        this.expressType = expressType;
+    }
+
+    public Boolean getFinished() {
+        return isFinished;
+    }
+
+    public void setFinished(Boolean finished) {
+        isFinished = finished;
+    }
+
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
+    }
 
     public Long getId() {
         return id;

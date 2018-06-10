@@ -36,16 +36,32 @@
 			 </bean>  -->
 		</mvc:message-converters>
 	</mvc:annotation-driven>
- <!-- 	<bean id="logAspectBean" class="com.school.web.log.SystemLogAspect">
-	</bean> 
-	<aop:config>
-		<aop:aspect id="logAspect" ref="logAspectBean">
-			<aop:pointcut id="logPoint"
-				expression="@annotation(com.school.web.log.ActionLogAnnotation)" />
-			<aop:after-returning pointcut-ref="logPoint"
-				arg-names="joinPoint,retValue" returning="retValue" method="afterReturning" />
-		</aop:aspect>
-	</aop:config> -->
+
+	<!-- 国际化配置 -->
+	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver"/>
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="useCodeAsDefaultMessage" value="true"/>
+	</bean>
+
+	<!-- 注册验证器 -->
+	<mvc:annotation-driven validator="validator"/>
+
+	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+		<property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>
+		<!--这里配置将使用上面国际化配置的messageSource -->
+		<property name="validationMessageSource" ref="messageSource"/>
+	</bean>
+
+	<!-- 	<bean id="logAspectBean" class="com.school.web.log.SystemLogAspect">
+       </bean>
+       <aop:config>
+           <aop:aspect id="logAspect" ref="logAspectBean">
+               <aop:pointcut id="logPoint"
+                   expression="@annotation(com.school.web.log.ActionLogAnnotation)" />
+               <aop:after-returning pointcut-ref="logPoint"
+                   arg-names="joinPoint,retValue" returning="retValue" method="afterReturning" />
+           </aop:aspect>
+       </aop:config> -->
 	<!-- 定义JSP文件的位置 -->
 		<!-- 静态资源映射 -->
 	<bean id="rpe" class="com.school.common.webUtil.ResourcePathExposer"	init-method="init" />
