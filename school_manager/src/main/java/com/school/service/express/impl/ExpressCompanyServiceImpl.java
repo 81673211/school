@@ -1,5 +1,6 @@
 package com.school.service.express.impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.school.dao.express.ExpressCompanyMapper;
 import com.school.domain.entity.express.ExpressCompany;
+import com.school.domain.entity.user.AdminUser;
 import com.school.service.base.impl.BaseServiceImpl;
 import com.school.service.express.ExpressCompanyService;
 
@@ -23,10 +25,16 @@ public class ExpressCompanyServiceImpl extends BaseServiceImpl<ExpressCompany, E
 	}
 	
 	@Override
-	public void saveOrUpdate(ExpressCompany expressCompany) {
+	public void saveOrUpdate(ExpressCompany expressCompany,AdminUser user) {
 		if(expressCompany.getId() == null){
+			expressCompany.setCreator(user.getAdminName());
+			expressCompany.setCreatedTime(new Date());
+			expressCompany.setModifier(user.getAdminName());
+			expressCompany.setModifiedTime(new Date());
 			this.save(expressCompany);
 		}else{
+			expressCompany.setModifier(user.getAdminName());
+			expressCompany.setModifiedTime(new Date());
 			this.update(expressCompany);
 		}
 	}

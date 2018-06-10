@@ -18,7 +18,7 @@ requirejs(['requirejs.config'], function () {
             };
 
 
-           var model=vm_goodTypeManage;
+           var model=vm_expressCompanyManage;
            /*
             * 顶部 搜索
             */
@@ -39,7 +39,7 @@ requirejs(['requirejs.config'], function () {
  					closeBtn: 1,
  					fix:true,
  					area: ['450px', '280px'],
- 					title:'商品类型详情',
+ 					title:'快递公司详情',
  					shadeClose: true,
  					maxmin: false,
  					content: getCtx() + detailUrl + '?id='+id
@@ -52,14 +52,14 @@ requirejs(['requirejs.config'], function () {
             model.methods.add=function(editUrl){
             	layer.open({
 					type: 2,
-                    title:"新增商品类型",
+                    title:"新增快递公司",
                     area: ['460px', '400px'],
                     btn: ['确定','取消'],
 					content : [getCtx() + editUrl,'no'],
 					yes : function(index, layero) {
 						// 调用iframe层的表单提交方法
                         var iframeWin = window[layero.find('iframe')[0]['name']];
-                        iframeWin.vm_goodTypeEdit.methods.validAndSubmit(function(){
+                        iframeWin.vm_expressCompanyEdit.methods.validAndSubmit(function(){
                         	queryVal();
                         });
 					},
@@ -73,14 +73,14 @@ requirejs(['requirejs.config'], function () {
             model.methods.edit = function(id,editUrl) {
 				layer.open({
 					type: 2,
-                    title:"修改商品类型",
+                    title:"修改快递公司",
                     area: ['460px', '400px'],
                     btn: ['确定','取消'],
 					content : [getCtx() + editUrl + '?id=' + id,'no'],
 					yes : function(index, layero) {
 						// 调用iframe层的表单提交方法
                         var iframeWin = window[layero.find('iframe')[0]['name']];
-                        iframeWin.vm_goodTypeEdit.methods.validAndSubmit(function(){
+                        iframeWin.vm_expressCompanyEdit.methods.validAndSubmit(function(){
                         	queryVal();
                         });
 					},

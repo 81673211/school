@@ -14,7 +14,9 @@ import com.alibaba.fastjson.JSON;
 import com.school.common.model.AjaxResult;
 import com.school.constant.ConstantUrl;
 import com.school.domain.entity.express.ExpressCompany;
+import com.school.domain.entity.user.AdminUser;
 import com.school.service.express.ExpressCompanyService;
+import com.school.util.SessionUtils;
 import com.school.util.core.exception.FuBusinessException;
 import com.school.util.core.pager.PageInfo;
 import com.school.util.core.utils.StrUtil;
@@ -89,12 +91,13 @@ public class ExpressCompanyController extends BaseEasyWebController {
 	 */
 	@ResponseBody
 	@RequestMapping("/save.do")
-	public AjaxResult save(ExpressCompany expressCompany){
+	public AjaxResult save(HttpServletRequest request,ExpressCompany expressCompany){
 		try{
 			if(StrUtil.isBlank(expressCompany.getName())){
 				return AjaxResult.fail("请填写快递公司名称");
 			}
-			expressCompanyService.saveOrUpdate(expressCompany);
+			AdminUser sessionUser = SessionUtils.getSessionUser(request);
+			expressCompanyService.saveOrUpdate(expressCompany,sessionUser);
 			return AjaxResult.success("保存成功", JSON.toJSON(expressCompany));
 		}catch(Exception e){
 			log.error("保存快递公司出错：" + e.getMessage());

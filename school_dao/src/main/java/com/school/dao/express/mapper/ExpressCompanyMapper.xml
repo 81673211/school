@@ -153,11 +153,10 @@
   <select id="queryPage" resultType="com.school.domain.entity.express.ExpressCompany" parameterType="map">
 		select ec.* from express_company ec
 		<where>
-			<if test="status != null and status != '' ">
-				and ec.status = #{status}
-			</if>
 			<if test="keyword != null and keyword != '' ">
-				and ec.name like concat('%',#{keyword},'%')
+				and (ec.name like concat('%',#{keyword},'%')
+					 or ec.code like concat('%',#{keyword},'%')
+					 or ec.phone like concat('%',#{keyword},'%'))
 			</if>
 		</where>
 		ORDER BY ec.id desc

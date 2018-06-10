@@ -32,16 +32,16 @@
             style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
     <div class="page-container">
         <div class="bk-gray pd-20 clearfix">
-            <div class="revi-staus f-l">
-                <span class="f-l lh-30">状态：</span>
-                <span class="select-box radius f-l" style="width: 120px;">
-                 <select class="select" size="1" name="status" :duplex="@inputStatus">
-                 	<option value="">全部</option>
-                    <option :for="(k,v) in @expressCompanyStatusMap" :attr="{value:k}">{{v}}</option> 
-                 </select>
-             </span>
-            </div>
-            <div class="tran-serch f-l ml-50">
+<!--             <div class="revi-staus f-l"> -->
+<!--                 <span class="f-l lh-30">状态：</span> -->
+<!--                 <span class="select-box radius f-l" style="width: 120px;"> -->
+<!--                  <select class="select" size="1" name="status" :duplex="@inputStatus"> -->
+<!--                  	<option value="">全部</option> -->
+<!--                     <option :for="(k,v) in @expressCompanyStatusMap" :attr="{value:k}">{{v}}</option>  -->
+<!--                  </select> -->
+<!--              </span> -->
+<!--             </div> -->
+            <div class="tran-serch f-l">
                 <input type="text" name="keywordSearch" id="" placeholder="名称/编码" style="width:200px" class="input-text" :duplex="@inputText">
                 <button name="" id="" class="btn btn-primary radius" type="button" :click="@methods.query"><i class="Hui-iconfont"></i> 搜索</button>
             </div>
@@ -59,7 +59,7 @@
                         <th width="100">名称</th>
                         <th width="100">编码</th>
                         <th width="100">联系电话</th>
-                        <th width="100">联系地址</th>
+                        <th width="100">地址</th>
                         <th width="100">创建时间</th>
                         <th width="100">修改时间</th>
                         <th width="50">操作</th>

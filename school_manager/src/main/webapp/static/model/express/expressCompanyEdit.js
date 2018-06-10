@@ -7,42 +7,42 @@ requirejs([ 'requirejs.config' ], function() {
 			icheck, Autocom, WdatePicker, validation, methods, zeo, Hui,
 			select2) {
 		$(function() {
-			var model = vm_goodTypeEdit;
-			$("#goodTypeForm").validate({
+			var model = vm_expressCompanyEdit;
+			$("#expressCompanyForm").validate({
             	rules: {
-            		typeName:{
+            		name:{
             			required:true
             		},
-            		pid:{
-                        digits:true
+            		code:{
+                        required:true
                     },
-                    sort:{
+                    phone:{
                         required:true,
                         digits:true
                     },
-                    status:{
+                    addr:{
                     	required:true
                     }
                 },
                 messages:{
-                	typeName:{
-                		required:'请填写类型名称'
+                	name:{
+                		required:'请填写名称'
                 	},
-                	pid:{
+                	code:{
+                		required:'请填写编码'
+                	},
+                	phone:{
+                		required:'请填写联系电话',
                 		digits:'请填写数字'
                 	},
-                	sort:{
-                		required:'请填写节点排序',
-                		digits:'请填写数字'
-                	},
-                	status:{
-                		required:'请选择状态'
+                	addr:{
+                		required:'请填写地址'
                 	}
                 }
             });
 			model.methods.validAndSubmit = function(callback) {
-				if ($("#goodTypeForm").valid()) {
-					$("#goodTypeForm").ajaxSubmit(function(json){
+				if ($("#expressCompanyForm").valid()) {
+					$("#expressCompanyForm").ajaxSubmit(function(json){
 						if(json.ok){
                 			layer.msg(json.msg, {
           						icon : 1,
