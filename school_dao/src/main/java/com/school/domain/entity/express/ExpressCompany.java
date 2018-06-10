@@ -2,6 +2,8 @@ package com.school.domain.entity.express;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class ExpressCompany {
     private Long id;
 
@@ -15,6 +17,7 @@ public class ExpressCompany {
 
     private String creator;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")  
     private Date createdTime;
 
     private String modifier;
