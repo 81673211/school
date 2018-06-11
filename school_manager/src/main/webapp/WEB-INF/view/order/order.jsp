@@ -61,8 +61,8 @@
                         <td>{{el.expressId}}</td>
                         <td>{{el.amount}}</td>
                         <td>{{el.isFinished}}</td>
-                        <td>{{el.createdTime}}</td>
-                        <td>{{el.modifiedTime}}</td>
+                        <td>{{el.createdTime|date('yyyy-MM-dd HH:mm:ss')}}</td>
+                        <td>{{el.modifiedTime|date('yyyy-MM-dd HH:mm:ss')}}</td>
                         <td>{{@orderStatusMap[el.status]}}</td>
 <!--                         <td>{{el.status}}</td> -->
                         <td class="but_xq">

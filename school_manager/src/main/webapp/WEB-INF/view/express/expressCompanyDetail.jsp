@@ -46,13 +46,13 @@
                 <div class="row cl">
                     <div class="col-xs-4 text-r">创建时间：</div>
                     <div class="col-xs-8">
-                        <p>{{@data.createdTime}}</p>
+                        <p>{{@data.createdTime|date('yyyy-MM-dd HH:mm:ss')}}</p>
                     </div>
                 </div>
                 <div class="row cl">
                     <div class="col-xs-4 text-r">修改时间：</div>
                     <div class="col-xs-8">
-                        <p>{{@data.modifiedTime}}</p>
+                        <p>{{@data.modifiedTime|date('yyyy-MM-dd HH:mm:ss')}}</p>
                     </div>
                 </div>
             </div>

@@ -72,8 +72,8 @@
                         <td>{{el.code}}</td>
                         <td>{{el.phone}}</td>
                         <td>{{el.addr}}</td>
-                        <td>{{el.createdTime}}</td>
-                        <td>{{el.modifiedTime}}</td>
+                        <td>{{el.createdTime|date('yyyy-MM-dd HH:mm:ss')}}</td>
+                        <td>{{el.modifiedTime|date('yyyy-MM-dd HH:mm:ss')}}</td>
                         <td class="but_xq">
                         	<btn:hasUrlPerm link="${detailUrl}">
 	                           	<a class="btn btn-primary-outline size-S radius" :click="@methods.detail(el.id,@methods.detailUrl)">详情</a>
