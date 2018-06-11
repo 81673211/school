@@ -1,6 +1,5 @@
 package com.school.vo.request;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -17,22 +16,14 @@ public class CreateSendExpressVo extends BaseVo {
     private String receiverName;//	收件人名字
     @NotNull(message = "收件人地址不为空")
     private String receiverAddr;//	收件人地址
-    private String receiverProvinceId;    //收件人省份ID
-    private String receiverCityId;//收件人城市ID
-    private String receiverDistrictId;        //收件人区县ID
+    @NotNull(message = "收件人省份不为空")
+    private Long receiverProvinceId;    //收件人省份ID
+    @NotNull(message = "收件人城市不为空")
+    private Long receiverCityId;//收件人城市ID
+    @NotNull(message = "收件人区县不为空")
+    private Long receiverDistrictId;        //收件人区县ID
     @NotNull(message = "快递公司编号不为空")
-    private String companyId;    //快递公司
-    @Min(value = 0, message = "金额不能小于零")
-    private Double amount;
-
-
-    public Double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Double amount) {
-        this.amount = amount;
-    }
+    private Long companyId;    //快递公司
 
     public String getSenderPhone() {
         return senderPhone;
@@ -74,35 +65,35 @@ public class CreateSendExpressVo extends BaseVo {
         this.receiverAddr = receiverAddr;
     }
 
-    public String getReceiverProvinceId() {
-        return receiverProvinceId;
-    }
-
-    public void setReceiverProvinceId(String receiverProvinceId) {
-        this.receiverProvinceId = receiverProvinceId;
-    }
-
-    public String getReceiverCityId() {
-        return receiverCityId;
-    }
-
-    public void setReceiverCityId(String receiverCityId) {
-        this.receiverCityId = receiverCityId;
-    }
-
-    public String getReceiverDistrictId() {
-        return receiverDistrictId;
-    }
-
-    public void setReceiverDistrictId(String receiverDistrictId) {
-        this.receiverDistrictId = receiverDistrictId;
-    }
-
-    public String getCompanyId() {
+    public Long getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(String companyId) {
+    public void setCompanyId(Long companyId) {
         this.companyId = companyId;
+    }
+
+    public Long getReceiverProvinceId() {
+        return receiverProvinceId;
+    }
+
+    public void setReceiverProvinceId(Long receiverProvinceId) {
+        this.receiverProvinceId = receiverProvinceId;
+    }
+
+    public Long getReceiverCityId() {
+        return receiverCityId;
+    }
+
+    public void setReceiverCityId(Long receiverCityId) {
+        this.receiverCityId = receiverCityId;
+    }
+
+    public Long getReceiverDistrictId() {
+        return receiverDistrictId;
+    }
+
+    public void setReceiverDistrictId(Long receiverDistrictId) {
+        this.receiverDistrictId = receiverDistrictId;
     }
 }

@@ -1,8 +1,11 @@
 package com.school.service.express.impl;
 
 import com.school.common.ExpressTypeEnum;
+import com.school.dao.express.ExpressCompanyMapper;
 import com.school.dao.express.ExpressSendMapper;
 import com.school.dao.order.OrderInfoMapper;
+import com.school.domain.entity.express.Express;
+import com.school.domain.entity.express.ExpressCompany;
 import com.school.domain.entity.express.ExpressSend;
 import com.school.domain.entity.order.OrderInfo;
 import com.school.enumeration.OrderStatusEnum;
@@ -22,23 +25,27 @@ import java.util.UUID;
  * @author jame
  */
 @Service
-@Transactional(rollbackFor = Exception.class)
+@Transactional(rollbackFor = ExpressException.class)
 public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, ExpressSendMapper> implements ExpressSendService {
 
     @Autowired
     private ExpressSendMapper expressSendMapper;
     @Autowired
     private OrderInfoMapper orderInfoMapper;
+    @Autowired
+    private ExpressCompanyMapper expressCompanyMapper;
 
     @Override
     public void createSendExpress(CreateSendExpressVo expressVo) throws ExpressException {
         try {
-            Long id = expressSendMapper.insertSelective(converterVo2Po(expressVo, ExpressSend.class));
-            if (!(id > 0L)) {
+            ExpressSend expressSend = converterVo2Po(expressVo, ExpressSend.class);
+            boxExpressCompany(expressSend);
+            Long expressId = expressSendMapper.insertSelective(expressSend);
+            if (!(expressId > 0L)) {
                 Log.error.error("create send express error,when insert table 'express_send' the number of affected rows is 0");
                 throw new ExpressException("create send express error,when insert table 'express_send' the number of affected rows is 0");
             }
-            if (!(orderInfoMapper.insertSelective(initOrderInfo(expressVo, id)) > 0)) {
+            if (!(orderInfoMapper.insertSelective(initOrderInfo(expressId)) > 0)) {
                 Log.error.error("create send express error,when insert table 'order_info' the number of affected rows is 0");
                 throw new ExpressException("create send express error,when insert table 'order_info' the number of affected rows is 0");
             }
@@ -48,14 +55,41 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
         }
     }
 
-    private OrderInfo initOrderInfo(CreateSendExpressVo expressVo, Long id) {
+    /**
+     * 初始化订单对象
+     *
+     * @param expressId
+     * @return
+     */
+    public OrderInfo initOrderInfo(Long expressId) {
         OrderInfo orderInfo = new OrderInfo();
-        orderInfo.setExpressId(id);
+        orderInfo.setExpressId(expressId);
         orderInfo.setExpressType(ExpressTypeEnum.SEND.getFlag());
         orderInfo.setStatus(OrderStatusEnum.UNPAID.getCode());
-        orderInfo.setAmount(BigDecimal.valueOf(expressVo.getAmount()));
+        orderInfo.setAmount(calcSendExpressAmount());
         orderInfo.setOrderNo(UUID.randomUUID().toString());
         return orderInfo;
     }
+
+    /**
+     * 封装快件对应的物流公司
+     *
+     * @param expressSend
+     */
+    public void boxExpressCompany(Express expressSend) {
+        ExpressCompany expressCompany = expressCompanyMapper.selectByPrimaryKey(expressSend.getCompanyId());
+        expressSend.setCompanyCode(expressCompany.getCode());
+        expressSend.setCompanyName(expressCompany.getName());
+    }
+
+    /**
+     * todo 寄件金额计算
+     *
+     * @return
+     */
+    public BigDecimal calcSendExpressAmount() {
+        return BigDecimal.ZERO;
+    }
+
 
 }

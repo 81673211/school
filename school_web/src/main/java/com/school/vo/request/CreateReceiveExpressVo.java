@@ -1,22 +1,29 @@
-package com.school.domain.entity.express;
+package com.school.vo.request;
 
-import lombok.Data;
-
-import java.util.Date;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author jame
  */
-@Data
-public class ExpressReceive extends Express{
-    private String senderPhone;
-    private String senderName;
-    private String senderAddr;
-    private Long senderProvinceId;
-    private Long senderCityId;
-    private Long senderDistrictId;
+public class CreateReceiveExpressVo extends BaseVo {
+    @NotNull(message = "收件人联系电话不为空")
     private String receiverPhone;
+    @NotNull(message = "收件人姓名不为空")
     private String receiverName;
+    @NotNull(message = "寄件人电话不为空")
+    private String senderPhone;
+    @NotNull(message = "寄件人名字不为空")
+    private String senderName;
+    @NotNull(message = "寄件人地址不为空")
+    private String senderAddr;
+    @NotNull(message = "寄件人省份不为空")
+    private Long senderProvinceId;
+    @NotNull(message = "寄件人城市不为空")
+    private Long senderCityId;
+    @NotNull(message = "寄件人区县不为空")
+    private Long senderDistrictId;
+    @NotNull(message = "快递公司编号不为空")
+    private Long companyId;    //快递公司
 
     public String getSenderPhone() {
         return senderPhone;
@@ -32,6 +39,22 @@ public class ExpressReceive extends Express{
 
     public void setSenderName(String senderName) {
         this.senderName = senderName;
+    }
+
+    public String getReceiverPhone() {
+        return receiverPhone;
+    }
+
+    public void setReceiverPhone(String receiverPhone) {
+        this.receiverPhone = receiverPhone;
+    }
+
+    public String getReceiverName() {
+        return receiverName;
+    }
+
+    public void setReceiverName(String receiverName) {
+        this.receiverName = receiverName;
     }
 
     public String getSenderAddr() {
@@ -66,20 +89,11 @@ public class ExpressReceive extends Express{
         this.senderDistrictId = senderDistrictId;
     }
 
-    public String getReceiverPhone() {
-        return receiverPhone;
+    public Long getCompanyId() {
+        return companyId;
     }
 
-    public void setReceiverPhone(String receiverPhone) {
-        this.receiverPhone = receiverPhone;
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
-
-    public String getReceiverName() {
-        return receiverName;
-    }
-
-    public void setReceiverName(String receiverName) {
-        this.receiverName = receiverName;
-    }
-
 }
