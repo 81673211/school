@@ -127,7 +127,7 @@ public class HttpUtil {
 		}
 
 		final String setCookie = conn.getHeaderField("Set-Cookie");
-		if (StrUtil.isBlank(setCookie) == false) {
+		if (!StrUtil.isBlank(setCookie)) {
 			log.debug("Set cookie: ["+ setCookie +"]");
 			cookies.put(host, setCookie);
 		}
@@ -318,7 +318,7 @@ public class HttpUtil {
 			content.append(line).append('\n');
 			if (isGetCharsetFromContent) {
 				String charsetInContent = ReUtil.get(CHARSET_PATTERN, line, 1);
-				if (StrUtil.isBlank(charsetInContent) == false) {
+				if (!StrUtil.isBlank(charsetInContent)) {
 					charset = charsetInContent;
 					reader = new BufferedReader(new InputStreamReader(in, charset));
 					isGetCharsetFromContent = true;

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.alibaba.fastjson.JSON;
 import com.school.domain.entity.good.GoodInfo;
+import com.school.service.base.AccessTokenService;
 import com.school.service.good.GoodInfoService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -17,12 +18,12 @@ public class TestController {
 	
 	@Autowired
 	private GoodInfoService goodInfoService;
+	@Autowired
+	private AccessTokenService accessTokenService;
 
 	@RequestMapping("/test")
 	public void test(){
-		System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxx");
-		Long id = 1L;
-		GoodInfo goodInfo = goodInfoService.getOne(id);
-		System.out.println(JSON.toJSON(goodInfo));
+		String accessToken = accessTokenService.get();
+		System.out.println(accessToken);
 	}
 }

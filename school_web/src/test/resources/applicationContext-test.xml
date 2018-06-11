@@ -20,7 +20,7 @@
 		<!-- 目前暂不需要 dubbo.properties-->
 		<property name="locations">
 			<list>
-				<value>classpath*:config/redis.properties</value>
+				<value>classpath*:config/redis.development.properties</value>
 				<value>classpath*:config/jdbc.development.properties</value> 
 			</list>
 		</property>
