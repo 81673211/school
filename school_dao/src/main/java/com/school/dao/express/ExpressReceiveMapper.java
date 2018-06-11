@@ -14,7 +14,7 @@ public interface ExpressReceiveMapper extends BaseDao {
 
     int insert(ExpressReceive record);
 
-    int insertSelective(ExpressReceive record);
+    Long insertSelective(ExpressReceive record);
 
     ExpressReceive selectByPrimaryKey(Long id);
 

@@ -15,9 +15,9 @@
         <result column="company_id" property="companyId" jdbcType="BIGINT"/>
         <result column="company_code" property="companyCode" jdbcType="VARCHAR"/>
         <result column="company_name" property="companyName" jdbcType="VARCHAR"/>
-        <result column="creator" property="creator" jdbcType="BIGINT"/>
         <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
         <result column="is_deleted" property="isDeleted" jdbcType="BIT"/>
+        <result column="express_status" property="expressStatus" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
         id,
@@ -35,7 +35,8 @@
         company_name,
         creator,
         created_time,
-        is_deleted
+        is_deleted,
+        express_status
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
@@ -50,7 +51,8 @@
     <insert id="insert" parameterType="com.school.domain.entity.express.ExpressReceive">
 
     </insert>
-    <insert id="insertSelective" parameterType="com.school.domain.entity.express.ExpressReceive">
+    <insert id="insertSelective" keyProperty="id" useGeneratedKeys="true"
+            parameterType="com.school.domain.entity.express.ExpressReceive">
         insert into express_receive
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="code != null">
@@ -91,6 +93,9 @@
             </if>
             <if test="creator != null and creator != 0">
                 creator,
+            </if>
+            <if test="expressStatus != null and expressStatus != 0">
+                express_status,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -133,6 +138,9 @@
             <if test="creator != null">
                 #{creator,jdbcType=VARCHAR},
             </if>
+            <if test="expressStatus != null and expressStatus != 0">
+                #{expressStatus,jdbcType=INTEGER},
+            </if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.school.domain.entity.express.ExpressReceive">
@@ -173,6 +181,9 @@
             </if>
             <if test="isDeleted != null">
                 is_deleted = #{isDeleted,jdbcType=BIT},
+            </if>
+            <if test="expressStatus != null and expressStatus != 0">
+                express_status = #{expressStatus,jdbcType=INTEGER},
             </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
