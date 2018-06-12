@@ -21,4 +21,7 @@ public interface CustomerMapper extends BaseDao {
     int updateByPrimaryKey(Customer record);
     
     List<Customer> queryPage(Map<String, Object> paramMap);
+
+
+    Customer selectByOpenId(String openId);
 }

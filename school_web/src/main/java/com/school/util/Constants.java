@@ -13,6 +13,5 @@ public final class Constants {
 
     public static final String ACCESS_TOKEN_KEY = "redis:access_token:key";
 
-    public static final String ACCESS_TOKEN_GET_URL =
-            "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${APPID}&secret=${APPSECRET}";
+    public static final String USER_AUTH_CALLBACK_URL = "http://www.glove1573.cn/getOpenId";
 }

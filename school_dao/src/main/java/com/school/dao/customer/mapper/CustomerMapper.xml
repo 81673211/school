@@ -3,6 +3,9 @@
 <mapper namespace="com.school.dao.customer.CustomerMapper" >
   <resultMap id="BaseResultMap" type="com.school.domain.entity.customer.Customer" >
     <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="open_id" property="openId" jdbcType="VARCHAR" />
+    <result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+    <result column="is_subscribed" property="subscribe" jdbcType="TINYINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="phone" property="phone" jdbcType="VARCHAR" />
     <result column="addr" property="addr" jdbcType="VARCHAR" />
@@ -17,7 +20,7 @@
     <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, name, phone, addr, email, avatar, sex, version, creator, created_time, modifier, 
+    id, open_id, nick_name name, phone, addr, email, avatar, sex, version, creator, created_time, modifier,
     modified_time, is_deleted
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
@@ -31,105 +34,18 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.school.domain.entity.customer.Customer" >
-    insert into customer (id, name, phone, 
-      addr, email, avatar, 
-      sex, version, creator, 
-      created_time, modifier, modified_time, 
-      is_deleted)
-    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
-      #{addr,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, 
-      #{sex,jdbcType=CHAR}, #{version,jdbcType=INTEGER}, #{creator,jdbcType=VARCHAR}, 
-      #{createdTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
-      #{isDeleted,jdbcType=BIT})
-  </insert>
-  <insert id="insertSelective" parameterType="com.school.domain.entity.customer.Customer" >
-    insert into customer
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="name != null" >
-        name,
-      </if>
-      <if test="phone != null" >
-        phone,
-      </if>
-      <if test="addr != null" >
-        addr,
-      </if>
-      <if test="email != null" >
-        email,
-      </if>
-      <if test="avatar != null" >
-        avatar,
-      </if>
-      <if test="sex != null" >
-        sex,
-      </if>
-      <if test="version != null" >
-        version,
-      </if>
-      <if test="creator != null" >
-        creator,
-      </if>
-      <if test="createdTime != null" >
-        created_time,
-      </if>
-      <if test="modifier != null" >
-        modifier,
-      </if>
-      <if test="modifiedTime != null" >
-        modified_time,
-      </if>
-      <if test="isDeleted != null" >
-        is_deleted,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="name != null" >
-        #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="phone != null" >
-        #{phone,jdbcType=VARCHAR},
-      </if>
-      <if test="addr != null" >
-        #{addr,jdbcType=VARCHAR},
-      </if>
-      <if test="email != null" >
-        #{email,jdbcType=VARCHAR},
-      </if>
-      <if test="avatar != null" >
-        #{avatar,jdbcType=VARCHAR},
-      </if>
-      <if test="sex != null" >
-        #{sex,jdbcType=CHAR},
-      </if>
-      <if test="version != null" >
-        #{version,jdbcType=INTEGER},
-      </if>
-      <if test="creator != null" >
-        #{creator,jdbcType=VARCHAR},
-      </if>
-      <if test="createdTime != null" >
-        #{createdTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="modifier != null" >
-        #{modifier,jdbcType=VARCHAR},
-      </if>
-      <if test="modifiedTime != null" >
-        #{modifiedTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDeleted != null" >
-        #{isDeleted,jdbcType=BIT},
-      </if>
-    </trim>
+    insert into customer (open_id)
+    values (#{openId,jdbcType=VARCHAR})
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.school.domain.entity.customer.Customer" >
     update customer
     <set >
+      <if test="nickName != null and nickName != ''" >
+        nick_name = #{nickName, jdbcType=VARCHAR},
+      </if>
+      <if test="subscribe != null" >
+        is_subscribe = #{subscribe, jdbcType=TINYINT},
+      </if>
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
       </if>
@@ -198,4 +114,11 @@
 		</where>
 		ORDER BY c.id desc
 	</select>
+
+  <select id="selectByOpenId" resultType="com.school.domain.entity.customer.Customer" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List" />
+    from customer
+    where open_id = #{openId, jdbcType=VARCHAR}
+  </select>
 </mapper>
