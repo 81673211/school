@@ -13,7 +13,9 @@ import com.school.exception.ExpressException;
 import com.school.service.base.impl.BaseServiceImpl;
 import com.school.service.express.ExpressReceiveService;
 import com.school.util.core.Log;
-import com.school.vo.request.CreateReceiveExpressVo;
+import com.school.vo.BaseVo;
+import com.school.vo.request.ReceiveExpressVo;
+import com.school.vo.response.ReceiveExpressResponseVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +36,7 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
     private OrderInfoMapper orderInfoMapper;
 
     @Override
-    public void createReceiveExpress(CreateReceiveExpressVo expressVo) throws ExpressException {
+    public void createReceiveExpress(ReceiveExpressVo expressVo) throws ExpressException {
         try {
             ExpressReceive expressReceive = converterVo2Po(expressVo, ExpressReceive.class);
             boxExpressCompany(expressReceive);
@@ -53,6 +55,37 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
         }
     }
 
+    @Override
+    public void modifyReceiveExpress(ReceiveExpressVo expressVo) throws ExpressException {
+        try {
+            ExpressReceive expressReceive  = converterVo2Po(expressVo, ExpressReceive.class);
+            if (!(expressReceiveMapper.updateByPrimaryKeySelective(expressReceive) > 0)) {
+                Log.error.error("modify receive express error,when update table 'express_receive' the number of affected rows is 0");
+                throw new ExpressException("modify receive express error,when update table 'express_receive' the number of affected rows is 0");
+            }
+        } catch (Exception e) {
+            Log.error.error("throw exception when modify receive express", e);
+            throw new ExpressException("throw exception when modify receive express", e);
+        }
+    }
+
+
+    @Override
+    public BaseVo getReceiveExpress(Long id) throws ExpressException {
+        try {
+            ExpressReceive expressReceive = expressReceiveMapper.selectByPrimaryKey(id);
+            if (expressReceive == null) {
+                String message = "get receive express error,when select table 'express_receive' the number of affected rows is 0,id=" + id;
+                Log.error.error(message);
+                throw new ExpressException(message);
+            }
+            return converterPo2Vo(expressReceive, new ReceiveExpressResponseVo());
+        } catch (Exception e) {
+            String message = "throw exception when get receive express";
+            Log.error.error(message, e);
+            throw new ExpressException(message, e);
+        }
+    }
 
     /**
      * 初始化订单对象

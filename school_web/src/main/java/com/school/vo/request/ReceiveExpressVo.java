@@ -1,11 +1,16 @@
 package com.school.vo.request;
 
+import com.school.vo.BaseVo;
+import org.springframework.validation.annotation.Validated;
+
 import javax.validation.constraints.NotNull;
 
 /**
  * @author jame
  */
-public class CreateReceiveExpressVo extends BaseVo {
+@Validated
+public class ReceiveExpressVo extends BaseVo {
+    private Long id;
     @NotNull(message = "收件人联系电话不为空")
     private String receiverPhone;
     @NotNull(message = "收件人姓名不为空")
@@ -24,6 +29,14 @@ public class CreateReceiveExpressVo extends BaseVo {
     private Long senderDistrictId;
     @NotNull(message = "快递公司编号不为空")
     private Long companyId;    //快递公司
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getSenderPhone() {
         return senderPhone;

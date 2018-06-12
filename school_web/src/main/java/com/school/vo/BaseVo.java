@@ -1,10 +1,9 @@
-package com.school.vo.request;
+package com.school.vo;
 
 import org.springframework.validation.annotation.Validated;
 
 /**
  * @author jame
  */
-@Validated
 public abstract class BaseVo {
 }

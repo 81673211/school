@@ -13,7 +13,9 @@ import com.school.exception.ExpressException;
 import com.school.service.base.impl.BaseServiceImpl;
 import com.school.service.express.ExpressSendService;
 import com.school.util.core.Log;
-import com.school.vo.request.CreateSendExpressVo;
+import com.school.vo.BaseVo;
+import com.school.vo.request.SendExpressVo;
+import com.school.vo.response.SendExpressResponseVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,22 +38,58 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
     private ExpressCompanyMapper expressCompanyMapper;
 
     @Override
-    public void createSendExpress(CreateSendExpressVo expressVo) throws ExpressException {
+    public void createSendExpress(SendExpressVo expressVo) throws ExpressException {
         try {
             ExpressSend expressSend = converterVo2Po(expressVo, ExpressSend.class);
             boxExpressCompany(expressSend);
             Long expressId = expressSendMapper.insertSelective(expressSend);
             if (!(expressId > 0L)) {
-                Log.error.error("create send express error,when insert table 'express_send' the number of affected rows is 0");
-                throw new ExpressException("create send express error,when insert table 'express_send' the number of affected rows is 0");
+                String message = "create send express error,when insert table 'express_send' the number of affected rows is 0";
+                Log.error.error(message);
+                throw new ExpressException(message);
             }
             if (!(orderInfoMapper.insertSelective(initOrderInfo(expressId)) > 0)) {
-                Log.error.error("create send express error,when insert table 'order_info' the number of affected rows is 0");
-                throw new ExpressException("create send express error,when insert table 'order_info' the number of affected rows is 0");
+                String message = "create send express error,when insert table 'order_info' the number of affected rows is 0";
+                Log.error.error(message);
+                throw new ExpressException(message);
             }
         } catch (Exception e) {
-            Log.error.error("throw exception when create send express", e);
-            throw new ExpressException("throw exception when create send express", e);
+            String message = "throw exception when create send express";
+            Log.error.error(message, e);
+            throw new ExpressException(message, e);
+        }
+    }
+
+    @Override
+    public void modifySendExpress(SendExpressVo expressVo) throws ExpressException {
+        try {
+            ExpressSend expressSend = converterVo2Po(expressVo, ExpressSend.class);
+            if (!(expressSendMapper.updateByPrimaryKeySelective(expressSend) > 0)) {
+                String message = "modify send express error,when update table 'express_send' the number of affected rows is 0";
+                Log.error.error(message);
+                throw new ExpressException(message);
+            }
+        } catch (Exception e) {
+            String message = "throw exception when modify send express";
+            Log.error.error(message, e);
+            throw new ExpressException(message, e);
+        }
+    }
+
+    @Override
+    public BaseVo getSendExpress(Long id) throws ExpressException {
+        try {
+            ExpressSend expressSend = expressSendMapper.selectByPrimaryKey(id);
+            if (expressSend == null) {
+                String message = "get send express error,when select table 'express_send' the number of affected rows is 0,id=" + id;
+                Log.error.error(message);
+                throw new ExpressException(message);
+            }
+            return converterPo2Vo(expressSend, new SendExpressResponseVo());
+        } catch (Exception e) {
+            String message = "throw exception when get send express";
+            Log.error.error(message, e);
+            throw new ExpressException(message, e);
         }
     }
 

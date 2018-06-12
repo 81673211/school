@@ -4,8 +4,9 @@ import com.school.dao.express.ExpressSendMapper;
 import com.school.domain.entity.express.ExpressSend;
 import com.school.exception.ExpressException;
 import com.school.service.base.BaseService;
-import com.school.vo.request.CreateReceiveExpressVo;
-import com.school.vo.request.CreateSendExpressVo;
+import com.school.vo.BaseVo;
+import com.school.vo.request.SendExpressVo;
+import com.school.vo.response.SendExpressResponseVo;
 
 /**
  * @author jame
@@ -18,6 +19,19 @@ public interface ExpressSendService extends BaseService<ExpressSend, ExpressSend
      * @param expressVo
      * @return
      */
-    void createSendExpress(CreateSendExpressVo expressVo) throws ExpressException;
+    void createSendExpress(SendExpressVo expressVo) throws ExpressException;
 
+    /**
+     * 编辑寄件快件
+     * @param expressVo
+     * @throws ExpressException
+     */
+    void modifySendExpress(SendExpressVo expressVo) throws ExpressException;
+
+    /**
+     * 通过id获取寄件信息
+     * @param id
+     * @return
+     */
+    BaseVo getSendExpress(Long id) throws ExpressException;
 }
