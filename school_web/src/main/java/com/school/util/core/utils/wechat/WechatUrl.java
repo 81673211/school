@@ -14,5 +14,5 @@ public final class WechatUrl {
     public static final String ACCESS_TOKEN_GET_URL =
             "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${APPID}&secret=${APPSECRET}";
     public static final String USER_AUTH_URL =
-            "https://open.weixin.qq.com/connect/oauth2/authorize?appid=${APPID}&redirect_uri=${CALLBACK_URL}&response_type=code&scope=snsapi_base&state=1#wechat_redirect";
+            "https://open.weixin.qq.com/connect/oauth2/authorize?appid=${APPID}&redirect_uri=${REDIRECT_URL}&response_type=code&scope=${SCOPE}&state=1#wechat_redirect";
 }

@@ -7,7 +7,7 @@ public class Customer {
 
     private String openId;
 
-    private String nickName;
+    private String nickname;
 
     private boolean subscribe;
 
@@ -51,12 +51,12 @@ public class Customer {
         this.openId = openId;
     }
 
-    public String getNickName() {
-        return nickName;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public boolean isSubscribe() {

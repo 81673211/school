@@ -1,5 +1,7 @@
 package com.school.service.customer.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,11 +21,14 @@ import com.school.service.customer.CustomerService;
 @Transactional
 public class CustomerServiceImpl implements CustomerService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(CustomerServiceImpl.class);
+
     @Autowired
     private CustomerMapper customerMapper;
 
     @Override
     public void subscribe(String openId) {
+        LOGGER.info("openId:{}", openId);
         Customer customer = customerMapper.selectByOpenId(openId);
         if (customer != null) {
             if (!customer.isSubscribe()) {

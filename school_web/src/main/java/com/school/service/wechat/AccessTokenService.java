@@ -1,4 +1,4 @@
-package com.school.service.base;
+package com.school.service.wechat;
 
 /**
  *

@@ -1,4 +1,4 @@
-package com.school.service.base.impl;
+package com.school.service.wechat.impl;
 
 import java.util.concurrent.TimeUnit;
 
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.school.service.base.AccessTokenService;
+import com.school.service.wechat.AccessTokenService;
 import com.school.util.Constants;
 import com.school.util.core.utils.HttpUtil;
 import com.school.util.core.utils.wechat.WechatUrl;
@@ -30,7 +30,7 @@ public class AccessTokenServiceImpl implements AccessTokenService {
 
     @Override
     public synchronized String get() {
-        String accessToken = redisTemplate.opsForValue().get(Constants.ACCESS_TOKEN_KEY);
+        String accessToken = redisTemplate.opsForValue().get(Constants.CACHE_NAMESPACE_ACCESS_TOKEN);
         if (StringUtils.isBlank(accessToken)) {
             String url = WechatUrl.ACCESS_TOKEN_GET_URL
                     .replace("${APPID}", ConstantWeChat.APPID)
@@ -47,7 +47,7 @@ public class AccessTokenServiceImpl implements AccessTokenService {
                     throw new RuntimeException(
                             "get access_token failed, access_token is blank or timeout less than zero");
                 }
-                redisTemplate.opsForValue().set(Constants.ACCESS_TOKEN_KEY, accessToken, timeout,
+                redisTemplate.opsForValue().set(Constants.CACHE_NAMESPACE_ACCESS_TOKEN, accessToken, timeout,
                                                 TimeUnit.SECONDS);
             } catch (Exception e) {
                 throw new RuntimeException(e.getMessage());

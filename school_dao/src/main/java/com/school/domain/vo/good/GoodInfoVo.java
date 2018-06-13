@@ -355,5 +355,5 @@ public class GoodInfoVo {
 	public void setBigImgPath(String bigImgPath) {
 		this.bigImgPath = bigImgPath;
 	}
-	
+
 }
