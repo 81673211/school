@@ -6,6 +6,10 @@
 <head>
 	<%@include file="/WEB-INF/view/common/common.jsp" %>
 	<title>登录页面</title>
+	<script type="text/javascript">
+	if (window != top)
+	    top.location.href = window.location.href;
+	</script>
 </head>
 
 <body>
