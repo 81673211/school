@@ -55,7 +55,7 @@ public class EventServiceImpl implements EventService {
             textMessage.setContent("欢迎您");
             return WechatMessageUtil.textMessageToXml(textMessage);
         } else {
-            return null;
+            return "success";
         }
     }
 }
