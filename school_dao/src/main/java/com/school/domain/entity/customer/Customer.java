@@ -11,6 +11,8 @@ public class Customer {
 
     private boolean subscribe;
 
+    private Date subscribedTime;
+
     private String name;
 
     private String phone;
@@ -65,6 +67,14 @@ public class Customer {
 
     public void setSubscribe(boolean subscribe) {
         this.subscribe = subscribe;
+    }
+
+    public Date getSubscribedTime() {
+        return subscribedTime;
+    }
+
+    public void setSubscribedTime(Date subscribedTime) {
+        this.subscribedTime = subscribedTime;
     }
 
     public String getName() {

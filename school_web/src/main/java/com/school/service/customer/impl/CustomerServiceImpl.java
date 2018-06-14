@@ -1,5 +1,7 @@
 package com.school.service.customer.impl;
 
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,11 +35,13 @@ public class CustomerServiceImpl implements CustomerService {
         if (customer != null) {
             if (!customer.isSubscribe()) {
                 customer.setSubscribe(true);
+                customer.setSubscribedTime(new Date());
                 customerMapper.updateByPrimaryKey(customer);
             }
         } else {
             customer = new Customer();
             customer.setOpenId(openId);
+            customer.setSubscribedTime(new Date());
             customerMapper.insert(customer);
         }
     }
