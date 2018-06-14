@@ -1,34 +1,19 @@
 package com.school.web.wechat;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.dom4j.Document;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSON;
-import com.school.service.customer.CustomerService;
-import com.school.service.wechat.OauthService;
-import com.school.service.wechat.WechatEventService;
-import com.school.util.Constants;
+import com.school.service.wechat.EventService;
 import com.school.util.wechat.CheckUtil;
-import com.school.util.wechat.OAuthToken;
 
 /**
  *
@@ -41,14 +26,19 @@ import com.school.util.wechat.OAuthToken;
 @RequestMapping("/wx")
 public class WechatController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(WechatController.class);
+
     @Autowired
-    private WechatEventService wechatEventService;
+    private EventService eventService;
 
     @RequestMapping(method = RequestMethod.POST)
     public void eventHandle(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String result = wechatEventService.process(request);
+        String result = eventService.process(request);
+        LOGGER.info("result:{}", result);
 
-
+        PrintWriter out = response.getWriter();
+        out.println(result);
+        out.close();
     }
 
     @RequestMapping(method = RequestMethod.GET)

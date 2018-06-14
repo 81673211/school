@@ -6,7 +6,7 @@ import java.net.URLEncoder;
 import org.springframework.stereotype.Service;
 
 import com.school.service.wechat.OauthService;
-import com.school.util.core.utils.wechat.WechatUrl;
+import com.school.util.wechat.WechatUrl;
 import com.school.util.wechat.ConstantWeChat;
 import com.school.util.wechat.UserWechat;
 
