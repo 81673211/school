@@ -1,8 +1,14 @@
 package com.school.web.customer;
 
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.school.web.base.BaseEasyWebController;
 
@@ -17,8 +23,13 @@ import com.school.web.base.BaseEasyWebController;
 @RequestMapping("/customer")
 public class CustomerController extends BaseEasyWebController {
 
-    @RequestMapping("/subscribe")
-    public ModelAndView subscribe() {
-        return null;
+    private static final Logger LOGGER = LoggerFactory.getLogger(CustomerController.class);
+
+    @RequestMapping("/profile/edit")
+    public void edit(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        LOGGER.info("--------------------------customerController--------edit----");
+        response.sendRedirect("/index.html");
     }
+
+
 }

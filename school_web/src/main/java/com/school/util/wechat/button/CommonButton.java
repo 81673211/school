@@ -14,4 +14,5 @@ public class CommonButton extends Button {
 
     private String type;
     private String key;
+    private String url;
 }

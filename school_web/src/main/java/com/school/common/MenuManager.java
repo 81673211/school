@@ -56,8 +56,9 @@ public class MenuManager {
         btn22.setKey("22");
 
         CommonButton btn31 = new CommonButton();
-        btn31.setName("完善个人资料");
-        btn31.setType("click");
+        btn31.setName("完善个人信息");
+        btn31.setType("view");
+        btn31.setUrl("http://www.glove1573.cn/customer/profile/edit");
         btn31.setKey("31");
 
         CommonButton btn32 = new CommonButton();
