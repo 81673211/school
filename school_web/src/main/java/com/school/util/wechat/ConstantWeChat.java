@@ -25,8 +25,6 @@ public final class ConstantWeChat {
 	 */
 	public static String APPSECRET = ConfigUtil.get("appSecret");
 
-	public static String REDIRECT_URL = ConfigUtil.get("redirect_url");
-
 	public static boolean REFRESH_MENU = Boolean.valueOf(ConfigUtil.get("refresh_menu"));
 	
 	/**

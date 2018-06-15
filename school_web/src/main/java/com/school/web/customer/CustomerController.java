@@ -1,16 +1,17 @@
 package com.school.web.customer;
 
-import java.io.IOException;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.school.util.wechat.WechatMessageUtil;
 import com.school.web.base.BaseEasyWebController;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *
@@ -21,13 +22,14 @@ import com.school.web.base.BaseEasyWebController;
  */
 @Controller
 @RequestMapping("/customer")
+@Slf4j
 public class CustomerController extends BaseEasyWebController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CustomerController.class);
-
     @RequestMapping("/profile/edit")
-    public void edit(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        LOGGER.info("--------------------------customerController--------edit----");
+    public void edit(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        log.info("-------------/customer/profile/edit---------");
+        String code = request.getParameter("code");
+        log.info("-------------code---------:{}", code);
         response.sendRedirect("/index.html");
     }
 

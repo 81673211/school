@@ -31,8 +31,7 @@ public class EventServiceImpl implements EventService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WechatController.class);
 
-    @Autowired
-    private RedisTemplate<String, String> redisTemplate;
+
     @Autowired
     private CustomerService customerService;
     @Autowired
@@ -42,20 +41,28 @@ public class EventServiceImpl implements EventService {
     public String process(HttpServletRequest request) throws Exception {
         Map<String, String> paramMap = WechatMessageUtil.parseXml(request);
         LOGGER.info("paramMap:{}", paramMap.toString());
+        String msgType = paramMap.get("MsgType");
+        LOGGER.info("msgType:{}", msgType);
         String event = paramMap.get("Event");
         LOGGER.info("event:{}", event);
         String openId = paramMap.get("FromUserName");
-        if (WechatEventTypeEnum.SUBSCRIBE.getCode().equals(event)) {
-            customerService.subscribe(openId);
-            TextMessage textMessage = new TextMessage();
-            textMessage.setMsgType(WechatMsgTypeEnum.TEXT.getCode());
-            textMessage.setToUserName(openId);
-            textMessage.setFromUserName(paramMap.get("ToUserName"));
-            textMessage.setCreateTime(System.currentTimeMillis());
-            textMessage.setContent("欢迎您");
-            return WechatMessageUtil.textMessageToXml(textMessage);
+        if (WechatMsgTypeEnum.EVENT.getCode().equals(msgType)) {
+            if (WechatEventTypeEnum.SUBSCRIBE.getCode().equals(event)) {
+                customerService.subscribe(openId);
+                TextMessage textMessage = new TextMessage();
+                textMessage.setMsgType(WechatMsgTypeEnum.TEXT.getCode());
+                textMessage.setToUserName(openId);
+                textMessage.setFromUserName(paramMap.get("ToUserName"));
+                textMessage.setCreateTime(System.currentTimeMillis());
+                textMessage.setContent("欢迎您");
+                return WechatMessageUtil.textMessageToXml(textMessage);
+            } else if (WechatEventTypeEnum.VIEW.getCode().equals(event)) {
+
+                return "success";
+            }
         } else {
             return "success";
         }
+        return "success";
     }
 }

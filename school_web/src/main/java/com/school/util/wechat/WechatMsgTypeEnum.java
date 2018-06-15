@@ -14,7 +14,8 @@ import lombok.Getter;
 @Getter
 public enum WechatMsgTypeEnum {
 
-    TEXT("text", "文本");
+    TEXT("text", "文本"),
+    EVENT("event", "事件");
 
     private String code;
 

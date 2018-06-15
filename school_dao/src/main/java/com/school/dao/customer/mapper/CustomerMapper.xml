@@ -35,8 +35,8 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.school.domain.entity.customer.Customer" >
-    insert into customer (open_id)
-    values (#{openId,jdbcType=VARCHAR})
+    insert into customer (open_id, subscribed_time)
+    values (#{openId,jdbcType=VARCHAR}, #{subscribedTime, jdcbType=TIMESTAMP})
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.school.domain.entity.customer.Customer" >
     update customer
@@ -46,6 +46,9 @@
       </if>
       <if test="subscribe != null" >
         is_subscribe = #{subscribe, jdbcType=TINYINT},
+      </if>
+      <if test="subscribedTime != null">
+        subscribed_time = #{subscribedTime, jdbcType=TIMESTAMP}
       </if>
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},

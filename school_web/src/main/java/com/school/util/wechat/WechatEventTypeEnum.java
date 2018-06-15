@@ -17,6 +17,7 @@ public enum WechatEventTypeEnum {
     SUBSCRIBE("subscribe", "关注"),
     UNSUBSCRIBE("unsubscribe", "取消关注"),
     CLICK("CLICK", "点击"),
+    VIEW("VIEW", "网页"),
     SCAN("SCAN", "二维码扫描");
 
     private String code;

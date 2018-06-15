@@ -1,5 +1,6 @@
 package com.school.service.wechat;
 
+import com.school.util.wechat.OAuthToken;
 import com.school.util.wechat.UserWechat;
 
 /**
@@ -11,9 +12,11 @@ import com.school.util.wechat.UserWechat;
  */
 public interface OauthService {
 
-    String getOAuthUrl();
+    boolean isOAuthed(String openId);
+
+    String getOAuthUrl(String redirectUrl);
 
     UserWechat getDetail(String openId);
 
-
+    OAuthToken getOAuthToken(String code);
 }

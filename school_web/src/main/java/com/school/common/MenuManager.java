@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import com.school.service.wechat.MenuService;
+import com.school.service.wechat.OauthService;
 import com.school.util.wechat.ConstantWeChat;
 import com.school.util.wechat.button.Button;
 import com.school.util.wechat.button.CommonButton;
@@ -27,6 +28,9 @@ public class MenuManager {
     @Autowired
     private MenuService menuService;
 
+    @Autowired
+    private OauthService oauthService;
+
     @PostConstruct
     public void init() {
         if (ConstantWeChat.REFRESH_MENU) {
@@ -37,28 +41,32 @@ public class MenuManager {
     private Menu getMenu() {
         CommonButton btn11 = new CommonButton();
         btn11.setName("我要寄件");
-        btn11.setType("click");
+        btn11.setType("view");
         btn11.setKey("11");
+        btn11.setUrl(oauthService.getOAuthUrl("http://www.glove1573.cn/express/send"));
 
         CommonButton btn12 = new CommonButton();
         btn12.setName("寄件历史");
-        btn12.setType("click");
-        btn12.setKey("12");;
+        btn12.setType("view");
+        btn12.setKey("12");
+        btn12.setUrl(oauthService.getOAuthUrl("http://www.glove1573.cn/express/send/history"));
 
         CommonButton btn21 = new CommonButton();
         btn21.setName("待收快件");
-        btn21.setType("click");
+        btn21.setType("view");
         btn21.setKey("21");
+        btn21.setUrl(oauthService.getOAuthUrl("http://www.glove1573.cn/express/receive"));
 
         CommonButton btn22 = new CommonButton();
         btn22.setName("收件历史");
-        btn22.setType("click");
+        btn22.setType("view");
         btn22.setKey("22");
+        btn22.setUrl(oauthService.getOAuthUrl("http://www.glove1573.cn/express/receive/history"));
 
         CommonButton btn31 = new CommonButton();
         btn31.setName("完善个人信息");
         btn31.setType("view");
-        btn31.setUrl("http://www.glove1573.cn/customer/profile/edit");
+        btn31.setUrl(oauthService.getOAuthUrl("http://www.glove1573.cn/customer/profile/edit"));
         btn31.setKey("31");
 
         CommonButton btn32 = new CommonButton();

@@ -37,7 +37,7 @@
 		</mvc:message-converters>
 	</mvc:annotation-driven>
  <!-- 	<bean id="logAspectBean" class="com.school.web.log.SystemLogAspect">
-	</bean> 
+	</bean>
 	<aop:config>
 		<aop:aspect id="logAspect" ref="logAspectBean">
 			<aop:pointcut id="logPoint"
@@ -85,15 +85,4 @@
 		</mvc:interceptor>
 	</mvc:interceptors>
 
-	<!-- <mvc:interceptors>
-		<mvc:interceptor>
-			<mvc:mapping path="/*/eshop/**" />
-			<mvc:exclude-mapping path="/console/index/*" />
-
-			过滤上传图片地址
-			<mvc:exclude-mapping path="/v1/webus/upload/*" />
-
-			<bean class="com.school.common.interceptor.InterfaceInterceptor" />
-		</mvc:interceptor>
-	</mvc:interceptors> -->
 </beans>

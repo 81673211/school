@@ -15,9 +15,11 @@ public final class WechatUrl {
             "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${APPID}&secret=${APPSECRET}";
     public static final String USER_AUTH_URL =
             "https://open.weixin.qq.com/connect/oauth2/authorize?appid=${APPID}&redirect_uri=${REDIRECT_URL}&response_type=code&scope=${SCOPE}&state=1#wechat_redirect";
-    public static final String CREATE_MENU_URL =
+    public static final String MENU_CREATE_URL =
             "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=${ACCESS_TOKEN}";
-    public static final String GET_MENU_URL =
+    public static final String MENU_GET_URL =
             "https://api.weixin.qq.com/cgi-bin/menu/get?access_token=${ACCESS_TOKEN}";
+    public static final String OAUTH_TOKEN_GET_URL =
+            "https://api.weixin.qq.com/sns/oauth2/access_token?appid=${APPID}&secret=${APPSECRET}&code=${CODE}&grant_type=authorization_code";
 
 }
