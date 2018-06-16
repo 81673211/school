@@ -1,10 +1,20 @@
 /** 1.快递管理 */
-/** 快递列表 */
-insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_remark) values (1, '快递列表', '/express/list.do', 0,(select mi.id from menu_info mi where mi.resource_name = '快递管理'),NULL);
-insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_remark) values (2, '快递详情', '/express/detail.do', (select ri.id from resource_info ri where ri.res_url='/express/list.do'),(select mi.id from menu_info mi where mi.resource_name = '快递管理'),NULL);
-insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_remark) values (3, '快递编辑', '/express/edit.do', (select ri.id from resource_info ri where ri.res_url='/express/list.do'),(select mi.id from menu_info mi where mi.resource_name = '快递管理'),NULL);
-insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_remark) values (4, '快递保存', '/express/save.do', (select ri.id from resource_info ri where ri.res_url='/express/list.do'),(select mi.id from menu_info mi where mi.resource_name = '快递管理'),NULL);
-insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_remark) values (5, '快递删除', '/express/del.do', (select ri.id from resource_info ri where ri.res_url='/express/list.do'),(select mi.id from menu_info mi where mi.resource_name = '快递管理'),NULL);
+/** 收件列表 */
+insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_remark) values (1, '收件列表', '/express/expressReceive/list.do', 0,(select mi.id from menu_info mi where mi.resource_name = '收件列表'),NULL);
+
+insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_remark) values (2, '收件详情', '/express/expressReceive/detail.do', (select ri.id from resource_info ri where ri.res_url='/express/expressReceive/list.do'),(select mi.id from menu_info mi where mi.resource_name = '收件列表'),NULL);
+insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_remark) values (3, '收件编辑', '/express/expressReceive/edit.do', (select ri.id from resource_info ri where ri.res_url='/express/expressReceive/list.do'),(select mi.id from menu_info mi where mi.resource_name = '收件列表'),NULL);
+insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_remark) values (4, '收件保存', '/express/expressReceive/save.do', (select ri.id from resource_info ri where ri.res_url='/express/expressReceive/list.do'),(select mi.id from menu_info mi where mi.resource_name = '收件列表'),NULL);
+insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_remark) values (5, '收件删除', '/express/expressReceive/del.do', (select ri.id from resource_info ri where ri.res_url='/express/expressReceive/list.do'),(select mi.id from menu_info mi where mi.resource_name = '收件列表'),NULL);
+
+/** 寄件列表 */
+insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_remark) values (31, '寄件列表', '/express/expressSend/list.do', 0,(select mi.id from menu_info mi where mi.resource_name = '寄件列表'),NULL);
+
+insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_remark) values (32, '寄件详情', '/express/expressSend/detail.do', (select ri.id from resource_info ri where ri.res_url='/express/expressSend/list.do'),(select mi.id from menu_info mi where mi.resource_name = '寄件列表'),NULL);
+insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_remark) values (33, '寄件编辑', '/express/expressSend/edit.do', (select ri.id from resource_info ri where ri.res_url='/express/expressSend/list.do'),(select mi.id from menu_info mi where mi.resource_name = '寄件列表'),NULL);
+insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_remark) values (34, '寄件保存', '/express/expressSend/save.do', (select ri.id from resource_info ri where ri.res_url='/express/expressSend/list.do'),(select mi.id from menu_info mi where mi.resource_name = '寄件列表'),NULL);
+insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_remark) values (35, '寄件删除', '/express/expressSend/del.do', (select ri.id from resource_info ri where ri.res_url='/express/expressSend/list.do'),(select mi.id from menu_info mi where mi.resource_name = '寄件列表'),NULL);
+
 
 /** 2.订单管理 */
 /** 订单列表 */
