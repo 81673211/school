@@ -169,18 +169,9 @@ public class StatusManage {
 	 */
 	public static final Map<String, Object> goodLabels = new HashMap<String, Object>();
 	
-	public static final Map<Integer, String> blackStatusMap = new HashMap<Integer, String>();
-	public static final Map<Integer, String> userInfoTypeMap = new HashMap<Integer, String>();
 	public static final Map<Integer, String> userInfoStatusMap = new HashMap<Integer, String>();
 	public static final Map<Integer, String> sexMap = new HashMap<Integer, String>();
-	public static final Map<Integer, String> bannerTypeMap = new HashMap<Integer, String>();
-	public static final Map<Integer, String> bannerShowMap = new HashMap<Integer, String>();
-	public static final Map<Integer, String> bannerPositionMap = new HashMap<Integer, String>();
 
-	public static final Map<Integer, String> appTypeMap = new HashMap<Integer, String>();
-	public static final Map<Integer, String> appForeMap = new HashMap<Integer, String>();
-	public static final Map<Integer, String> questionTypeMap = new HashMap<Integer, String>();
-	public static final Map<Integer, String> questionhotFlagMap = new HashMap<Integer, String>();
 
 	
 	public static final DecimalFormat MONEY_FORMAT = new DecimalFormat("##,##0.00");
@@ -222,45 +213,11 @@ public class StatusManage {
 		shortMessageStatusMap.put(SHORT_MESSAGE_STATUS_SUCCESS, "已发送");
 		shortMessageStatusMap.put(SHORT_MESSAGE_STATUS_FAILED, "发送失败");
 
-		blackStatusMap.put(1, "启用");
-		blackStatusMap.put(0, "不启用");
-
 		userInfoStatusMap.put(1, "禁用");
 		userInfoStatusMap.put(0, "正常");
 
 		sexMap.put(1, "女");
 		sexMap.put(0, "男");
-
-		appForeMap.put(1, "强制");
-		appForeMap.put(0, "非强制");
-
-		appTypeMap.put(1, "IOS");
-		appTypeMap.put(0, "安卓");
-
-		bannerTypeMap.put(0, "不连接");
-		bannerTypeMap.put(1, "绝对路径");
-		bannerTypeMap.put(2, "相对路径");
-		bannerTypeMap.put(3, "页面内容");
-
-		bannerShowMap.put(1, "显示");
-		bannerShowMap.put(0, "不显示");
-
-		bannerPositionMap.put(1, "顶部");
-		bannerPositionMap.put(0, "底部");
-
-
-		userInfoTypeMap.put(0, "普通用户");
-		userInfoTypeMap.put(1, "经销商");
-		userInfoTypeMap.put(2, "代理商");
-
-		questionTypeMap.put(1, "注册");
-		questionTypeMap.put(2, "充值");
-		questionTypeMap.put(3, "订单");
-		questionTypeMap.put(4, "账户安全");
-
-
-		questionhotFlagMap.put(0, "否");
-		questionhotFlagMap.put(1, "是");
 
 	}
 	

@@ -53,7 +53,7 @@ public class ConstantUrl {
 	
 	/** 订单管理 */
 	/**
-	 * 商品类型
+	 * 订单详情
 	 */
 	// 订单详情
 	public static final String ORDER_DETAIL_URL = "/order/detail.do";
