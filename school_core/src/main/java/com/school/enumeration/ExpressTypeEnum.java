@@ -1,4 +1,4 @@
-package com.school.common;
+package com.school.enumeration;
 
 /**
  * <b>Description:快递类型枚举.</b><br>

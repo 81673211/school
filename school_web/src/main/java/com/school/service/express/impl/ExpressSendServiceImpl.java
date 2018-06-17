@@ -1,6 +1,5 @@
 package com.school.service.express.impl;
 
-import com.school.common.ExpressTypeEnum;
 import com.school.dao.express.ExpressCompanyMapper;
 import com.school.dao.express.ExpressSendMapper;
 import com.school.dao.order.OrderInfoMapper;
@@ -8,8 +7,10 @@ import com.school.domain.entity.express.Express;
 import com.school.domain.entity.express.ExpressCompany;
 import com.school.domain.entity.express.ExpressSend;
 import com.school.domain.entity.order.OrderInfo;
+import com.school.enumeration.ExpressTypeEnum;
 import com.school.enumeration.OrderStatusEnum;
 import com.school.exception.ExpressException;
+import com.school.exception.ExpressStatusException;
 import com.school.service.base.impl.BaseServiceImpl;
 import com.school.service.express.ExpressSendService;
 import com.school.util.core.Log;
@@ -93,13 +94,33 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
         }
     }
 
+    @Override
+    public void updateSendExpressStatus(Long id, Integer status) throws ExpressException {
+        try {
+            expressStatusCheck(id, ExpressTypeEnum.SEND.getFlag(), true, status);
+        } catch (ExpressStatusException e) {
+            String msg = "update send express status error,express status check failed";
+            Log.error.error(msg, e);
+            throw new ExpressException(msg, e);
+        }
+        ExpressSend expressSend = new ExpressSend();
+        expressSend.setId(id);
+        expressSend.setExpressStatus(status);
+        int count = expressSendMapper.updateByPrimaryKeySelective(expressSend);
+        if (!(count > 0)) {
+            String msg = "update send express status failed,when update table 'express_send' the number of affected rows is 0";
+            Log.error.error(msg);
+            throw new ExpressException(msg);
+        }
+    }
+
     /**
      * 初始化订单对象
      *
      * @param expressId
      * @return
      */
-    public OrderInfo initOrderInfo(Long expressId) {
+    private OrderInfo initOrderInfo(Long expressId) {
         OrderInfo orderInfo = new OrderInfo();
         orderInfo.setExpressId(expressId);
         orderInfo.setExpressType(ExpressTypeEnum.SEND.getFlag());
@@ -114,7 +135,7 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
      *
      * @param expressSend
      */
-    public void boxExpressCompany(Express expressSend) {
+    private void boxExpressCompany(Express expressSend) {
         ExpressCompany expressCompany = expressCompanyMapper.selectByPrimaryKey(expressSend.getCompanyId());
         expressSend.setCompanyCode(expressCompany.getCode());
         expressSend.setCompanyName(expressCompany.getName());
@@ -125,7 +146,7 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
      *
      * @return
      */
-    public BigDecimal calcSendExpressAmount() {
+    private BigDecimal calcSendExpressAmount() {
         return BigDecimal.ZERO;
     }
 

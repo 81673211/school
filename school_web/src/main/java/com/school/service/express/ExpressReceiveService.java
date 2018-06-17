@@ -34,4 +34,11 @@ public interface ExpressReceiveService extends BaseService<ExpressReceive, Expre
      * @throws ExpressException
      */
     BaseVo getReceiveExpress(Long id) throws ExpressException;
+
+    /**
+     * 修改收件状态
+     * @param id
+     * @param status
+     */
+    void updateReceiveExpressStatus(Long id, Integer status) throws ExpressException;
 }

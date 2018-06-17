@@ -33,7 +33,6 @@
         company_id,
         company_code,
         company_name,
-        creator,
         created_time,
         is_deleted,
         express_status
@@ -91,9 +90,6 @@
             <if test="companyName != null">
                 company_name,
             </if>
-            <if test="creator != null and creator != 0">
-                creator,
-            </if>
             <if test="expressStatus != null and expressStatus != 0">
                 express_status,
             </if>
@@ -134,9 +130,6 @@
             </if>
             <if test="companyName != null">
                 #{companyName,jdbcType=VARCHAR},
-            </if>
-            <if test="creator != null">
-                #{creator,jdbcType=VARCHAR},
             </if>
             <if test="expressStatus != null and expressStatus != 0">
                 #{expressStatus,jdbcType=INTEGER},

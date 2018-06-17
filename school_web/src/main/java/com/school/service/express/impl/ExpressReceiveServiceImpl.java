@@ -1,6 +1,5 @@
 package com.school.service.express.impl;
 
-import com.school.common.ExpressTypeEnum;
 import com.school.dao.express.ExpressCompanyMapper;
 import com.school.dao.express.ExpressReceiveMapper;
 import com.school.dao.order.OrderInfoMapper;
@@ -8,8 +7,10 @@ import com.school.domain.entity.express.Express;
 import com.school.domain.entity.express.ExpressCompany;
 import com.school.domain.entity.express.ExpressReceive;
 import com.school.domain.entity.order.OrderInfo;
+import com.school.enumeration.ExpressTypeEnum;
 import com.school.enumeration.OrderStatusEnum;
 import com.school.exception.ExpressException;
+import com.school.exception.ExpressStatusException;
 import com.school.service.base.impl.BaseServiceImpl;
 import com.school.service.express.ExpressReceiveService;
 import com.school.util.core.Log;
@@ -18,6 +19,7 @@ import com.school.vo.request.ReceiveExpressVo;
 import com.school.vo.response.ReceiveExpressResponseVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -26,6 +28,7 @@ import java.util.UUID;
  * @author jame
  */
 @Service
+@Transactional(rollbackFor = ExpressException.class)
 public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, ExpressReceiveMapper> implements ExpressReceiveService {
 
     @Autowired
@@ -58,7 +61,7 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
     @Override
     public void modifyReceiveExpress(ReceiveExpressVo expressVo) throws ExpressException {
         try {
-            ExpressReceive expressReceive  = converterVo2Po(expressVo, ExpressReceive.class);
+            ExpressReceive expressReceive = converterVo2Po(expressVo, ExpressReceive.class);
             if (!(expressReceiveMapper.updateByPrimaryKeySelective(expressReceive) > 0)) {
                 Log.error.error("modify receive express error,when update table 'express_receive' the number of affected rows is 0");
                 throw new ExpressException("modify receive express error,when update table 'express_receive' the number of affected rows is 0");
@@ -87,13 +90,34 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
         }
     }
 
+
+    @Override
+    public void updateReceiveExpressStatus(Long id, Integer status) throws ExpressException {
+        try {
+            expressStatusCheck(id, ExpressTypeEnum.RECEIVE.getFlag(), true, status);
+        } catch (ExpressStatusException e) {
+            String msg = "update receive express status error,express status check failed";
+            Log.error.error(msg, e);
+            throw new ExpressException(msg, e);
+        }
+        ExpressReceive expressReceive = new ExpressReceive();
+        expressReceive.setId(id);
+        expressReceive.setExpressStatus(status);
+        int count = expressReceiveMapper.updateByPrimaryKeySelective(expressReceive);
+        if (!(count > 0)) {
+            String msg = "update receive express status failed,when update table 'express_receive' the number of affected rows is 0";
+            Log.error.error(msg);
+            throw new ExpressException(msg);
+        }
+    }
+
     /**
      * 初始化订单对象
      *
      * @param expressId
      * @return
      */
-    public OrderInfo initOrderInfo(Long expressId) {
+    private OrderInfo initOrderInfo(Long expressId) {
         OrderInfo orderInfo = new OrderInfo();
         orderInfo.setExpressId(expressId);
         orderInfo.setExpressType(ExpressTypeEnum.SEND.getFlag());
@@ -108,7 +132,7 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
      *
      * @param expressSend
      */
-    public void boxExpressCompany(Express expressSend) {
+    private void boxExpressCompany(Express expressSend) {
         ExpressCompany expressCompany = expressCompanyMapper.selectByPrimaryKey(expressSend.getCompanyId());
         expressSend.setCompanyCode(expressCompany.getCode());
         expressSend.setCompanyName(expressCompany.getName());
@@ -119,7 +143,7 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
      *
      * @return
      */
-    public BigDecimal calcSendExpressAmount() {
+    private BigDecimal calcSendExpressAmount() {
         return BigDecimal.ZERO;
     }
 

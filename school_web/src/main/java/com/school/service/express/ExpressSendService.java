@@ -34,4 +34,11 @@ public interface ExpressSendService extends BaseService<ExpressSend, ExpressSend
      * @return
      */
     BaseVo getSendExpress(Long id) throws ExpressException;
+
+    /**
+     * 修改寄件状态
+     * @param id
+     * @param status
+     */
+    void updateSendExpressStatus(Long id, Integer status) throws ExpressException;
 }

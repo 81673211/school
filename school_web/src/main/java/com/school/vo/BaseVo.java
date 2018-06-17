@@ -1,7 +1,5 @@
 package com.school.vo;
 
-import org.springframework.validation.annotation.Validated;
-
 /**
  * @author jame
  */
