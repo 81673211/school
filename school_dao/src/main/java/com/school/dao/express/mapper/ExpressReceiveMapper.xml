@@ -195,4 +195,17 @@
     <select id="queryPage" resultType="com.school.domain.entity.express.ExpressReceive" parameterType="map">
 
     </select>
+    
+	<!-- 管理台列表查询 -->
+	<select id="queryForManagerPage" resultType="com.school.domain.entity.express.ExpressReceive" parameterType="map">
+		select er.* from express_receive er
+		<where>
+			<if test="keyword != null and keyword != '' ">
+				and (er.name like concat('%',#{keyword},'%')
+					 or er.code like concat('%',#{keyword},'%')
+					 or er.phone like concat('%',#{keyword},'%'))
+			</if>
+		</where>
+		ORDER BY er.id desc
+    </select>
 </mapper>

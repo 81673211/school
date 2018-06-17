@@ -58,6 +58,18 @@ public class ConstantUrl {
 	// 订单详情
 	public static final String ORDER_DETAIL_URL = "/order/detail.do";
 	
+	/** 快递管理 */
+	/**
+	 * 收件
+	 */
+	// 收件详情
+	public static final String EXPRESS_RECEIVE_DETAIL_URL = "/express/expressReceive/detail.do";
+	// 收件编辑
+	public static final String EXPRESS_RECEIVE_EDIT_URL = "/express/expressReceive/edit.do";
+	// 收件删除
+	public static final String EXPRESS_RECEIVE_DEL_URL = "/express/expressReceive/del.do";
+	
+	
 	/** 快递公司管理 */
 	/**
 	 * 快递公司

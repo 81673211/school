@@ -23,4 +23,9 @@ public interface ExpressReceiveMapper extends BaseDao {
     int updateByPrimaryKey(ExpressReceive record);
 
     List<ExpressReceive> queryPage(Map<String, Object> paramMap);
+    
+    /**
+     * 管理台列表
+     */
+    List<ExpressReceive> queryForManagerPage(Map<String, Object> paramMap);
 }

@@ -23,4 +23,9 @@ public interface ExpressSendMapper extends BaseDao {
     int updateByPrimaryKey(ExpressSend record);
 
     List<ExpressSend> queryPage(Map<String, Object> paramMap);
+    
+    /**
+     * 管理台列表查询
+     */
+    List<ExpressSend> queryForManagerPage(Map<String, Object> paramMap);
 }
