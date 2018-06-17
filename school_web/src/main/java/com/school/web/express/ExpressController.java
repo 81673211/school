@@ -197,7 +197,7 @@ public class ExpressController extends BaseEasyWebController {
      */
     @RequestMapping(value = "/1/up-status", method = RequestMethod.POST)
     public Response updateReceiveExpressStatus(@RequestParam(value = "id") Long id,
-                                            @RequestParam(value = "status") Long status) {
+                                            @RequestParam(value = "status") Integer status) {
         Response response = new Response();
         if (id == null || status == null) {
             return response.writeFailure("参数错误");

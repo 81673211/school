@@ -14,6 +14,7 @@ public class Express {
     private Date createdTime;
     private Boolean isDeleted;
     private Integer expressStatus;
+    private Integer expressWay;//快件方式：入柜/自己
 
     public Long getId() {
         return id;
@@ -78,4 +79,14 @@ public class Express {
     public void setExpressStatus(Integer expressStatus) {
         this.expressStatus = expressStatus;
     }
+
+
+    public Integer getExpressWay() {
+        return expressWay;
+    }
+
+    public void setExpressWay(Integer expressWay) {
+        this.expressWay = expressWay;
+    }
+
 }

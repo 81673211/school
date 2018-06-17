@@ -29,6 +29,8 @@ public class ReceiveExpressVo extends BaseVo {
     private Long senderDistrictId;
     @NotNull(message = "快递公司编号不为空")
     private Long companyId;    //快递公司
+    @NotNull(message = "收件类型不为空")
+    private Integer expressWay;    //快件方式，0：自提；1：入柜
 
     public Long getId() {
         return id;
@@ -108,5 +110,13 @@ public class ReceiveExpressVo extends BaseVo {
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
+    }
+
+    public Integer getExpressWay() {
+        return expressWay;
+    }
+
+    public void setExpressWay(Integer expressWay) {
+        this.expressWay = expressWay;
     }
 }
