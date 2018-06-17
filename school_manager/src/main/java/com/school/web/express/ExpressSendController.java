@@ -47,9 +47,9 @@ public class ExpressSendController extends BaseEasyWebController {
 			mav.addObject(PAGE_PARAM_PAGECOUNT, pageInfo.getTotalPage());
 			mav.addObject(PAGE_PARAM_TOTALCOUNT, pageInfo.getTotalRecord());
 			
-			mav.addObject(ConstantUrl.DETAIL_URL, ConstantUrl.GOOD_TYPE_DETAIL_URL);// 详情url
-			mav.addObject(ConstantUrl.EDIT_URL, ConstantUrl.GOOD_TYPE_EDIT_URL);// 编辑url
-			mav.addObject(ConstantUrl.DEL_URL,ConstantUrl.GOOD_TYPE_DEL_URL);// 删除url
+			mav.addObject(ConstantUrl.DETAIL_URL, ConstantUrl.EXPRESS_SEND_DETAIL_URL);// 详情url
+			mav.addObject(ConstantUrl.EDIT_URL, ConstantUrl.EXPRESS_SEND_EDIT_URL);// 编辑url
+			mav.addObject(ConstantUrl.DEL_URL,ConstantUrl.EXPRESS_SEND_DEL_URL);// 删除url
 		} catch (Exception e) {
 			log.error("商品分类分页查询出现错误："+e.getMessage());
 			throw webExp(e);

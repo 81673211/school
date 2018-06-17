@@ -69,6 +69,16 @@ public class ConstantUrl {
 	// 收件删除
 	public static final String EXPRESS_RECEIVE_DEL_URL = "/express/expressReceive/del.do";
 	
+	/**
+	 * 寄件
+	 */
+	// 寄件详情
+	public static final String EXPRESS_SEND_DETAIL_URL = "/express/expressSend/detail.do";
+	// 寄件编辑
+	public static final String EXPRESS_SEND_EDIT_URL = "/express/expressSend/edit.do";
+	// 寄件删除
+	public static final String EXPRESS_SEND_DEL_URL = "/express/expressSend/del.do";
+	
 	
 	/** 快递公司管理 */
 	/**
