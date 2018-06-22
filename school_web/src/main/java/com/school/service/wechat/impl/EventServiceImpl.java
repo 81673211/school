@@ -30,7 +30,7 @@ import com.school.web.wechat.WechatController;
 public class EventServiceImpl implements EventService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WechatController.class);
-
+    private static final String SUCCESS = "success";
 
     @Autowired
     private CustomerService customerService;
@@ -56,13 +56,16 @@ public class EventServiceImpl implements EventService {
                 textMessage.setCreateTime(System.currentTimeMillis());
                 textMessage.setContent("欢迎您");
                 return WechatMessageUtil.textMessageToXml(textMessage);
+            } else if (WechatEventTypeEnum.UNSUBSCRIBE.getCode().equals(event)) {
+                customerService.unsubscribe(openId);
+                return SUCCESS;
             } else if (WechatEventTypeEnum.VIEW.getCode().equals(event)) {
 
-                return "success";
+                return SUCCESS;
             }
         } else {
-            return "success";
+            return SUCCESS;
         }
-        return "success";
+        return SUCCESS;
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
+import com.alibaba.fastjson.JSON;
 import com.school.service.wechat.MenuService;
 import com.school.service.wechat.OauthService;
 import com.school.util.wechat.ConstantWeChat;
@@ -13,6 +14,8 @@ import com.school.util.wechat.button.Button;
 import com.school.util.wechat.button.CommonButton;
 import com.school.util.wechat.button.ComplexButton;
 import com.school.util.wechat.button.Menu;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *
@@ -23,6 +26,7 @@ import com.school.util.wechat.button.Menu;
  */
 @Component
 @Lazy(value = false)
+@Slf4j
 public class MenuManager {
 
     @Autowired
@@ -36,6 +40,7 @@ public class MenuManager {
         if (ConstantWeChat.REFRESH_MENU) {
             menuService.create(getMenu());
         }
+        log.info("menu:{}", JSON.toJSONString(menuService.get()));
     }
 
     private Menu getMenu() {
@@ -66,18 +71,14 @@ public class MenuManager {
         CommonButton btn31 = new CommonButton();
         btn31.setName("完善个人信息");
         btn31.setType("view");
-        btn31.setUrl(oauthService.getOAuthUrl("http://www.glove1573.cn/customer/profile/edit"));
+        btn31.setUrl(oauthService.getOAuthUrl("http://www.glove1573.cn/customer/profile"));
         btn31.setKey("31");
 
         CommonButton btn32 = new CommonButton();
         btn32.setName("联系我们");
-        btn32.setType("click");
+        btn32.setType("view");
+        btn32.setUrl("http://www.glove1573.cn/contact_us.html");
         btn32.setKey("32");
-
-        CommonButton btn33 = new CommonButton();
-        btn33.setName("在线帮助");
-        btn33.setType("click");
-        btn33.setKey("33");
 
         /**
          * 微信：  mainBtn1,mainBtn2,mainBtn3底部的三个一级菜单。
@@ -85,7 +86,6 @@ public class MenuManager {
 
         ComplexButton mainBtn1 = new ComplexButton();
         mainBtn1.setName("我的寄件");
-        //一级下有4个子菜单
         mainBtn1.setSub_button(new Button[] {btn11, btn12});
 
 
@@ -96,7 +96,7 @@ public class MenuManager {
 
         ComplexButton mainBtn3 = new ComplexButton();
         mainBtn3.setName("个人中心");
-        mainBtn3.setSub_button(new Button[] {btn31, btn32, btn33});
+        mainBtn3.setSub_button(new Button[] {btn31, btn32});
 
 
         /**

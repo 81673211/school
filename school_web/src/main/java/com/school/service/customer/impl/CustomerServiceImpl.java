@@ -32,17 +32,28 @@ public class CustomerServiceImpl implements CustomerService {
     public void subscribe(String openId) {
         LOGGER.info("openId:{}", openId);
         Customer customer = customerMapper.selectByOpenId(openId);
+        LOGGER.info("customer is not null? {}", customer != null);
         if (customer != null) {
-            if (!customer.isSubscribe()) {
-                customer.setSubscribe(true);
+            if (!customer.isSubscribed()) {
+                customer.setSubscribed(true);
                 customer.setSubscribedTime(new Date());
                 customerMapper.updateByPrimaryKey(customer);
             }
         } else {
             customer = new Customer();
             customer.setOpenId(openId);
+            customer.setSubscribed(true);
             customer.setSubscribedTime(new Date());
             customerMapper.insert(customer);
+        }
+    }
+
+    @Override
+    public void unsubscribe(String openId) {
+        Customer customer = customerMapper.selectByOpenId(openId);
+        if (customer != null && customer.isSubscribed()) {
+            customer.setSubscribed(false);
+            customerMapper.updateByPrimaryKey(customer);
         }
     }
 

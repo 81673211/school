@@ -1,14 +1,11 @@
 package com.school.web.customer;
 
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.school.util.wechat.WechatMessageUtil;
 import com.school.web.base.BaseEasyWebController;
 
 import lombok.extern.slf4j.Slf4j;
@@ -25,12 +22,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CustomerController extends BaseEasyWebController {
 
-    @RequestMapping("/profile/edit")
+    @RequestMapping("/profile")
     public void edit(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        log.info("-------------/customer/profile/edit---------");
+        log.info("-------------/customer/profile/profile---------");
         String code = request.getParameter("code");
         log.info("-------------code---------:{}", code);
-        response.sendRedirect("/index.html");
+        response.sendRedirect("/profile.html");
     }
 
 

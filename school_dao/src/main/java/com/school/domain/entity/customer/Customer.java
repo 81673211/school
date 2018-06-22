@@ -9,7 +9,7 @@ public class Customer {
 
     private String nickname;
 
-    private boolean subscribe;
+    private boolean subscribed;
 
     private Date subscribedTime;
 
@@ -61,12 +61,20 @@ public class Customer {
         this.nickname = nickname;
     }
 
-    public boolean isSubscribe() {
-        return subscribe;
+    public boolean isSubscribed() {
+        return subscribed;
     }
 
-    public void setSubscribe(boolean subscribe) {
-        this.subscribe = subscribe;
+    public void setSubscribed(boolean subscribed) {
+        this.subscribed = subscribed;
+    }
+
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 
     public Date getSubscribedTime() {

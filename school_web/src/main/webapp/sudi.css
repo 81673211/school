@@ -1,0 +1,9 @@
+.wrap h3{text-align: center;}
+.btnGroup>div{text-align: center;}
+.sendPiece>div{margin-bottom: 20px;}
+.price{color: red;}
+.receivedExpress label{color: #999;}
+.receivedExpress>div{border: 1px solid #e4e4e4;padding: 5px;margin-bottom: 10px;}
+.receivedExpress span{color: #666;}
+.timeExp{margin-top: -25px;}
+.getGood{margin-top: -10px;}

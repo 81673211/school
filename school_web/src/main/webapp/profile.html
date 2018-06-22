@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>个人信息</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <link rel="stylesheet" href="cssReset.css">
+    <!-- ZUI 标准版压缩后的 CSS 文件 -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/css/zui.min.css">
+    <link rel="stylesheet" href="sudi.css">
+</head>
+<body>
+    <div class="wrap container sendPiece">
+        <h3 class="">个人信息</h3>
+        <div class="input-control has-icon-right">
+            <input  type="password" class="form-control" placeholder="姓名">
+        </div>
+        <div class="input-control has-icon-right">
+            <input  type="password" class="form-control" placeholder="手机号">
+            <label  class="input-control-icon-right"><i class="icon icon-asterisk"></i></label>
+        </div>
+        <div class="row">
+            <div class="input-control has-icon-right col-xs-6">
+                <input  type="password" class="form-control" placeholder="验证码">
+            </div>
+            <div class="col-xs-4">
+                <button class="btn getCode">获取验证码</button>
+            </div>
+        </div>
+        <div class="input-control has-icon-right">
+            <input  type="password" class="form-control" placeholder="邮箱">
+        </div>
+        <div class="input-control has-icon-right">
+            <input  type="password" class="form-control" placeholder="地址">
+            <label  class="input-control-icon-right"><i class="icon icon-asterisk"></i></label>
+        </div>
+        <div class="row btnGroup">
+            <div class="col-xs-6">
+                <button class="btn btn-danger " type="button">重置</button>
+            </div>
+            <div class="col-xs-6">
+                <button class="btn btn-success " type="button">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ZUI Javascript 依赖 jQuery -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/lib/jquery/jquery.js"></script>
+    <!-- ZUI 标准版压缩后的 JavaScript 文件 -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/js/zui.min.js"></script>
+    <script>
+        $('.getCode').click(function () {
+            if($(this).html()=='获取验证码'){
+                var i=60;
+                var codeNum ;
+                setInterval(function () {
+                    i--;
+                    codeNum = i+"秒";
+                    $('.getCode').html(codeNum) ;
+                    if(i<1){
+                        i=60;
+                        $('.getCode').html('获取验证码') ;
+                    }
+                },1000);
+
+            }
+        });
+    </script>
+</body>
+</html>

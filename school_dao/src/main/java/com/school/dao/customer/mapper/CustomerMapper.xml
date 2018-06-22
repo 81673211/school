@@ -5,7 +5,7 @@
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="open_id" property="openId" jdbcType="VARCHAR" />
     <result column="nickname" property="nickname" jdbcType="VARCHAR" />
-    <result column="is_subscribed" property="subscribe" jdbcType="TINYINT" />
+    <result column="is_subscribed" property="subscribed" jdbcType="TINYINT" />
     <result column="subscribed_time" property="subscribedTime" jdbcType="TIMESTAMP" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="phone" property="phone" jdbcType="VARCHAR" />
@@ -34,18 +34,25 @@
     delete from customer
     where id = #{id,jdbcType=BIGINT}
   </delete>
+
   <insert id="insert" parameterType="com.school.domain.entity.customer.Customer" >
-    insert into customer (open_id, subscribed_time)
-    values (#{openId,jdbcType=VARCHAR}, #{subscribedTime, jdcbType=TIMESTAMP})
+    insert into customer (open_id, is_subscribed, subscribed_time)
+    values
+    (
+      #{openId,jdbcType=VARCHAR},
+      #{subscribed, jdbcType=TINYINT},
+      #{subscribedTime, jdbcType=TIMESTAMP}
+    )
   </insert>
+
   <update id="updateByPrimaryKeySelective" parameterType="com.school.domain.entity.customer.Customer" >
     update customer
     <set >
       <if test="nickname != null and nickname != ''" >
         nickname = #{nickname, jdbcType=VARCHAR},
       </if>
-      <if test="subscribe != null" >
-        is_subscribe = #{subscribe, jdbcType=TINYINT},
+      <if test="subscribed != null" >
+        is_subscribed = #{subscribed, jdbcType=TINYINT},
       </if>
       <if test="subscribedTime != null">
         subscribed_time = #{subscribedTime, jdbcType=TIMESTAMP}

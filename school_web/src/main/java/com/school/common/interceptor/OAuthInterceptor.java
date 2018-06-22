@@ -15,12 +15,15 @@ import com.school.service.customer.CustomerService;
 import com.school.service.wechat.OauthService;
 import com.school.util.wechat.OAuthToken;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * ClassName: OAuthInterceptor
  * @Description:  接口拦截器 
  * @author linqingsong
  * @date Jan 18, 2016 9:57:39 AM
  */
+@Slf4j
 public class OAuthInterceptor implements HandlerInterceptor{
 
 	@Autowired
@@ -47,7 +50,8 @@ public class OAuthInterceptor implements HandlerInterceptor{
 		OAuthToken oAuthToken = oauthService.getOAuthToken(code);
 		String openId = oAuthToken.getOpenId();
 		Customer customer = customerService.getByOpenId(openId);
-		if (customer == null || !customer.isSubscribe()) {
+		log.info("customer:{}, openId:{}", customer, openId);
+		if (customer == null || !customer.isSubscribed()) {
 			response.sendRedirect("/index.html");
 		} else if (StringUtils.isBlank(customer.getPhone())) {
 			response.sendRedirect("/customer/profile");

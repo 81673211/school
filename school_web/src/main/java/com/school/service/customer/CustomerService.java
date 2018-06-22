@@ -18,5 +18,7 @@ public interface CustomerService extends BaseService<Customer, CustomerMapper> {
      */
     void subscribe(String openId);
 
+    void unsubscribe(String openId);
+
     Customer getByOpenId(String openId);
 }
