@@ -16,13 +16,18 @@ import com.school.service.express.ExpressSendService;
 import com.school.util.core.Log;
 import com.school.vo.BaseVo;
 import com.school.vo.request.SendExpressVo;
+import com.school.vo.response.SendExpressListResponseVo;
 import com.school.vo.response.SendExpressResponseVo;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author jame
@@ -114,6 +119,28 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
         }
     }
 
+
+    @Override
+    public List<BaseVo> selectExpressList(Integer[] status, String phone) throws ExpressException {
+        List<BaseVo> list = new ArrayList<>();
+        try {
+            Map<String, Object> param = new HashMap<>();
+            param.put("status", status);
+            param.put("phone", phone);
+            List<ExpressSend> receiveList = expressSendMapper.selectByParams(param);
+            if (!receiveList.isEmpty()) {
+                for (ExpressSend expressSend : receiveList) {
+                    list.add(converterPo2Vo(expressSend, new SendExpressListResponseVo()));
+                }
+            }
+        } catch (Exception e) {
+            String msg = "throw exception when get receive express list";
+            Log.error.error(msg, e);
+            throw new ExpressException(e);
+        }
+        return list;
+    }
+
     /**
      * 初始化订单对象
      *
@@ -126,7 +153,7 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
         orderInfo.setExpressType(ExpressTypeEnum.SEND.getFlag());
         orderInfo.setStatus(OrderStatusEnum.UNPAID.getCode());
         orderInfo.setAmount(calcSendExpressAmount());
-        orderInfo.setOrderNo(UUID.randomUUID().toString());
+        orderInfo.setOrderNo(RandomStringUtils.randomAlphanumeric(20));
         return orderInfo;
     }
 

@@ -23,6 +23,8 @@ public abstract class BaseEasyWebController {
     protected final int HTTP_SUCCESS = 200;
     protected static String dateFormat;
 
+    private static final String PARAM_ERROR = "参数错误";
+
     static {
         dateFormat = "yyyy-MM-dd HH:mm:ss";
         SerializeConfig mapping = new SerializeConfig();

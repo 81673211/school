@@ -27,7 +27,7 @@ public class SendExpressVo extends BaseVo {
     private Long receiverCityId;//收件人城市ID
     @NotNull(message = "收件人区县不为空")
     private Long receiverDistrictId;        //收件人区县ID
-    @NotNull(message = "快递公司编号不为空")
+    @NotNull(message = "快递公司不为空")
     private Long companyId;    //快递公司
 
 

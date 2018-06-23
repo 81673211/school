@@ -9,6 +9,7 @@ import com.school.vo.request.ReceiveExpressVo;
 import com.school.vo.request.SendExpressVo;
 import com.school.web.base.BaseEasyWebController;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @author jame
@@ -64,6 +67,9 @@ public class ExpressController extends BaseEasyWebController {
         Response response = checkValid(bindingResult);
         if (response.getStatus() != HTTP_SUCCESS) {
             return response;
+        }
+        if (expressVo.getCompanyCode() == null && expressVo.getCompanyName() == null && expressVo.getCompanyId() == null) {
+            return response.writeFailure("参数错误");
         }
         try {
             expressReceiveService.createReceiveExpress(expressVo);
@@ -197,7 +203,7 @@ public class ExpressController extends BaseEasyWebController {
      */
     @RequestMapping(value = "/1/up-status", method = RequestMethod.POST)
     public Response updateReceiveExpressStatus(@RequestParam(value = "id") Long id,
-                                            @RequestParam(value = "status") Integer status) {
+                                               @RequestParam(value = "status") Integer status) {
         Response response = new Response();
         if (id == null || status == null) {
             return response.writeFailure("参数错误");
@@ -211,4 +217,49 @@ public class ExpressController extends BaseEasyWebController {
         return response;
     }
 
+
+    /**
+     * 收件  查询收件列表
+     *
+     * @param status
+     * @return
+     */
+    @RequestMapping(value = "/1/list", method = RequestMethod.GET)
+    public Response selectReceiveExpressList(@RequestParam(value = "status[]", required = false) Integer[] status,
+                                             @RequestParam(value = "phone") String phone) {
+        DataResponse<List> response = new DataResponse<>();
+        if (StringUtils.isBlank(phone)) {
+            return response.writeFailure("参数错误");
+        }
+        try {
+            List list = expressReceiveService.selectExpressList(status == null ? null : status, phone);
+            response.writeSuccess("查询列表成功", list);
+        } catch (Exception e) {
+            response.writeFailure("查询列表失败");
+        }
+        return response;
+    }
+
+
+    /**
+     * 寄件  查询寄件列表
+     *
+     * @param status
+     * @return
+     */
+    @RequestMapping(value = "/0/list", method = RequestMethod.GET)
+    public Response selectExpressList(@RequestParam(value = "status[]", required = false) Integer[] status,
+                                      @RequestParam(value = "phone") String phone) {
+        DataResponse<List> response = new DataResponse<>();
+        if (StringUtils.isBlank(phone)) {
+            return response.writeFailure("参数错误");
+        }
+        try {
+            List list = expressSendService.selectExpressList(status == null ? null : status, phone);
+            response.writeSuccess("查询列表成功", list);
+        } catch (Exception e) {
+            response.writeFailure("查询列表失败");
+        }
+        return response;
+    }
 }

@@ -212,4 +212,22 @@
         </where>
         ORDER BY er.id desc
     </select>
+
+
+    <select id="selectByParams" resultType="com.school.domain.entity.express.ExpressReceive" parameterType="map">
+        select * from express_receive t
+        <where>
+            <if test="phone != null and phone != '' ">
+                and t.receiver_phone=#{phone,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and t.express_status in
+                <foreach collection="status" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        and t.is_deleted=0
+        order by t.id desc
+    </select>
 </mapper>

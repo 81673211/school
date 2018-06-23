@@ -11,6 +11,8 @@ import javax.validation.constraints.NotNull;
 @Validated
 public class ReceiveExpressVo extends BaseVo {
     private Long id;
+    @NotNull(message = "快递单号不为空")
+    private String code;
     @NotNull(message = "收件人联系电话不为空")
     private String receiverPhone;
     @NotNull(message = "收件人姓名不为空")
@@ -21,15 +23,12 @@ public class ReceiveExpressVo extends BaseVo {
     private String senderName;
     @NotNull(message = "寄件人地址不为空")
     private String senderAddr;
-    @NotNull(message = "寄件人省份不为空")
     private Long senderProvinceId;
-    @NotNull(message = "寄件人城市不为空")
     private Long senderCityId;
-    @NotNull(message = "寄件人区县不为空")
     private Long senderDistrictId;
-    @NotNull(message = "快递公司编号不为空")
     private Long companyId;    //快递公司
-    @NotNull(message = "收件类型不为空")
+    private String companyCode;    //快递公司
+    private String companyName;    //快递公司
     private Integer expressWay;    //快件方式，0：自提；1：入柜
 
     public Long getId() {
@@ -118,5 +117,29 @@ public class ReceiveExpressVo extends BaseVo {
 
     public void setExpressWay(Integer expressWay) {
         this.expressWay = expressWay;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

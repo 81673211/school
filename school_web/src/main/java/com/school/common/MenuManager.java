@@ -22,7 +22,7 @@ import com.school.util.wechat.button.Menu;
  * <br><b>Date:</b> 14/06/2018 13:13
  */
 @Component
-@Lazy(value = false)
+//@Lazy(value = false)
 public class MenuManager {
 
     @Autowired

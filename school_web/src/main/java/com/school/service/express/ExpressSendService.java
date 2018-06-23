@@ -6,7 +6,8 @@ import com.school.exception.ExpressException;
 import com.school.service.base.BaseService;
 import com.school.vo.BaseVo;
 import com.school.vo.request.SendExpressVo;
-import com.school.vo.response.SendExpressResponseVo;
+
+import java.util.List;
 
 /**
  * @author jame
@@ -23,6 +24,7 @@ public interface ExpressSendService extends BaseService<ExpressSend, ExpressSend
 
     /**
      * 编辑寄件快件
+     *
      * @param expressVo
      * @throws ExpressException
      */
@@ -30,6 +32,7 @@ public interface ExpressSendService extends BaseService<ExpressSend, ExpressSend
 
     /**
      * 通过id获取寄件信息
+     *
      * @param id
      * @return
      */
@@ -37,8 +40,20 @@ public interface ExpressSendService extends BaseService<ExpressSend, ExpressSend
 
     /**
      * 修改寄件状态
+     *
      * @param id
      * @param status
      */
     void updateSendExpressStatus(Long id, Integer status) throws ExpressException;
+
+    /**
+     * 寄件列表，通过指定的状态值查询,
+     * 默认条件isDelete=0
+     *
+     * @param status
+     * @param phone
+     * @return
+     * @throws ExpressException
+     */
+    List<BaseVo> selectExpressList(Integer[] status, String phone) throws ExpressException;
 }
