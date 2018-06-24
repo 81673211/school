@@ -6,6 +6,7 @@ import com.school.exception.ExpressException;
 import com.school.service.base.BaseService;
 import com.school.vo.BaseVo;
 import com.school.vo.request.SendExpressVo;
+import com.school.vo.request.SendExpressModifyVo;
 
 import java.util.List;
 
@@ -28,7 +29,7 @@ public interface ExpressSendService extends BaseService<ExpressSend, ExpressSend
      * @param expressVo
      * @throws ExpressException
      */
-    void modifySendExpress(SendExpressVo expressVo) throws ExpressException;
+    void modifySendExpress(SendExpressModifyVo expressVo) throws ExpressException;
 
     /**
      * 通过id获取寄件信息

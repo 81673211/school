@@ -5,8 +5,10 @@ import com.school.common.model.Response;
 import com.school.service.express.ExpressReceiveService;
 import com.school.service.express.ExpressSendService;
 import com.school.vo.BaseVo;
-import com.school.vo.request.ReceiveExpressVo;
-import com.school.vo.request.SendExpressVo;
+import com.school.vo.request.ReceiveExpressCreateVo;
+import com.school.vo.request.ReceiveExpressModifyVo;
+import com.school.vo.request.SendExpressCreateVo;
+import com.school.vo.request.SendExpressModifyVo;
 import com.school.web.base.BaseEasyWebController;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -42,7 +44,7 @@ public class ExpressController extends BaseEasyWebController {
      * @return
      */
     @RequestMapping(value = "/0/create", method = RequestMethod.POST)
-    public Response createSendExpress(@Validated SendExpressVo expressVo, BindingResult bindingResult) {
+    public Response createSendExpress(@Validated SendExpressCreateVo expressVo, BindingResult bindingResult) {
         Response response = checkValid(bindingResult);
         if (response.getStatus() != HTTP_SUCCESS) {
             return response;
@@ -63,7 +65,7 @@ public class ExpressController extends BaseEasyWebController {
      * @return
      */
     @RequestMapping(value = "/1/create", method = RequestMethod.POST)
-    public Response createReceiveExpress(@Validated ReceiveExpressVo expressVo, BindingResult bindingResult) {
+    public Response createReceiveExpress(@Validated ReceiveExpressCreateVo expressVo, BindingResult bindingResult) {
         Response response = checkValid(bindingResult);
         if (response.getStatus() != HTTP_SUCCESS) {
             return response;
@@ -87,13 +89,10 @@ public class ExpressController extends BaseEasyWebController {
      * @return
      */
     @RequestMapping(value = "/0/modify", method = RequestMethod.POST)
-    public Response modifySendExpress(@Validated SendExpressVo expressVo, BindingResult bindingResult) {
+    public Response modifySendExpress(@Validated SendExpressModifyVo expressVo, BindingResult bindingResult) {
         Response response = checkValid(bindingResult);
         if (response.getStatus() != HTTP_SUCCESS) {
             return response;
-        }
-        if (expressVo.getId() == null) {
-            return response.writeFailure("参数错误");
         }
         try {
             expressSendService.modifySendExpress(expressVo);
@@ -112,13 +111,10 @@ public class ExpressController extends BaseEasyWebController {
      * @return
      */
     @RequestMapping(value = "/1/modify", method = RequestMethod.POST)
-    public Response modifySendExpress(@Validated ReceiveExpressVo expressVo, BindingResult bindingResult) {
+    public Response modifySendExpress(@Validated ReceiveExpressModifyVo expressVo, BindingResult bindingResult) {
         Response response = checkValid(bindingResult);
         if (response.getStatus() != HTTP_SUCCESS) {
             return response;
-        }
-        if (expressVo.getId() == null) {
-            return response.writeFailure("参数错误");
         }
         try {
             expressReceiveService.modifyReceiveExpress(expressVo);
