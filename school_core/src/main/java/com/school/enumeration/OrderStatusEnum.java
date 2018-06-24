@@ -1,7 +1,6 @@
 package com.school.enumeration;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import lombok.AllArgsConstructor;
@@ -18,16 +17,13 @@ import lombok.Getter;
 @Getter
 public enum OrderStatusEnum {
 
-    PROXY_RECIEVED("proxy_received", "代理处已签收"),
-    WAITING_PROXY_OBTAIN("waiting_proxy_obtain", "待从代理处取件"),
-    PROXY_OBTAINED("geted", "已从代理处取件"),
-    UNPAID("unpaid", "待支付，中间状态，用户不可见"),
-    PAID("paid", "已支付"),
-    CABINET_RECIEVED("cabinet_received", "已放入柜子"),
-    CABINET_OBTAINED("cabinet_obtained", "已从柜子取件"),
-    RETRIEVED("retrieved", "已回收");
+    UNPAY(0, "未支付"),
+    SUCCESS(1, "支付成功"),
+    FAILED(2, "支付失败"),
+    PAYING(3, "支付处理中"),
+    EXPIRED(4, "已过期");
 
-    private String code;
+    private Integer code;
 
     private String message;
     
@@ -40,8 +36,8 @@ public enum OrderStatusEnum {
     	return null;
     }
     
-    public static Map<String, String> getAllStatusEnum(){
-    	Map<String, String> resultMap = new HashMap<String,String>();
+    public static Map<Object, String> getAllStatusEnum(){
+    	Map<Object, String> resultMap = new HashMap<Object,String>();
     	OrderStatusEnum[] orderStatusEnums = OrderStatusEnum.values();
     	for (OrderStatusEnum orderStatusEnum : orderStatusEnums) {
 			resultMap.put(orderStatusEnum.code, orderStatusEnum.message);
@@ -49,19 +45,12 @@ public enum OrderStatusEnum {
     	return resultMap;
     }
 
-    public String getCode() {
-        return code;
-    }
+	public void setCode(Integer code) {
+		this.code = code;
+	}
 
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
+	public void setMessage(String message) {
+		this.message = message;
+	}
+    
 }

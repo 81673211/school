@@ -20,12 +20,12 @@
     <div class="yhl-lay-box">
         <div class="panel">
             <div class="panel-body">
-                <div class="row cl">
-                    <div class="col-xs-4 text-r">头像：</div>
-                    <div class="col-xs-8">
-                        <p>{{@data.avatar}}</p>
-                    </div>
-                </div>
+<!--                 <div class="row cl"> -->
+<!--                     <div class="col-xs-4 text-r">头像：</div> -->
+<!--                     <div class="col-xs-8"> -->
+<!--                         <p>{{@data.avatar}}</p> -->
+<!--                     </div> -->
+<!--                 </div> -->
                 <div class="row cl">
                     <div class="col-xs-4 text-r">名称：</div>
                     <div class="col-xs-8">

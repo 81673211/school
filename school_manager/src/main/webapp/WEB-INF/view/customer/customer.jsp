@@ -45,18 +45,18 @@
                 <input type="text" name="keywordSearch" id="" placeholder="客户名称/手机号" style="width:200px" class="input-text" :duplex="@inputText">
                 <button name="" id="" class="btn btn-primary radius" type="button" :click="@methods.query"><i class="Hui-iconfont"></i> 搜索</button>
             </div>
-            <div class="f-r">
-                <btn:hasUrlPerm link="${editUrl}">
-                	<a class="btn btn-danger ml-10" data-title="新建" :click="@methods.add(@methods.editUrl)" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 新增</a>
-                </btn:hasUrlPerm>
-	        </div>
+<!--             <div class="f-r"> -->
+<%--                 <btn:hasUrlPerm link="${editUrl}"> --%>
+<!--                 	<a class="btn btn-danger ml-10" data-title="新建" :click="@methods.add(@methods.editUrl)" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 新增</a> -->
+<%--                 </btn:hasUrlPerm> --%>
+<!-- 	        </div> -->
         </div>
         <div class="mt-20">
             <table class="table table-border table-bordered table-hover table-bg table-sort" id="reviwtable">
                 <thead>
                     <tr class="text-c">
                         <th width="25">编号</th>
-                        <th width="50">头像</th>
+<!--                         <th width="50">头像</th> -->
                         <th width="50">名称</th>
                         <th width="50">性别</th>
                         <th width="100">手机号</th>
@@ -70,7 +70,7 @@
                 <tbody>
                     <tr class="text-c" :for="index,el in @data">
                         <td>{{index+1}}</td>
-                        <td>{{el.avatar}}</td>
+<!--                         <td>{{el.avatar}}</td> -->
                         <td>{{el.name}}</td>
                         <td>{{el.sex}}</td>
                         <td>{{el.phone}}</td>
