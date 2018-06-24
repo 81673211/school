@@ -45,7 +45,7 @@
         nickname = #{nickname, jdbcType=VARCHAR},
       </if>
       <if test="subscribe != null" >
-        is_subscribe = #{subscribe, jdbcType=TINYINT},
+        is_subscribed = #{subscribe, jdbcType=TINYINT},
       </if>
       <if test="subscribedTime != null">
         subscribed_time = #{subscribedTime, jdbcType=TIMESTAMP}
@@ -92,6 +92,8 @@
   <update id="updateByPrimaryKey" parameterType="com.school.domain.entity.customer.Customer" >
     update customer
     set name = #{name,jdbcType=VARCHAR},
+      is_subscribed=#{subscribe,jdbcType=TINYINT},
+      subscribed_time=#{subscribedTime,jdbcType=TIMESTAMP},
       phone = #{phone,jdbcType=VARCHAR},
       addr = #{addr,jdbcType=VARCHAR},
       email = #{email,jdbcType=VARCHAR},
@@ -108,14 +110,13 @@
   
   <select id="queryPage" resultType="com.school.domain.entity.customer.Customer" parameterType="map">
 		select c.* from customer c
-		<where>
+		where c.phone is not null
 			<if test="status != null and status != '' ">
 				and c.status = #{status}
 			</if>
 			<if test="keyword != null and keyword != '' ">
 				and c.name like concat('%',#{keyword},'%')
 			</if>
-		</where>
 		ORDER BY c.id desc
 	</select>
 
