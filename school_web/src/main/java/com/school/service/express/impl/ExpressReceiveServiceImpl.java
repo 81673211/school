@@ -14,8 +14,8 @@ import com.school.service.base.impl.BaseServiceImpl;
 import com.school.service.express.ExpressReceiveService;
 import com.school.util.core.Log;
 import com.school.vo.BaseVo;
+import com.school.vo.request.ReceiveExpressCreateVo;
 import com.school.vo.request.ReceiveExpressModifyVo;
-import com.school.vo.request.ReceiveExpressVo;
 import com.school.vo.response.ReceiveExpressListResponseVo;
 import com.school.vo.response.ReceiveExpressResponseVo;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -44,7 +44,7 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
     private OrderInfoMapper orderInfoMapper;
 
     @Override
-    public void createReceiveExpress(ReceiveExpressVo expressVo) throws ExpressException {
+    public void createReceiveExpress(ReceiveExpressCreateVo expressVo) throws ExpressException {
         try {
             ExpressReceive expressReceive = converterVo2Po(expressVo, ExpressReceive.class);
             boxExpressCompany(expressReceive);

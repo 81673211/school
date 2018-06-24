@@ -5,7 +5,7 @@ import com.school.domain.entity.express.ExpressReceive;
 import com.school.exception.ExpressException;
 import com.school.service.base.BaseService;
 import com.school.vo.BaseVo;
-import com.school.vo.request.ReceiveExpressVo;
+import com.school.vo.request.ReceiveExpressCreateVo;
 import com.school.vo.request.ReceiveExpressModifyVo;
 
 import java.util.List;
@@ -20,7 +20,7 @@ public interface ExpressReceiveService extends BaseService<ExpressReceive, Expre
      *
      * @param expressVo
      */
-    void createReceiveExpress(ReceiveExpressVo expressVo) throws ExpressException;
+    void createReceiveExpress(ReceiveExpressCreateVo expressVo) throws ExpressException;
 
     /**
      * 编辑收件快件

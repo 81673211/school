@@ -13,8 +13,8 @@ import com.school.service.base.impl.BaseServiceImpl;
 import com.school.service.express.ExpressSendService;
 import com.school.util.core.Log;
 import com.school.vo.BaseVo;
+import com.school.vo.request.SendExpressCreateVo;
 import com.school.vo.request.SendExpressModifyVo;
-import com.school.vo.request.SendExpressVo;
 import com.school.vo.response.SendExpressListResponseVo;
 import com.school.vo.response.SendExpressResponseVo;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -43,7 +43,7 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
     private ExpressCompanyMapper expressCompanyMapper;
 
     @Override
-    public void createSendExpress(SendExpressVo expressVo) throws ExpressException {
+    public void createSendExpress(SendExpressCreateVo expressVo) throws ExpressException {
         try {
             ExpressSend expressSend = converterVo2Po(expressVo, ExpressSend.class);
             boxExpressCompany(expressSend);

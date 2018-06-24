@@ -5,7 +5,7 @@ import com.school.domain.entity.express.ExpressSend;
 import com.school.exception.ExpressException;
 import com.school.service.base.BaseService;
 import com.school.vo.BaseVo;
-import com.school.vo.request.SendExpressVo;
+import com.school.vo.request.SendExpressCreateVo;
 import com.school.vo.request.SendExpressModifyVo;
 
 import java.util.List;
@@ -21,7 +21,7 @@ public interface ExpressSendService extends BaseService<ExpressSend, ExpressSend
      * @param expressVo
      * @return
      */
-    void createSendExpress(SendExpressVo expressVo) throws ExpressException;
+    void createSendExpress(SendExpressCreateVo expressVo) throws ExpressException;
 
     /**
      * 编辑寄件快件
