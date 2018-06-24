@@ -147,6 +147,9 @@
     <update id="updateByPrimaryKeySelective" parameterType="com.school.domain.entity.express.ExpressSend">
         update express_send
         <set>
+            <if test="code != null">
+                code = #{code,jdbcType=VARCHAR},
+            </if>
             <if test="senderPhone != null">
                 sender_phone = #{senderPhone,jdbcType=VARCHAR},
             </if>

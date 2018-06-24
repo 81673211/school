@@ -17,6 +17,15 @@ public class ExpressReceive extends Express{
     private Long senderDistrictId;
     private String receiverPhone;
     private String receiverName;
+    private Date intoBoxTime;
+
+    public Date getIntoBoxTime() {
+        return intoBoxTime;
+    }
+
+    public void setIntoBoxTime(Date intoBoxTime) {
+        this.intoBoxTime = intoBoxTime;
+    }
 
     public String getSenderPhone() {
         return senderPhone;
