@@ -20,13 +20,13 @@
 <body :controller="customerEdit">
     <div class="mt-30">
         <form id="customerForm" action="${ctx}/customer/save.do" method="post">
-             <div class="row cl mb-15">
-                <label class="form-label col-xs-2 col-sm-3 text-r">头像：</label>
-                <div class="formControls col-xs-10 col-sm-9">
-                	<input type="hidden" id="id" name="id" value="${customer.id}">
-                    <input class="input-text" autocomplete="off" placeholder="" name="avatar" value="${customer.avatar}" type="text">
-                </div>
-            </div>
+            <input type="hidden" id="id" name="id" value="${customer.id}">
+<!--              <div class="row cl mb-15"> -->
+<!--                 <label class="form-label col-xs-2 col-sm-3 text-r">头像：</label> -->
+<!--                 <div class="formControls col-xs-10 col-sm-9"> -->
+<%--                     <input class="input-text" autocomplete="off" placeholder="" name="avatar" value="${customer.avatar}" type="text"> --%>
+<!--                 </div> -->
+<!--             </div> -->
              <div class="row cl mb-15">
                 <label class="form-label col-xs-2 col-sm-3 text-r">名称：</label>
                 <div class="formControls col-xs-10 col-sm-9">
