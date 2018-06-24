@@ -2,6 +2,7 @@ package com.school.web.express;
 
 import com.school.common.model.DataResponse;
 import com.school.common.model.Response;
+import com.school.service.express.ExpressCompanyService;
 import com.school.service.express.ExpressReceiveService;
 import com.school.service.express.ExpressSendService;
 import com.school.vo.BaseVo;
@@ -35,6 +36,8 @@ public class ExpressController extends BaseEasyWebController {
     private ExpressReceiveService expressReceiveService;
     @Autowired
     private ExpressSendService expressSendService;
+    @Autowired
+    private ExpressCompanyService expressCompanyService;
 
     /**
      * 寄件
@@ -252,6 +255,23 @@ public class ExpressController extends BaseEasyWebController {
         }
         try {
             List list = expressSendService.selectExpressList(status == null ? null : status, phone);
+            response.writeSuccess("查询列表成功", list);
+        } catch (Exception e) {
+            response.writeFailure("查询列表失败");
+        }
+        return response;
+    }
+
+    /**
+     * 快递公司列表
+     *
+     * @return
+     */
+    @RequestMapping(value = "/company", method = RequestMethod.GET)
+    public Response selectList() {
+        DataResponse<List> response = new DataResponse<>();
+        try {
+            List list = expressCompanyService.selectList();
             response.writeSuccess("查询列表成功", list);
         } catch (Exception e) {
             response.writeFailure("查询列表失败");

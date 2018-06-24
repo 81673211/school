@@ -1,10 +1,6 @@
 package com.school.vo.response;
 
-import com.school.enumeration.SendExpressStatusEnum;
 import com.school.vo.BaseVo;
-import org.apache.commons.lang3.EnumUtils;
-
-import java.util.Map;
 
 /**
  * @author jame
