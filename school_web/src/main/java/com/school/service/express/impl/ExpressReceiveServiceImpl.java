@@ -15,7 +15,8 @@ import com.school.service.base.impl.BaseServiceImpl;
 import com.school.service.express.ExpressReceiveService;
 import com.school.util.core.Log;
 import com.school.vo.BaseVo;
-import com.school.vo.request.ReceiveExpressVo;
+import com.school.vo.request.ReceiveExpressCreateVo;
+import com.school.vo.request.ReceiveExpressModifyVo;
 import com.school.vo.response.ReceiveExpressListResponseVo;
 import com.school.vo.response.ReceiveExpressResponseVo;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -44,7 +45,7 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
     private OrderInfoMapper orderInfoMapper;
 
     @Override
-    public void createReceiveExpress(ReceiveExpressVo expressVo) throws ExpressException {
+    public void createReceiveExpress(ReceiveExpressCreateVo expressVo) throws ExpressException {
         try {
             ExpressReceive expressReceive = converterVo2Po(expressVo, ExpressReceive.class);
             boxExpressCompany(expressReceive);
@@ -65,23 +66,22 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
     }
 
     @Override
-    public void modifyReceiveExpress(ReceiveExpressVo expressVo) throws ExpressException {
+    public void modifyReceiveExpress(ReceiveExpressModifyVo expressVo) throws ExpressException {
         try {
             ExpressReceive expressReceive = converterVo2Po(expressVo, ExpressReceive.class);
             //0自提；1入柜，null表示还未选择过
             Integer expressWay = expressReceiveMapper.selectByPrimaryKey(expressReceive.getId()).getExpressWay();
-            if (!(expressReceiveMapper.updateByPrimaryKeySelective(expressReceive) > 0)) {
-                Log.error.error("modify receive express error,when update table 'express_receive' the number of affected rows is 0");
-                throw new ExpressException("modify receive express error,when update table 'express_receive' the number of affected rows is 0");
-            }
-            if (expressWay == null) {
+            if (expressWay == null && expressReceive.getExpressWay() == 1) {
                 //修改后选择入柜方式才生成订单
                 if (!(orderInfoMapper.insertSelective(initOrderInfo(expressReceive.getId())) > 0)) {
                     Log.error.error("create receive express error,when insert table 'order_info' the number of affected rows is 0");
                     throw new ExpressException("create receive express error,when insert table 'order_info' the number of affected rows is 0");
                 }
             }
-
+            if (!(expressReceiveMapper.updateByPrimaryKeySelective(expressReceive) > 0)) {
+                Log.error.error("modify receive express error,when update table 'express_receive' the number of affected rows is 0");
+                throw new ExpressException("modify receive express error,when update table 'express_receive' the number of affected rows is 0");
+            }
         } catch (Exception e) {
             Log.error.error("throw exception when modify receive express", e);
             throw new ExpressException("throw exception when modify receive express", e);
@@ -159,7 +159,7 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
     private OrderInfo initOrderInfo(Long expressId) {
         OrderInfo orderInfo = new OrderInfo();
         orderInfo.setExpressId(expressId);
-        orderInfo.setExpressType(ExpressTypeEnum.SEND.getFlag());
+        orderInfo.setExpressType(ExpressTypeEnum.RECEIVE.getFlag());
         orderInfo.setStatus(OrderStatusEnum.UNPAID.getCode());
         orderInfo.setAmount(calcSendExpressAmount());
         orderInfo.setOrderNo(RandomStringUtils.randomAlphanumeric(20));

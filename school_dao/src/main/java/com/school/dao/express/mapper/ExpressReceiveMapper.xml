@@ -19,6 +19,7 @@
         <result column="is_deleted" property="isDeleted" jdbcType="BIT"/>
         <result column="express_status" property="expressStatus" jdbcType="INTEGER"/>
         <result column="express_way" property="expressWay" jdbcType="INTEGER"/>
+        <result column="into_box_time" property="intoBoxTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
         id,
@@ -37,7 +38,8 @@
         created_time,
         is_deleted,
         express_status,
-        express_way
+        express_way,
+        into_box_time
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
@@ -147,6 +149,9 @@
     <update id="updateByPrimaryKeySelective" parameterType="com.school.domain.entity.express.ExpressReceive">
         update express_receive
         <set>
+            <if test="code != null">
+                code = #{code,jdbcType=VARCHAR},
+            </if>
             <if test="senderPhone != null">
                 sender_phone = #{senderPhone,jdbcType=VARCHAR},
             </if>
@@ -188,6 +193,9 @@
             </if>
             <if test="expressWay != null and expressWay != 0">
                 express_way = #{expressWay,jdbcType=INTEGER},
+            </if>
+            <if test="intoBoxTime != null and intoBoxTime != 0">
+                intoBoxTime = #{intoBoxTime,jdbcType=TIMESTAMP},
             </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
