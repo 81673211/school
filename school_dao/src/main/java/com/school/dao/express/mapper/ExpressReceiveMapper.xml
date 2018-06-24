@@ -3,7 +3,7 @@
 <mapper namespace="com.school.dao.express.ExpressReceiveMapper">
     <resultMap id="BaseResultMap" type="com.school.domain.entity.express.ExpressReceive">
         <id column="id" property="id" jdbcType="BIGINT"/>
-        <result column="code" property="orderNo" jdbcType="VARCHAR"/>
+        <result column="code" property="code" jdbcType="VARCHAR"/>
         <result column="sender_phone" property="senderPhone" jdbcType="VARCHAR"/>
         <result column="sender_name" property="senderName" jdbcType="VARCHAR"/>
         <result column="sender_addr" property="senderAddr" jdbcType="VARCHAR"/>
