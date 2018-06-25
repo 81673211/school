@@ -27,7 +27,7 @@ public enum OrderStatusEnum {
 
     private String message;
     
-    public static OrderStatusEnum parseObj(String code){
+    public static OrderStatusEnum parseObj(Integer code){
     	for (OrderStatusEnum o : OrderStatusEnum.values()) {
     		if(o.code.equals(code)){
     			return o;

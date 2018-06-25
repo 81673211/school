@@ -15,6 +15,7 @@ import com.alibaba.fastjson.JSON;
 import com.school.common.model.AjaxResult;
 import com.school.constant.ConstantUrl;
 import com.school.domain.entity.express.ExpressReceive;
+import com.school.enumeration.ReceiveExpressStatusEnum;
 import com.school.service.express.ExpressReceiveService;
 import com.school.util.core.exception.FuBusinessException;
 import com.school.util.core.pager.PageInfo;
@@ -43,7 +44,7 @@ public class ExpressReceiveController extends BaseEasyWebController {
 		try {
 			List<ExpressReceive> list = expressReceiveService.queryPage(searchParams);
 			mav.addObject("listData",JSON.toJSON(list));
-//			mav.addObject("expressReceiveStatusMap",JSON.toJSON(StatusManage.expressReceiveStatusMap));
+			mav.addObject("expressReceiveStatusMap",JSON.toJSON(ReceiveExpressStatusEnum.getAllStatusEnum()));
 			mav.addObject(PAGE_PARAM_PAGECOUNT, pageInfo.getTotalPage());
 			mav.addObject(PAGE_PARAM_TOTALCOUNT, pageInfo.getTotalRecord());
 			
@@ -65,7 +66,7 @@ public class ExpressReceiveController extends BaseEasyWebController {
     		ModelAndView mv = new ModelAndView("express/expressReceiveDetail");
     		ExpressReceive expressReceive = expressReceiveService.get(id);
     		mv.addObject("expressReceive", JSON.toJSON(expressReceive));
-//    		mv.addObject("expressReceiveStatusMap",JSON.toJSON(StatusManage.expressReceiveStatusMap));
+    		mv.addObject("expressReceiveStatusMap",JSON.toJSON(ReceiveExpressStatusEnum.getAllStatusEnum()));
     		return mv;
     	}catch(Exception e){
     		throw webExp(e);
@@ -81,7 +82,7 @@ public class ExpressReceiveController extends BaseEasyWebController {
 		mav.setViewName("express/expressReceiveEdit");
 		ExpressReceive expressReceive = expressReceiveService.get(id);
 		mav.addObject("expressReceive", JSON.toJSON(expressReceive));
-//		mav.addObject("expressReceiveStatusMap",JSON.toJSON(StatusManage.expressReceiveStatusMap));
+		mav.addObject("expressReceiveStatusMap",JSON.toJSON(ReceiveExpressStatusEnum.getAllStatusEnum()));
 		return mav;
 	}
 	

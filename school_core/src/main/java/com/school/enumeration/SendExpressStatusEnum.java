@@ -1,5 +1,8 @@
 package com.school.enumeration;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author jame
  */
@@ -16,6 +19,24 @@ public enum SendExpressStatusEnum {
     SendExpressStatusEnum(int flag, String message) {
         this.flag = flag;
         this.message = message;
+    }
+    
+    public static SendExpressStatusEnum parseObj(Integer code){
+    	for (SendExpressStatusEnum o : SendExpressStatusEnum.values()) {
+    		if(o.flag == code){
+    			return o;
+    		}
+		}
+    	return null;
+    }
+    
+    public static Map<Object, String> getAllStatusEnum(){
+    	Map<Object, String> resultMap = new HashMap<Object,String>();
+    	SendExpressStatusEnum[] sendExpressStatusEnums = SendExpressStatusEnum.values();
+    	for (SendExpressStatusEnum sendExpressStatusEnum : sendExpressStatusEnums) {
+			resultMap.put(sendExpressStatusEnum.flag, sendExpressStatusEnum.message);
+		}
+    	return resultMap;
     }
 
     public int getFlag() {

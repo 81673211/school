@@ -3,9 +3,10 @@ package com.school.dao.order;
 import java.util.List;
 import java.util.Map;
 
+import com.school.dao.base.BaseDao;
 import com.school.domain.entity.order.OrderInfo;
 
-public interface OrderInfoMapper {
+public interface OrderInfoMapper extends BaseDao {
     int deleteByPrimaryKey(Long id);
 
     int insert(OrderInfo record);

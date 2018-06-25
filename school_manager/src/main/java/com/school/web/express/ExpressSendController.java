@@ -17,6 +17,7 @@ import com.school.common.model.AjaxResult;
 import com.school.constant.ConstantUrl;
 import com.school.constant.StatusManage;
 import com.school.domain.entity.express.ExpressSend;
+import com.school.enumeration.SendExpressStatusEnum;
 import com.school.service.express.ExpressSendService;
 import com.school.util.core.exception.FuBusinessException;
 import com.school.util.core.pager.PageInfo;
@@ -43,7 +44,7 @@ public class ExpressSendController extends BaseEasyWebController {
 			ModelAndView mav) throws FuBusinessException {
 		try {
 			mav.addObject("listData",JSON.toJSON(expressSendService.queryPage(searchParams)));
-//			mav.addObject("expressSendStatusMap",JSON.toJSON(StatusManage.expressSendStatusMap));
+			mav.addObject("expressSendStatusMap",JSON.toJSON(SendExpressStatusEnum.getAllStatusEnum()));
 			mav.addObject(PAGE_PARAM_PAGECOUNT, pageInfo.getTotalPage());
 			mav.addObject(PAGE_PARAM_TOTALCOUNT, pageInfo.getTotalRecord());
 			
@@ -51,7 +52,7 @@ public class ExpressSendController extends BaseEasyWebController {
 			mav.addObject(ConstantUrl.EDIT_URL, ConstantUrl.EXPRESS_SEND_EDIT_URL);// 编辑url
 			mav.addObject(ConstantUrl.DEL_URL,ConstantUrl.EXPRESS_SEND_DEL_URL);// 删除url
 		} catch (Exception e) {
-			log.error("商品分类分页查询出现错误："+e.getMessage());
+			log.error("寄件查询出现错误："+e.getMessage());
 			throw webExp(e);
 		}
 	}
@@ -65,7 +66,7 @@ public class ExpressSendController extends BaseEasyWebController {
     		ModelAndView mv = new ModelAndView("express/expressSendDetail");
     		ExpressSend expressSend = expressSendService.get(id);
     		mv.addObject("expressSend", JSON.toJSON(expressSend));
-//    		mv.addObject("expressSendStatusMap",JSON.toJSON(StatusManage.expressSendStatusMap));
+    		mv.addObject("expressSendStatusMap",JSON.toJSON(SendExpressStatusEnum.getAllStatusEnum()));
     		return mv;
     	}catch(Exception e){
     		throw webExp(e);
@@ -81,7 +82,7 @@ public class ExpressSendController extends BaseEasyWebController {
 		mav.setViewName("express/expressSendEdit");
 		ExpressSend expressSend = expressSendService.get(id);
 		mav.addObject("expressSend", JSON.toJSON(expressSend));
-//		mav.addObject("expressSendStatusMap",JSON.toJSON(StatusManage.expressSendStatusMap));
+		mav.addObject("expressSendStatusMap",JSON.toJSON(SendExpressStatusEnum.getAllStatusEnum()));
 		return mav;
 	}
 	
@@ -98,7 +99,7 @@ public class ExpressSendController extends BaseEasyWebController {
 			expressSendService.saveOrUpdate(expressSend);
 			return AjaxResult.success("保存成功", JSON.toJSON(expressSend));
 		}catch(Exception e){
-			log.error("保存商品类型出错：" + e.getMessage());
+			log.error("保存寄件出错：" + e.getMessage());
 			return AjaxResult.fail("保存失败");
 		}
 	}
@@ -113,7 +114,7 @@ public class ExpressSendController extends BaseEasyWebController {
 			expressSendService.deleteById(id);
 			return AjaxResult.success("删除成功");
 		} catch (Exception e) {
-			log.error("删除商品类型出错：" + e.getMessage());
+			log.error("删除寄件出错：" + e.getMessage());
 			return AjaxResult.fail("删除失败");
 		}
 	}

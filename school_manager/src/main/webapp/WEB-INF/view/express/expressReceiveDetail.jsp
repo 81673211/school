@@ -65,8 +65,7 @@
                 <div class="row cl">
                     <div class="col-xs-4 text-r">状态：</div>
                     <div class="col-xs-8">
-<!--                         <p>{{@expressReceiveStatusMap[@data.expressStatus]}}</p> -->
-                        <p>{{@data.expressStatus}}</p>
+                        <p>{{@expressReceiveStatusMap[@data.expressStatus]}}</p>
                     </div>
                 </div>
             </div>

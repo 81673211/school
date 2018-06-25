@@ -10,7 +10,7 @@
       var vm_expressSendManage=avalon.define({
           $id:'expressSendManage',
           data:${listData},
-//           expressSendStatusMap:${expressSendStatusMap},
+          expressSendStatusMap:${expressSendStatusMap},
           inputStatus:"${searchParams.status}",
           inputText:"${searchParams.keyword}",
           methods:{
@@ -42,7 +42,7 @@
              </span>
             </div>
             <div class="tran-serch f-l ml-50">
-                <input type="text" name="keywordSearch" id="" placeholder="商品类型名称" style="width:200px" class="input-text" :duplex="@inputText">
+                <input type="text" name="keywordSearch" id="" placeholder="快递单号" style="width:200px" class="input-text" :duplex="@inputText">
                 <button name="" id="" class="btn btn-primary radius" type="button" :click="@methods.query"><i class="Hui-iconfont"></i> 搜索</button>
             </div>
             <div class="f-r">
@@ -77,8 +77,7 @@
                         <td>{{el.receiverName}}</td>
                         <td>{{el.receiverPhone}}</td>
                         <td>{{el.companyName}}</td>
-<!--                         <td>{{@expressReceiveStatusMap[el.status]}}</td> -->
-                        <td>{{el.expressStatus}}</td>
+                        <td>{{@expressSendStatusMap[el.expressStatus]}}</td>
                         <td class="but_xq">
                         	<btn:hasUrlPerm link="${detailUrl}">
 	                           	<a class="btn btn-primary-outline size-S radius" :click="@methods.detail(el.id,@methods.detailUrl)">详情</a>

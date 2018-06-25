@@ -4,50 +4,68 @@
 <head>
 	<%@include file="/WEB-INF/view/common/common.jsp" %>
     <script type="text/javascript">
-    var vm_goodTypeDetail=avalon.define({
-        $id:'goodTypeDetail',
-        data:${goodType},
-        goodTypeStatusMap:${goodTypeStatusMap}
+    var vm_expressSendDetail=avalon.define({
+        $id:'expressSendDetail',
+        data:${expressSend},
+        expressSendStatusMap:${expressSendStatusMap}
     });
     </script>
-    <title>商品类型详情</title>
+    <title>寄件详情</title>
         <style>
             .table th,.table td{font-size:12px;text-align:center;}
             .table td.text-r{text-align:right;}
         </style>
 </head>
-<body :controller="goodTypeDetail">
+<body :controller="expressSendDetail">
     <div class="yhl-lay-box">
         <div class="panel">
             <div class="panel-body">
                 <div class="row cl">
-                    <div class="col-xs-4 text-r">类型名称：</div>
+                    <div class="col-xs-4 text-r">快递单号：</div>
                     <div class="col-xs-8">
-                        <p>{{@data.typeName}}</p>
+                        <p>{{@data.code}}</p>
                     </div>
                 </div>
                 <div class="row cl">
-                    <div class="col-xs-4 text-r">图片地址：</div>
+                    <div class="col-xs-4 text-r">寄件人姓名：</div>
                     <div class="col-xs-8">
-                        <p>{{@data.picPath}}</p>
+                        <p>{{@data.senderName}}</p>
                     </div>
                 </div>
                 <div class="row cl">
-                    <div class="col-xs-4 text-r">父节点：</div>
+                    <div class="col-xs-4 text-r">寄件人电话：</div>
                     <div class="col-xs-8">
-                        <p>{{@data.pid}}</p>
+                        <p>{{@data.senderPhone}}</p>
+                    </div>
+                </div>
+<!--                 <div class="row cl"> -->
+<!--                     <div class="col-xs-4 text-r">寄件人地址：</div> -->
+<!--                     <div class="col-xs-8"> -->
+<!--                         <p>{{@data.senderAddr}}</p> -->
+<!--                     </div> -->
+<!--                 </div> -->
+                <div class="row cl">
+                    <div class="col-xs-4 text-r">收件人姓名：</div>
+                    <div class="col-xs-8">
+                        <p>{{@data.receiverName}}</p>
                     </div>
                 </div>
                 <div class="row cl">
-                    <div class="col-xs-4 text-r">节点排序：</div>
+                    <div class="col-xs-4 text-r">收件人电话：</div>
                     <div class="col-xs-8">
-                        <p>{{@data.sort}}</p>
+                        <p>{{@data.receiverPhone}}</p>
+                    </div>
+                </div>
+                <div class="row cl">
+                    <div class="col-xs-4 text-r">快递公司：</div>
+                    <div class="col-xs-8">
+                        <p>{{@data.companyName}}</p>
                     </div>
                 </div>
                 <div class="row cl">
                     <div class="col-xs-4 text-r">状态：</div>
                     <div class="col-xs-8">
-                        <p>{{@goodTypeStatusMap[@data.status]}}</p>
+                        <p>{{@expressSendStatusMap[@data.expressStatus]}}</p>
                     </div>
                 </div>
             </div>
