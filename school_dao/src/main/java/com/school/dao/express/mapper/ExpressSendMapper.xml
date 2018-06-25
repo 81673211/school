@@ -186,7 +186,7 @@
             <if test="isDeleted != null">
                 is_deleted = #{isDeleted,jdbcType=BIT},
             </if>
-            <if test="expressStatus != null and expressStatus != 0">
+            <if test="expressStatus != null">
                 express_status = #{expressStatus,jdbcType=INTEGER},
             </if>
             <if test="expressWay != null and expressWay != 0">
