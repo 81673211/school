@@ -210,7 +210,10 @@
 			<if test="keyword != null and keyword != '' ">
 				and (es.name like concat('%',#{keyword},'%')
 					 or es.code like concat('%',#{keyword},'%')
-					 or es.phone like concat('%',#{keyword},'%'))
+					 or es.sender_name like concat('%',#{keyword},'%')
+					 or es.sender_phone like concat('%',#{keyword},'%')
+					 or es.receiver_name like concat('%',#{keyword},'%')
+					 or es.receiver_phone like concat('%',#{keyword},'%'))
 			</if>
 		</where>
 		ORDER BY es.id desc

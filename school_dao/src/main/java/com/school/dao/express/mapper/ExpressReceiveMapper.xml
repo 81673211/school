@@ -213,9 +213,11 @@
         select er.* from express_receive er
         <where>
             <if test="keyword != null and keyword != '' ">
-                and (er.name like concat('%',#{keyword},'%')
-                or er.code like concat('%',#{keyword},'%')
-                or er.phone like concat('%',#{keyword},'%'))
+                and (er.code like concat('%',#{keyword},'%')
+                or er.sender_name like concat('%',#{keyword},'%')
+                or er.sender_phone like concat('%',#{keyword},'%')
+                or er.receiver_name like concat('%',#{keyword},'%')
+                or er.receiver_phone like concat('%',#{keyword},'%'))
             </if>
         </where>
         ORDER BY er.id desc
