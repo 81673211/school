@@ -6,6 +6,7 @@ import com.school.vo.BaseVo;
  * @author jame
  */
 public class ReceiveExpressResponseVo extends BaseVo{
+    private Long id;
     private String code; //快件编号
     private String receiverPhone;
     private String receiverName;
@@ -20,6 +21,14 @@ public class ReceiveExpressResponseVo extends BaseVo{
     private String companyName; //快递name
     private Integer expressStatus; //快件状态
     private String createdTime; //创建时间
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getCode() {
         return code;

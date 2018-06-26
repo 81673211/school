@@ -10,7 +10,7 @@
       var vm_expressReceiveManage=avalon.define({
           $id:'expressReceiveManage',
           data:${listData},
-//           expressReceiveStatusMap:${expressReceiveStatusMap},
+          expressReceiveStatusMap:${expressReceiveStatusMap},
           inputStatus:"${searchParams.status}",
           inputText:"${searchParams.keyword}",
           methods:{
@@ -42,7 +42,7 @@
              </span>
             </div>
             <div class="tran-serch f-l ml-50">
-                <input type="text" name="keywordSearch" id="" placeholder="收件名称" style="width:200px" class="input-text" :duplex="@inputText">
+                <input type="text" name="keywordSearch" id="" placeholder="快递单号/收寄人姓名/电话" style="width:200px" class="input-text" :duplex="@inputText">
                 <button name="" id="" class="btn btn-primary radius" type="button" :click="@methods.query"><i class="Hui-iconfont"></i> 搜索</button>
             </div>
             <div class="f-r">
@@ -57,7 +57,7 @@
                     <tr class="text-c">
                         <th width="25">编号</th>
                         <th width="100">快递单号</th>
-                        <th width="100">寄件人姓名</th>
+                        <th width="50">寄件人姓名</th>
                         <th width="100">寄件人电话</th>
                         <th width="100">寄件人地址</th>
                         <th width="100">收件人姓名</th>
@@ -77,8 +77,7 @@
                         <td>{{el.receiverName}}</td>
                         <td>{{el.receiverPhone}}</td>
                         <td>{{el.companyName}}</td>
-<!--                         <td>{{@expressReceiveStatusMap[el.status]}}</td> -->
-                        <td>{{el.expressStatus}}</td>
+                        <td>{{@expressReceiveStatusMap[el.expressStatus]}}</td>
                         <td class="but_xq">
                         	<btn:hasUrlPerm link="${detailUrl}">
 	                           	<a class="btn btn-primary-outline size-S radius" :click="@methods.detail(el.id,@methods.detailUrl)">详情</a>

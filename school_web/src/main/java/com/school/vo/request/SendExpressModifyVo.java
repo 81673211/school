@@ -1,26 +1,36 @@
-package com.school.vo.response;
+package com.school.vo.request;
 
 import com.school.vo.BaseVo;
+import org.springframework.validation.annotation.Validated;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * @author jame
  */
-public class SendExpressResponseVo extends BaseVo{
+@Validated
+public class SendExpressModifyVo extends BaseVo {
+    @NotNull(message = "参数错误")
     private Long id;
-    private String code; //快件编号
+    private String code;
+    @NotNull(message = "寄件人联系电话不为空")
     private String senderPhone;//	寄件人联系电话
+    @NotNull(message = "寄件人姓名不为空")
     private String senderName;        //寄件人姓名
+    @NotNull(message = "收件人电话不为空")
     private String receiverPhone;    //收件人电话
+    @NotNull(message = "收件人名字不为空")
     private String receiverName;//	收件人名字
+    @NotNull(message = "收件人地址不为空")
     private String receiverAddr;//	收件人地址
+    @NotNull(message = "收件人省份不为空")
     private Long receiverProvinceId;    //收件人省份ID
+    @NotNull(message = "收件人城市不为空")
     private Long receiverCityId;//收件人城市ID
+    @NotNull(message = "收件人区县不为空")
     private Long receiverDistrictId;        //收件人区县ID
+    @NotNull(message = "快递公司不为空")
     private Long companyId;    //快递公司
-    private String companyCode; //快递code
-    private String companyName; //快递name
-    private Integer expressStatus; //快件状态
-    private String createdTime; //创建时间
 
 
     public Long getId() {
@@ -29,14 +39,6 @@ public class SendExpressResponseVo extends BaseVo{
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
 
     public String getSenderPhone() {
@@ -79,6 +81,14 @@ public class SendExpressResponseVo extends BaseVo{
         this.receiverAddr = receiverAddr;
     }
 
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
+
     public Long getReceiverProvinceId() {
         return receiverProvinceId;
     }
@@ -103,43 +113,11 @@ public class SendExpressResponseVo extends BaseVo{
         this.receiverDistrictId = receiverDistrictId;
     }
 
-    public Long getCompanyId() {
-        return companyId;
+    public String getCode() {
+        return code;
     }
 
-    public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
-    }
-
-    public String getCompanyCode() {
-        return companyCode;
-    }
-
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
-    }
-
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
-    public Integer getExpressStatus() {
-        return expressStatus;
-    }
-
-    public void setExpressStatus(Integer expressStatus) {
-        this.expressStatus = expressStatus;
-    }
-
-    public String getCreatedTime() {
-        return createdTime;
-    }
-
-    public void setCreatedTime(String createdTime) {
-        this.createdTime = createdTime;
+    public void setCode(String code) {
+        this.code = code;
     }
 }

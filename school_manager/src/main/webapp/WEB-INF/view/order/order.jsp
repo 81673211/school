@@ -46,11 +46,12 @@
                 <thead>
                     <tr class="text-c">
                         <th width="25">编号</th>
-                        <th width="100">快递ID</th>
+                        <th width="100">订单号</th>
+                        <th width="100">快递单号</th>
+                        <th width="30">快递类型</th>
                         <th width="100">订单金额</th>
-                        <th width="100">是否已完成</th>
                         <th width="100">创建时间</th>
-                        <th width="100">修改时间</th>
+                        <th width="100">完成时间</th>
                         <th width="100">订单状态</th>
                         <th width="50">操作</th>
                     </tr>
@@ -58,11 +59,12 @@
                 <tbody>
                     <tr class="text-c" :for="index,el in @data">
                         <td>{{index+1}}</td>
-                        <td>{{el.expressId}}</td>
+                        <td>{{el.orderNo}}</td>
+                        <td>{{el.expressCode}}</td>
+                        <td>{{el.expressType}}</td>
                         <td>{{el.amount}}</td>
-                        <td>{{el.isFinished}}</td>
                         <td>{{el.createdTime|date('yyyy-MM-dd HH:mm:ss')}}</td>
-                        <td>{{el.modifiedTime|date('yyyy-MM-dd HH:mm:ss')}}</td>
+                        <td>{{el.sucTime|date('yyyy-MM-dd HH:mm:ss')}}</td>
                         <td>{{@orderStatusMap[el.status]}}</td>
 <!--                         <td>{{el.status}}</td> -->
                         <td class="but_xq">

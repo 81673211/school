@@ -1,5 +1,10 @@
 package com.school.dao.base;
 
+import com.school.domain.entity.express.ExpressReceive;
+
+import java.util.List;
+import java.util.Map;
+
 /**
  * <p>Title: BaseDao</p>
  * <p>Description: 基础dao接口，定义单表的增删该查方法</p>
@@ -20,4 +25,6 @@ public interface BaseDao {
     int updateByPrimaryKeySelective(Object record);
 
     int updateByPrimaryKey(Object record);
+
+    List selectByParams(Map<String, Object> param);
 }

@@ -6,8 +6,8 @@
     <script type="text/javascript">
     var vm_customerDetail=avalon.define({
         $id:'customerDetail',
-        data:${customer},
-        customerStatusMap:${customerStatusMap}
+        data:${customer}
+//         customerStatusMap:${customerStatusMap}
     });
     </script>
     <title>客户详情</title>
@@ -20,12 +20,12 @@
     <div class="yhl-lay-box">
         <div class="panel">
             <div class="panel-body">
-                <div class="row cl">
-                    <div class="col-xs-4 text-r">头像：</div>
-                    <div class="col-xs-8">
-                        <p>{{@data.avatar}}</p>
-                    </div>
-                </div>
+<!--                 <div class="row cl"> -->
+<!--                     <div class="col-xs-4 text-r">头像：</div> -->
+<!--                     <div class="col-xs-8"> -->
+<!--                         <p>{{@data.avatar}}</p> -->
+<!--                     </div> -->
+<!--                 </div> -->
                 <div class="row cl">
                     <div class="col-xs-4 text-r">名称：</div>
                     <div class="col-xs-8">
@@ -68,12 +68,12 @@
                         <p>{{@data.modifiedTime|date('yyyy-MM-dd HH:mm:ss')}}</p>
                     </div>
                 </div>
-                <div class="row cl">
-                    <div class="col-xs-4 text-r">状态：</div>
-                    <div class="col-xs-8">
-                        <p>{{@customerStatusMap[@data.status]}}</p>
-                    </div>
-                </div>
+<!--                 <div class="row cl"> -->
+<!--                     <div class="col-xs-4 text-r">状态：</div> -->
+<!--                     <div class="col-xs-8"> -->
+<!--                         <p>{{@customerStatusMap[@data.status]}}</p> -->
+<!--                     </div> -->
+<!--                 </div> -->
             </div>
         </div>
     </div>

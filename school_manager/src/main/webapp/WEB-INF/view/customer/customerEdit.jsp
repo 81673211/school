@@ -19,14 +19,14 @@
 </head>
 <body :controller="customerEdit">
     <div class="mt-30">
-        <form id="customerForm" action="${ctx}/customer/customer/save.do" method="post">
-             <div class="row cl mb-15">
-                <label class="form-label col-xs-2 col-sm-3 text-r">头像：</label>
-                <div class="formControls col-xs-10 col-sm-9">
-                	<input type="hidden" id="id" name="id" value="${customer.id}">
-                    <input class="input-text" autocomplete="off" placeholder="" name="avatar" value="${customer.avatar}" type="text">
-                </div>
-            </div>
+        <form id="customerForm" action="${ctx}/customer/save.do" method="post">
+            <input type="hidden" id="id" name="id" value="${customer.id}">
+<!--              <div class="row cl mb-15"> -->
+<!--                 <label class="form-label col-xs-2 col-sm-3 text-r">头像：</label> -->
+<!--                 <div class="formControls col-xs-10 col-sm-9"> -->
+<%--                     <input class="input-text" autocomplete="off" placeholder="" name="avatar" value="${customer.avatar}" type="text"> --%>
+<!--                 </div> -->
+<!--             </div> -->
              <div class="row cl mb-15">
                 <label class="form-label col-xs-2 col-sm-3 text-r">名称：</label>
                 <div class="formControls col-xs-10 col-sm-9">
@@ -57,16 +57,16 @@
                     <input class="input-text" autocomplete="off" placeholder="" name="email" value="${customer.email}" type="text">
                 </div>
             </div>
-             <div class="row cl mb-15">
-                <label class="form-label col-xs-2 col-sm-3 text-r">状态：</label>
-                <div class="formControls col-xs-10 col-sm-9">
-                	<select class="input-text" name="status">
-                		<c:forEach items="${customerStatusMap}" var="status">
-	                		<option value="${status.key}" <c:if test="${status.key == customer.status}">selected="selected"</c:if>>${status.value}</option>
-                		</c:forEach>
-                	</select>
-                </div>
-            </div>
+<!--              <div class="row cl mb-15"> -->
+<!--                 <label class="form-label col-xs-2 col-sm-3 text-r">状态：</label> -->
+<!--                 <div class="formControls col-xs-10 col-sm-9"> -->
+<!--                 	<select class="input-text" name="status"> -->
+<%--                 		<c:forEach items="${customerStatusMap}" var="status"> --%>
+<%-- 	                		<option value="${status.key}" <c:if test="${status.key == customer.status}">selected="selected"</c:if>>${status.value}</option> --%>
+<%--                 		</c:forEach> --%>
+<!--                 	</select> -->
+<!--                 </div> -->
+<!--             </div> -->
         </form>
     </div>    
 <script type="text/javascript" src="${ctx}/static/lib/requirejs/requirejs.js" data-main="${ctx}/static/requirejs.config.js"></script>

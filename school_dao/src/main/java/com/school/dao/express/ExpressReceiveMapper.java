@@ -28,4 +28,6 @@ public interface ExpressReceiveMapper extends BaseDao {
      * 管理台列表
      */
     List<ExpressReceive> queryForManagerPage(Map<String, Object> paramMap);
+
+
 }

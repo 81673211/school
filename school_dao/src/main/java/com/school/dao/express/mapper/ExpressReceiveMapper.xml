@@ -3,7 +3,7 @@
 <mapper namespace="com.school.dao.express.ExpressReceiveMapper">
     <resultMap id="BaseResultMap" type="com.school.domain.entity.express.ExpressReceive">
         <id column="id" property="id" jdbcType="BIGINT"/>
-        <result column="code" property="orderNo" jdbcType="VARCHAR"/>
+        <result column="code" property="code" jdbcType="VARCHAR"/>
         <result column="sender_phone" property="senderPhone" jdbcType="VARCHAR"/>
         <result column="sender_name" property="senderName" jdbcType="VARCHAR"/>
         <result column="sender_addr" property="senderAddr" jdbcType="VARCHAR"/>
@@ -19,6 +19,7 @@
         <result column="is_deleted" property="isDeleted" jdbcType="BIT"/>
         <result column="express_status" property="expressStatus" jdbcType="INTEGER"/>
         <result column="express_way" property="expressWay" jdbcType="INTEGER"/>
+        <result column="into_box_time" property="intoBoxTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
         id,
@@ -37,7 +38,8 @@
         created_time,
         is_deleted,
         express_status,
-        express_way
+        express_way,
+        into_box_time
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
@@ -92,7 +94,7 @@
             <if test="companyName != null">
                 company_name,
             </if>
-            <if test="expressStatus != null and expressStatus != 0">
+            <if test="expressStatus != null">
                 express_status,
             </if>
             <if test="expressWay != null and expressWay != 0">
@@ -147,6 +149,9 @@
     <update id="updateByPrimaryKeySelective" parameterType="com.school.domain.entity.express.ExpressReceive">
         update express_receive
         <set>
+            <if test="code != null">
+                code = #{code,jdbcType=VARCHAR},
+            </if>
             <if test="senderPhone != null">
                 sender_phone = #{senderPhone,jdbcType=VARCHAR},
             </if>
@@ -189,6 +194,9 @@
             <if test="expressWay != null and expressWay != 0">
                 express_way = #{expressWay,jdbcType=INTEGER},
             </if>
+            <if test="intoBoxTime != null and intoBoxTime != 0">
+                intoBoxTime = #{intoBoxTime,jdbcType=TIMESTAMP},
+            </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
@@ -205,11 +213,31 @@
         select er.* from express_receive er
         <where>
             <if test="keyword != null and keyword != '' ">
-                and (er.name like concat('%',#{keyword},'%')
-                or er.code like concat('%',#{keyword},'%')
-                or er.phone like concat('%',#{keyword},'%'))
+                and (er.code like concat('%',#{keyword},'%')
+                or er.sender_name like concat('%',#{keyword},'%')
+                or er.sender_phone like concat('%',#{keyword},'%')
+                or er.receiver_name like concat('%',#{keyword},'%')
+                or er.receiver_phone like concat('%',#{keyword},'%'))
             </if>
         </where>
         ORDER BY er.id desc
+    </select>
+
+
+    <select id="selectByParams" resultType="com.school.domain.entity.express.ExpressReceive" parameterType="map">
+        select * from express_receive t
+        <where>
+            <if test="phone != null and phone != '' ">
+                and t.receiver_phone=#{phone,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and t.express_status in
+                <foreach collection="status" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        and t.is_deleted=0
+        order by t.id desc
     </select>
 </mapper>

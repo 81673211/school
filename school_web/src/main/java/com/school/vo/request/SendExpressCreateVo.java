@@ -9,8 +9,9 @@ import javax.validation.constraints.NotNull;
  * @author jame
  */
 @Validated
-public class SendExpressVo extends BaseVo {
+public class SendExpressCreateVo extends BaseVo {
     private Long id;
+    private String code;
     @NotNull(message = "寄件人联系电话不为空")
     private String senderPhone;//	寄件人联系电话
     @NotNull(message = "寄件人姓名不为空")
@@ -27,7 +28,7 @@ public class SendExpressVo extends BaseVo {
     private Long receiverCityId;//收件人城市ID
     @NotNull(message = "收件人区县不为空")
     private Long receiverDistrictId;        //收件人区县ID
-    @NotNull(message = "快递公司编号不为空")
+    @NotNull(message = "快递公司不为空")
     private Long companyId;    //快递公司
 
 
@@ -109,5 +110,13 @@ public class SendExpressVo extends BaseVo {
 
     public void setReceiverDistrictId(Long receiverDistrictId) {
         this.receiverDistrictId = receiverDistrictId;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

@@ -68,12 +68,12 @@
     </property>
   </bean>
 
-  <mvc:interceptors>
-    <mvc:interceptor>
-      <mvc:mapping path="/customer/profile/edit" />
-      <mvc:mapping path="/express/**" />
-      <bean class="com.school.common.interceptor.OAuthInterceptor"/>
-    </mvc:interceptor>
-  </mvc:interceptors>
+  <!--<mvc:interceptors>-->
+    <!--<mvc:interceptor>-->
+      <!--<mvc:mapping path="/customer/profile/edit" />-->
+      <!--<mvc:mapping path="/express/**" />-->
+      <!--<bean class="com.school.common.interceptor.OAuthInterceptor"/>-->
+    <!--</mvc:interceptor>-->
+  <!--</mvc:interceptors>-->
 
 </beans>

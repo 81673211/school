@@ -3,26 +3,30 @@ package com.school.service.express.impl;
 import com.school.dao.express.ExpressCompanyMapper;
 import com.school.dao.express.ExpressSendMapper;
 import com.school.dao.order.OrderInfoMapper;
-import com.school.domain.entity.express.Express;
 import com.school.domain.entity.express.ExpressCompany;
 import com.school.domain.entity.express.ExpressSend;
 import com.school.domain.entity.order.OrderInfo;
 import com.school.enumeration.ExpressTypeEnum;
-import com.school.enumeration.OrderStatusEnum;
 import com.school.exception.ExpressException;
 import com.school.exception.ExpressStatusException;
 import com.school.service.base.impl.BaseServiceImpl;
 import com.school.service.express.ExpressSendService;
 import com.school.util.core.Log;
 import com.school.vo.BaseVo;
-import com.school.vo.request.SendExpressVo;
+import com.school.vo.request.SendExpressCreateVo;
+import com.school.vo.request.SendExpressModifyVo;
+import com.school.vo.response.SendExpressListResponseVo;
 import com.school.vo.response.SendExpressResponseVo;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author jame
@@ -39,7 +43,7 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
     private ExpressCompanyMapper expressCompanyMapper;
 
     @Override
-    public void createSendExpress(SendExpressVo expressVo) throws ExpressException {
+    public void createSendExpress(SendExpressCreateVo expressVo) throws ExpressException {
         try {
             ExpressSend expressSend = converterVo2Po(expressVo, ExpressSend.class);
             boxExpressCompany(expressSend);
@@ -62,13 +66,26 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
     }
 
     @Override
-    public void modifySendExpress(SendExpressVo expressVo) throws ExpressException {
+    public void modifySendExpress(SendExpressModifyVo expressVo) throws ExpressException {
         try {
             ExpressSend expressSend = converterVo2Po(expressVo, ExpressSend.class);
+            boxExpressCompany(expressSend);
+            ExpressSend hasSendExpress = expressSendMapper.selectByPrimaryKey(expressSend.getId());
             if (!(expressSendMapper.updateByPrimaryKeySelective(expressSend) > 0)) {
                 String message = "modify send express error,when update table 'express_send' the number of affected rows is 0";
                 Log.error.error(message);
                 throw new ExpressException(message);
+            }
+            //todo 修改完成后检查省市区快递公司等是否发生改变，改变了则重新创建订单，待修改；以及状态检查
+            if (!hasSendExpress.getCompanyId().equals(expressSend.getCompanyId()) ||
+                    !hasSendExpress.getReceiverProvinceId().equals(expressSend.getReceiverProvinceId()) ||
+                    !hasSendExpress.getReceiverCityId().equals(expressSend.getReceiverCityId()) ||
+                    !hasSendExpress.getReceiverDistrictId().equals(expressSend.getReceiverDistrictId())) {
+                if (!(orderInfoMapper.insertSelective(initOrderInfo(expressSend.getId())) > 0)) {
+                    String message = "create send express error,when insert table 'order_info' the number of affected rows is 0";
+                    Log.error.error(message);
+                    throw new ExpressException(message);
+                }
             }
         } catch (Exception e) {
             String message = "throw exception when modify send express";
@@ -114,6 +131,28 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
         }
     }
 
+
+    @Override
+    public List<BaseVo> selectExpressList(Integer[] status, String phone) throws ExpressException {
+        List<BaseVo> list = new ArrayList<>();
+        try {
+            Map<String, Object> param = new HashMap<>();
+            param.put("status", status);
+            param.put("phone", phone);
+            List<ExpressSend> receiveList = expressSendMapper.selectByParams(param);
+            if (!receiveList.isEmpty()) {
+                for (ExpressSend expressSend : receiveList) {
+                    list.add(converterPo2Vo(expressSend, new SendExpressListResponseVo()));
+                }
+            }
+        } catch (Exception e) {
+            String msg = "throw exception when get receive express list";
+            Log.error.error(msg, e);
+            throw new ExpressException(e);
+        }
+        return list;
+    }
+
     /**
      * 初始化订单对象
      *
@@ -122,11 +161,12 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
      */
     private OrderInfo initOrderInfo(Long expressId) {
         OrderInfo orderInfo = new OrderInfo();
+        orderInfo.setExpressType(ExpressTypeEnum.SEND.getFlag());
         orderInfo.setExpressId(expressId);
         orderInfo.setExpressType(ExpressTypeEnum.SEND.getFlag());
-        orderInfo.setStatus(OrderStatusEnum.UNPAID.getCode());
+        orderInfo.setStatus(0);
         orderInfo.setAmount(calcSendExpressAmount());
-        orderInfo.setOrderNo(UUID.randomUUID().toString());
+        orderInfo.setOrderNo(RandomStringUtils.randomAlphanumeric(20));
         return orderInfo;
     }
 
@@ -135,7 +175,7 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
      *
      * @param expressSend
      */
-    private void boxExpressCompany(Express expressSend) {
+    private void boxExpressCompany(ExpressSend expressSend) {
         ExpressCompany expressCompany = expressCompanyMapper.selectByPrimaryKey(expressSend.getCompanyId());
         expressSend.setCompanyCode(expressCompany.getCode());
         expressSend.setCompanyName(expressCompany.getName());
