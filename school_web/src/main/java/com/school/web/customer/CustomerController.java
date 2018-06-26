@@ -3,9 +3,11 @@ package com.school.web.customer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.school.service.customer.CustomerService;
 import com.school.web.base.BaseEasyWebController;
 
 import lombok.extern.slf4j.Slf4j;
@@ -22,12 +24,20 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CustomerController extends BaseEasyWebController {
 
+    @Autowired
+    private CustomerService customerService;
+
     @RequestMapping("/profile")
     public void edit(HttpServletRequest request, HttpServletResponse response) throws Exception {
         log.info("-------------/customer/profile/profile---------");
         String code = request.getParameter("code");
         log.info("-------------code---------:{}", code);
         response.sendRedirect("/profile.html");
+    }
+
+    @RequestMapping("/test")
+    public void test(String openId) {
+        customerService.subscribe(openId);
     }
 
 

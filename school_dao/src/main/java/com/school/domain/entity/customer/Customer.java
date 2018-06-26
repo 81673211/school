@@ -9,7 +9,7 @@ public class Customer {
 
     private String nickname;
 
-    private boolean subscribed;
+    private boolean isSubscribed;
 
     private Date subscribedTime;
 
@@ -62,19 +62,11 @@ public class Customer {
     }
 
     public boolean isSubscribed() {
-        return subscribed;
+        return isSubscribed;
     }
 
     public void setSubscribed(boolean subscribed) {
-        this.subscribed = subscribed;
-    }
-
-    public Boolean getDeleted() {
-        return isDeleted;
-    }
-
-    public void setDeleted(Boolean deleted) {
-        isDeleted = deleted;
+        isSubscribed = subscribed;
     }
 
     public Date getSubscribedTime() {
@@ -90,7 +82,7 @@ public class Customer {
     }
 
     public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+        this.name = name;
     }
 
     public String getPhone() {
@@ -98,7 +90,7 @@ public class Customer {
     }
 
     public void setPhone(String phone) {
-        this.phone = phone == null ? null : phone.trim();
+        this.phone = phone;
     }
 
     public String getAddr() {
@@ -106,7 +98,7 @@ public class Customer {
     }
 
     public void setAddr(String addr) {
-        this.addr = addr == null ? null : addr.trim();
+        this.addr = addr;
     }
 
     public String getEmail() {
@@ -114,7 +106,7 @@ public class Customer {
     }
 
     public void setEmail(String email) {
-        this.email = email == null ? null : email.trim();
+        this.email = email;
     }
 
     public String getAvatar() {
@@ -122,7 +114,7 @@ public class Customer {
     }
 
     public void setAvatar(String avatar) {
-        this.avatar = avatar == null ? null : avatar.trim();
+        this.avatar = avatar;
     }
 
     public String getSex() {
@@ -130,7 +122,7 @@ public class Customer {
     }
 
     public void setSex(String sex) {
-        this.sex = sex == null ? null : sex.trim();
+        this.sex = sex;
     }
 
     public Integer getVersion() {
@@ -146,7 +138,7 @@ public class Customer {
     }
 
     public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
+        this.creator = creator;
     }
 
     public Date getCreatedTime() {
@@ -162,7 +154,7 @@ public class Customer {
     }
 
     public void setModifier(String modifier) {
-        this.modifier = modifier == null ? null : modifier.trim();
+        this.modifier = modifier;
     }
 
     public Date getModifiedTime() {
@@ -173,11 +165,11 @@ public class Customer {
         this.modifiedTime = modifiedTime;
     }
 
-    public Boolean getIsDeleted() {
+    public Boolean getDeleted() {
         return isDeleted;
     }
 
-    public void setIsDeleted(Boolean isDeleted) {
-        this.isDeleted = isDeleted;
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 }
