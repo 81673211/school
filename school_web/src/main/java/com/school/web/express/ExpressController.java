@@ -73,8 +73,8 @@ public class ExpressController extends BaseEasyWebController {
         if (response.getStatus() != HTTP_SUCCESS) {
             return response;
         }
-        if (expressVo.getCompanyCode() == null && expressVo.getCompanyName() == null && expressVo.getCompanyId() == null) {
-            return response.writeFailure("参数错误");
+        if (expressVo.getCompanyCode() == null || expressVo.getCompanyName() == null || expressVo.getCompanyId() == null) {
+            return response.writeFailure(PARAM_ERROR);
         }
         try {
             expressReceiveService.createReceiveExpress(expressVo);
@@ -137,7 +137,7 @@ public class ExpressController extends BaseEasyWebController {
     public Response getSendExpress(@RequestParam(value = "id") Long id) {
         DataResponse<BaseVo> response = new DataResponse<>();
         if (id == null) {
-            return response.writeFailure("参数错误");
+            return response.writeFailure(PARAM_ERROR);
         }
         try {
             BaseVo responseVo = expressSendService.getSendExpress(id);
@@ -158,7 +158,7 @@ public class ExpressController extends BaseEasyWebController {
     public Response getReceiveExpress(@RequestParam(value = "id") Long id) {
         DataResponse<BaseVo> response = new DataResponse<>();
         if (id == null) {
-            return response.writeFailure("参数错误");
+            return response.writeFailure(PARAM_ERROR);
         }
         try {
             BaseVo responseVo = expressReceiveService.getReceiveExpress(id);
@@ -181,7 +181,7 @@ public class ExpressController extends BaseEasyWebController {
                                             @RequestParam(value = "status") Integer status) {
         Response response = new Response();
         if (id == null || status == null) {
-            return response.writeFailure("参数错误");
+            return response.writeFailure(PARAM_ERROR);
         }
         try {
             expressSendService.updateSendExpressStatus(id, status);
@@ -205,7 +205,7 @@ public class ExpressController extends BaseEasyWebController {
                                                @RequestParam(value = "status") Integer status) {
         Response response = new Response();
         if (id == null || status == null) {
-            return response.writeFailure("参数错误");
+            return response.writeFailure(PARAM_ERROR);
         }
         try {
             expressReceiveService.updateReceiveExpressStatus(id, status);
@@ -228,10 +228,10 @@ public class ExpressController extends BaseEasyWebController {
                                              @RequestParam(value = "phone") String phone) {
         DataResponse<List> response = new DataResponse<>();
         if (StringUtils.isBlank(phone)) {
-            return response.writeFailure("参数错误");
+            return response.writeFailure(PARAM_ERROR);
         }
         try {
-            List list = expressReceiveService.selectExpressList(status == null ? null : status, phone);
+            List list = expressReceiveService.selectExpressList(status, phone);
             response.writeSuccess("查询列表成功", list);
         } catch (Exception e) {
             response.writeFailure("查询列表失败");
@@ -251,10 +251,10 @@ public class ExpressController extends BaseEasyWebController {
                                       @RequestParam(value = "phone") String phone) {
         DataResponse<List> response = new DataResponse<>();
         if (StringUtils.isBlank(phone)) {
-            return response.writeFailure("参数错误");
+            return response.writeFailure(PARAM_ERROR);
         }
         try {
-            List list = expressSendService.selectExpressList(status == null ? null : status, phone);
+            List list = expressSendService.selectExpressList(status, phone);
             response.writeSuccess("查询列表成功", list);
         } catch (Exception e) {
             response.writeFailure("查询列表失败");

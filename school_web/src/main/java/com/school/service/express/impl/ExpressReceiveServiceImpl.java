@@ -50,8 +50,9 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
             boxExpressCompany(expressReceive);
             Long expressId = expressReceiveMapper.insertSelective(expressReceive);
             if (!(expressId > 0L)) {
-                Log.error.error("create receive express error,when insert table 'express_receive' the number of affected rows is 0");
-                throw new ExpressException("create receive express error,when insert table 'express_receive' the number of affected rows is 0");
+                String message = "create receive express error,when insert table 'express_receive' the number of affected rows is 0";
+                Log.error.error(message);
+                throw new ExpressException(message);
             }
             //创建收件无需新增订单，放到修改后选择入柜方式才生成订单
 //            if (!(orderInfoMapper.insertSelective(initOrderInfo(expressId)) > 0)) {
@@ -59,8 +60,9 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
 //                throw new ExpressException("create receive express error,when insert table 'order_info' the number of affected rows is 0");
 //            }
         } catch (Exception e) {
-            Log.error.error("throw exception when create receive express", e);
-            throw new ExpressException("throw exception when create receive express", e);
+            String message = "throw exception when create receive express";
+            Log.error.error(message, e);
+            throw new ExpressException(message, e);
         }
     }
 
@@ -73,17 +75,20 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
             if (expressWay == null && expressReceive.getExpressWay() == 1) {
                 //修改后选择入柜方式才生成订单
                 if (!(orderInfoMapper.insertSelective(initOrderInfo(expressReceive.getId())) > 0)) {
-                    Log.error.error("create receive express error,when insert table 'order_info' the number of affected rows is 0");
-                    throw new ExpressException("create receive express error,when insert table 'order_info' the number of affected rows is 0");
+                    String message = "create receive express error,when insert table 'order_info' the number of affected rows is 0";
+                    Log.error.error(message);
+                    throw new ExpressException(message);
                 }
             }
             if (!(expressReceiveMapper.updateByPrimaryKeySelective(expressReceive) > 0)) {
-                Log.error.error("modify receive express error,when update table 'express_receive' the number of affected rows is 0");
-                throw new ExpressException("modify receive express error,when update table 'express_receive' the number of affected rows is 0");
+                String message = "modify receive express error,when update table 'express_receive' the number of affected rows is 0";
+                Log.error.error(message);
+                throw new ExpressException(message);
             }
         } catch (Exception e) {
-            Log.error.error("throw exception when modify receive express", e);
-            throw new ExpressException("throw exception when modify receive express", e);
+            String message = "throw exception when modify receive express";
+            Log.error.error(message, e);
+            throw new ExpressException(message, e);
         }
     }
 
