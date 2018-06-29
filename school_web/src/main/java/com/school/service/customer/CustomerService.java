@@ -3,6 +3,7 @@ package com.school.service.customer;
 import com.school.dao.customer.CustomerMapper;
 import com.school.domain.entity.customer.Customer;
 import com.school.service.base.BaseService;
+import com.school.web.customer.request.CustomerProfileEditRequest;
 
 /**
  *
@@ -21,4 +22,8 @@ public interface CustomerService extends BaseService<Customer, CustomerMapper> {
     void unsubscribe(String openId);
 
     Customer getByOpenId(String openId);
+
+    void sendVerifyCode(String phone);
+
+    void update(CustomerProfileEditRequest request);
 }
