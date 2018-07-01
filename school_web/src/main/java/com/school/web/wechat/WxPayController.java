@@ -8,11 +8,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.github.wxpay.sdk.WXPayUtil;
 import com.school.service.wechat.WxPayService;
-import com.school.util.core.exception.FuBusinessException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -52,6 +51,7 @@ public class WxPayController {
 	/**
 	 * 支付通知
 	 */
+	@ResponseBody
 	@RequestMapping("/notify")
 	public String wxNotify(HttpServletRequest request){
 	    try {
