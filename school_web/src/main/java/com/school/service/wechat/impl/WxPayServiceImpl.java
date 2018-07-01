@@ -2,6 +2,7 @@ package com.school.service.wechat.impl;
 
 import java.math.BigDecimal;
 import java.net.InetAddress;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -221,8 +222,8 @@ public class WxPayServiceImpl implements WxPayService {
 	 * @param orderNo
 	 */
 	private void orderSuccess(OrderInfo orderInfo){
-		
 		orderInfo.setStatus(OrderStatusEnum.SUCCESS.getCode());
+		orderInfo.setSucTime(new Date());
 		orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
 	}
     
