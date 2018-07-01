@@ -107,6 +107,23 @@ public class Constants {
 	/** 临时文件路径 */
 	public static final String TEMP_PATH = p.getValue("temp_path");
 	/**
+	 * 微信支付证书保存路径
+	 */
+	public static final String WXPAY_CERT_PATH = p.getValue("wxpay_cert_path");
+	/**
+	 * 微信支付appid
+	 */
+	public static final String WXPAY_APP_ID = p.getValue("wxpay_app_id");
+	/**
+	 * 微信支付商户id
+	 */
+	public static final String WXPAY_MCH_ID = p.getValue("wxpay_mch_id");
+	/**
+	 * 微信支付密钥
+	 */
+	public static final String WXPAY_KEY = p.getValue("wxpay_key");
+	
+	/**
 	 * 默认分页显示数
 	 */
 	public static final int DEFAULT_PAGESIZE = 10;
