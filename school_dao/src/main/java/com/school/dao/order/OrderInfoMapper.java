@@ -20,4 +20,6 @@ public interface OrderInfoMapper extends BaseDao {
     int updateByPrimaryKey(OrderInfo record);
     
     List<OrderInfo> queryPage(Map<String, Object> paramMap);
+    
+    OrderInfo findByOrderNo(String orderNo);
 }

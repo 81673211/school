@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.school.domain.entity.order.OrderInfo" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="customer_id" property="customerId" jdbcType="BIGINT" />
     <result column="express_type" property="expressType" jdbcType="INTEGER" />
     <result column="express_id" property="expressId" jdbcType="BIGINT" />
     <result column="express_code" property="expressCode" jdbcType="VARCHAR" />
@@ -16,8 +17,8 @@
     <result column="version" property="version" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, order_no, express_type, express_id, express_code, amount, created_time, trade_summary, 
-    status, notify_url, suc_time, version
+    id, order_no, customer_id, express_type, express_id, express_code, amount, created_time, 
+    trade_summary, status, notify_url, suc_time, version
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -30,16 +31,16 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.school.domain.entity.order.OrderInfo" >
-    insert into order_info (id, order_no, express_type, 
-      express_id, express_code, amount, 
-      created_time, trade_summary, status, 
-      notify_url, suc_time, version
-      )
-    values (#{id,jdbcType=BIGINT}, #{orderNo,jdbcType=VARCHAR}, #{expressType,jdbcType=INTEGER}, 
-      #{expressId,jdbcType=BIGINT}, #{expressCode,jdbcType=VARCHAR}, #{amount,jdbcType=DECIMAL}, 
-      #{createdTime,jdbcType=TIMESTAMP}, #{tradeSummary,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
-      #{notifyUrl,jdbcType=VARCHAR}, #{sucTime,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER}
-      )
+    insert into order_info (id, order_no, customer_id, 
+      express_type, express_id, express_code, 
+      amount, created_time, trade_summary, 
+      status, notify_url, suc_time, 
+      version)
+    values (#{id,jdbcType=BIGINT}, #{orderNo,jdbcType=VARCHAR}, #{customerId,jdbcType=BIGINT}, 
+      #{expressType,jdbcType=INTEGER}, #{expressId,jdbcType=BIGINT}, #{expressCode,jdbcType=VARCHAR}, 
+      #{amount,jdbcType=DECIMAL}, #{createdTime,jdbcType=TIMESTAMP}, #{tradeSummary,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{notifyUrl,jdbcType=VARCHAR}, #{sucTime,jdbcType=TIMESTAMP}, 
+      #{version,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.school.domain.entity.order.OrderInfo" >
     insert into order_info
@@ -49,6 +50,9 @@
       </if>
       <if test="orderNo != null" >
         order_no,
+      </if>
+      <if test="customerId != null" >
+        customer_id,
       </if>
       <if test="expressType != null" >
         express_type,
@@ -88,6 +92,9 @@
       <if test="orderNo != null" >
         #{orderNo,jdbcType=VARCHAR},
       </if>
+      <if test="customerId != null" >
+        #{customerId,jdbcType=BIGINT},
+      </if>
       <if test="expressType != null" >
         #{expressType,jdbcType=INTEGER},
       </if>
@@ -126,6 +133,9 @@
       <if test="orderNo != null" >
         order_no = #{orderNo,jdbcType=VARCHAR},
       </if>
+      <if test="customerId != null" >
+        customer_id = #{customerId,jdbcType=BIGINT},
+      </if>
       <if test="expressType != null" >
         express_type = #{expressType,jdbcType=INTEGER},
       </if>
@@ -162,6 +172,7 @@
   <update id="updateByPrimaryKey" parameterType="com.school.domain.entity.order.OrderInfo" >
     update order_info
     set order_no = #{orderNo,jdbcType=VARCHAR},
+      customer_id = #{customerId,jdbcType=BIGINT},
       express_type = #{expressType,jdbcType=INTEGER},
       express_id = #{expressId,jdbcType=BIGINT},
       express_code = #{expressCode,jdbcType=VARCHAR},
@@ -186,5 +197,10 @@
             </if>
         </where>
         ORDER BY o.created_time desc
+    </select>
+    
+    <select id="findByOrderNo" resultType="com.school.domain.entity.order.OrderInfo" parameterType="java.lang.String">
+    	select * from order_info o
+    	where o.order_no = #{orderNo,jdbcType=VARCHAR}
     </select>
 </mapper>

@@ -8,6 +8,8 @@ public class OrderInfo {
 
     private String orderNo;
 
+    private Long customerId;
+
     private Integer expressType;
 
     private Long expressId;
@@ -42,6 +44,14 @@ public class OrderInfo {
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo == null ? null : orderNo.trim();
+    }
+
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
 
     public Integer getExpressType() {
