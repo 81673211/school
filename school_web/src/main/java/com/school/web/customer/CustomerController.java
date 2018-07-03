@@ -40,7 +40,8 @@ public class CustomerController extends BaseEasyWebController {
         if (StringUtils.isNotBlank(openId)) {
             mav.addObject("customer", customerService.getByOpenId(openId));
         } else {
-            mav.addObject("customer", customerService.getByOpenId(oauthService.getOAuthToken(code).getOpenId()));
+            mav.addObject("customer",
+                          customerService.getByOpenId(oauthService.getOAuthToken(code).getOpenId()));
         }
         return mav;
     }

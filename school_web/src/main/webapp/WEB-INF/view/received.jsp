@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,26 +14,26 @@
 <body>
     <div class="wrap container receivedExpress">
         <h3 class="">我收到过的快件</h3>
-
-        <div>
-            <div  class="row">
-                <div class="col-xs-7">
-                    <label for="">快递名称:<span>顺丰速运</span></label>
-                    <label for="">运单号:<span>793724093820</span></label>
-
-                </div>
-                <div class="col-xs-5">
-                    <label for=""><span>张三</span></label>
-                    <label for=""><span>18392738272</span></label>
-
-                </div>
-            </div>
+        <c:forEach items="${list}" var="item">
             <div>
-                <label for="">地址:<span>四川省成都市高新区中和镇心怡花园b区8栋2单元1号</span></label>
-                <label for="" class="pull-right timeExp"><span>2018-10-2 13:45</span></label>
-            </div>
-        </div>
+                <div  class="row">
+                    <div class="col-xs-7">
+                        <label for="">快递名称:<span>${item.companyName }</span></label>
+                        <label for="">运单号:<span>${item.code }</span></label>
 
+                    </div>
+                    <div class="col-xs-5">
+                        <label for=""><span>${item.senderName}</span></label>
+                        <label for=""><span>${item.senderPhone}</span></label>
+
+                    </div>
+                </div>
+                <div>
+                    <label for="">地址:<span>${item.senderAddr}</span></label>
+                    <label for="" class="pull-right timeExp"><span>2018-10-2 13:45</span></label>
+                </div>
+            </div>
+        </c:forEach>
     </div>
 
     <!-- ZUI Javascript 依赖 jQuery -->

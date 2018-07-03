@@ -16,6 +16,8 @@ public interface OauthService {
 
     String getOAuthUrl(String redirectUrl);
 
+    String getOAuthUrl(String redirectUrl, String state);
+
     UserWechat getDetail(String openId);
 
     OAuthToken getOAuthToken(String code);

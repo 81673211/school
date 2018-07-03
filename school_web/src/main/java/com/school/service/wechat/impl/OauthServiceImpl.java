@@ -53,11 +53,30 @@ public class OauthServiceImpl implements OauthService {
             return WechatUrl.USER_AUTH_URL
                     .replace("${APPID}", ConstantWeChat.APPID)
                     .replace("${REDIRECT_URL}", URLEncoder.encode(redirectUrl, "utf8"))
-                    .replace("${SCOPE}", ConstantWeChat.SCOPE_SNSAPI_USERINFO);
+                    .replace("${SCOPE}", ConstantWeChat.SCOPE_SNSAPI_USERINFO)
+                    .replace("${STATE}", "STATE");
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
     }
+
+
+
+    @Override
+    public String getOAuthUrl(String redirectUrl, String state) {
+        try {
+            String url = WechatUrl.USER_AUTH_URL
+                    .replace("${APPID}", ConstantWeChat.APPID)
+                    .replace("${REDIRECT_URL}", URLEncoder.encode(redirectUrl, "utf8"))
+                    .replace("${SCOPE}", ConstantWeChat.SCOPE_SNSAPI_USERINFO)
+                    .replace("${STATE}", state);
+            log.info("---getOAuthUrl----:{}", url);
+            return url;
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     @Override
     public OAuthToken getOAuthToken(String code) {
@@ -65,6 +84,7 @@ public class OauthServiceImpl implements OauthService {
                 .replace("${APPID}", ConstantWeChat.APPID)
                 .replace("${APPSECRET}", ConstantWeChat.APPSECRET)
                 .replace("${CODE}", code);
+        log.info("----OAuthTokenUrl----:{}", getOAuthTokenUrl);
         String response;
         try {
             response = HttpUtil.get(getOAuthTokenUrl, "utf8", false);

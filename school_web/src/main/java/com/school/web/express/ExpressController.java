@@ -2,9 +2,13 @@ package com.school.web.express;
 
 import com.school.common.model.DataResponse;
 import com.school.common.model.Response;
+import com.school.domain.entity.customer.Customer;
+import com.school.exception.ExpressException;
+import com.school.service.customer.CustomerService;
 import com.school.service.express.ExpressCompanyService;
 import com.school.service.express.ExpressReceiveService;
 import com.school.service.express.ExpressSendService;
+import com.school.service.wechat.OauthService;
 import com.school.vo.BaseVo;
 import com.school.vo.request.ReceiveExpressCreateVo;
 import com.school.vo.request.ReceiveExpressModifyVo;
@@ -20,8 +24,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * @author jame
@@ -38,6 +45,10 @@ public class ExpressController extends BaseEasyWebController {
     private ExpressSendService expressSendService;
     @Autowired
     private ExpressCompanyService expressCompanyService;
+    @Autowired
+    private OauthService oauthService;
+    @Autowired
+    private CustomerService customerService;
 
     /**
      * 寄件
@@ -220,23 +231,33 @@ public class ExpressController extends BaseEasyWebController {
     /**
      * 收件  查询收件列表
      *
-     * @param status
+     * @param state
      * @return
      */
     @RequestMapping(value = "/1/list", method = RequestMethod.GET)
-    public Response selectReceiveExpressList(@RequestParam(value = "status[]", required = false) Integer[] status,
-                                             @RequestParam(value = "phone") String phone) {
-        DataResponse<List> response = new DataResponse<>();
+    public ModelAndView selectReceiveExpressList(@RequestParam(value = "state") String state,
+                                                 @RequestParam(value = "code") String code)
+            throws ExpressException {
+        log.info("----code--:{}", code);
+        log.info("----state--:{}", state);
+        ModelAndView mav = new ModelAndView("received");
+        if (StringUtils.isBlank(code)) {
+            throw new RuntimeException("参数错误");
+        }
+        Customer customer = customerService.getByOpenId(oauthService.getOAuthToken(code).getOpenId());
+        String phone = customer.getPhone();
         if (StringUtils.isBlank(phone)) {
-            return response.writeFailure(PARAM_ERROR);
+            mav.setViewName("redirect:/customer/profile");
+        } else {
+            String[] split = state.split(",");
+            Integer[] statuses = new Integer[split.length];
+            for (int i = 0; i < split.length; i++) {
+                statuses[i] = Integer.parseInt(split[i]);
+            }
+            List list = expressReceiveService.selectExpressList(statuses, phone);
+            mav.addObject("list", list);
         }
-        try {
-            List list = expressReceiveService.selectExpressList(status, phone);
-            response.writeSuccess("查询列表成功", list);
-        } catch (Exception e) {
-            response.writeFailure("查询列表失败");
-        }
-        return response;
+        return mav;
     }
 
 

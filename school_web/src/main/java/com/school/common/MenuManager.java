@@ -66,7 +66,7 @@ public class MenuManager {
         btn22.setName("收件历史");
         btn22.setType("view");
         btn22.setKey("22");
-        btn22.setUrl(oauthService.getOAuthUrl("http://www.glove1573.cn/express/receive/history"));
+        btn22.setUrl(oauthService.getOAuthUrl("http://www.glove1573.cn/express/1/list", "5"));
 
         CommonButton btn31 = new CommonButton();
         btn31.setName("完善个人信息");
