@@ -5,41 +5,36 @@
 <head>
     <meta charset="UTF-8">
     <title>我收到过的快件</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-    <link rel="stylesheet" href="/css/cssReset.css">
-    <!-- ZUI 标准版压缩后的 CSS 文件 -->
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/css/zui.min.css">
-    <link rel="stylesheet" href="/css/sudi.css">
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link href="/css/mzui.min.css" rel="stylesheet" />
 </head>
 <body>
-    <div class="wrap container receivedExpress">
-        <h3 class="">我收到过的快件</h3>
-        <c:forEach items="${list}" var="item">
-            <div>
-                <div  class="row">
-                    <div class="col-xs-7">
-                        <label for="">快递名称:<span>${item.companyName }</span></label>
-                        <label for="">运单号:<span>${item.code }</span></label>
-
-                    </div>
-                    <div class="col-xs-5">
-                        <label for=""><span>${item.senderName}</span></label>
-                        <label for=""><span>${item.senderPhone}</span></label>
-
-                    </div>
-                </div>
-                <div>
-                    <label for="">地址:<span>${item.senderAddr}</span></label>
-                    <label for="" class="pull-right timeExp"><span>2018-10-2 13:45</span></label>
-                </div>
-            </div>
-        </c:forEach>
+<div class="">
+    <div class="heading">
+        <div class="title"><h3>我收到过的快件</h3></div>
     </div>
+    <div class="list section">
+        <c:if test="${list != null and list.size() > 0}">
+            <c:forEach items="${list}" varStatus="var" var="item">
+                <a class="item multi-lines with-avatar">
+                    <div class="avatar circle blue outline">${var.count}</div>
+                    <div class="content">
+                        <span class="title">${item.code}</span>
+                        <div>
+                            <small class="text-gray">${item.companyName}</small>&nbsp;
+                            <small class="muted">2018-07-01 20:00</small>
+                        </div>
+                    </div>
+                </a>
+            </c:forEach>
+        </c:if>
+    </div>
+</div>
 
-    <!-- ZUI Javascript 依赖 jQuery -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/lib/jquery/jquery.js"></script>
-    <!-- ZUI 标准版压缩后的 JavaScript 文件 -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/js/zui.min.js"></script>
+<!-- ZUI Javascript 依赖 jQuery -->
+<script src="/lib/jquery/jquery-3.2.1.min.js" />
+<!-- ZUI 标准版压缩后的 JavaScript 文件 -->
+<script src="/js/mzui.min.js" />
 
 </body>
 </html>

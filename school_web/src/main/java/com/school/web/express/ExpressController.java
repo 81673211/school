@@ -3,6 +3,7 @@ package com.school.web.express;
 import com.school.common.model.DataResponse;
 import com.school.common.model.Response;
 import com.school.domain.entity.customer.Customer;
+import com.school.enumeration.ReceiveExpressStatusEnum;
 import com.school.exception.ExpressException;
 import com.school.service.customer.CustomerService;
 import com.school.service.express.ExpressCompanyService;
@@ -26,9 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * @author jame
@@ -238,9 +237,7 @@ public class ExpressController extends BaseEasyWebController {
     public ModelAndView selectReceiveExpressList(@RequestParam(value = "state") String state,
                                                  @RequestParam(value = "code") String code)
             throws ExpressException {
-        log.info("----code--:{}", code);
-        log.info("----state--:{}", state);
-        ModelAndView mav = new ModelAndView("received");
+        ModelAndView mav = new ModelAndView();
         if (StringUtils.isBlank(code)) {
             throw new RuntimeException("参数错误");
         }
@@ -256,6 +253,11 @@ public class ExpressController extends BaseEasyWebController {
             }
             List list = expressReceiveService.selectExpressList(statuses, phone);
             mav.addObject("list", list);
+            if (split.length == 1 && ReceiveExpressStatusEnum.FINISHED.getFlag() == Integer.parseInt(split[0])) {
+                mav.setViewName("received");
+            } else {
+                mav.setViewName("receive");
+            }
         }
         return mav;
     }

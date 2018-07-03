@@ -60,7 +60,7 @@ public class MenuManager {
         btn21.setName("待收快件");
         btn21.setType("view");
         btn21.setKey("21");
-        btn21.setUrl(oauthService.getOAuthUrl("http://www.glove1573.cn/express/receive"));
+        btn21.setUrl(oauthService.getOAuthUrl("http://www.glove1573.cn/express/1/list", "0,1,2,3,4"));
 
         CommonButton btn22 = new CommonButton();
         btn22.setName("收件历史");
