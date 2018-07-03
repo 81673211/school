@@ -11,13 +11,9 @@ import com.school.service.express.ExpressReceiveService;
 import com.school.service.express.ExpressSendService;
 import com.school.service.wechat.OauthService;
 import com.school.vo.BaseVo;
-import com.school.vo.request.ReceiveExpressCreateVo;
-import com.school.vo.request.ReceiveExpressModifyVo;
-import com.school.vo.request.SendExpressCreateVo;
-import com.school.vo.request.SendExpressModifyVo;
+import com.school.vo.request.*;
 import com.school.web.base.BaseEasyWebController;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -58,7 +54,8 @@ public class ExpressController extends BaseEasyWebController {
      */
     @RequestMapping(value = "/0/create", method = RequestMethod.POST)
     public Response createSendExpress(@Validated SendExpressCreateVo expressVo, BindingResult bindingResult) {
-        Response response = checkValid(bindingResult);
+        Response response = new Response();
+        checkValid(bindingResult, response);
         if (response.getStatus() != HTTP_SUCCESS) {
             return response;
         }
@@ -79,7 +76,8 @@ public class ExpressController extends BaseEasyWebController {
      */
     @RequestMapping(value = "/1/create", method = RequestMethod.POST)
     public Response createReceiveExpress(@Validated ReceiveExpressCreateVo expressVo, BindingResult bindingResult) {
-        Response response = checkValid(bindingResult);
+        Response response = new Response();
+        checkValid(bindingResult, response);
         if (response.getStatus() != HTTP_SUCCESS) {
             return response;
         }
@@ -103,7 +101,8 @@ public class ExpressController extends BaseEasyWebController {
      */
     @RequestMapping(value = "/0/modify", method = RequestMethod.POST)
     public Response modifySendExpress(@Validated SendExpressModifyVo expressVo, BindingResult bindingResult) {
-        Response response = checkValid(bindingResult);
+        Response response = new Response();
+        checkValid(bindingResult, response);
         if (response.getStatus() != HTTP_SUCCESS) {
             return response;
         }
@@ -125,7 +124,8 @@ public class ExpressController extends BaseEasyWebController {
      */
     @RequestMapping(value = "/1/modify", method = RequestMethod.POST)
     public Response modifySendExpress(@Validated ReceiveExpressModifyVo expressVo, BindingResult bindingResult) {
-        Response response = checkValid(bindingResult);
+        Response response = new Response();
+        checkValid(bindingResult, response);
         if (response.getStatus() != HTTP_SUCCESS) {
             return response;
         }
@@ -140,17 +140,19 @@ public class ExpressController extends BaseEasyWebController {
     /**
      * 获取 寄件信息
      *
-     * @param id
+     * @param vo
+     * @param bindingResult
      * @return
      */
     @RequestMapping(value = "/0/get", method = RequestMethod.GET)
-    public Response getSendExpress(@RequestParam(value = "id") Long id) {
+    public Response getSendExpress(@Validated ExpressGetVo vo, BindingResult bindingResult) {
         DataResponse<BaseVo> response = new DataResponse<>();
-        if (id == null) {
-            return response.writeFailure(PARAM_ERROR);
+        checkValid(bindingResult, response);
+        if (response.getStatus() != HTTP_SUCCESS) {
+            return response;
         }
         try {
-            BaseVo responseVo = expressSendService.getSendExpress(id);
+            BaseVo responseVo = expressSendService.getSendExpress(vo.getId());
             return response.writeSuccess("获取寄件快件成功", responseVo);
         } catch (Exception e) {
             return response.writeFailure("获取寄件快件失败");
@@ -161,17 +163,19 @@ public class ExpressController extends BaseEasyWebController {
     /**
      * 获取 收件信息
      *
-     * @param id
+     * @param vo
+     * @param bindingResult
      * @return
      */
     @RequestMapping(value = "/1/get", method = RequestMethod.GET)
-    public Response getReceiveExpress(@RequestParam(value = "id") Long id) {
+    public Response getReceiveExpress(@Validated ExpressGetVo vo, BindingResult bindingResult) {
         DataResponse<BaseVo> response = new DataResponse<>();
-        if (id == null) {
-            return response.writeFailure(PARAM_ERROR);
+        checkValid(bindingResult, response);
+        if (response.getStatus() != HTTP_SUCCESS) {
+            return response;
         }
         try {
-            BaseVo responseVo = expressReceiveService.getReceiveExpress(id);
+            BaseVo responseVo = expressReceiveService.getReceiveExpress(vo.getId());
             return response.writeSuccess("获取收件快件成功", responseVo);
         } catch (Exception e) {
             return response.writeFailure("获取收件快件失败");
@@ -182,19 +186,19 @@ public class ExpressController extends BaseEasyWebController {
     /**
      * 寄件   修改寄件的快件状态
      *
-     * @param id
-     * @param status
+     * @param vo
+     * @param bindingResult
      * @return
      */
     @RequestMapping(value = "/0/up-status", method = RequestMethod.POST)
-    public Response updateSendExpressStatus(@RequestParam(value = "id") Long id,
-                                            @RequestParam(value = "status") Integer status) {
+    public Response updateSendExpressStatus(@Validated ExpressStatusModifyVo vo, BindingResult bindingResult) {
         Response response = new Response();
-        if (id == null || status == null) {
-            return response.writeFailure(PARAM_ERROR);
+        checkValid(bindingResult, response);
+        if (response.getStatus() != HTTP_SUCCESS) {
+            return response;
         }
         try {
-            expressSendService.updateSendExpressStatus(id, status);
+            expressSendService.updateSendExpressStatus(vo.getId(), vo.getStatus());
             response.writeSuccess("修改寄件状态成功");
         } catch (Exception e) {
             response.writeFailure("修改寄件状态失败");
@@ -206,19 +210,19 @@ public class ExpressController extends BaseEasyWebController {
     /**
      * 收件   修改收件的快件状态
      *
-     * @param id
-     * @param status
+     * @param vo
+     * @param bindingResult
      * @return
      */
     @RequestMapping(value = "/1/up-status", method = RequestMethod.POST)
-    public Response updateReceiveExpressStatus(@RequestParam(value = "id") Long id,
-                                               @RequestParam(value = "status") Integer status) {
+    public Response updateReceiveExpressStatus(@Validated ExpressStatusModifyVo vo, BindingResult bindingResult) {
         Response response = new Response();
-        if (id == null || status == null) {
-            return response.writeFailure(PARAM_ERROR);
+        checkValid(bindingResult, response);
+        if (response.getStatus() != HTTP_SUCCESS) {
+            return response;
         }
         try {
-            expressReceiveService.updateReceiveExpressStatus(id, status);
+            expressReceiveService.updateReceiveExpressStatus(vo.getId(), vo.getStatus());
             response.writeSuccess("修改收件状态成功");
         } catch (Exception e) {
             response.writeFailure("修改收件状态失败");
@@ -271,13 +275,14 @@ public class ExpressController extends BaseEasyWebController {
      */
     @RequestMapping(value = "/0/list", method = RequestMethod.GET)
     public Response selectExpressList(@RequestParam(value = "status[]", required = false) Integer[] status,
-                                      @RequestParam(value = "phone") String phone) {
+                                      @Validated BaseVo vo, BindingResult bindingResult) {
         DataResponse<List> response = new DataResponse<>();
-        if (StringUtils.isBlank(phone)) {
-            return response.writeFailure(PARAM_ERROR);
+        checkValid(bindingResult, response);
+        if (response.getStatus() != HTTP_SUCCESS) {
+            return response;
         }
         try {
-            List list = expressSendService.selectExpressList(status, phone);
+            List list = expressSendService.selectExpressList(status, vo.getOpenid());
             response.writeSuccess("查询列表成功", list);
         } catch (Exception e) {
             response.writeFailure("查询列表失败");

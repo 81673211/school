@@ -1,5 +1,7 @@
 package com.school.service.base;
 
+import com.school.vo.request.OrderCreateVo;
+
 /**
  * <p>Title: BaseService</p>
  * <p>Description: Service基础接口，定义单表的增删该查方法</p>
@@ -11,6 +13,7 @@ package com.school.service.base;
  * 
  */
 public interface BaseService<M,T> {
+
 
 
 }

@@ -15,6 +15,7 @@ public class Express {
     private Boolean isDeleted;
     private Integer expressStatus;
     private Integer expressWay;//快件方式：入柜/自己
+    private Long customerId;
 
     public Long getId() {
         return id;
@@ -89,4 +90,11 @@ public class Express {
         this.expressWay = expressWay;
     }
 
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
+    }
 }
