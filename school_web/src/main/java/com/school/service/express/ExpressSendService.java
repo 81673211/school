@@ -52,9 +52,9 @@ public interface ExpressSendService extends BaseService<ExpressSend, ExpressSend
      * 默认条件isDelete=0
      *
      * @param status
-     * @param phone
+     * @param openid
      * @return
      * @throws ExpressException
      */
-    List<BaseVo> selectExpressList(Integer[] status, String phone) throws ExpressException;
+    List<BaseVo> selectExpressList(Integer[] status, String openid) throws ExpressException;
 }

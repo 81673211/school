@@ -1,8 +1,10 @@
 package com.school.service.express.impl;
 
+import com.school.dao.customer.CustomerMapper;
 import com.school.dao.express.ExpressCompanyMapper;
 import com.school.dao.express.ExpressSendMapper;
 import com.school.dao.order.OrderInfoMapper;
+import com.school.domain.entity.customer.Customer;
 import com.school.domain.entity.express.ExpressCompany;
 import com.school.domain.entity.express.ExpressSend;
 import com.school.domain.entity.order.OrderInfo;
@@ -41,23 +43,26 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
     private OrderInfoMapper orderInfoMapper;
     @Autowired
     private ExpressCompanyMapper expressCompanyMapper;
+    @Autowired
+    private CustomerMapper customerMapper;
 
     @Override
     public void createSendExpress(SendExpressCreateVo expressVo) throws ExpressException {
         try {
             ExpressSend expressSend = converterVo2Po(expressVo, ExpressSend.class);
             boxExpressCompany(expressSend);
+            boxCustomer(expressSend);
             Long expressId = expressSendMapper.insertSelective(expressSend);
             if (!(expressId > 0L)) {
                 String message = "create send express error,when insert table 'express_send' the number of affected rows is 0";
                 Log.error.error(message);
                 throw new ExpressException(message);
             }
-            if (!(orderInfoMapper.insertSelective(initOrderInfo(expressId)) > 0)) {
-                String message = "create send express error,when insert table 'order_info' the number of affected rows is 0";
-                Log.error.error(message);
-                throw new ExpressException(message);
-            }
+//            if (!(orderInfoMapper.insertSelective(initOrderInfo(expressId)) > 0)) {
+//                String message = "create send express error,when insert table 'order_info' the number of affected rows is 0";
+//                Log.error.error(message);
+//                throw new ExpressException(message);
+//            }
         } catch (Exception e) {
             String message = "throw exception when create send express";
             Log.error.error(message, e);
@@ -65,28 +70,35 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
         }
     }
 
+    private void boxCustomer(ExpressSend expressSend) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("phone", expressSend.getSenderPhone());
+        List<Customer> list = customerMapper.selectByParams(map);
+        expressSend.setCustomerId(list.get(0).getId());
+    }
+
     @Override
     public void modifySendExpress(SendExpressModifyVo expressVo) throws ExpressException {
         try {
             ExpressSend expressSend = converterVo2Po(expressVo, ExpressSend.class);
             boxExpressCompany(expressSend);
-            ExpressSend hasSendExpress = expressSendMapper.selectByPrimaryKey(expressSend.getId());
+//            ExpressSend hasSendExpress = expressSendMapper.selectByPrimaryKey(expressSend.getId());
             if (!(expressSendMapper.updateByPrimaryKeySelective(expressSend) > 0)) {
                 String message = "modify send express error,when update table 'express_send' the number of affected rows is 0";
                 Log.error.error(message);
                 throw new ExpressException(message);
             }
-            //todo 修改完成后检查省市区快递公司等是否发生改变，改变了则重新创建订单，待修改；以及状态检查
-            if (!hasSendExpress.getCompanyId().equals(expressSend.getCompanyId()) ||
-                    !hasSendExpress.getReceiverProvinceId().equals(expressSend.getReceiverProvinceId()) ||
-                    !hasSendExpress.getReceiverCityId().equals(expressSend.getReceiverCityId()) ||
-                    !hasSendExpress.getReceiverDistrictId().equals(expressSend.getReceiverDistrictId())) {
-                if (!(orderInfoMapper.insertSelective(initOrderInfo(expressSend.getId())) > 0)) {
-                    String message = "create send express error,when insert table 'order_info' the number of affected rows is 0";
-                    Log.error.error(message);
-                    throw new ExpressException(message);
-                }
-            }
+//            // 修改完成后检查省市区快递公司等是否发生改变，改变了则重新创建订单，待修改；以及状态检查
+//            if (!hasSendExpress.getCompanyId().equals(expressSend.getCompanyId()) ||
+//                    !hasSendExpress.getReceiverProvinceId().equals(expressSend.getReceiverProvinceId()) ||
+//                    !hasSendExpress.getReceiverCityId().equals(expressSend.getReceiverCityId()) ||
+//                    !hasSendExpress.getReceiverDistrictId().equals(expressSend.getReceiverDistrictId())) {
+//                if (!(orderInfoMapper.insertSelective(initOrderInfo(expressSend.getId())) > 0)) {
+//                    String message = "create send express error,when insert table 'order_info' the number of affected rows is 0";
+//                    Log.error.error(message);
+//                    throw new ExpressException(message);
+//                }
+//            }
         } catch (Exception e) {
             String message = "throw exception when modify send express";
             Log.error.error(message, e);
@@ -133,12 +145,12 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
 
 
     @Override
-    public List<BaseVo> selectExpressList(Integer[] status, String phone) throws ExpressException {
+    public List<BaseVo> selectExpressList(Integer[] status, String openid) throws ExpressException {
         List<BaseVo> list = new ArrayList<>();
         try {
             Map<String, Object> param = new HashMap<>();
             param.put("status", status);
-            param.put("phone", phone);
+            param.put("phone", customerMapper.selectByOpenId(openid).getPhone());
             List<ExpressSend> receiveList = expressSendMapper.selectByParams(param);
             if (!receiveList.isEmpty()) {
                 for (ExpressSend expressSend : receiveList) {

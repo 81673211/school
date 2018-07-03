@@ -20,6 +20,7 @@
         <result column="express_status" property="expressStatus" jdbcType="INTEGER"/>
         <result column="express_way" property="expressWay" jdbcType="INTEGER"/>
         <result column="into_box_time" property="intoBoxTime" jdbcType="TIMESTAMP"/>
+        <result column="customer_id" property="customerId" jdbcType="BIGINT"/>
     </resultMap>
     <sql id="Base_Column_List">
         id,
@@ -39,7 +40,8 @@
         is_deleted,
         express_status,
         express_way,
-        into_box_time
+        into_box_time,
+        customer_id
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
@@ -100,6 +102,9 @@
             <if test="expressWay != null and expressWay != 0">
                 express_way,
             </if>
+            <if test="customerId != null and customerId != 0">
+                customer_id,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="code != null">
@@ -143,6 +148,9 @@
             </if>
             <if test="expressWay != null and expressWay != 0">
                 #{expressWay,jdbcType=INTEGER},
+            </if>
+            <if test="customerId != null and customerId != 0">
+                #{customerId,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>

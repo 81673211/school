@@ -37,12 +37,11 @@ public abstract class BaseEasyWebController {
      * @return
      * @Validated校验
      */
-    public Response checkValid(BindingResult bindingResult) {
-        Response response = new Response();
+    public void checkValid(BindingResult bindingResult, Response response) {
         if (bindingResult.hasErrors()) {
-            return response.writeFailure(bindingResult.getAllErrors().get(0).getDefaultMessage());
+            response.writeFailure(bindingResult.getAllErrors().get(0).getDefaultMessage());
         }
-        return response.writeSuccess();
+        response.writeSuccess();
     }
 
 }

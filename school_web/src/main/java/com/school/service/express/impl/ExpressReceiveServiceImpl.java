@@ -1,8 +1,10 @@
 package com.school.service.express.impl;
 
+import com.school.dao.customer.CustomerMapper;
 import com.school.dao.express.ExpressCompanyMapper;
 import com.school.dao.express.ExpressReceiveMapper;
 import com.school.dao.order.OrderInfoMapper;
+import com.school.domain.entity.customer.Customer;
 import com.school.domain.entity.express.Express;
 import com.school.domain.entity.express.ExpressCompany;
 import com.school.domain.entity.express.ExpressReceive;
@@ -42,12 +44,15 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
     private ExpressReceiveMapper expressReceiveMapper;
     @Autowired
     private OrderInfoMapper orderInfoMapper;
+    @Autowired
+    private CustomerMapper customerMapper;
 
     @Override
     public void createReceiveExpress(ReceiveExpressCreateVo expressVo) throws ExpressException {
         try {
             ExpressReceive expressReceive = converterVo2Po(expressVo, ExpressReceive.class);
             boxExpressCompany(expressReceive);
+            boxCustomer(expressReceive);
             Long expressId = expressReceiveMapper.insertSelective(expressReceive);
             if (!(expressId > 0L)) {
                 String message = "create receive express error,when insert table 'express_receive' the number of affected rows is 0";
@@ -66,20 +71,27 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
         }
     }
 
+    private void boxCustomer(ExpressReceive expressReceive) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("phone", expressReceive.getReceiverPhone());
+        List<Customer> list = customerMapper.selectByParams(map);
+        expressReceive.setCustomerId(list.get(0).getId());
+    }
+
     @Override
     public void modifyReceiveExpress(ReceiveExpressModifyVo expressVo) throws ExpressException {
         try {
             ExpressReceive expressReceive = converterVo2Po(expressVo, ExpressReceive.class);
             //0自提；1入柜，null表示还未选择过
-            Integer expressWay = expressReceiveMapper.selectByPrimaryKey(expressReceive.getId()).getExpressWay();
-            if (expressWay == null && expressReceive.getExpressWay() == 1) {
-                //修改后选择入柜方式才生成订单
-                if (!(orderInfoMapper.insertSelective(initOrderInfo(expressReceive.getId())) > 0)) {
-                    String message = "create receive express error,when insert table 'order_info' the number of affected rows is 0";
-                    Log.error.error(message);
-                    throw new ExpressException(message);
-                }
-            }
+//            Integer expressWay = expressReceiveMapper.selectByPrimaryKey(expressReceive.getId()).getExpressWay();
+//            if (expressWay == null && expressReceive.getExpressWay() == 1) {
+//                //修改后选择入柜方式才生成订单
+//                if (!(orderInfoMapper.insertSelective(initOrderInfo(expressReceive.getId())) > 0)) {
+//                    String message = "create receive express error,when insert table 'order_info' the number of affected rows is 0";
+//                    Log.error.error(message);
+//                    throw new ExpressException(message);
+//                }
+//            }
             if (!(expressReceiveMapper.updateByPrimaryKeySelective(expressReceive) > 0)) {
                 String message = "modify receive express error,when update table 'express_receive' the number of affected rows is 0";
                 Log.error.error(message);
@@ -133,12 +145,12 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
 
 
     @Override
-    public List<BaseVo> selectExpressList(Integer[] status, String phone) throws ExpressException {
+    public List<BaseVo> selectExpressList(Integer[] status, String openid) throws ExpressException {
         List<BaseVo> list = new ArrayList<>();
         try {
             Map<String, Object> param = new HashMap<>();
             param.put("status", status);
-            param.put("phone", phone);
+            param.put("phone", customerMapper.selectByOpenId(openid).getPhone());
             List<ExpressReceive> receiveList = expressReceiveMapper.selectByParams(param);
             if (!receiveList.isEmpty()) {
                 for (ExpressReceive expressReceive : receiveList) {
