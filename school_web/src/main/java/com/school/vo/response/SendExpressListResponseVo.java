@@ -13,6 +13,9 @@ public class SendExpressListResponseVo extends BaseVo {
     private String receiverPhone;    //收件人电话
     private String receiverName;//	收件人名字
     private String receiverAddr;//	收件人地址
+    private String endTime;
+
+
 
     public Long getId() {
         return id;
@@ -68,5 +71,13 @@ public class SendExpressListResponseVo extends BaseVo {
 
     public void setReceiverAddr(String receiverAddr) {
         this.receiverAddr = receiverAddr;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }

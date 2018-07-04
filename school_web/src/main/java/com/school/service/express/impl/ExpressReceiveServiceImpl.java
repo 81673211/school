@@ -145,12 +145,12 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
 
 
     @Override
-    public List<BaseVo> selectExpressList(Integer[] status, String openid) throws ExpressException {
+    public List<BaseVo> selectExpressList(Integer[] status, String phone) throws ExpressException {
         List<BaseVo> list = new ArrayList<>();
         try {
             Map<String, Object> param = new HashMap<>();
             param.put("status", status);
-            param.put("phone", customerMapper.selectByOpenId(openid).getPhone());
+            param.put("phone", phone);
             List<ExpressReceive> receiveList = expressReceiveMapper.selectByParams(param);
             if (!receiveList.isEmpty()) {
                 for (ExpressReceive expressReceive : receiveList) {

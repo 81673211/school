@@ -14,9 +14,9 @@ import com.school.vo.BaseVo;
 import com.school.vo.request.*;
 import com.school.web.base.BaseEasyWebController;
 import lombok.extern.slf4j.Slf4j;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -276,20 +276,17 @@ public class ExpressController extends BaseEasyWebController {
      * @return
      */
     @RequestMapping(value = "/0/list", method = RequestMethod.GET)
-    public Response selectExpressList(@RequestParam(value = "status[]", required = false) Integer[] status,
-                                      @Validated BaseVo vo, BindingResult bindingResult) {
-        DataResponse<List> response = new DataResponse<>();
-        checkValid(bindingResult, response);
-        if (response.getStatus() != HTTP_SUCCESS) {
-            return response;
-        }
+    public ModelAndView selectExpressList(@RequestParam(value = "status[]", required = false) Integer[] status,
+                                          @RequestParam(value = "openid") String openid) {
+        ModelAndView modelAndView = new ModelAndView();
         try {
-            List list = expressSendService.selectExpressList(status, vo.getOpenid());
-            response.writeSuccess("查询列表成功", list);
+            List list = expressSendService.selectExpressList(status, openid);
+            modelAndView.addObject("list", list);
+            modelAndView.setViewName("sent");
         } catch (Exception e) {
-            response.writeFailure("查询列表失败");
+            modelAndView.setViewName("redirect:/error");
         }
-        return response;
+        return modelAndView;
     }
 
     /**
@@ -308,4 +305,6 @@ public class ExpressController extends BaseEasyWebController {
         }
         return response;
     }
+
+
 }
