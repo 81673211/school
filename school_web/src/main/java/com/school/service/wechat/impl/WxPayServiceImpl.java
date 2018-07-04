@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.Ordered;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
@@ -106,6 +107,8 @@ public class WxPayServiceImpl implements WxPayService {
         		treeMap.put("timeStamp", String.valueOf(System.currentTimeMillis()).substring(0, 10));
         		String paySign = WXPayUtil.generateSignature(treeMap, config.getKey(),SignType.HMACSHA256);
         		treeMap.put("paySign", paySign);
+        		// 将订单置为支付处理中
+        		this.orderPaying(orderInfo);
             }else{
             	throw new Exception("微信统一下单失败:" + result.get("err_code_des"));
             }
@@ -115,6 +118,20 @@ public class WxPayServiceImpl implements WxPayService {
             throw new Exception("微信统一下单失败");
         }
 	}
+	
+	/**
+	 * 将订单更新为支付处理中
+	 * @param orderNo
+	 */
+	private void orderPaying(OrderInfo orderInfo){
+		if(orderInfo == null){
+			return;
+		}
+		orderInfo.setStatus(OrderStatusEnum.PAYING.getCode());
+		orderInfo.setSucTime(new Date());
+		orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
+	}
+	
 	
 	/**
      * 修改订单状态，获取微信回调结果
@@ -195,9 +212,6 @@ public class WxPayServiceImpl implements WxPayService {
              resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>" + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
              
              // 校验金额是否正确
-             
-             
-             // 将订单置为成功
              OrderInfo orderInfo = orderInfoMapper.findByOrderNo(out_trade_no);
              
              if(orderInfo == null){
@@ -211,6 +225,7 @@ public class WxPayServiceImpl implements WxPayService {
             	 throw new Exception("订单金额不一致");
              }
              
+             // 将订单置为成功
              this.orderSuccess(orderInfo);
              
         }
@@ -222,6 +237,9 @@ public class WxPayServiceImpl implements WxPayService {
 	 * @param orderNo
 	 */
 	private void orderSuccess(OrderInfo orderInfo){
+		if(orderInfo == null){
+			return;
+		}
 		orderInfo.setStatus(OrderStatusEnum.SUCCESS.getCode());
 		orderInfo.setSucTime(new Date());
 		orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
