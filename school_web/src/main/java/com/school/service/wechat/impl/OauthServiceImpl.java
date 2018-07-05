@@ -48,11 +48,11 @@ public class OauthServiceImpl implements OauthService {
     }
 
     @Override
-    public String getOAuthUrl(String redirectUrl) {
+    public String getOAuthUrl() {
         try {
             return WechatUrl.USER_AUTH_URL
                     .replace("${APPID}", ConstantWeChat.APPID)
-                    .replace("${REDIRECT_URL}", URLEncoder.encode(redirectUrl, "utf8"))
+                    .replace("${REDIRECT_URL}", URLEncoder.encode("http://www.glove1573.cn/wx/proxy", "utf8"))
                     .replace("${SCOPE}", ConstantWeChat.SCOPE_SNSAPI_USERINFO)
                     .replace("${STATE}", "STATE");
         } catch (UnsupportedEncodingException e) {
@@ -63,11 +63,11 @@ public class OauthServiceImpl implements OauthService {
 
 
     @Override
-    public String getOAuthUrl(String redirectUrl, String state) {
+    public String getOAuthUrl(String state) {
         try {
             String url = WechatUrl.USER_AUTH_URL
                     .replace("${APPID}", ConstantWeChat.APPID)
-                    .replace("${REDIRECT_URL}", URLEncoder.encode(redirectUrl, "utf8"))
+                    .replace("${REDIRECT_URL}", URLEncoder.encode("http://www.glove1573.cn/wx/proxy", "utf8"))
                     .replace("${SCOPE}", ConstantWeChat.SCOPE_SNSAPI_USERINFO)
                     .replace("${STATE}", state);
             log.info("---getOAuthUrl----:{}", url);

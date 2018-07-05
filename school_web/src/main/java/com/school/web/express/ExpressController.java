@@ -236,23 +236,20 @@ public class ExpressController extends BaseEasyWebController {
     /**
      * 收件  查询收件列表
      *
-     * @param state
+     * @param status
      * @return
      */
     @RequestMapping(value = "/1/list", method = RequestMethod.GET)
-    public ModelAndView selectReceiveExpressList(@RequestParam(value = "state") String state,
-                                                 @RequestParam(value = "code") String code)
+    public ModelAndView selectReceiveExpressList(@RequestParam(value = "status") String status,
+                                                 @RequestParam(value = "openId") String openId)
             throws ExpressException {
         ModelAndView mav = new ModelAndView();
-        if (StringUtils.isBlank(code)) {
-            throw new RuntimeException("参数错误");
-        }
-        Customer customer = customerService.getByOpenId(oauthService.getOAuthToken(code).getOpenId());
+        Customer customer = customerService.getByOpenId(openId);
         String phone = customer.getPhone();
         if (StringUtils.isBlank(phone)) {
             mav.setViewName("redirect:/customer/profile");
         } else {
-            String[] split = state.split(",");
+            String[] split = status.split(",");
             Integer[] statuses = new Integer[split.length];
             for (int i = 0; i < split.length; i++) {
                 statuses[i] = Integer.parseInt(split[i]);
@@ -276,11 +273,16 @@ public class ExpressController extends BaseEasyWebController {
      * @return
      */
     @RequestMapping(value = "/0/list", method = RequestMethod.GET)
-    public ModelAndView selectExpressList(@RequestParam(value = "status[]", required = false) Integer[] status,
-                                          @RequestParam(value = "openid") String openid) {
+    public ModelAndView selectExpressList(@RequestParam(value = "status") String status,
+                                          @RequestParam(value = "openId") String openId) {
         ModelAndView modelAndView = new ModelAndView();
         try {
-            List list = expressSendService.selectExpressList(status, openid);
+            String[] split = status.split(",");
+            Integer[] statuses = new Integer[split.length];
+            for (int i = 0; i < split.length; i++) {
+                statuses[i] = Integer.parseInt(split[i]);
+            }
+            List list = expressSendService.selectExpressList(statuses, openId);
             modelAndView.addObject("list", list);
             modelAndView.setViewName("sent");
         } catch (Exception e) {

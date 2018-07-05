@@ -1,5 +1,8 @@
 package com.school.common;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MenuManager {
 
+    private static final String CHARSET_UTF8 = "UTF-8";
     @Autowired
     private MenuService menuService;
 
@@ -36,19 +40,19 @@ public class MenuManager {
     private OauthService oauthService;
 
     @PostConstruct
-    public void init() {
+    public void init() throws UnsupportedEncodingException {
         if (ConstantWeChat.REFRESH_MENU) {
             menuService.create(getMenu());
         }
         log.info("menu:{}", JSON.toJSONString(menuService.get()));
     }
 
-    private Menu getMenu() {
+    private Menu getMenu() throws UnsupportedEncodingException {
         CommonButton btn11 = new CommonButton();
         btn11.setName("我要寄件");
         btn11.setType("view");
         btn11.setKey("11");
-        btn11.setUrl(oauthService.getOAuthUrl("http://www.glove1573.cn/express/send"));
+        btn11.setUrl(oauthService.getOAuthUrl(URLEncoder.encode("/express/0/list?status=0,1", CHARSET_UTF8)));
 
         CommonButton btn12 = new CommonButton();
         btn12.setName("寄件历史");
@@ -60,18 +64,18 @@ public class MenuManager {
         btn21.setName("待收快件");
         btn21.setType("view");
         btn21.setKey("21");
-        btn21.setUrl(oauthService.getOAuthUrl("http://www.glove1573.cn/express/1/list", "0,1,2,3,4"));
+        btn21.setUrl(oauthService.getOAuthUrl(URLEncoder.encode("/express/1/list?status=0,1,2,3,4", CHARSET_UTF8)));
 
         CommonButton btn22 = new CommonButton();
         btn22.setName("收件历史");
         btn22.setType("view");
         btn22.setKey("22");
-        btn22.setUrl(oauthService.getOAuthUrl("http://www.glove1573.cn/express/1/list", "5"));
+        btn22.setUrl(oauthService.getOAuthUrl(URLEncoder.encode("/express/1/list?status=5", CHARSET_UTF8)));
 
         CommonButton btn31 = new CommonButton();
         btn31.setName("完善个人信息");
         btn31.setType("view");
-        btn31.setUrl(oauthService.getOAuthUrl("http://www.glove1573.cn/customer/profile"));
+        btn31.setUrl(oauthService.getOAuthUrl(URLEncoder.encode("/customer/profile", CHARSET_UTF8)));
         btn31.setKey("31");
 
         CommonButton btn32 = new CommonButton();
