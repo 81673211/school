@@ -9,6 +9,7 @@ import com.school.service.customer.CustomerService;
 import com.school.service.express.ExpressCompanyService;
 import com.school.service.express.ExpressReceiveService;
 import com.school.service.express.ExpressSendService;
+import com.school.service.region.RegionService;
 import com.school.service.wechat.OauthService;
 import com.school.vo.BaseVo;
 import com.school.vo.request.*;
@@ -16,7 +17,6 @@ import com.school.web.base.BaseEasyWebController;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,6 +46,8 @@ public class ExpressController extends BaseEasyWebController {
     private OauthService oauthService;
     @Autowired
     private CustomerService customerService;
+    @Autowired
+    private RegionService regionService;
 
     /**
      * 寄件
@@ -306,6 +308,29 @@ public class ExpressController extends BaseEasyWebController {
             response.writeFailure("查询列表失败");
         }
         return response;
+    }
+
+
+    /**
+     * 寄件  页面跳转
+     *
+     * @param openId
+     * @return
+     */
+    @RequestMapping(value = "/sending", method = RequestMethod.GET)
+    public ModelAndView sending(@RequestParam(value = "openId") String openId) {
+        ModelAndView modelAndView = new ModelAndView();
+        try {
+            List<BaseVo> regionList = regionService.selectRegionList(null);
+            List<BaseVo> companyList = expressCompanyService.selectList();
+            modelAndView.addObject("openId", openId);
+            modelAndView.addObject("regionList", regionList);
+            modelAndView.addObject("companyList", companyList);
+            modelAndView.setViewName("sending");
+        } catch (Exception e) {
+            modelAndView.setViewName("redirect:/error");
+        }
+        return modelAndView;
     }
 
 

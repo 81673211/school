@@ -29,11 +29,22 @@ public class MenuDecirectController {
             modelAndView.setViewName("redirect:/error");
         } else {
             Customer customer = customerService.getByOpenId(oauthService.getOAuthToken(code).getOpenId());
-            modelAndView.setViewName("redirect:/express/0/list?openid=" + customer.getOpenId());
+            modelAndView.setViewName("redirect:/express/0/list?openId=" + customer.getOpenId());
         }
         return modelAndView;
     }
 
+    @RequestMapping("express/send")
+    public ModelAndView sendExpress(@RequestParam(value = "code") String code) {
+        ModelAndView modelAndView = new ModelAndView();
+        if (StringUtils.isBlank(code)) {
+            modelAndView.setViewName("redirect:/error");
+        } else {
+            Customer customer = customerService.getByOpenId(oauthService.getOAuthToken(code).getOpenId());
+            modelAndView.setViewName("redirect:/express/sending?openid=" + customer.getOpenId());
+        }
+        return modelAndView;
+    }
 
     @RequestMapping("error")
     public ModelAndView error() {
