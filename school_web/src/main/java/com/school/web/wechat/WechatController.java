@@ -71,8 +71,7 @@ public class WechatController {
     public ModelAndView proxy(String code, String state) throws UnsupportedEncodingException {
         ModelAndView mav = new ModelAndView();
         String openId = oauthService.getOAuthToken(code).getOpenId();
-        state = URLDecoder.decode(state, "UTF-8");
-        String viewName = "redirect:" + state.replace("|", "&") + "&openId=" + openId;
+        String viewName = "redirect:" + URLDecoder.decode(state, "UTF-8") + "&openId=" + openId;
         log.info("********viewName:{}", viewName);
         mav.setViewName(viewName);
         return mav;
