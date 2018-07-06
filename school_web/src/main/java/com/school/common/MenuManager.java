@@ -52,13 +52,13 @@ public class MenuManager {
         btn11.setName("我要寄件");
         btn11.setType("view");
         btn11.setKey("11");
-        btn11.setUrl(oauthService.getOAuthUrl(URLEncoder.encode("/express/0/list?status=0,1", CHARSET_UTF8)));
+        btn11.setUrl(oauthService.getOAuthUrl(URLEncoder.encode("*", CHARSET_UTF8)));
 
         CommonButton btn12 = new CommonButton();
         btn12.setName("寄件历史");
         btn12.setType("view");
         btn12.setKey("12");
-        btn12.setUrl(oauthService.getOAuthUrl("http://www.glove1573.cn/express/send/history"));
+        btn12.setUrl(oauthService.getOAuthUrl(URLEncoder.encode("/express/0/list", CHARSET_UTF8)));
 
         CommonButton btn21 = new CommonButton();
         btn21.setName("待收快件");

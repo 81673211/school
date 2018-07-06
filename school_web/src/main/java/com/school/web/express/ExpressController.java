@@ -275,7 +275,7 @@ public class ExpressController extends BaseEasyWebController {
      * @return
      */
     @RequestMapping(value = "/0/list", method = RequestMethod.GET)
-    public ModelAndView selectExpressList(@RequestParam(value = "status") String status,
+    public ModelAndView selectExpressList(@RequestParam(value = "status", required = false) String status,
                                           @RequestParam(value = "openId") String openId) {
         ModelAndView modelAndView = new ModelAndView();
         try {
