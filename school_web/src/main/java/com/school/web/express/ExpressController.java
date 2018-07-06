@@ -279,10 +279,13 @@ public class ExpressController extends BaseEasyWebController {
                                           @RequestParam(value = "openId") String openId) {
         ModelAndView modelAndView = new ModelAndView();
         try {
-            String[] split = status.split(",");
-            Integer[] statuses = new Integer[split.length];
-            for (int i = 0; i < split.length; i++) {
-                statuses[i] = Integer.parseInt(split[i]);
+            Integer[] statuses = null;
+            if (StringUtils.isNotBlank(status)) {
+                String[] split = status.split(",");
+                statuses = new Integer[split.length];
+                for (int i = 0; i < split.length; i++) {
+                    statuses[i] = Integer.parseInt(split[i]);
+                }
             }
             List list = expressSendService.selectExpressList(statuses, openId);
             modelAndView.addObject("list", list);
