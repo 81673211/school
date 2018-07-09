@@ -43,24 +43,8 @@ public class OauthServiceImpl implements OauthService {
 
     @Override
     public UserWechat getDetail(String openId) {
-
         return null;
     }
-
-    @Override
-    public String getOAuthUrl() {
-        try {
-            return WechatUrl.USER_AUTH_URL
-                    .replace("${APPID}", ConstantWeChat.APPID)
-                    .replace("${REDIRECT_URL}", URLEncoder.encode("http://www.glove1573.cn/wx/proxy", "utf8"))
-                    .replace("${SCOPE}", ConstantWeChat.SCOPE_SNSAPI_USERINFO)
-                    .replace("${STATE}", "STATE");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
 
     @Override
     public String getOAuthUrl(String state) {
