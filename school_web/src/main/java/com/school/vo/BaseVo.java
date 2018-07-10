@@ -9,14 +9,14 @@ import javax.validation.constraints.NotNull;
  */
 @Validated
 public abstract class BaseVo {
-    @NotNull(message = "openid参数错误")
-    private String openid;
+    @NotNull(message = "openId参数错误")
+    private String openId;
 
-    public String getOpenid() {
-        return openid;
+    public String getOpenId() {
+        return openId;
     }
 
-    public void setOpenid(String openid) {
-        this.openid = openid;
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 }

@@ -58,11 +58,11 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
                 Log.error.error(message);
                 throw new ExpressException(message);
             }
-//            if (!(orderInfoMapper.insertSelective(initOrderInfo(expressId)) > 0)) {
-//                String message = "create send express error,when insert table 'order_info' the number of affected rows is 0";
-//                Log.error.error(message);
-//                throw new ExpressException(message);
-//            }
+            if (!(orderInfoMapper.insertSelective(initOrderInfo(expressId)) > 0)) {
+                String message = "create send express error,when insert table 'order_info' the number of affected rows is 0";
+                Log.error.error(message);
+                throw new ExpressException(message);
+            }
         } catch (Exception e) {
             String message = "throw exception when create send express";
             Log.error.error(message, e);
@@ -75,6 +75,8 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
         map.put("phone", expressSend.getSenderPhone());
         List<Customer> list = customerMapper.selectByParams(map);
         expressSend.setCustomerId(list.get(0).getId());
+        expressSend.setSenderPhone(list.get(0).getPhone());
+        expressSend.setSenderName(list.get(0).getName());
     }
 
     @Override
@@ -82,23 +84,23 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
         try {
             ExpressSend expressSend = converterVo2Po(expressVo, ExpressSend.class);
             boxExpressCompany(expressSend);
-//            ExpressSend hasSendExpress = expressSendMapper.selectByPrimaryKey(expressSend.getId());
+            ExpressSend hasSendExpress = expressSendMapper.selectByPrimaryKey(expressSend.getId());
             if (!(expressSendMapper.updateByPrimaryKeySelective(expressSend) > 0)) {
                 String message = "modify send express error,when update table 'express_send' the number of affected rows is 0";
                 Log.error.error(message);
                 throw new ExpressException(message);
             }
 //            // 修改完成后检查省市区快递公司等是否发生改变，改变了则重新创建订单，待修改；以及状态检查
-//            if (!hasSendExpress.getCompanyId().equals(expressSend.getCompanyId()) ||
-//                    !hasSendExpress.getReceiverProvinceId().equals(expressSend.getReceiverProvinceId()) ||
-//                    !hasSendExpress.getReceiverCityId().equals(expressSend.getReceiverCityId()) ||
-//                    !hasSendExpress.getReceiverDistrictId().equals(expressSend.getReceiverDistrictId())) {
-//                if (!(orderInfoMapper.insertSelective(initOrderInfo(expressSend.getId())) > 0)) {
-//                    String message = "create send express error,when insert table 'order_info' the number of affected rows is 0";
-//                    Log.error.error(message);
-//                    throw new ExpressException(message);
-//                }
-//            }
+            if (!hasSendExpress.getCompanyId().equals(expressSend.getCompanyId()) ||
+                    !hasSendExpress.getReceiverProvinceId().equals(expressSend.getReceiverProvinceId()) ||
+                    !hasSendExpress.getReceiverCityId().equals(expressSend.getReceiverCityId()) ||
+                    !hasSendExpress.getReceiverDistrictId().equals(expressSend.getReceiverDistrictId())) {
+                if (!(orderInfoMapper.insertSelective(initOrderInfo(expressSend.getId())) > 0)) {
+                    String message = "create send express error,when insert table 'order_info' the number of affected rows is 0";
+                    Log.error.error(message);
+                    throw new ExpressException(message);
+                }
+            }
         } catch (Exception e) {
             String message = "throw exception when modify send express";
             Log.error.error(message, e);
@@ -199,7 +201,7 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
      * @return
      */
     private BigDecimal calcSendExpressAmount() {
-        return BigDecimal.ZERO;
+        return new BigDecimal(0.01);
     }
 
 
