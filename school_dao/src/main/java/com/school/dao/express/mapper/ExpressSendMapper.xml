@@ -102,7 +102,7 @@
             <if test="expressWay != null and expressWay != 0">
                 express_way,
             </if>
-            <if test="customer_id != null and customer_id != 0">
+            <if test="customerId != null and customerId != 0">
                 customer_id,
             </if>
         </trim>

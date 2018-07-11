@@ -51,7 +51,7 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
         try {
             ExpressSend expressSend = converterVo2Po(expressVo, ExpressSend.class);
             boxExpressCompany(expressSend);
-            boxCustomer(expressSend);
+            boxCustomer(expressSend, expressVo.getOpenId());
             Long expressId = expressSendMapper.insertSelective(expressSend);
             if (!(expressId > 0L)) {
                 String message = "create send express error,when insert table 'express_send' the number of affected rows is 0";
@@ -70,13 +70,11 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
         }
     }
 
-    private void boxCustomer(ExpressSend expressSend) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("phone", expressSend.getSenderPhone());
-        List<Customer> list = customerMapper.selectByParams(map);
-        expressSend.setCustomerId(list.get(0).getId());
-        expressSend.setSenderPhone(list.get(0).getPhone());
-        expressSend.setSenderName(list.get(0).getName());
+    private void boxCustomer(ExpressSend expressSend, String openId) {
+        Customer customer = customerMapper.selectByOpenId(openId);
+        expressSend.setCustomerId(customer.getId());
+        expressSend.setSenderPhone(customer.getPhone());
+        expressSend.setSenderName(customer.getName());
     }
 
     @Override

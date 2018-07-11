@@ -137,7 +137,7 @@
 
 
     <select id="selectByParams" resultType="com.school.domain.entity.customer.Customer" parameterType="map">
-        select * from customer t
+        select * from customer t where 1=1
         <where>
             <if test="phone != null and phone != '' ">
                 and t.phone=#{phone,jdbcType=VARCHAR}

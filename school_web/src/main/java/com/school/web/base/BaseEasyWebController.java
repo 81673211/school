@@ -40,8 +40,9 @@ public abstract class BaseEasyWebController {
     public void checkValid(BindingResult bindingResult, Response response) {
         if (bindingResult.hasErrors()) {
             response.writeFailure(bindingResult.getAllErrors().get(0).getDefaultMessage());
+        } else {
+            response.writeSuccess();
         }
-        response.writeSuccess();
     }
 
 }

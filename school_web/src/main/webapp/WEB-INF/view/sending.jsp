@@ -22,7 +22,7 @@
     </div>
     <div class="row">
         <div class="col-xs-3">
-            <select class="form-control " onchange="provinceChange(this);">
+            <select class="form-control " id="province" onchange="change(this,'city');">
                 <option value="">[---请选择---]</option>
                 <c:if test="${regionList != null and regionList.size() > 0}">
                     <c:forEach items="${regionList}" varStatus="var" var="item">
@@ -32,12 +32,12 @@
             </select>
         </div>
         <div class="col-xs-3">
-            <select class="form-control" id="city" onchange="cityChange(this);">
+            <select class="form-control" id="city" onchange="change(this,'area');">
                 <option value="">[---请选择---]</option>
             </select>
         </div>
         <div class="col-xs-3">
-            <select class="form-control" id="area">
+            <select class="form-control" id="area" onchange="calcAmount();">
                 <option value="">[---请选择---]</option>
             </select>
         </div>
@@ -51,8 +51,7 @@
         <label class="input-control-icon-right"><i class="icon icon-asterisk"></i></label>
     </div>
     <div>
-        <select class="form-control">
-            <option value="">[---请选择---]</option>
+        <select class="form-control" id="company" onchange="calcAmount();">
             <c:if test="${companyList != null and companyList.size() > 0}">
                 <c:forEach items="${companyList}" varStatus="var" var="item">
                     <option value="${item.id}">${item.name}</option>
@@ -61,13 +60,12 @@
         </select>
     </div>
     <div>
-        <select class="form-control">
-            <option value="">寄件方式</option>
+        <select class="form-control" id="type" onchange="calcAmount();">
             <option value="0">自发</option>
             <option value="1">入柜</option>
         </select>
     </div>
-    <%--<div>价格（￥<span class="price">10.0</span>元）</div>--%>
+    <div>价格（￥<span class="price" id="price">0.01</span>元）</div>
     <div class="row btnGroup">
         <%--<div class="col-xs-6">--%>
         <%--<button class="btn btn-danger " type="button">重置</button>--%>
@@ -84,48 +82,86 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/js/zui.min.js"></script>
 
 <script>
-    function provinceChange(e) {
+    function change(e, id) {
         var html = "";
         $.get("/region/list", {"parentId": e.value}, function (result) {
             html += "<option value=''>[---请选择---]</option>";
             $.each(result.data, function (index, item) {
                 html += "<option value='" + item.id + "'>" + item.areaName + "</option>";
             });
-            $("#city").html(html);
+            $("#" + id).html(html);
         });
     }
 
+    function calcAmount() {
+        var element = $("#price");
+        var a = parseFloat(element.text()) + parseFloat(0.01);
+        element.html(a);
+    }
 
     $("#confirm").click(function () {
         var openId = $("#openId").val();
         var receiverPhone = $("#receiverPhone").val();
         var receiverName = $("#receiverName").val();
         var receiverAddr = $("#receiverAddr").val();
+        var companyId = $("#company").val();
+        var receiverProvinceId = $("#province").val();
+        var receiverCityId = $("#city").val();
+        var receiverDistrictId = $("#area").val();
         if (openId == '') {
-            alert("openId error");
+            alert("参数错误");
             return false;
         }
         var data = {openId: openId};
-        if (receiverPhone != '') {
-            data.receiverPhone = receiverPhone;
-        } else {
-            alert("receiverPhone error");
-            return false;
-        }
+
         if (receiverName != '') {
             data.receiverName = receiverName;
         } else {
-            alert("receiverName error");
+            alert("请输入收件人姓名");
             return false;
         }
+
+        if (receiverProvinceId != '') {
+            data.receiverProvinceId = receiverProvinceId;
+        } else {
+            alert("请选择收件人省份");
+            return false;
+        }
+        if (receiverCityId != '') {
+            data.receiverCityId = receiverCityId;
+        } else {
+            alert("请选择收件人市区");
+            return false;
+        }
+
+        if (receiverDistrictId != '') {
+            data.receiverDistrictId = receiverDistrictId;
+        } else {
+            alert("请选择收件人区县");
+            return false;
+        }
+
+
         if (receiverAddr != '') {
             data.receiverAddr = receiverAddr;
         } else {
-            alert("receiverAddr error");
+            alert("请输入收件人详细地址");
+            return false;
+        }
+        if (receiverPhone != '') {
+            data.receiverPhone = receiverPhone;
+        } else {
+            alert("请输入收件人电话");
+            return false;
+        }
+        if (companyId != '') {
+            data.companyId = companyId;
+        } else {
+            alert("请选择快递公司");
             return false;
         }
         $.post("/express/0/create", data, function (result) {
-            alert(result.data);
+            alert(result.msg);
         });
     });
 
