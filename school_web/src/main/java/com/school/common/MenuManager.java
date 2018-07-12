@@ -52,7 +52,7 @@ public class MenuManager {
         btn11.setName("我要寄件");
         btn11.setType("view");
         btn11.setKey("11");
-        btn11.setUrl(oauthService.getOAuthUrl(URLEncoder.encode("*", CHARSET_UTF8)));
+        btn11.setUrl(oauthService.getOAuthUrl(URLEncoder.encode("/express/sending", CHARSET_UTF8)));
 
         CommonButton btn12 = new CommonButton();
         btn12.setName("寄件历史");
