@@ -1,6 +1,5 @@
 package com.school.web.customer;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.school.service.customer.CustomerService;
-import com.school.service.wechat.OauthService;
 import com.school.web.base.BaseEasyWebController;
 import com.school.web.customer.request.CustomerProfileEditRequest;
 
@@ -30,19 +28,11 @@ public class CustomerController extends BaseEasyWebController {
 
     @Autowired
     private CustomerService customerService;
-    @Autowired
-    private OauthService oauthService;
 
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
-    public ModelAndView profile(@RequestParam(value = "code", required = false) String code,
-                                @RequestParam(value = "openId", required = false) String openId) {
+    public ModelAndView profile(@RequestParam(value = "openId", required = false) String openId) {
         ModelAndView mav = new ModelAndView("profile");
-        if (StringUtils.isNotBlank(openId)) {
-            mav.addObject("customer", customerService.getByOpenId(openId));
-        } else {
-            mav.addObject("customer",
-                          customerService.getByOpenId(oauthService.getOAuthToken(code).getOpenId()));
-        }
+        mav.addObject("customer", customerService.getByOpenId(openId));
         return mav;
     }
 
