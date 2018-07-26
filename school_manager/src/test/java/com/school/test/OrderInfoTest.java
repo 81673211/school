@@ -1,9 +1,6 @@
 package com.school.test;
 
-import static org.junit.Assert.*;
-
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
@@ -14,7 +11,6 @@ import com.school.base.BaseAbstractTest;
 import com.school.dao.order.OrderInfoMapper;
 import com.school.dao.security.RoleMapper;
 import com.school.domain.entity.order.OrderInfo;
-import com.school.domain.entity.security.Role;
 
 public class OrderInfoTest extends BaseAbstractTest {
 

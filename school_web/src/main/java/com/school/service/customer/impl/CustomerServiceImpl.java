@@ -91,6 +91,8 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public void update(CustomerProfileEditRequest request) {
         Customer customer = getByOpenId(request.getOpenId());
+        String phone = customer.getPhone();
+        redisTemplate.opsForValue().get(phone);
         try {
             BeanUtils.copyProperties(customer, request);
         } catch (IllegalAccessException | InvocationTargetException e) {
