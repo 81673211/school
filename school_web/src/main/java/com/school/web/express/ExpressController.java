@@ -249,7 +249,7 @@ public class ExpressController extends BaseEasyWebController {
         Customer customer = customerService.getByOpenId(openId);
         String phone = customer.getPhone();
         if (StringUtils.isBlank(phone)) {
-            mav.setViewName("redirect:/customer/profile");
+            mav.setViewName("redirect:/customer/profile?openId=" + openId);
         } else {
             String[] split = status.split(",");
             Integer[] statuses = new Integer[split.length];
