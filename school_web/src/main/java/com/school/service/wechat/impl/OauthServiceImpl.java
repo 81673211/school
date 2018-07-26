@@ -37,7 +37,6 @@ public class OauthServiceImpl implements OauthService {
     public boolean isOAuthed(String openId) {
         String oauthTokenStr = redisTemplate.opsForValue().get(
                 Constants.CACHE_NAMESPACE_OAUTH_TOKEN.replace("${openId}", openId));
-        log.info("oauthTokenStr:{}", oauthTokenStr);
         return !(oauthTokenStr == null || (JSON.parseObject(oauthTokenStr, OAuthToken.class)).isExpired());
     }
 
@@ -54,7 +53,6 @@ public class OauthServiceImpl implements OauthService {
                     .replace("${REDIRECT_URL}", URLEncoder.encode("http://www.glove1573.cn/wx/proxy", "utf8"))
                     .replace("${SCOPE}", ConstantWeChat.SCOPE_SNSAPI_USERINFO)
                     .replace("${STATE}", state);
-            log.info("---getOAuthUrl----:{}", url);
             return url;
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
@@ -68,14 +66,12 @@ public class OauthServiceImpl implements OauthService {
                 .replace("${APPID}", ConstantWeChat.APPID)
                 .replace("${APPSECRET}", ConstantWeChat.APPSECRET)
                 .replace("${CODE}", code);
-        log.info("----OAuthTokenUrl----:{}", getOAuthTokenUrl);
         String response;
         try {
             response = HttpUtil.get(getOAuthTokenUrl, "utf8", false);
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage());
         }
-        log.info("----getOAuthToken----response:{}", response);
         return JSON.parseObject(response, OAuthToken.class);
     }
 }
