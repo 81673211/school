@@ -12,11 +12,9 @@ import com.school.util.wechat.UserWechat;
  */
 public interface OauthService {
 
-    boolean isOAuthed(String openId);
-
     String getOAuthUrl(String state);
 
-    UserWechat getDetail(String openId);
+    UserWechat getDetail(String openId, String accessToken);
 
     OAuthToken getOAuthToken(String code);
 }

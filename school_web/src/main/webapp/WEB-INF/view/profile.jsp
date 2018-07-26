@@ -46,10 +46,12 @@
         </div>
     </div>
 
-    <div class="alert alert-success with-icon" id="feedback">
-        <i class="icon-ok-sign"></i>
-        <div class="content"></div>
-    </div>
+
+    <div class="alert alert-success-inverse" id="feedback-suc">修改成功</div>
+    <div class="alert alert-warning-inverse" id="feedback-err"></div>
+
+
+
 </div>
 
 <!-- ZUI Javascript 依赖 jQuery -->
@@ -62,7 +64,8 @@
       $("#verify_code").hide();
       $("#phone").attr("readonly", "readonly");
     }
-    $("#feedback").hide();
+    $("#feedback-suc").hide();
+    $("#feedback-err").hide();
   });
   $('.getCode').click(function () {
     if ($(this).html() == '获取验证码') {
@@ -84,6 +87,8 @@
     }
   });
   $("#reset").click(function () {
+    $("#feedback-suc").hide();
+    $("#feedback-err").hide();
     $("#name").val('');
     $("#email").val('');
     $("#addr").val('');
@@ -93,6 +98,8 @@
     }
   });
   $("#confirm").click(function () {
+    $("#feedback-suc").hide();
+    $("#feedback-err").hide();
     var openId = $("#openId").val();
     var name = $("#name").val();
     var email = $("#email").val();
@@ -120,8 +127,12 @@
       data.code = code;
     }
     $.post("/customer/profile", data, function (result) {
-      $(".content").value(result);
-      $("#feedback").show();
+      if (result != "success") {
+        $("#feedback-err").html(result);
+        $("#feedback-err").show();
+      } else {
+        $("#feedback-suc").show();
+      }
     });
   });
 </script>

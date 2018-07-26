@@ -39,7 +39,11 @@ public class CustomerController extends BaseEasyWebController {
     @RequestMapping(value = "/profile", method = RequestMethod.POST)
     @ResponseBody
     public String profile(CustomerProfileEditRequest request) {
-        customerService.update(request);
+        try {
+            customerService.update(request);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
         return "success";
     }
 
@@ -49,5 +53,4 @@ public class CustomerController extends BaseEasyWebController {
         customerService.sendVerifyCode(phone);
         return "1";
     }
-
 }

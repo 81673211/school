@@ -101,6 +101,7 @@
     set name = #{name,jdbcType=VARCHAR},
       is_subscribed=#{subscribed,jdbcType=TINYINT},
       subscribed_time=#{subscribedTime,jdbcType=TIMESTAMP},
+      nickname=#{nickname,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=VARCHAR},
       addr = #{addr,jdbcType=VARCHAR},
       email = #{email,jdbcType=VARCHAR},

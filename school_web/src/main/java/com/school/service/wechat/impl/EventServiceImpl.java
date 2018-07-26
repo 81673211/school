@@ -60,7 +60,6 @@ public class EventServiceImpl implements EventService {
                 customerService.unsubscribe(openId);
                 return SUCCESS;
             } else if (WechatEventTypeEnum.VIEW.getCode().equals(event)) {
-
                 return SUCCESS;
             }
         } else {

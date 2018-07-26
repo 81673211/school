@@ -26,4 +26,8 @@ public interface CustomerService extends BaseService<Customer, CustomerMapper> {
     void sendVerifyCode(String phone);
 
     void update(CustomerProfileEditRequest request);
+
+    void update(Customer customer);
+
+    Customer create(String openId);
 }

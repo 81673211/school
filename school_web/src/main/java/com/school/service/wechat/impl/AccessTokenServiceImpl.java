@@ -2,11 +2,7 @@ package com.school.service.wechat.impl;
 
 import java.util.concurrent.TimeUnit;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -16,8 +12,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.school.service.wechat.AccessTokenService;
 import com.school.util.Constants;
 import com.school.util.core.utils.HttpUtil;
-import com.school.util.wechat.WechatUrl;
 import com.school.util.wechat.ConstantWeChat;
+import com.school.util.wechat.WechatUrl;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *
@@ -27,9 +25,8 @@ import com.school.util.wechat.ConstantWeChat;
  * <br><b>Date:</b> 11/06/2018 15:00
  */
 @Service
+@Slf4j
 public class AccessTokenServiceImpl implements AccessTokenService {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(AccessTokenServiceImpl.class);
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
@@ -46,7 +43,6 @@ public class AccessTokenServiceImpl implements AccessTokenService {
                 if (StringUtils.isBlank(response)) {
                     throw new RuntimeException("get access_token failed, response is blank");
                 }
-                LOGGER.info(response);
                 JSONObject jsonObject = JSON.parseObject(response);
                 accessToken = jsonObject.getString("access_token");
                 long timeout = jsonObject.getLongValue("expires_in");
@@ -61,10 +57,5 @@ public class AccessTokenServiceImpl implements AccessTokenService {
             }
         }
         return accessToken;
-    }
-
-    @PostConstruct
-    public void init() {
-        System.out.println("222");
     }
 }

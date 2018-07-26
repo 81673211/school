@@ -21,5 +21,7 @@ public final class WechatUrl {
             "https://api.weixin.qq.com/cgi-bin/menu/get?access_token=${ACCESS_TOKEN}";
     public static final String OAUTH_TOKEN_GET_URL =
             "https://api.weixin.qq.com/sns/oauth2/access_token?appid=${APPID}&secret=${APPSECRET}&code=${CODE}&grant_type=authorization_code";
+    public static final String USER_INFO_URL =
+            "https://api.weixin.qq.com/sns/userinfo?access_token=${ACCESS_TOKEN}&openid=${OPEN_ID}&lang=zh_CN";
 
 }

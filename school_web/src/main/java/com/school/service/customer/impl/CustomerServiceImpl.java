@@ -52,11 +52,7 @@ public class CustomerServiceImpl implements CustomerService {
                 customerMapper.updateByPrimaryKey(customer);
             }
         } else {
-            customer = new Customer();
-            customer.setOpenId(openId);
-            customer.setSubscribed(true);
-            customer.setSubscribedTime(new Date());
-            customerMapper.insert(customer);
+            create(openId);
         }
     }
 
@@ -76,6 +72,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void sendVerifyCode(String phone) {
+        if (StringUtils.isBlank(phone)) {
+            throw new RuntimeException("手机号不能为空");
+        }
         String cacheKey = RedisKeyNS.CUSTOMER_PROFILE_VERIFY_CODE + phone;
         String verifyCode = redisTemplate.opsForValue().get(cacheKey);
         if (verifyCode != null) {
@@ -92,8 +91,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public void update(CustomerProfileEditRequest request) {
         Customer customer = getByOpenId(request.getOpenId());
-        String phone = customer.getPhone();
-        checkVerifyCode(phone, request.getCode());
+        checkVerifyCode(customer.getPhone(), request.getPhone(), request.getCode());
         String name = request.getName();
         if (StringUtils.isNotBlank(name)) {
             customer.setName(name);
@@ -106,18 +104,27 @@ public class CustomerServiceImpl implements CustomerService {
         if (StringUtils.isNotBlank(addr)) {
             customer.setAddr(addr);
         }
-        if (StringUtils.isNotBlank(phone)) {
-            customer.setPhone(phone);
+        String requestPhone = request.getPhone();
+        if (StringUtils.isNotBlank(requestPhone)) {
+            customer.setPhone(requestPhone);
         }
+        update(customer);
+    }
+
+    @Override
+    public void update(Customer customer) {
         customerMapper.updateByPrimaryKey(customer);
     }
 
-    private void checkVerifyCode(String phone, String reqVerifyCode) {
+    private void checkVerifyCode(String phone, String reqPhone, String reqVerifyCode) {
         if (StringUtils.isBlank(phone)) {
+            if (StringUtils.isBlank(reqPhone)) {
+                throw new RuntimeException("手机号不能为空");
+            }
             if (StringUtils.isBlank(reqVerifyCode)) {
                 throw new RuntimeException("验证码不能为空");
             }
-            String cacheKey = RedisKeyNS.CUSTOMER_PROFILE_VERIFY_CODE + phone;
+            String cacheKey = RedisKeyNS.CUSTOMER_PROFILE_VERIFY_CODE + reqPhone;
             String verifyCode = redisTemplate.opsForValue().get(cacheKey);
             if (verifyCode == null) {
                 throw new RuntimeException("无效的验证码");
@@ -126,5 +133,15 @@ public class CustomerServiceImpl implements CustomerService {
                 throw new RuntimeException("验证码错误");
             }
         }
+    }
+
+    @Override
+    public Customer create(String openId) {
+        Customer customer = new Customer();
+        customer.setOpenId(openId);
+        customer.setSubscribed(true);
+        customer.setSubscribedTime(new Date());
+        customerMapper.insert(customer);
+        return getByOpenId(openId);
     }
 }

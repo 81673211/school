@@ -7,6 +7,7 @@ import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.school.domain.entity.customer.Customer;
+import com.school.service.customer.CustomerService;
 import com.school.service.wechat.EventService;
 import com.school.service.wechat.OauthService;
 import com.school.util.wechat.CheckUtil;
+import com.school.util.wechat.OAuthToken;
+import com.school.util.wechat.UserWechat;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,6 +44,8 @@ public class WechatController {
     private EventService eventService;
     @Autowired
     private OauthService oauthService;
+    @Autowired
+    private CustomerService customerService;
 
     @RequestMapping(method = RequestMethod.POST)
     public void eventHandle(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -70,14 +77,26 @@ public class WechatController {
     @RequestMapping(value = "/proxy", method = RequestMethod.GET)
     public ModelAndView proxy(String code, String state) throws UnsupportedEncodingException {
         ModelAndView mav = new ModelAndView();
-        String openId = oauthService.getOAuthToken(code).getOpenId();
+        String decodeState = URLDecoder.decode(state, "UTF-8");
+        OAuthToken oAuthToken = oauthService.getOAuthToken(code);
+        String openId = oAuthToken.getOpenId();
+        Customer customer = customerService.getByOpenId(openId);
+        if (customer == null) {
+            customer = customerService.create(openId);
+        }
+        if (StringUtils.isBlank(customer.getNickname())) {
+            UserWechat userWechat = oauthService.getDetail(openId, oAuthToken.getAccessToken());
+            customer.setNickname(userWechat.getNickname());
+            customer.setAvatar(userWechat.getAvatar());
+            customer.setSex(String.valueOf(userWechat.getSex()));
+            customerService.update(customer);
+        }
         String viewName;
         if (state.contains("?")) {
-            viewName = "redirect:" + URLDecoder.decode(state, "UTF-8") + "&openId=" + openId;
+            viewName = "redirect:" + decodeState + "&openId=" + openId;
         } else {
-            viewName = "redirect:" + URLDecoder.decode(state, "UTF-8") + "?openId=" + openId;
+            viewName = "redirect:" + decodeState + "?openId=" + openId;
         }
-        log.info("********viewName:{}", viewName);
         mav.setViewName(viewName);
         return mav;
     }
