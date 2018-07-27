@@ -2,6 +2,7 @@ package com.school.service.customer.impl;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,6 +121,9 @@ public class CustomerServiceImpl implements CustomerService {
         if (StringUtils.isBlank(phone)) {
             if (StringUtils.isBlank(reqPhone)) {
                 throw new RuntimeException("手机号不能为空");
+            }
+            if (!Pattern.matches("^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\\d{8}$", reqPhone)) {
+                throw new RuntimeException("手机号格式错误");
             }
             if (StringUtils.isBlank(reqVerifyCode)) {
                 throw new RuntimeException("验证码不能为空");

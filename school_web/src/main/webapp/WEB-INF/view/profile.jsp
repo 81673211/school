@@ -58,12 +58,8 @@
         </div>
     </div>
 
-
-    <div class="alert alert-success-inverse" id="feedback-suc">修改成功</div>
-    <div class="alert alert-warning-inverse" id="feedback-err"></div>
-
-
-
+    <div class="alert alert-success-inverse text-center" id="feedback-suc">修改成功</div>
+    <div class="alert alert-warning-inverse text-center" id="feedback-err"></div>
 </div>
 
 <!-- ZUI Javascript 依赖 jQuery -->
@@ -81,7 +77,20 @@
   });
   $('.getCode').click(function () {
     if ($(this).html() == '获取验证码') {
-      $.post("/customer/verifyCode", {"phone": $("#phone").val()}, function (result) {
+      var phone = $("#phone").val();
+      if (phone == null || phone == '') {
+        $("#feedback-err").html("手机号不能为空");
+        $("#feedback-err").show();
+        $("#feedback-err").fadeOut(5000);
+        return;
+      }
+      if (!phone.match(/^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/)) {
+        $("#feedback-err").html("手机号格式错误");
+        $("#feedback-err").show();
+        $("#feedback-err").fadeOut(5000);
+        return;
+      }
+      $.post("/customer/verifyCode", {"phone": phone}, function (result) {
         if (result == "1") {
           var i = 60;
           var codeNum;
@@ -142,8 +151,10 @@
       if (result != "success") {
         $("#feedback-err").html(result);
         $("#feedback-err").show();
+        $("#feedback-err").fadeOut(5000);
       } else {
         $("#feedback-suc").show();
+        $("#feedback-suc").fadeOut(5000);
       }
     });
   });
