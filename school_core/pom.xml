@@ -11,6 +11,7 @@
 	
 	<artifactId>school_core</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
 	<name>school_core</name>
 	<url>http://maven.apache.org</url>
 	

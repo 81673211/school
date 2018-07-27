@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -12,7 +13,7 @@
     <link rel="stylesheet" href="/css/sudi.css">
     <style>
         .profile-haeder {position: relative; overflow: hidden; min-height: 8rem}
-        .profile-haeder > .front {background: rgba(0,0,0,.1); text-align: center; padding: 1.5rem}
+        .profile-haeder > .front {background: rgba(0,0,0,0.49); text-align: center; padding: 1.5rem}
     </style>
 </head>
 <body>
@@ -20,8 +21,9 @@
 <div class="wrap container sendPiece">
     <div class="profile-haeder space shadow">
         <div class="front dock text-white">
-            <img src="${customer.avatar}" alt="" class="img-circle">
+            <img src="${customer.avatar}" alt="" class="img-circle" style="height: 70px">
             <h4 class="lead text-shadow-black">${customer.nickname}</h4>
+            <h4>编辑个人信息</h4>
         </div>
     </div>
 
