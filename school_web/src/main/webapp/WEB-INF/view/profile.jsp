@@ -10,11 +10,21 @@
     <!-- ZUI 标准版压缩后的 CSS 文件 -->
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/css/zui.min.css">
     <link rel="stylesheet" href="/css/sudi.css">
+    <style>
+        .profile-haeder {position: relative; overflow: hidden; min-height: 8rem}
+        .profile-haeder > .front {background: rgba(0,0,0,.1); text-align: center; padding: 1.5rem}
+    </style>
 </head>
 <body>
 <input type="hidden" value="${customer.openId}" id="openId" />
 <div class="wrap container sendPiece">
-    <h3 class="">个人信息</h3>
+    <div class="profile-haeder space shadow">
+        <div class="front dock text-white">
+            <img src="${customer.avatar}" alt="" class="img-circle">
+            <h4 class="lead text-shadow-black">${customer.nickname}</h4>
+        </div>
+    </div>
+
     <div class="input-control has-icon-right">
         <input id="name" type="text" class="form-control" placeholder="姓名" value="${customer.name}">
     </div>
