@@ -100,9 +100,10 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
         orderInfo.setStatus(0);
         orderInfo.setAmount(calcSendExpressAmount());
         orderInfo.setOrderNo(RandomUtil.GenerateOrderNo(Constants.idWorker,ConstantMap.ORDER_NO_TYPE_ORDER));
+        orderInfo.setNotifyUrl(Constants.WXPAY_NOTIFY_URL);
         return orderInfo;
     }
-
+    
     /**
      * todo 寄件金额计算
      *

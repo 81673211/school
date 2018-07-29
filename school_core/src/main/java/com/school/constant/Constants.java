@@ -223,5 +223,9 @@ public class Constants {
 	/**
      * 根据节点id构造订单生成器
      */
-    public static IdWorker idWorker = new IdWorker(p.getValue("idworker_work_id", env), p.getValue("idworker_data_id", env)); 
+    public static IdWorker idWorker = new IdWorker(p.getValue("idworker_work_id", env), p.getValue("idworker_data_id", env));
+    /**
+     * notifyUrl
+     */
+    public static String WXPAY_NOTIFY_URL = p.getValue("wxpay_notify_url",env);
 }
