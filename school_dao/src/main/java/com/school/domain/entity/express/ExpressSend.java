@@ -1,5 +1,6 @@
 package com.school.domain.entity.express;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.util.Date;
@@ -7,7 +8,6 @@ import java.util.Date;
 /**
  * @author jame
  */
-@Data
 public class ExpressSend extends Express{
     private String senderPhone;
     private String senderName;
@@ -17,6 +17,14 @@ public class ExpressSend extends Express{
     private Long receiverProvinceId;
     private Long receiverCityId;
     private Long receiverDistrictId;
+
+    @JsonIgnore
+    private String receiverProvince;
+    @JsonIgnore
+    private String receiverCity;
+    @JsonIgnore
+    private String receiverDistrict;
+
 
     public String getSenderPhone() {
         return senderPhone;
@@ -83,4 +91,27 @@ public class ExpressSend extends Express{
     }
 
 
+    public String getReceiverProvince() {
+        return receiverProvince;
+    }
+
+    public void setReceiverProvince(String receiverProvince) {
+        this.receiverProvince = receiverProvince;
+    }
+
+    public String getReceiverCity() {
+        return receiverCity;
+    }
+
+    public void setReceiverCity(String receiverCity) {
+        this.receiverCity = receiverCity;
+    }
+
+    public String getReceiverDistrict() {
+        return receiverDistrict;
+    }
+
+    public void setReceiverDistrict(String receiverDistrict) {
+        this.receiverDistrict = receiverDistrict;
+    }
 }

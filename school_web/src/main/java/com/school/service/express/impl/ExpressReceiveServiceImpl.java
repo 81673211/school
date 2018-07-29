@@ -4,28 +4,29 @@ import com.school.dao.customer.CustomerMapper;
 import com.school.dao.express.ExpressCompanyMapper;
 import com.school.dao.express.ExpressReceiveMapper;
 import com.school.dao.order.OrderInfoMapper;
+import com.school.dao.region.RegionMapper;
 import com.school.domain.entity.customer.Customer;
 import com.school.domain.entity.express.Express;
 import com.school.domain.entity.express.ExpressCompany;
 import com.school.domain.entity.express.ExpressReceive;
-import com.school.domain.entity.order.OrderInfo;
+import com.school.domain.entity.region.Region;
 import com.school.enumeration.ExpressTypeEnum;
 import com.school.exception.ExpressException;
 import com.school.exception.ExpressStatusException;
 import com.school.service.base.impl.BaseServiceImpl;
 import com.school.service.express.ExpressReceiveService;
+import com.school.service.order.OrderInfoService;
 import com.school.util.core.Log;
 import com.school.vo.BaseVo;
+import com.school.vo.request.OrderCreateVo;
 import com.school.vo.request.ReceiveExpressCreateVo;
 import com.school.vo.request.ReceiveExpressModifyVo;
 import com.school.vo.response.ReceiveExpressListResponseVo;
 import com.school.vo.response.ReceiveExpressResponseVo;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,6 +47,10 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
     private OrderInfoMapper orderInfoMapper;
     @Autowired
     private CustomerMapper customerMapper;
+    @Autowired
+    private RegionMapper regionMapper;
+    @Autowired
+    private OrderInfoService orderInfoService;
 
     @Override
     public void createReceiveExpress(ReceiveExpressCreateVo expressVo) throws ExpressException {
@@ -53,8 +58,8 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
             ExpressReceive expressReceive = converterVo2Po(expressVo, ExpressReceive.class);
             boxExpressCompany(expressReceive);
             boxCustomer(expressReceive);
-            Long expressId = expressReceiveMapper.insertSelective(expressReceive);
-            if (!(expressId > 0L)) {
+            Long count = expressReceiveMapper.insertSelective(expressReceive);
+            if (!(count > 0L)) {
                 String message = "create receive express error,when insert table 'express_receive' the number of affected rows is 0";
                 Log.error.error(message);
                 throw new ExpressException(message);
@@ -83,15 +88,13 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
         try {
             ExpressReceive expressReceive = converterVo2Po(expressVo, ExpressReceive.class);
             //0自提；1入柜，null表示还未选择过
-//            Integer expressWay = expressReceiveMapper.selectByPrimaryKey(expressReceive.getId()).getExpressWay();
-//            if (expressWay == null && expressReceive.getExpressWay() == 1) {
-//                //修改后选择入柜方式才生成订单
-//                if (!(orderInfoMapper.insertSelective(initOrderInfo(expressReceive.getId())) > 0)) {
-//                    String message = "create receive express error,when insert table 'order_info' the number of affected rows is 0";
-//                    Log.error.error(message);
-//                    throw new ExpressException(message);
-//                }
-//            }
+            Integer expressWay = expressReceiveMapper.selectByPrimaryKey(expressReceive.getId()).getExpressWay();
+            if (expressWay == null && expressReceive.getExpressWay() == 1) {
+                //修改后选择入柜方式才生成订单
+                OrderCreateVo vo=new OrderCreateVo();
+                vo.setExpressId(expressReceive.getId());
+                orderInfoService.createReceiveOrder(vo);
+            }
             if (!(expressReceiveMapper.updateByPrimaryKeySelective(expressReceive) > 0)) {
                 String message = "modify receive express error,when update table 'express_receive' the number of affected rows is 0";
                 Log.error.error(message);
@@ -154,6 +157,7 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
             List<ExpressReceive> receiveList = expressReceiveMapper.selectByParams(param);
             if (!receiveList.isEmpty()) {
                 for (ExpressReceive expressReceive : receiveList) {
+                    initProvinceCityDistrict(expressReceive);
                     BaseVo baseVo = converterPo2Vo(expressReceive, new ReceiveExpressListResponseVo());
                     list.add(baseVo);
                 }
@@ -166,20 +170,16 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
         return list;
     }
 
-    /**
-     * 初始化订单对象
-     *
-     * @param expressId
-     * @return
-     */
-    private OrderInfo initOrderInfo(Long expressId) {
-        OrderInfo orderInfo = new OrderInfo();
-        orderInfo.setExpressId(expressId);
-        orderInfo.setExpressType(ExpressTypeEnum.RECEIVE.getFlag());
-        orderInfo.setStatus(0);
-        orderInfo.setAmount(calcSendExpressAmount());
-        orderInfo.setOrderNo(RandomStringUtils.randomAlphanumeric(20));
-        return orderInfo;
+
+    @Override
+    public ExpressReceive initProvinceCityDistrict(ExpressReceive expressReceive) {
+        Region province = (Region) regionMapper.selectByPrimaryKey(expressReceive.getSenderProvinceId());
+        Region city = (Region) regionMapper.selectByPrimaryKey(expressReceive.getSenderCityId());
+        Region district = (Region) regionMapper.selectByPrimaryKey(expressReceive.getSenderDistrictId());
+        expressReceive.setSenderProvince(province.getAreaName());
+        expressReceive.setSenderCity(city.getAreaName());
+        expressReceive.setSenderDistrict(district.getAreaName());
+        return expressReceive;
     }
 
     /**
@@ -204,15 +204,6 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
         expressSend.setCompanyId(expressCompany.getId());
         expressSend.setCompanyCode(expressCompany.getCode());
         expressSend.setCompanyName(expressCompany.getName());
-    }
-
-    /**
-     * todo 收件金额计算
-     *
-     * @return
-     */
-    private BigDecimal calcSendExpressAmount() {
-        return BigDecimal.ZERO;
     }
 
 }

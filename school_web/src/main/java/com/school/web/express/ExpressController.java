@@ -242,7 +242,7 @@ public class ExpressController extends BaseEasyWebController {
      * @return
      */
     @RequestMapping(value = "/1/list", method = RequestMethod.GET)
-    public ModelAndView selectReceiveExpressList(@RequestParam(value = "status") String status,
+    public ModelAndView selectReceiveExpressList(@RequestParam(value = "status", required = false) String status,
                                                  @RequestParam(value = "openId") String openId)
             throws ExpressException {
         ModelAndView mav = new ModelAndView();

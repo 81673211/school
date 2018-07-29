@@ -14,6 +14,11 @@ public class ReceiveExpressListResponseVo extends BaseVo {
     private String senderName;
     private String senderAddr;
     private String expressStatusDesc;
+    private String endTime;
+    private String senderProvince;
+    private String senderCity;
+    private String senderDistrict;
+
 
     public Long getId() {
         return id;
@@ -77,5 +82,37 @@ public class ReceiveExpressListResponseVo extends BaseVo {
 
     public void setExpressStatusDesc(String expressStatusDesc) {
         this.expressStatusDesc = expressStatusDesc;
+    }
+
+    public String getSenderProvince() {
+        return senderProvince;
+    }
+
+    public void setSenderProvince(String senderProvince) {
+        this.senderProvince = senderProvince;
+    }
+
+    public String getSenderCity() {
+        return senderCity;
+    }
+
+    public void setSenderCity(String senderCity) {
+        this.senderCity = senderCity;
+    }
+
+    public String getSenderDistrict() {
+        return senderDistrict;
+    }
+
+    public void setSenderDistrict(String senderDistrict) {
+        this.senderDistrict = senderDistrict;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }

@@ -22,15 +22,13 @@
                     <div class="avatar circle blue outline">${var.count}</div>
                     <div class="content">
                         <div class="title">${item.code} ${item.companyName}</div>
-                        <div class="subtitle">2018-07-01 20:00</div>
+                        <div class="subtitle">${item.endTime}</div>
                         <div class="pull-right">
                             <c:choose>
                                 <c:when test="${item.expressStatus == 0}">
-                                    <span class="blue-pale ">配送(￥1.5)</span>&nbsp;
-                                    <span class="icon blue-pale ">自提</span>
+                                    <span class="icon blue-pale ">代理点已签收</span>
                                 </c:when>
                                 <c:when test="${item.expressStatus == 1}">
-                                    <span class="label blue-pale ">配送(￥1.5)</span>
                                     <span class="label blue-pale ">等待自提</span>
                                 </c:when>
                                 <c:when test="${item.expressStatus == 2}">

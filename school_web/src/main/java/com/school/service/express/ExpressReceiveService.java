@@ -57,4 +57,13 @@ public interface ExpressReceiveService extends BaseService<ExpressReceive, Expre
      * @throws ExpressException
      */
     List<BaseVo> selectExpressList(Integer[] status, String phone) throws ExpressException;
+
+
+    /**
+     * 初始化省市区详细内容
+     *
+     * @param expressSend
+     * @return
+     */
+    ExpressReceive initProvinceCityDistrict(ExpressReceive expressSend);
 }

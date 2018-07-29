@@ -60,8 +60,8 @@
         </select>
     </div>
     <div>
-        <select class="form-control" id="type" onchange="calcAmount();">
-            <option value="0">自发</option>
+        <select class="form-control" id="type" onchange="calcAmount();" disabled="disabled">
+            <option value="0">上门取件</option>
             <option value="1">入柜</option>
         </select>
     </div>
@@ -120,7 +120,6 @@
             alert("请输入收件人姓名");
             return false;
         }
-
         if (receiverProvinceId != '') {
             data.receiverProvinceId = receiverProvinceId;
         } else {
@@ -133,15 +132,12 @@
             alert("请选择收件人市区");
             return false;
         }
-
         if (receiverDistrictId != '') {
             data.receiverDistrictId = receiverDistrictId;
         } else {
             alert("请选择收件人区县");
             return false;
         }
-
-
         if (receiverAddr != '') {
             data.receiverAddr = receiverAddr;
         } else {

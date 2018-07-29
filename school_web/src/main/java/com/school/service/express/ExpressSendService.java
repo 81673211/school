@@ -57,4 +57,12 @@ public interface ExpressSendService extends BaseService<ExpressSend, ExpressSend
      * @throws ExpressException
      */
     List<BaseVo> selectExpressList(Integer[] status, String openid) throws ExpressException;
+
+    /**
+     * 初始化省市区详细内容
+     *
+     * @param expressSend
+     * @return
+     */
+    ExpressSend initProvinceCityDistrict(ExpressSend expressSend);
 }

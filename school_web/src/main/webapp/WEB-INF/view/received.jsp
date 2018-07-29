@@ -22,7 +22,9 @@
                         <span class="title">${item.code}</span>
                         <div>
                             <small class="text-gray">${item.companyName}</small>&nbsp;
-                            <small class="muted">2018-07-01 20:00</small>
+                            <small class="text-gray">${item.senderPhone}</small>&nbsp;
+                            <small class="text-gray">${item.senderName}</small>&nbsp;
+                            <small class="muted">${item.endTime}</small>
                         </div>
                     </div>
                 </a>

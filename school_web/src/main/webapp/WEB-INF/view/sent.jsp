@@ -41,7 +41,7 @@
                     </div>
                 </div>
                 <div>
-                    <label for="">地址:<span>${item.receiverAddr}</span></label>
+                    <label for="">地址:<span>${item.receiverProvince}&nbsp;&nbsp;${item.receiverCity}&nbsp;&nbsp;${item.receiverDistrict}&nbsp;&nbsp;${item.receiverAddr}</span></label>
                     <label for="" class="pull-right timeExp"><span>${item.endTime}</span></label>
                 </div>
             </div>

@@ -18,7 +18,7 @@
         where id = #{id,jdbcType=BIGINT}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-  </delete>
+    </delete>
     <insert id="insert" parameterType="com.school.domain.entity.region.Region">
 
     </insert>
@@ -36,18 +36,18 @@
     <select id="queryPage" resultType="com.school.domain.entity.region.Region" parameterType="map">
 
     </select>
-    
+
     <!-- 管理台列表查询 -->
-	<select id="queryForManagerPage" resultType="com.school.domain.entity.region.Region" parameterType="map">
-		select es.* from express_send es
-		<where>
-			<if test="keyword != null and keyword != '' ">
-				and (es.name like concat('%',#{keyword},'%')
-					 or es.code like concat('%',#{keyword},'%')
-					 or es.phone like concat('%',#{keyword},'%'))
-			</if>
-		</where>
-		ORDER BY es.id desc
+    <select id="queryForManagerPage" resultType="com.school.domain.entity.region.Region" parameterType="map">
+        select es.* from express_send es
+        <where>
+            <if test="keyword != null and keyword != '' ">
+                and (es.name like concat('%',#{keyword},'%')
+                or es.code like concat('%',#{keyword},'%')
+                or es.phone like concat('%',#{keyword},'%'))
+            </if>
+        </where>
+        ORDER BY es.id desc
     </select>
 
 
