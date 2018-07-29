@@ -6,6 +6,7 @@
         <result column="code" property="code" jdbcType="VARCHAR"/>
         <result column="sender_phone" property="senderPhone" jdbcType="VARCHAR"/>
         <result column="sender_name" property="senderName" jdbcType="VARCHAR"/>
+        <result column="sender_addr" property="senderNameAddr" jdbcType="VARCHAR"/>
         <result column="receiver_phone" property="receiverPhone" jdbcType="VARCHAR"/>
         <result column="receiver_name" property="receiverName" jdbcType="VARCHAR"/>
         <result column="receiver_addr" property="receiverAddr" jdbcType="VARCHAR"/>
@@ -27,6 +28,7 @@
         code,
         sender_phone,
         sender_name,
+        sender_addr,
         receiver_phone,
         receiver_name,
         receiver_addr,
@@ -69,6 +71,9 @@
             <if test="senderName != null">
                 sender_name,
             </if>
+            <if test="senderAddr != null">
+                sender_addr,
+            </if>
             <if test="receiverPhone != null">
                 receiver_phone,
             </if>
@@ -78,16 +83,16 @@
             <if test="receiverAddr != null">
                 receiver_addr,
             </if>
-            <if test="receiverProvinceId != null and receiverProvinceId != 0">
+            <if test="receiverProvinceId != null">
                 receiver_province_id,
             </if>
-            <if test="receiverCityId != null and receiverCityId !=0">
+            <if test="receiverCityId != null">
                 receiver_city_id,
             </if>
-            <if test="receiverDistrictId != null and receiverDistrictId != 0">
+            <if test="receiverDistrictId != null">
                 receiver_district_id,
             </if>
-            <if test="companyId != null and companyId != 0">
+            <if test="companyId != null">
                 company_id,
             </if>
             <if test="companyCode != null">
@@ -96,13 +101,13 @@
             <if test="companyName != null">
                 company_name,
             </if>
-            <if test="expressStatus != null and expressStatus != 0">
+            <if test="expressStatus != null">
                 express_status,
             </if>
-            <if test="expressWay != null and expressWay != 0">
+            <if test="expressWay != null">
                 express_way,
             </if>
-            <if test="customerId != null and customerId != 0">
+            <if test="customerId != null">
                 customer_id,
             </if>
         </trim>
@@ -116,6 +121,9 @@
             <if test="senderName != null">
                 #{senderName,jdbcType=VARCHAR},
             </if>
+            <if test="senderAddr != null">
+                #{senderAddr,jdbcType=VARCHAR},
+            </if>
             <if test="receiverPhone != null">
                 #{receiverPhone,jdbcType=VARCHAR},
             </if>
@@ -125,16 +133,16 @@
             <if test="receiverAddr != null">
                 #{receiverAddr,jdbcType=VARCHAR},
             </if>
-            <if test="receiverProvinceId != null and receiverProvinceId != 0">
+            <if test="receiverProvinceId != null">
                 #{receiverProvinceId,jdbcType=BIGINT},
             </if>
-            <if test="receiverCityId != null and receiverCityId != 0">
+            <if test="receiverCityId != null">
                 #{receiverCityId,jdbcType=BIGINT},
             </if>
-            <if test="receiverDistrictId != null and receiverDistrictId != 0">
+            <if test="receiverDistrictId != null">
                 #{receiverDistrictId,jdbcType=BIGINT},
             </if>
-            <if test="companyId != null and companyId != 0">
+            <if test="companyId != null">
                 #{companyId,jdbcType=BIGINT},
             </if>
             <if test="companyCode != null">
@@ -143,13 +151,13 @@
             <if test="companyName != null">
                 #{companyName,jdbcType=VARCHAR},
             </if>
-            <if test="expressStatus != null and expressStatus != 0">
+            <if test="expressStatus != null">
                 #{expressStatus,jdbcType=INTEGER},
             </if>
-            <if test="expressWay != null and expressWay != 0">
+            <if test="expressWay != null">
                 #{expressWay,jdbcType=INTEGER},
             </if>
-            <if test="customerId != null and customerId != 0">
+            <if test="customerId != null">
                 #{customerId,jdbcType=INTEGER},
             </if>
         </trim>
@@ -166,6 +174,9 @@
             <if test="senderName != null">
                 sender_name = #{senderName,jdbcType=VARCHAR},
             </if>
+            <if test="senderAddr != null">
+                sender_addr = #{senderAddr,jdbcType=VARCHAR},
+            </if>
             <if test="receiverPhone != null">
                 receiver_phone = #{receiverPhone,jdbcType=VARCHAR},
             </if>
@@ -175,16 +186,16 @@
             <if test="receiverAddr != null">
                 receiver_addr = #{receiverAddr,jdbcType=VARCHAR},
             </if>
-            <if test="receiverProvinceId != null and receiverProvinceId != 0">
+            <if test="receiverProvinceId != null">
                 receiver_province_id = #{receiverProvinceId,jdbcType=BIGINT},
             </if>
-            <if test="receiverCityId != null and receiverCityId != 0">
+            <if test="receiverCityId != null">
                 receiver_city_id = #{receiverCityId,jdbcType=BIGINT},
             </if>
-            <if test="receiverDistrictId != null and receiverDistrictId != 0">
+            <if test="receiverDistrictId != null">
                 receiver_district_id = #{receiverDistrictId,jdbcType=BIGINT},
             </if>
-            <if test="companyId != null and companyId != 0">
+            <if test="companyId != null">
                 company_id = #{companyId,jdbcType=BIGINT},
             </if>
             <if test="companyCode != null">
@@ -199,10 +210,10 @@
             <if test="expressStatus != null">
                 express_status = #{expressStatus,jdbcType=INTEGER},
             </if>
-            <if test="expressWay != null and expressWay != 0">
+            <if test="expressWay != null">
                 express_way = #{expressWay,jdbcType=INTEGER},
             </if>
-            <if test="endTime != null and endTime != ''">
+            <if test="endTime != null">
                 end_time = #{endTime,jdbcType=TIMESTAMP},
             </if>
         </set>

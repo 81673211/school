@@ -174,4 +174,13 @@
             </if>
         </where>
     </select>
+    
+    <select id="findAll" resultType="com.school.domain.entity.express.ExpressCompany">
+    	select * from express_company ec
+    </select>
+    
+    <select id="findByCode" parameterType="java.lang.String" resultType="com.school.domain.entity.express.ExpressCompany">
+    	select * from express_company ec
+    	where ec.code = #{code,jdbcType=VARCHAR}
+    </select>
 </mapper>

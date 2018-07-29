@@ -57,6 +57,12 @@
                     </div>
                 </div>
                 <div class="row cl">
+                    <div class="col-xs-4 text-r">收件人地址：</div>
+                    <div class="col-xs-8">
+                        <p>{{@data.receiverAddr}}</p>
+                    </div>
+                </div>
+                <div class="row cl">
                     <div class="col-xs-4 text-r">快递公司：</div>
                     <div class="col-xs-8">
                         <p>{{@data.companyName}}</p>

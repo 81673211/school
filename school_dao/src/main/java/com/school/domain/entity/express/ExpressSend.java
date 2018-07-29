@@ -2,8 +2,6 @@ package com.school.domain.entity.express;
 
 import lombok.Data;
 
-import java.util.Date;
-
 /**
  * @author jame
  */
@@ -11,6 +9,7 @@ import java.util.Date;
 public class ExpressSend extends Express{
     private String senderPhone;
     private String senderName;
+    private String senderAddr;
     private String receiverPhone;
     private String receiverName;
     private String receiverAddr;
@@ -34,7 +33,15 @@ public class ExpressSend extends Express{
         this.senderName = senderName;
     }
 
-    public String getReceiverPhone() {
+    public String getSenderAddr() {
+		return senderAddr;
+	}
+
+	public void setSenderAddr(String senderAddr) {
+		this.senderAddr = senderAddr;
+	}
+
+	public String getReceiverPhone() {
         return receiverPhone;
     }
 

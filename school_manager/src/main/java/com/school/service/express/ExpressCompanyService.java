@@ -14,4 +14,8 @@ public interface ExpressCompanyService extends BaseService<ExpressCompany, Expre
 
 	void saveOrUpdate(ExpressCompany expressCompany,AdminUser sessionUser);
 
+	List<ExpressCompany> findAll();
+
+	ExpressCompany findByCode(String code);
+
 }

@@ -30,19 +30,19 @@
              <div class="row cl mb-15">
                 <label class="form-label col-xs-3 col-sm-3 text-r">寄件人姓名：</label>
                 <div class="formControls col-xs-9 col-sm-9">
-                    <input class="input-text" autocomplete="off" placeholder="" name="sendName" value="${expressReceive.senderName}" type="text">
+                    <input class="input-text" autocomplete="off" placeholder="" name="senderName" value="${expressReceive.senderName}" type="text">
                 </div>
             </div>
              <div class="row cl mb-15">
                 <label class="form-label col-xs-3 col-sm-3 text-r">寄件人电话：</label>
                 <div class="formControls col-xs-9 col-sm-9">
-                    <input class="input-text" autocomplete="off" placeholder="" name="pid" value="${expressReceive.senderPhone}" type="text">
+                    <input class="input-text" autocomplete="off" placeholder="" name="senderPhone" value="${expressReceive.senderPhone}" type="text">
                 </div>
             </div>
              <div class="row cl mb-15">
                 <label class="form-label col-xs-3 col-sm-3 text-r">寄件人地址：</label>
                 <div class="formControls col-xs-9 col-sm-9">
-                    <input class="input-text" autocomplete="off" placeholder="" name="sort" value="${expressReceive.senderAddr}" type="text">
+                    <input class="input-text" autocomplete="off" placeholder="" name="senderAddr" value="${expressReceive.senderAddr}" type="text">
                 </div>
             </div>
              <div class="row cl mb-15">
@@ -58,9 +58,19 @@
                 </div>
             </div>
              <div class="row cl mb-15">
+                <label class="form-label col-xs-3 col-sm-3 text-r">收件人地址：</label>
+                <div class="formControls col-xs-9 col-sm-9">
+                    <input class="input-text" autocomplete="off" placeholder="" name="receiverAddr" value="${expressReceive.receiverAddr}" type="text">
+                </div>
+            </div>
+             <div class="row cl mb-15">
                 <label class="form-label col-xs-3 col-sm-3 text-r">快递公司：</label>
                 <div class="formControls col-xs-9 col-sm-9">
-                    <input class="input-text" autocomplete="off" placeholder="" name="companyName" value="${expressReceive.companyName}" type="text">
+                	<select class="input-text" name="companyCode">
+                		<c:forEach items="${expressCompanyList}" var="expressCompany">
+	                		<option value="${expressCompany.code}" <c:if test="${expressCompany.code == expressReceive.companyCode}">selected="selected"</c:if>>${expressCompany.name}</option>
+                		</c:forEach>
+                	</select>
                 </div>
             </div>
              <div class="row cl mb-15">
