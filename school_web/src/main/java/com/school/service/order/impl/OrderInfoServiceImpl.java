@@ -1,5 +1,14 @@
 package com.school.service.order.impl;
 
+import java.math.BigDecimal;
+
+import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.school.constant.ConstantMap;
+import com.school.constant.Constants;
 import com.school.dao.express.ExpressReceiveMapper;
 import com.school.dao.express.ExpressSendMapper;
 import com.school.dao.order.OrderInfoMapper;
@@ -12,13 +21,8 @@ import com.school.exception.OrderException;
 import com.school.service.base.impl.BaseServiceImpl;
 import com.school.service.order.OrderInfoService;
 import com.school.util.core.Log;
+import com.school.util.core.utils.RandomUtil;
 import com.school.vo.request.OrderCreateVo;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
 
 @Service
 @Transactional(rollbackFor = OrderException.class)
@@ -95,10 +99,9 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
         orderInfo.setCustomerId(express.getCustomerId());
         orderInfo.setStatus(0);
         orderInfo.setAmount(calcSendExpressAmount());
-        orderInfo.setOrderNo(RandomStringUtils.randomAlphanumeric(20));
+        orderInfo.setOrderNo(RandomUtil.GenerateOrderNo(Constants.idWorker,ConstantMap.ORDER_NO_TYPE_ORDER));
         return orderInfo;
     }
-
 
     /**
      * todo 寄件金额计算

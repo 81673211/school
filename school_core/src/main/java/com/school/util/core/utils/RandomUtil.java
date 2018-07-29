@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import com.relops.snowflake.Snowflake;
+
 /**
  * 随机工具类
  */
@@ -132,58 +134,111 @@ public class RandomUtil {
 	}
 	
 	/**
-	 * @Description: 生成订单号
+	 * @Description: 生成订单号,采用twitter的Snowflake方法避免id重复
 	 * @param
 	 * @return
 	 * @return String
 	 * @throws
 	 */
-	public static String getOrderNo() {
+	public static String getOrderNoSnow() {
+		int node = 1;
+		Snowflake s = new Snowflake(node);
+		long id = s.next();
+		return String.valueOf(id);
+	}
+	
+	/**
+	 * 生成訂單號
+	 * @param orderType
+	 * @return
+	 */
+	   private static IdWorker w = new IdWorker(1, 1);
+	   
+	   
+	   public static String GenerateOrderNo(String orderType) {
+//	       final IdWorker w = new IdWorker(1, 2);
+	       String orderNo = String.valueOf(w.nextId());
+	       orderNo = orderType + orderNo;
+	       return orderNo;
+	    }
+	   
+	   /**
+	    * 
+	    *           
+	    * 方法描述：创建订单号，支持多节点并发创建不重复的订单号 
+	    * 创建人：zhuqing    
+	    * 创建时间：2017年8月24日 下午5:04:36    
+	    * 最后修改人：zhuqing    
+	    * 最后修改时间：2017年8月24日 下午5:04:36    
+	    * 修改备注：    
+	    * @version 1.0    
+	    *
+	    */
+	   public static String GenerateOrderNo(IdWorker idWorker, String orderType) {
+	       String orderNo = String.valueOf(idWorker.nextId());
+	       orderNo = orderType + orderNo;
+	       return orderNo;
+	   }
+	   
+	   public static String getOrderNo() {
+	    long ct = System.currentTimeMillis();
+	    String t = String.valueOf(ct);
+	    int random = (int) (Math.random() * 1000);
+	    String payOrderNo = t + random;
+	    if (payOrderNo.length() < 16) {
+	        int num = 16 - payOrderNo.length();
+	        for (int i = 0; i < num; i++) {
+	            payOrderNo += "0";
+	        }
+	    }
+	    
+	    return payOrderNo;
+	}
+	
+	/**
+	 * 生成16位商户号
+	 * @param agentId 商户所属机构ID
+	 * @return
+	 */
+	public static String creatMerchNo(int agentId) {
+	    long ct = System.currentTimeMillis();
+	    String agentIdPrefix = String.valueOf(agentId);
+	    String t = "2";
+	    String merchNo = t + agentIdPrefix +String.valueOf(ct);
+	    if (merchNo.length() < 16) {
+	        int num = 16 - merchNo.length();
+	        for (int i = 0; i < num; i++) {
+	            merchNo += "0";
+	        }
+	    }
+	    if(merchNo.length() >=16){
+	        merchNo = merchNo.substring(0, 16);
+	    }
+	    
+	    return merchNo;
+	}
+	/**
+	 * 生成16位机构号
+	 * @return
+	 */
+	public static String createAgentNo() {
 		long ct = System.currentTimeMillis();
-		String t = String.valueOf(ct);
-		int random = (int) (Math.random() * 1000);
-		String payOrderNo = t + random;
-		if (payOrderNo.length() < 16) {
-			int num = 16 - payOrderNo.length();
+		String t = "10001";
+		String merchNo = t +String.valueOf(ct);
+		if (merchNo.length() < 16) {
+			int num = 16 - merchNo.length();
 			for (int i = 0; i < num; i++) {
-				payOrderNo += "0";
+				merchNo += "0";
 			}
 		}
-
-		return payOrderNo;
+		if(merchNo.length() >=16){
+			merchNo = merchNo.substring(0, 16);
+		}
+		
+		return merchNo;
 	}
 	
-	/**
-	 * 生成商户编码
-	 * @author yao
-	 * @since 2015-12-30 15:24
-	 * @return string 编码
-	 */
-	public static String getMerchantNo() {
-		StringBuilder merchantNo = new StringBuilder();
-		//5100代表四川地区
-		merchantNo.append("5100");
-		//当前时间戳
-		long ct = System.currentTimeMillis();
-		String t = String.valueOf(ct);
-		merchantNo.append(t);
-		return merchantNo.toString();
-	}
 	
-	/**
-	 * 生成商品编码
-	 * @author yao
-	 * @since 2015-12-30 15:24
-	 * @return string 编码
-	 */
-	public static String getGoodsNo(Long merChantId) {
-		StringBuilder goodsNo = new StringBuilder();
-		goodsNo.append(merChantId.toString());
-		long ct = System.currentTimeMillis();
-		String t = String.valueOf(ct);
-		goodsNo.append(t);
-		return goodsNo.toString();
-	}
 	
 	/**
 	 * 创建指定数量的随机字符串

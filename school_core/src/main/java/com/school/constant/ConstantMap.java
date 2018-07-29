@@ -20,6 +20,36 @@ import java.util.Map;
 public class ConstantMap {
 	
 	/**
+	 * 订单号类型：平台订单号
+	 */
+	public static final String ORDER_NO_TYPE_ORDER = "10";
+
+	/**
+	 * 订单号类型：支付订单号
+	 */
+	public static final String ORDER_NO_TYPE_PAY_ORDER = "11";
+
+	/**
+	 * 订单号类型：提现订单
+	 */
+	public static final String ORDER_NO_TYPE_SETT_WITHDRAW = "12";
+
+	/**
+	 * 订单号类型：委托代付申请
+	 */
+	public static final String ORDER_NO_TYPE_SETT_APPLY = "13";
+
+	/**
+	 * 订单号类型：直连委托
+	 */
+	public static final String ORDER_NO_TYPE_SETT_DIRECT = "14";
+	
+	/**
+     * 订单号类型：手工上账订单号
+     */
+    public static final String ORDER_NO_TYPE_MANUAL_IN = "15";
+	
+	/**
 	 * 申请机关
 	 */
 	public static final Map<Integer, String> applyOrgansMap = new HashMap<Integer, String>();

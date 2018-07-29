@@ -6,13 +6,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import jodd.props.Props;
-
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+
+import com.school.util.core.utils.IdWorker;
+
+import jodd.props.Props;
 
 /**
  * 类名称：Constants    
@@ -217,4 +219,9 @@ public class Constants {
 		path = "/" + year + "-" + m + "-" + d;
 		return path;
 	}
+	
+	/**
+     * 根据节点id构造订单生成器
+     */
+    public static IdWorker idWorker = new IdWorker(p.getValue("idworker_work_id", env), p.getValue("idworker_data_id", env)); 
 }
