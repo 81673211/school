@@ -38,12 +38,12 @@
                         <p>{{@data.senderPhone}}</p>
                     </div>
                 </div>
-<!--                 <div class="row cl"> -->
-<!--                     <div class="col-xs-4 text-r">寄件人地址：</div> -->
-<!--                     <div class="col-xs-8"> -->
-<!--                         <p>{{@data.senderAddr}}</p> -->
-<!--                     </div> -->
-<!--                 </div> -->
+                <div class="row cl">
+                    <div class="col-xs-4 text-r">寄件人地址：</div>
+                    <div class="col-xs-8">
+                        <p>{{@data.senderAddr}}</p>
+                    </div>
+                </div>
                 <div class="row cl">
                     <div class="col-xs-4 text-r">收件人姓名：</div>
                     <div class="col-xs-8">
@@ -54,6 +54,12 @@
                     <div class="col-xs-4 text-r">收件人电话：</div>
                     <div class="col-xs-8">
                         <p>{{@data.receiverPhone}}</p>
+                    </div>
+                </div>
+                <div class="row cl">
+                    <div class="col-xs-4 text-r">收件人地址：</div>
+                    <div class="col-xs-8">
+                        <p>{{@data.receiverAddr}}</p>
                     </div>
                 </div>
                 <div class="row cl">

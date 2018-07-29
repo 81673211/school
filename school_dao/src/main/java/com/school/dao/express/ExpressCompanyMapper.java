@@ -20,4 +20,8 @@ public interface ExpressCompanyMapper extends BaseDao {
     int updateByPrimaryKey(ExpressCompany record);
     
     List<ExpressCompany> queryPage(Map<String, Object> paramMap);
+
+	List<ExpressCompany> findAll();
+
+	ExpressCompany findByCode(String code);
 }

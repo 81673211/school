@@ -14,9 +14,13 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSON;
 import com.school.common.model.AjaxResult;
 import com.school.constant.ConstantUrl;
+import com.school.domain.entity.express.ExpressCompany;
 import com.school.domain.entity.express.ExpressReceive;
+import com.school.domain.entity.user.AdminUser;
 import com.school.enumeration.ReceiveExpressStatusEnum;
+import com.school.service.express.ExpressCompanyService;
 import com.school.service.express.ExpressReceiveService;
+import com.school.util.SessionUtils;
 import com.school.util.core.exception.FuBusinessException;
 import com.school.util.core.pager.PageInfo;
 import com.school.web.base.BaseEasyWebController;
@@ -30,6 +34,9 @@ public class ExpressReceiveController extends BaseEasyWebController {
 
 	@Autowired
 	private ExpressReceiveService expressReceiveService;
+	
+	@Autowired
+	private ExpressCompanyService expressCompanyService;
 	
 	{
 		listView = "express/expressReceive";
@@ -83,6 +90,9 @@ public class ExpressReceiveController extends BaseEasyWebController {
 		ExpressReceive expressReceive = expressReceiveService.get(id);
 		mav.addObject("expressReceive", JSON.toJSON(expressReceive));
 		mav.addObject("expressReceiveStatusMap",JSON.toJSON(ReceiveExpressStatusEnum.getAllStatusEnum()));
+		// 查询所有快递公司
+		List<ExpressCompany> expressCompanyList = expressCompanyService.findAll();
+		mav.addObject("expressCompanyList",JSON.toJSON(expressCompanyList));
 		return mav;
 	}
 	
@@ -91,11 +101,11 @@ public class ExpressReceiveController extends BaseEasyWebController {
 	 */
 	@ResponseBody
 	@RequestMapping("/save.do")
-	public AjaxResult save(ExpressReceive expressReceive){
+	public AjaxResult save(HttpServletRequest request,ExpressReceive expressReceive){
 		try{
-//			if(StrUtil.isBlank(expressReceive.getTypeName())){
-//				return AjaxResult.fail("请填写类型名称");
-//			}
+			ExpressCompany expressCompany = expressCompanyService.findByCode(expressReceive.getCompanyCode());
+			expressReceive.setCompanyId(expressCompany.getId());
+			expressReceive.setCompanyName(expressCompany.getName());
 			expressReceiveService.saveOrUpdate(expressReceive);
 			return AjaxResult.success("保存成功", JSON.toJSON(expressReceive));
 		}catch(Exception e){

@@ -1,5 +1,6 @@
 package com.school.web.express;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,8 +17,10 @@ import com.alibaba.fastjson.JSON;
 import com.school.common.model.AjaxResult;
 import com.school.constant.ConstantUrl;
 import com.school.constant.StatusManage;
+import com.school.domain.entity.express.ExpressCompany;
 import com.school.domain.entity.express.ExpressSend;
 import com.school.enumeration.SendExpressStatusEnum;
+import com.school.service.express.ExpressCompanyService;
 import com.school.service.express.ExpressSendService;
 import com.school.util.core.exception.FuBusinessException;
 import com.school.util.core.pager.PageInfo;
@@ -31,6 +34,9 @@ public class ExpressSendController extends BaseEasyWebController {
 
 	@Autowired
 	private ExpressSendService expressSendService;
+	
+	@Autowired
+	private ExpressCompanyService expressCompanyService;
 	
 	{
 		listView = "express/expressSend";
@@ -83,6 +89,9 @@ public class ExpressSendController extends BaseEasyWebController {
 		ExpressSend expressSend = expressSendService.get(id);
 		mav.addObject("expressSend", JSON.toJSON(expressSend));
 		mav.addObject("expressSendStatusMap",JSON.toJSON(SendExpressStatusEnum.getAllStatusEnum()));
+		// 查询所有快递公司
+		List<ExpressCompany> expressCompanyList = expressCompanyService.findAll();
+		mav.addObject("expressCompanyList",JSON.toJSON(expressCompanyList));
 		return mav;
 	}
 	
@@ -93,9 +102,9 @@ public class ExpressSendController extends BaseEasyWebController {
 	@RequestMapping("/save.do")
 	public AjaxResult save(ExpressSend expressSend){
 		try{
-//			if(StrUtil.isBlank(expressSend.getTypeName())){
-//				return AjaxResult.fail("请填写类型名称");
-//			}
+			ExpressCompany expressCompany = expressCompanyService.findByCode(expressSend.getCompanyCode());
+			expressSend.setCompanyId(expressCompany.getId());
+			expressSend.setCompanyName(expressCompany.getName());
 			expressSendService.saveOrUpdate(expressSend);
 			return AjaxResult.success("保存成功", JSON.toJSON(expressSend));
 		}catch(Exception e){
