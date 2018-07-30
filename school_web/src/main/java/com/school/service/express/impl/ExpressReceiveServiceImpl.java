@@ -44,8 +44,6 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
     @Autowired
     private ExpressReceiveMapper expressReceiveMapper;
     @Autowired
-    private OrderInfoMapper orderInfoMapper;
-    @Autowired
     private CustomerMapper customerMapper;
     @Autowired
     private RegionMapper regionMapper;
@@ -64,11 +62,6 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
                 Log.error.error(message);
                 throw new ExpressException(message);
             }
-            //创建收件无需新增订单，放到修改后选择入柜方式才生成订单
-//            if (!(orderInfoMapper.insertSelective(initOrderInfo(expressId)) > 0)) {
-//                Log.error.error("create receive express error,when insert table 'order_info' the number of affected rows is 0");
-//                throw new ExpressException("create receive express error,when insert table 'order_info' the number of affected rows is 0");
-//            }
         } catch (Exception e) {
             String message = "throw exception when create receive express";
             Log.error.error(message, e);
@@ -89,7 +82,7 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
             ExpressReceive expressReceive = converterVo2Po(expressVo, ExpressReceive.class);
             //0自提；1入柜，null表示还未选择过
             Integer expressWay = expressReceiveMapper.selectByPrimaryKey(expressReceive.getId()).getExpressWay();
-            if (expressWay == null && expressReceive.getExpressWay() == 1) {
+            if (expressWay != 1 && expressReceive.getExpressWay() == 1) {
                 //修改后选择入柜方式才生成订单
                 OrderCreateVo vo=new OrderCreateVo();
                 vo.setExpressId(expressReceive.getId());

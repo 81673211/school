@@ -1,5 +1,6 @@
 package com.school.domain.entity.express;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.util.Date;
