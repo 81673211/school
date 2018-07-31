@@ -14,6 +14,7 @@ import com.school.enumeration.ExpressTypeEnum;
 import com.school.exception.ExpressException;
 import com.school.exception.ExpressStatusException;
 import com.school.service.base.impl.BaseServiceImpl;
+import com.school.service.calc.CalcCostService;
 import com.school.service.express.ExpressSendService;
 import com.school.service.order.OrderInfoService;
 import com.school.util.core.Log;
@@ -43,8 +44,6 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
 
     @Autowired
     private ExpressSendMapper expressSendMapper;
-    @Autowired
-    private OrderInfoMapper orderInfoMapper;
     @Autowired
     private ExpressCompanyMapper expressCompanyMapper;
     @Autowired

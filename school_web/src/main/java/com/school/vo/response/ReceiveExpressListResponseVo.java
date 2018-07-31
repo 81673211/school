@@ -2,6 +2,8 @@ package com.school.vo.response;
 
 import com.school.vo.BaseVo;
 
+import java.math.BigDecimal;
+
 /**
  * @author jame
  */
@@ -15,10 +17,11 @@ public class ReceiveExpressListResponseVo extends BaseVo {
     private String senderAddr;
     private String expressStatusDesc;
     private String endTime;
+    private String createdTime;
     private String senderProvince;
     private String senderCity;
     private String senderDistrict;
-
+    private BigDecimal distributionCost;
 
     public Long getId() {
         return id;
@@ -114,5 +117,21 @@ public class ReceiveExpressListResponseVo extends BaseVo {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public BigDecimal getDistributionCost() {
+        return distributionCost;
+    }
+
+    public void setDistributionCost(BigDecimal distributionCost) {
+        this.distributionCost = distributionCost;
     }
 }

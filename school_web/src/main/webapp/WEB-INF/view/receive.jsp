@@ -6,8 +6,8 @@
 <head>
     <meta charset="UTF-8">
     <title>我待收的快件</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <link href="/css/mzui.min.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <link href="/css/mzui.min.css" rel="stylesheet"/>
 </head>
 <body>
 <div class="heading">
@@ -20,16 +20,26 @@
             <a class="item multi-lines with-avatar">
                 <div class="avatar circle blue outline">${var.count}</div>
                 <div class="content">
-                    <span class="title">${item.code}</span>
-                    <div>
-                        <small class="text-gray">${item.companyName}</small>&nbsp;
-                        <small class="muted"><fmt:formatDate value="${item.createdTime}" pattern="yyyy-MM-dd HH:mm"/></small>
+                    <div onclick="receiveDetail(${item.id});">
+                        <span class="title">${item.code}</span>
+                        <div>
+                            <small class="text-gray">${item.companyName}</small>
+                            &nbsp;
+                            <small class="muted"><fmt:formatDate value="${item.createdTime}"
+                                                                 pattern="yyyy-MM-dd HH:mm"/></small>
+                        </div>
                     </div>
                     <div class="inline-block pull-right">
                         <c:choose>
                             <c:when test="${item.expressStatus == 0}">
-                                <button type="button" class="btn primary-pale btn-sm text-tint pull-left">配送(￥1.5)</button>&nbsp;&nbsp;
-                                <button type="button" class="btn primary-pale btn-sm text-tint pull-right">自提</button>
+                                <button type="button" class="btn primary-pale btn-sm text-tint pull-left"
+                                        onclick="receiveWay(${item.id},1)">配送(￥<fmt:formatNumber
+                                        value="${item.distributionCost}" pattern="0.00"/>)
+                                </button>
+                                &nbsp;&nbsp;
+                                <button type="button" class="btn primary-pale btn-sm text-tint pull-right"
+                                        onclick="receiveWay(${item.id},0)">自提
+                                </button>
                             </c:when>
                             <c:when test="${item.expressStatus == 1}">
                                 <label class="btn primary-pale btn-sm text-tint pull-right">等待自提</label>
@@ -53,9 +63,34 @@
 </div>
 
 <!-- ZUI Javascript 依赖 jQuery -->
-<script src="/lib/jquery/jquery-3.2.1.min.js" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/lib/jquery/jquery.js"></script>
 <!-- ZUI 标准版压缩后的 JavaScript 文件 -->
-<script src="/js/mzui.min.js" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/js/zui.min.js"></script>
 
+
+<script>
+
+    function receiveDetail(id) {
+        var html = "";
+        $.get("/express/1/get", {"openId": '${openId}', "id": id}, function (result) {
+            $.each(result.data, function (index, item) {
+                html += item;
+            });
+            alert(html);
+        });
+    }
+
+    function receiveWay(id, way) {
+        $.post("/express/1/modify", {"openId": '${openId}', "id": id, "expressWay": way}, function (result) {
+            alert(result.msg);
+            if (result.status == 200 && way == 1) {
+                alert("跳转到支付");
+            } else {
+                window.location.reload();
+            }
+        });
+    }
+
+</script>
 </body>
 </html>

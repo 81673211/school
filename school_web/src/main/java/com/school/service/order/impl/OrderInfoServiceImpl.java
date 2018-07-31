@@ -12,6 +12,7 @@ import com.school.domain.entity.order.OrderInfo;
 import com.school.enumeration.ExpressTypeEnum;
 import com.school.exception.OrderException;
 import com.school.service.base.impl.BaseServiceImpl;
+import com.school.service.calc.CalcCostService;
 import com.school.service.order.OrderInfoService;
 import com.school.util.core.Log;
 import com.school.util.core.utils.RandomUtil;
@@ -19,8 +20,6 @@ import com.school.vo.request.OrderCreateVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
 
 @Service
 @Transactional(rollbackFor = OrderException.class)
@@ -32,6 +31,8 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
     private ExpressSendMapper expressSendMapper;
     @Autowired
     private ExpressReceiveMapper expressReceiveMapper;
+    @Autowired
+    private CalcCostService calcCostService;
 
     @Override
     public OrderInfo findByOrderNo(String orderNo) {
@@ -77,14 +78,18 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
      * @param express
      * @return
      */
-    private OrderInfo initOrderInfo(Express express) throws OrderException {
+    private OrderInfo initOrderInfo(Express express) throws Exception {
         OrderInfo orderInfo = new OrderInfo();
         if (express instanceof ExpressSend) {
+            ExpressSend expressSend = (ExpressSend) express;
             orderInfo.setExpressType(ExpressTypeEnum.SEND.getFlag());
             orderInfo.setExpressType(ExpressTypeEnum.SEND.getFlag());
+            orderInfo.setAmount(calcCostService.calcSendDistributionCost(expressSend));
         } else if (express instanceof ExpressReceive) {
+            ExpressReceive expressReceive = (ExpressReceive) express;
             orderInfo.setExpressType(ExpressTypeEnum.RECEIVE.getFlag());
             orderInfo.setExpressType(ExpressTypeEnum.RECEIVE.getFlag());
+            orderInfo.setAmount(calcCostService.calcReceiveDistributionCost(expressReceive));
         } else {
             String errorMsg = "error express type.";
             Log.error.error(errorMsg);
@@ -94,19 +99,9 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
         orderInfo.setExpressCode(express.getCode());
         orderInfo.setCustomerId(express.getCustomerId());
         orderInfo.setStatus(0);
-        orderInfo.setAmount(calcSendExpressAmount());
         orderInfo.setOrderNo(RandomUtil.GenerateOrderNo(Constants.idWorker, ConstantMap.ORDER_NO_TYPE_ORDER));
         orderInfo.setNotifyUrl(Constants.WXPAY_NOTIFY_URL);
         return orderInfo;
-    }
-
-    /**
-     * todo 寄件金额计算
-     *
-     * @return
-     */
-    private BigDecimal calcSendExpressAmount() {
-        return new BigDecimal(0.01);
     }
 
 }

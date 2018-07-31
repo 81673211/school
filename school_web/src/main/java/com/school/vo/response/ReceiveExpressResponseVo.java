@@ -22,6 +22,10 @@ public class ReceiveExpressResponseVo extends BaseVo{
     private Integer expressStatus; //快件状态
     private String createdTime; //创建时间
 
+    private String senderProvince;
+    private String senderCity;
+    private String senderDistrict;
+
     public Long getId() {
         return id;
     }
@@ -140,5 +144,29 @@ public class ReceiveExpressResponseVo extends BaseVo{
 
     public void setCreatedTime(String createdTime) {
         this.createdTime = createdTime;
+    }
+
+    public String getSenderProvince() {
+        return senderProvince;
+    }
+
+    public void setSenderProvince(String senderProvince) {
+        this.senderProvince = senderProvince;
+    }
+
+    public String getSenderCity() {
+        return senderCity;
+    }
+
+    public void setSenderCity(String senderCity) {
+        this.senderCity = senderCity;
+    }
+
+    public String getSenderDistrict() {
+        return senderDistrict;
+    }
+
+    public void setSenderDistrict(String senderDistrict) {
+        this.senderDistrict = senderDistrict;
     }
 }

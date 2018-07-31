@@ -258,6 +258,7 @@ public class ExpressController extends BaseEasyWebController {
             }
             List list = expressReceiveService.selectExpressList(statuses, phone);
             mav.addObject("list", list);
+            mav.addObject("openId", openId);
             if (split.length == 1 && ReceiveExpressStatusEnum.FINISHED.getFlag() == Integer.parseInt(split[0])) {
                 mav.setViewName("received");
             } else {

@@ -3,17 +3,19 @@ package com.school.service.express.impl;
 import com.school.dao.customer.CustomerMapper;
 import com.school.dao.express.ExpressCompanyMapper;
 import com.school.dao.express.ExpressReceiveMapper;
-import com.school.dao.order.OrderInfoMapper;
 import com.school.dao.region.RegionMapper;
 import com.school.domain.entity.customer.Customer;
 import com.school.domain.entity.express.Express;
 import com.school.domain.entity.express.ExpressCompany;
 import com.school.domain.entity.express.ExpressReceive;
 import com.school.domain.entity.region.Region;
+import com.school.enumeration.DistributionTypeEnum;
 import com.school.enumeration.ExpressTypeEnum;
+import com.school.enumeration.ReceiveExpressStatusEnum;
 import com.school.exception.ExpressException;
 import com.school.exception.ExpressStatusException;
 import com.school.service.base.impl.BaseServiceImpl;
+import com.school.service.calc.CalcCostService;
 import com.school.service.express.ExpressReceiveService;
 import com.school.service.order.OrderInfoService;
 import com.school.util.core.Log;
@@ -49,6 +51,8 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
     private RegionMapper regionMapper;
     @Autowired
     private OrderInfoService orderInfoService;
+    @Autowired
+    private CalcCostService calcCostService;
 
     @Override
     public void createReceiveExpress(ReceiveExpressCreateVo expressVo) throws ExpressException {
@@ -69,6 +73,7 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
         }
     }
 
+
     private void boxCustomer(ExpressReceive expressReceive) {
         Map<String, Object> map = new HashMap<>();
         map.put("phone", expressReceive.getReceiverPhone());
@@ -80,11 +85,17 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
     public void modifyReceiveExpress(ReceiveExpressModifyVo expressVo) throws ExpressException {
         try {
             ExpressReceive expressReceive = converterVo2Po(expressVo, ExpressReceive.class);
+            //配送
+            if (expressReceive.getExpressWay() == DistributionTypeEnum.DISTRIBUTION.getFlag()) {
+                expressReceive.setExpressStatus(ReceiveExpressStatusEnum.WAIT_INTO_BOX.getFlag());
+            } else {
+                expressReceive.setExpressStatus(ReceiveExpressStatusEnum.WAIT_SELF.getFlag());
+            }
             //0自提；1入柜，null表示还未选择过
             Integer expressWay = expressReceiveMapper.selectByPrimaryKey(expressReceive.getId()).getExpressWay();
-            if (expressWay != 1 && expressReceive.getExpressWay() == 1) {
+            if ((expressWay == null || expressWay != DistributionTypeEnum.DISTRIBUTION.getFlag()) && expressReceive.getExpressWay() == 1) {
                 //修改后选择入柜方式才生成订单
-                OrderCreateVo vo=new OrderCreateVo();
+                OrderCreateVo vo = new OrderCreateVo();
                 vo.setExpressId(expressReceive.getId());
                 orderInfoService.createReceiveOrder(vo);
             }
@@ -110,6 +121,7 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
                 Log.error.error(message);
                 throw new ExpressException(message);
             }
+            initProvinceCityDistrict(expressReceive);
             return converterPo2Vo(expressReceive, new ReceiveExpressResponseVo());
         } catch (Exception e) {
             String message = "throw exception when get receive express";
@@ -150,9 +162,10 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
             List<ExpressReceive> receiveList = expressReceiveMapper.selectByParams(param);
             if (!receiveList.isEmpty()) {
                 for (ExpressReceive expressReceive : receiveList) {
-                    initProvinceCityDistrict(expressReceive);
-                    BaseVo baseVo = converterPo2Vo(expressReceive, new ReceiveExpressListResponseVo());
-                    list.add(baseVo);
+//                    initProvinceCityDistrict(expressReceive);
+                    ReceiveExpressListResponseVo vo = converterPo2Vo(expressReceive, new ReceiveExpressListResponseVo());
+                    vo.setDistributionCost(calcCostService.calcReceiveDistributionCost(expressReceive));
+                    list.add(vo);
                 }
             }
         } catch (Exception e) {
