@@ -3,6 +3,7 @@ package com.school.vo.response;
 import com.school.vo.BaseVo;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * @author jame
@@ -16,8 +17,8 @@ public class ReceiveExpressListResponseVo extends BaseVo {
     private String senderName;
     private String senderAddr;
     private String expressStatusDesc;
-    private String endTime;
-    private String createdTime;
+    private Date endTime;
+    private Date createdTime;
     private String senderProvince;
     private String senderCity;
     private String senderDistrict;
@@ -111,19 +112,19 @@ public class ReceiveExpressListResponseVo extends BaseVo {
         this.senderDistrict = senderDistrict;
     }
 
-    public String getEndTime() {
+    public Date getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(String endTime) {
+    public void setEndTime(Date endTime) {
         this.endTime = endTime;
     }
 
-    public String getCreatedTime() {
+    public Date getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(String createdTime) {
+    public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
     }
 

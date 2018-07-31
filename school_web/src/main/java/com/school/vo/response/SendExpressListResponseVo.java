@@ -2,6 +2,8 @@ package com.school.vo.response;
 
 import com.school.vo.BaseVo;
 
+import java.util.Date;
+
 /**
  * @author jame
  */
@@ -13,7 +15,8 @@ public class SendExpressListResponseVo extends BaseVo {
     private String receiverPhone;    //收件人电话
     private String receiverName;//	收件人名字
     private String receiverAddr;//	收件人地址
-    private String endTime;
+    private Date endTime;
+    private Date createdTime;
     private String receiverProvince;
     private String receiverCity;
     private String receiverDistrict;
@@ -75,12 +78,20 @@ public class SendExpressListResponseVo extends BaseVo {
         this.receiverAddr = receiverAddr;
     }
 
-    public String getEndTime() {
+    public Date getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(String endTime) {
+    public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public Date getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
     public String getReceiverProvince() {

@@ -2,6 +2,8 @@ package com.school.vo.response;
 
 import com.school.vo.BaseVo;
 
+import java.util.Date;
+
 /**
  * @author jame
  */
@@ -20,7 +22,8 @@ public class SendExpressResponseVo extends BaseVo{
     private String companyCode; //快递code
     private String companyName; //快递name
     private Integer expressStatus; //快件状态
-    private String createdTime; //创建时间
+    private Date createdTime; //创建时间
+    private Date endTime;
 
 
     public Long getId() {
@@ -135,11 +138,19 @@ public class SendExpressResponseVo extends BaseVo{
         this.expressStatus = expressStatus;
     }
 
-    public String getCreatedTime() {
+    public Date getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(String createdTime) {
+    public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 }
