@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
  * <br><b>Date:</b> 14/06/2018 13:13
  */
 @Component
-@Lazy(value = false)
+//@Lazy(value = false)
 @Slf4j
 public class MenuManager {
 

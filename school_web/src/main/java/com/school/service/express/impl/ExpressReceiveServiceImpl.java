@@ -150,7 +150,7 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
             List<ExpressReceive> receiveList = expressReceiveMapper.selectByParams(param);
             if (!receiveList.isEmpty()) {
                 for (ExpressReceive expressReceive : receiveList) {
-                    initProvinceCityDistrict(expressReceive);
+//                    initProvinceCityDistrict(expressReceive);
                     BaseVo baseVo = converterPo2Vo(expressReceive, new ReceiveExpressListResponseVo());
                     list.add(baseVo);
                 }

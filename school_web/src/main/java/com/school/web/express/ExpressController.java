@@ -218,7 +218,7 @@ public class ExpressController extends BaseEasyWebController {
      * @param bindingResult
      * @return
      */
-    @RequestMapping(value = "/1/up-status", method = RequestMethod.POST)
+    @RequestMapping(value = "/1/updateStatus", method = RequestMethod.POST)
     public Response updateReceiveExpressStatus(@Validated ExpressStatusModifyVo vo, BindingResult bindingResult) {
         Response response = new Response();
         checkValid(bindingResult, response);

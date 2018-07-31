@@ -28,10 +28,11 @@
                     <div class="inline-block pull-right">
                         <c:choose>
                             <c:when test="${item.expressStatus == 0}">
-                                <button type="button" class="btn primary-pale btn-sm text-tint pull-left">配送(￥1.5)</button>&nbsp;&nbsp;
-                                <button type="button" class="btn primary-pale btn-sm text-tint pull-right">自提</button>
+                                <button type="button" class="btn primary-pale btn-sm text-tint pull-left" onclick="_update(${item.id}, 2)">配送(￥1.5)</button>&nbsp;&nbsp;
+                                <button type="button" class="btn primary-pale btn-sm text-tint pull-right" onclick="_update(${item.id}, 1)">自提</button>
                             </c:when>
                             <c:when test="${item.expressStatus == 1}">
+                                <button type="button" class="btn primary-pale btn-sm text-tint pull-left" onclick="_update(${item.id}, 2)">配送(￥1.5)</button>&nbsp;&nbsp;
                                 <label class="btn primary-pale btn-sm text-tint pull-right">等待自提</label>
                             </c:when>
                             <c:when test="${item.expressStatus == 2}">
@@ -51,11 +52,27 @@
         </c:forEach>
     </c:if>
 </div>
-
 <!-- ZUI Javascript 依赖 jQuery -->
-<script src="/lib/jquery/jquery-3.2.1.min.js" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/lib/jquery/jquery.js"></script>
 <!-- ZUI 标准版压缩后的 JavaScript 文件 -->
-<script src="/js/mzui.min.js" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/js/zui.min.js"></script>
+<script type="application/javascript">
+  $(document).ready(function () {
+    $("#update-suc").hide();
+    $("#update-err").hide();
+  });
+  function _update(expressId, expressStatus) {
+    $.post("/express/1/updateStatus", {"id": expressId, "status": expressStatus}, function (result) {
+      if (result.status == 200) {
+        if (expressStatus == 1) {
+          document.location.reload();
+        } else if (expressStatus == 2) {
+          //跳转到支付
 
+        }
+      }
+    })
+  }
+</script>
 </body>
 </html>
