@@ -13,4 +13,6 @@ public interface OrderInfoService extends BaseService<OrderInfo, OrderInfoMapper
 	void createSendOrder(OrderCreateVo vo) throws OrderException;
 
 	void createReceiveOrder(OrderCreateVo vo) throws OrderException;
+
+	OrderInfo findByExpressReceiveId(Long expressId);
 }

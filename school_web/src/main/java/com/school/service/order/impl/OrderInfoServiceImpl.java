@@ -72,6 +72,15 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
         }
     }
 
+    @Override
+    public OrderInfo findByExpressReceiveId(Long expressId) {
+        return findByExpressIdAndType(expressId, ExpressTypeEnum.RECEIVE.getFlag());
+    }
+
+    private OrderInfo findByExpressIdAndType(Long expressId, int expressType) {
+        return orderInfoMapper.findByExpressIdAndType(expressId, expressType);
+    }
+
     /**
      * 初始化订单对象
      *

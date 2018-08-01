@@ -8,9 +8,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.school.domain.entity.order.OrderInfo;
+import com.school.service.order.OrderInfoService;
 import com.school.service.wechat.WxPayService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -22,11 +25,26 @@ public class WxPayController {
 
 	@Autowired
 	private WxPayService wxPayService;
+
+	@Autowired
+	private OrderInfoService orderInfoService;
+
+	@RequestMapping(value = "/pay", method = RequestMethod.GET)
+	public ModelAndView pay(Long expressId) {
+		log.info("begin pay ......");
+		OrderInfo orderInfo = orderInfoService.findByExpressReceiveId(expressId);
+		if (orderInfo == null) {
+			throw new RuntimeException("支付时未找到收件订单, expressId:" + expressId);
+		}
+		ModelAndView mav = new ModelAndView("pay");
+		mav.addObject("orderNo", orderInfo.getOrderNo());
+		return mav;
+	}
 	
 	/**
 	 * 微信支付
 	 */
-	@RequestMapping("/pay")
+	@RequestMapping(value = "/pay", method = RequestMethod.POST)
 	public ModelAndView wxpay(String orderNo) throws Exception{
 		try {
 			if(StringUtils.isBlank(orderNo)){

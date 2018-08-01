@@ -3,6 +3,8 @@ package com.school.dao.order;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.school.dao.base.BaseDao;
 import com.school.domain.entity.order.OrderInfo;
 
@@ -22,4 +24,6 @@ public interface OrderInfoMapper extends BaseDao {
     List<OrderInfo> queryPage(Map<String, Object> paramMap);
     
     OrderInfo findByOrderNo(String orderNo);
+
+    OrderInfo findByExpressIdAndType(@Param("expressId") Long expressId, @Param("expressType") int expressType);
 }
