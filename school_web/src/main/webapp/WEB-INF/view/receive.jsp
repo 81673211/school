@@ -88,7 +88,7 @@
   function receiveWay(id, way) {
     $.post("/express/1/modify", {"openId": '${openId}', "id": id, "expressWay": way}, function (result) {
       if (result.status == 200 && way == 1) {
-        window.location.href = "http://www.glove1573.cn/wxpay/pay?id=" + id;
+        window.location.href = "http://www.glove1573.cn/wxpay/pay?expressId=" + id;
       } else {
         window.location.reload();
       }
