@@ -14,6 +14,7 @@ import com.school.cache.RedisKeyNS;
 import com.school.dao.customer.CustomerMapper;
 import com.school.domain.entity.customer.Customer;
 import com.school.service.customer.CustomerService;
+import com.school.service.express.ExpressReceiveService;
 import com.school.service.message.SmsService;
 import com.school.util.VerifyCodeUtil;
 import com.school.web.customer.request.CustomerProfileEditRequest;
@@ -39,6 +40,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private SmsService smsService;
+
+    @Autowired
+    private ExpressReceiveService expressReceiveService;
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
@@ -106,10 +110,18 @@ public class CustomerServiceImpl implements CustomerService {
             customer.setAddr(addr);
         }
         String requestPhone = request.getPhone();
+        boolean bindExpress = false;
         if (StringUtils.isNotBlank(requestPhone)) {
+            if (StringUtils.isBlank(customer.getPhone()) && StringUtils.isNotBlank(requestPhone)) {
+                //绑定收件
+                bindExpress = true;
+            }
             customer.setPhone(requestPhone);
         }
         update(customer);
+        if (bindExpress) {
+            expressReceiveService.bindCustomerByPhone(requestPhone, customer.getId());
+        }
     }
 
     @Override

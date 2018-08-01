@@ -5,7 +5,6 @@ import java.util.Map;
 
 import com.school.dao.base.BaseDao;
 import com.school.domain.entity.customer.Customer;
-import com.school.domain.entity.order.OrderInfo;
 
 public interface CustomerMapper extends BaseDao {
     int deleteByPrimaryKey(Long id);
@@ -15,6 +14,8 @@ public interface CustomerMapper extends BaseDao {
     int insertSelective(Customer record);
 
     Customer selectByPrimaryKey(Long id);
+
+    Customer selectByPhone(String phone);
 
     int updateByPrimaryKeySelective(Customer record);
 

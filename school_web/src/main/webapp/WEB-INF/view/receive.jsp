@@ -42,6 +42,11 @@
                                 </button>
                             </c:when>
                             <c:when test="${item.expressStatus == 1}">
+                                <button type="button" class="btn primary-pale btn-sm text-tint pull-left"
+                                        onclick="receiveWay(${item.id},1)">配送(￥<fmt:formatNumber
+                                        value="${item.distributionCost}" pattern="0.00"/>)
+                                </button>
+                                &nbsp;&nbsp;
                                 <label class="btn primary-pale btn-sm text-tint pull-right">等待自提</label>
                             </c:when>
                             <c:when test="${item.expressStatus == 2}">

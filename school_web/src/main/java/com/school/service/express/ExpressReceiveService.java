@@ -48,6 +48,14 @@ public interface ExpressReceiveService extends BaseService<ExpressReceive, Expre
     void updateReceiveExpressStatus(Long id, Integer status) throws ExpressException;
 
     /**
+     * <b>Description:通过手机号绑定用户ID.</b><br>
+     * <b>Author:fred</b>
+     * <br><b>Date:01/08/2018 10:56.</b>
+     * <br><b>BackLog:</b>
+     */
+    void bindCustomerByPhone(String phone, Long customerId);
+
+    /**
      * 收件列表，通过指定的状态值查询,
      * 默认条件isDelete=0
      *

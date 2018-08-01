@@ -14,13 +14,13 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSON;
 import com.school.common.model.AjaxResult;
 import com.school.constant.ConstantUrl;
+import com.school.domain.entity.customer.Customer;
 import com.school.domain.entity.express.ExpressCompany;
 import com.school.domain.entity.express.ExpressReceive;
-import com.school.domain.entity.user.AdminUser;
 import com.school.enumeration.ReceiveExpressStatusEnum;
+import com.school.service.customer.CustomerService;
 import com.school.service.express.ExpressCompanyService;
 import com.school.service.express.ExpressReceiveService;
-import com.school.util.SessionUtils;
 import com.school.util.core.exception.FuBusinessException;
 import com.school.util.core.pager.PageInfo;
 import com.school.web.base.BaseEasyWebController;
@@ -37,9 +37,14 @@ public class ExpressReceiveController extends BaseEasyWebController {
 	
 	@Autowired
 	private ExpressCompanyService expressCompanyService;
-	
+
+	@Autowired
+	private CustomerService customerService;
+
+
 	{
 		listView = "express/expressReceive";
+
 	}
 	
 	/**
@@ -106,6 +111,10 @@ public class ExpressReceiveController extends BaseEasyWebController {
 			ExpressCompany expressCompany = expressCompanyService.findByCode(expressReceive.getCompanyCode());
 			expressReceive.setCompanyId(expressCompany.getId());
 			expressReceive.setCompanyName(expressCompany.getName());
+			Customer customer = customerService.getByPhone(expressReceive.getReceiverPhone());
+			if (customer != null) {
+				expressReceive.setCustomerId(customer.getId());
+			}
 			expressReceiveService.saveOrUpdate(expressReceive);
 			return AjaxResult.success("保存成功", JSON.toJSON(expressReceive));
 		}catch(Exception e){

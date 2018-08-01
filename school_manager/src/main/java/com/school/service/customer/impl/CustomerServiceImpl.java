@@ -31,4 +31,8 @@ public class CustomerServiceImpl extends BaseServiceImpl<Customer, CustomerMappe
 		}
 	}
 
+	@Override
+	public Customer getByPhone(String phone) {
+		return customerMapper.selectByPhone(phone);
+	}
 }

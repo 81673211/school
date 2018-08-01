@@ -136,6 +136,14 @@
         where open_id = #{openId, jdbcType=VARCHAR}
     </select>
 
+    <select id="selectByPhone" resultType="com.school.domain.entity.customer.Customer"
+            parameterType="java.lang.String">
+      select
+      <include refid="Base_Column_List"/>
+      from customer
+      where phone = #{phone, jdbcType=VARCHAR}
+    </select>
+
 
     <select id="selectByParams" resultType="com.school.domain.entity.customer.Customer" parameterType="map">
         select * from customer t where 1=1

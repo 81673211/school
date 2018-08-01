@@ -1,5 +1,17 @@
 package com.school.web.express;
 
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+
 import com.school.common.model.DataResponse;
 import com.school.common.model.Response;
 import com.school.domain.entity.customer.Customer;
@@ -12,20 +24,15 @@ import com.school.service.express.ExpressSendService;
 import com.school.service.region.RegionService;
 import com.school.service.wechat.OauthService;
 import com.school.vo.BaseVo;
-import com.school.vo.request.*;
+import com.school.vo.request.ExpressGetVo;
+import com.school.vo.request.ExpressStatusModifyVo;
+import com.school.vo.request.ReceiveExpressCreateVo;
+import com.school.vo.request.ReceiveExpressModifyVo;
+import com.school.vo.request.SendExpressCreateVo;
+import com.school.vo.request.SendExpressModifyVo;
 import com.school.web.base.BaseEasyWebController;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author jame
@@ -135,9 +142,9 @@ public class ExpressController extends BaseEasyWebController {
         }
         try {
             expressReceiveService.modifyReceiveExpress(expressVo);
-            return response.writeSuccess("编辑寄件快件成功");
+            return response.writeSuccess("编辑收件快件成功");
         } catch (Exception e) {
-            return response.writeFailure("编辑寄件快件失败");
+            return response.writeFailure("编辑收件快件失败");
         }
     }
 

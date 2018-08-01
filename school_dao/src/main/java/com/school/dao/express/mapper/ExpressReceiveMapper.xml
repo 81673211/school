@@ -257,4 +257,10 @@
         and t.is_deleted=0
         order by t.id desc
     </select>
+
+    <update id="bindCustomerByPhone">
+        update express_receive
+        SET customer_id = #{customerId, jdbcType=BIGINT}
+        where receiver_phone = #{phone,jdbcType=VARCHAR} AND customer_id is null
+    </update>
 </mapper>

@@ -6,6 +6,8 @@ import com.school.domain.entity.express.ExpressReceive;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+
 /**
  * @author jame
  */
@@ -21,6 +23,8 @@ public interface ExpressReceiveMapper extends BaseDao {
     int updateByPrimaryKeySelective(ExpressReceive record);
 
     int updateByPrimaryKey(ExpressReceive record);
+
+    int bindCustomerByPhone(@Param("phone") String phone, @Param("customerId") Long customerId);
 
     List<ExpressReceive> queryPage(Map<String, Object> paramMap);
     

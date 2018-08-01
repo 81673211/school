@@ -13,4 +13,6 @@ public interface CustomerService extends BaseService<Customer, CustomerMapper> {
 
 	void saveOrUpdate(Customer customer);
 
+	Customer getByPhone(String phone);
+
 }

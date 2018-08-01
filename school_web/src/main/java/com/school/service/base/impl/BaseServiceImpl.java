@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @param <M> 表对应的实体
  * @param <T> 表对应的mapper接口（xxMapper.xml中的命名空间）
- * @author liliang
  */
 @Slf4j
 @Transactional(rollbackFor = Exception.class)

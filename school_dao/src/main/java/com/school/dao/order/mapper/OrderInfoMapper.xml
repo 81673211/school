@@ -33,12 +33,12 @@
   <insert id="insert" parameterType="com.school.domain.entity.order.OrderInfo" >
     insert into order_info (id, order_no, customer_id, 
       express_type, express_id, express_code, 
-      amount, created_time, trade_summary, 
+      amount, trade_summary,
       status, notify_url, suc_time, 
       version)
     values (#{id,jdbcType=BIGINT}, #{orderNo,jdbcType=VARCHAR}, #{customerId,jdbcType=BIGINT}, 
       #{expressType,jdbcType=INTEGER}, #{expressId,jdbcType=BIGINT}, #{expressCode,jdbcType=VARCHAR}, 
-      #{amount,jdbcType=DECIMAL}, #{createdTime,jdbcType=TIMESTAMP}, #{tradeSummary,jdbcType=VARCHAR}, 
+      #{amount,jdbcType=DECIMAL}, #{tradeSummary,jdbcType=VARCHAR},
       #{status,jdbcType=INTEGER}, #{notifyUrl,jdbcType=VARCHAR}, #{sucTime,jdbcType=TIMESTAMP}, 
       #{version,jdbcType=INTEGER})
   </insert>

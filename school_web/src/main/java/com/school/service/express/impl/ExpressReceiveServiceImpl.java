@@ -121,7 +121,7 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
                 Log.error.error(message);
                 throw new ExpressException(message);
             }
-            initProvinceCityDistrict(expressReceive);
+//            initProvinceCityDistrict(expressReceive);
             return converterPo2Vo(expressReceive, new ReceiveExpressResponseVo());
         } catch (Exception e) {
             String message = "throw exception when get receive express";
@@ -151,6 +151,10 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
         }
     }
 
+    @Override
+    public void bindCustomerByPhone(String phone, Long customerId) {
+        expressReceiveMapper.bindCustomerByPhone(phone, customerId);
+    }
 
     @Override
     public List<BaseVo> selectExpressList(Integer[] status, String phone) throws ExpressException {
