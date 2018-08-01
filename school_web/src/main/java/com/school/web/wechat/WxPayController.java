@@ -8,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -29,30 +28,23 @@ public class WxPayController {
 	@Autowired
 	private OrderInfoService orderInfoService;
 
-	@RequestMapping(value = "/pay", method = RequestMethod.GET)
-	public ModelAndView pay(Long expressId) {
-		log.info("begin pay ......, expressId:{}", expressId);
-		OrderInfo orderInfo = orderInfoService.findByExpressReceiveId(expressId);
-		if (orderInfo == null) {
-			throw new RuntimeException("支付时未找到收件订单, expressId:" + expressId);
-		}
-		ModelAndView mav = new ModelAndView("pay");
-		mav.addObject("orderNo", orderInfo.getOrderNo());
-		return mav;
-	}
-	
 	/**
 	 * 微信支付
 	 */
-	@RequestMapping(value = "/pay", method = RequestMethod.POST)
-	public ModelAndView wxpay(String orderNo) throws Exception{
+	@RequestMapping(value = "/pay")
+	public ModelAndView wxpay(Long expressId) throws Exception{
+		String orderNo = "";
 		try {
-			if(StringUtils.isBlank(orderNo)){
-				throw new Exception("订单号不能为空");
+			OrderInfo orderInfo = orderInfoService.findByExpressReceiveId(expressId);
+			if (orderInfo == null) {
+				throw new RuntimeException("支付时未找到订单");
 			}
-			
 			ModelAndView mv = new ModelAndView();
 			// 统一下单
+			orderNo = orderInfo.getOrderNo();
+			if (StringUtils.isBlank(orderNo)) {
+				throw new RuntimeException("订单号异常");
+			}
 			TreeMap<String, String> resultMap = wxPayService.doUnifiedOrder(orderNo);
 			// 避免关键字package，将package换成pkg
 			resultMap.put("pkg", resultMap.get("package"));
