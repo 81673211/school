@@ -208,7 +208,7 @@
   <select id="findByExpressIdAndType" resultType="com.school.domain.entity.order.OrderInfo"
           parameterType="java.lang.String">
     select
-    <include refid="BaseResultMap" />
+    <include refid="Base_Column_List" />
     from order_info
     where express_type = #{expressType,jdbcType=INTEGER} AND express_id = #{express_id, jdbcType=BIGINT} AND status = 0
   </select>
