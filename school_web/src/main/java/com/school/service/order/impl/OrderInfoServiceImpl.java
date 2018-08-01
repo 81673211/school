@@ -89,14 +89,13 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
      */
     private OrderInfo initOrderInfo(Express express) throws Exception {
         OrderInfo orderInfo = new OrderInfo();
+        orderInfo.setTradeSummary("express");
         if (express instanceof ExpressSend) {
             ExpressSend expressSend = (ExpressSend) express;
-            orderInfo.setExpressType(ExpressTypeEnum.SEND.getFlag());
             orderInfo.setExpressType(ExpressTypeEnum.SEND.getFlag());
             orderInfo.setAmount(calcCostService.calcSendDistributionCost(expressSend));
         } else if (express instanceof ExpressReceive) {
             ExpressReceive expressReceive = (ExpressReceive) express;
-            orderInfo.setExpressType(ExpressTypeEnum.RECEIVE.getFlag());
             orderInfo.setExpressType(ExpressTypeEnum.RECEIVE.getFlag());
             orderInfo.setAmount(calcCostService.calcReceiveDistributionCost(expressReceive));
         } else {
