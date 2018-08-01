@@ -7,8 +7,7 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/lib/jquery/jquery.js"></script>
 <script type="application/javascript">
     $(document).ready(function () {
-      $.post("/wxpay/pay", {'orderNo':${orderNo}});
-      alert("支付成功");
+      $.post("/wxpay/pay", {'orderNo':'${orderNo}'});
     });
 </script>
 </body>
