@@ -31,7 +31,7 @@ public class WxPayController {
 
 	@RequestMapping(value = "/pay", method = RequestMethod.GET)
 	public ModelAndView pay(Long expressId) {
-		log.info("begin pay ......");
+		log.info("begin pay ......, expressId:{}", expressId);
 		OrderInfo orderInfo = orderInfoService.findByExpressReceiveId(expressId);
 		if (orderInfo == null) {
 			throw new RuntimeException("支付时未找到收件订单, expressId:" + expressId);
