@@ -210,6 +210,8 @@
     select
     <include refid="Base_Column_List" />
     from order_info
-    where express_type = #{expressType,jdbcType=INTEGER} AND express_id = #{expressId, jdbcType=BIGINT} AND status = 0
+    where express_type = #{expressType,jdbcType=INTEGER} AND express_id = #{expressId, jdbcType=BIGINT}
+    order by created_time DESC
+    LIMIT 1
   </select>
 </mapper>

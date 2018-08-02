@@ -25,7 +25,6 @@ public class WxPayController {
 
 	@Autowired
 	private WxPayService wxPayService;
-
 	@Autowired
 	private OrderInfoService orderInfoService;
 
@@ -80,11 +79,4 @@ public class WxPayController {
 		}
 	}
 
-    @RequestMapping("/success")
-	public ModelAndView success(String amountVal) {
-	    log.info("forward pay_suc page....amount:{}", amountVal);
-	    ModelAndView mav = new ModelAndView("wxpay/pay_suc");
-	    mav.addObject("amount", amountVal);
-	    return mav;
-    }
 }
