@@ -33,7 +33,7 @@
                         <c:choose>
                             <c:when test="${item.expressStatus == 0}">
                                 <button type="button" class="btn primary-pale btn-sm text-tint pull-left"
-                                        onclick="receiveWay(${item.id},1)">配送(￥<fmt:formatNumber
+                                        onclick="launchPay(${item.id})">配送(￥<fmt:formatNumber
                                         value="${item.distributionCost}" pattern="0.00" />)
                                 </button>
                                 &nbsp;&nbsp;
@@ -43,7 +43,7 @@
                             </c:when>
                             <c:when test="${item.expressStatus == 1}">
                                 <button type="button" class="btn primary-pale btn-sm text-tint pull-left"
-                                        onclick="receiveWay(${item.id},1)">配送(￥<fmt:formatNumber
+                                        onclick="launchPay(${item.id})">配送(￥<fmt:formatNumber
                                         value="${item.distributionCost}" pattern="0.00" />)
                                 </button>
                                 &nbsp;&nbsp;
@@ -93,6 +93,15 @@
         window.location.reload();
       }
     });
+  }
+  
+  function launchPay(expressId) {
+    $.post("/order/1/create", {"expressId": expressId, "openId": "${openId}"}, function (result) {
+      if (result.status = 200) {
+        console.log("生成订单成功");
+        window.location.href = "http://www.glove1573.cn/wxpay/pay?expressId=" + id;
+      }
+    })
   }
 
 </script>

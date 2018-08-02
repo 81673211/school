@@ -32,12 +32,12 @@ public class WxPayController {
 	 * 微信支付
 	 */
 	@RequestMapping(value = "/pay")
-	public ModelAndView wxpay(Long expressId) throws Exception{
+	public ModelAndView wxpay(Long expressId) {
 		String orderNo = "";
 		try {
 			OrderInfo orderInfo = orderInfoService.findByExpressReceiveId(expressId);
 			if (orderInfo == null) {
-				throw new RuntimeException("支付时未找到订单");
+                throw new RuntimeException("支付时未找到订单");
 			}
 			ModelAndView mv = new ModelAndView();
 			// 统一下单
@@ -54,7 +54,7 @@ public class WxPayController {
 			return mv;
 		} catch (Exception e) {
 			log.error("订单"+orderNo+"支付失败，原因：" + e.getMessage());
-			throw new Exception("订单"+orderNo+"支付失败，原因：" + e.getMessage());
+			throw new RuntimeException("订单"+orderNo+"支付失败，原因：" + e.getMessage());
 		}
 	}
 	
