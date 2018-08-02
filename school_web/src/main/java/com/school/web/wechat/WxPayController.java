@@ -72,6 +72,7 @@ public class WxPayController {
 	    	log.info("===============>>>>微信支付回调获取数据开始");  
 			String resXml = wxPayService.wxPayNotify(request);
 			//向微信输出处理结果，如果成功（SUCCESS），微信就不会继续调用了，否则微信会连续调用8次
+            log.info("resXml:{}", resXml);
 			return "SUCCESS";
 		} catch (Exception e) {
 			log.error("微信支付通知失败:" + e.getMessage());
@@ -81,6 +82,7 @@ public class WxPayController {
 
     @RequestMapping("/success")
 	public ModelAndView success(String amountVal) {
+	    log.info("forward pay_suc page....amount:{}", amountVal);
 	    ModelAndView mav = new ModelAndView("wxpay/pay_suc");
 	    mav.addObject("amount", amountVal);
 	    return mav;
