@@ -57,7 +57,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
     }
 
     @Override
-    public void createReceiveOrder(OrderCreateVo vo) throws OrderException {
+    public String createReceiveOrder(OrderCreateVo vo) throws OrderException {
         try {
             ExpressReceive expressReceive = expressReceiveMapper.selectByPrimaryKey(vo.getExpressId());
             if (!(orderInfoMapper.insertSelective(initOrderInfo(expressReceive)) > 0)) {
@@ -65,6 +65,8 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
                 Log.error.error(message);
                 throw new OrderException(message);
             }
+            OrderInfo orderInfo = findByExpressReceiveId(vo.getExpressId());
+            return orderInfo.getOrderNo();
         } catch (Exception e) {
             String message = "throw exception when create receive order";
             Log.error.error(message, e);

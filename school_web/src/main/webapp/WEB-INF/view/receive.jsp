@@ -20,7 +20,7 @@
             <a class="item multi-lines with-avatar">
                 <div class="avatar circle blue outline">${var.count}</div>
                 <div class="content">
-                    <div onclick="receiveDetail(${item.id});">
+                    <div>
                         <span class="title">${item.code}</span>
                         <div>
                             <small class="text-gray">${item.companyName}</small>
@@ -96,12 +96,7 @@
   }
   
   function launchPay(expressId) {
-    $.post("/order/1/create", {"expressId": expressId, "openId": "${openId}"}, function (result) {
-      if (result.status = 200) {
-        console.log("生成订单成功");
-        window.location.href = "http://www.glove1573.cn/wxpay/pay?expressId=" + id;
-      }
-    })
+    window.location.href = "http://127.0.0.1:8080/wxpay/pay?expressId=" + expressId;
   }
 
 </script>

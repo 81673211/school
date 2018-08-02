@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.school.domain.entity.order.OrderInfo;
 import com.school.service.order.OrderInfoService;
 import com.school.service.wechat.WxPayService;
+import com.school.vo.request.OrderCreateVo;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,15 +34,18 @@ public class WxPayController {
 	 */
 	@RequestMapping(value = "/pay")
 	public ModelAndView wxpay(Long expressId) {
-		String orderNo = "";
 		try {
+			String orderNo;
 			OrderInfo orderInfo = orderInfoService.findByExpressReceiveId(expressId);
 			if (orderInfo == null) {
-                throw new RuntimeException("支付时未找到订单");
+				OrderCreateVo orderCreateVo = new OrderCreateVo();
+				orderCreateVo.setExpressId(expressId);
+				orderNo = orderInfoService.createReceiveOrder(orderCreateVo);
+			} else {
+				orderNo = orderInfo.getOrderNo();
 			}
 			ModelAndView mv = new ModelAndView();
 			// 统一下单
-			orderNo = orderInfo.getOrderNo();
 			if (StringUtils.isBlank(orderNo)) {
 				throw new RuntimeException("订单号异常");
 			}
@@ -53,8 +57,8 @@ public class WxPayController {
 			mv.addObject("resultMap",resultMap);
 			return mv;
 		} catch (Exception e) {
-			log.error("订单"+orderNo+"支付失败，原因：" + e.getMessage());
-			throw new RuntimeException("订单"+orderNo+"支付失败，原因：" + e.getMessage());
+			log.error("收件ID:{}, 支付失败，原因:", expressId, e.getMessage());
+			throw new RuntimeException(e.getMessage());
 		}
 	}
 	
