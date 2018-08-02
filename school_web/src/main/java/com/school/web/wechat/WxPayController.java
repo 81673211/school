@@ -78,4 +78,11 @@ public class WxPayController {
 			return null;
 		}
 	}
+
+    @RequestMapping("/success")
+	public ModelAndView success(String amountVal) {
+	    ModelAndView mav = new ModelAndView("wxpay/pay_suc");
+	    mav.addObject("amount", amountVal);
+	    return mav;
+    }
 }

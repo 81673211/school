@@ -1,6 +1,7 @@
 package com.school.service.wechat.impl;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.InetAddress;
 import java.util.Date;
 import java.util.HashMap;
@@ -106,6 +107,7 @@ public class WxPayServiceImpl implements WxPayService {
         		treeMap.put("timeStamp", String.valueOf(System.currentTimeMillis()).substring(0, 10));
         		String paySign = WXPayUtil.generateSignature(treeMap, config.getKey(),SignType.HMACSHA256);
         		treeMap.put("paySign", paySign);
+        		treeMap.put("amount", orderInfo.getAmount().setScale(2, RoundingMode.HALF_UP).toString());
         		// 将订单置为支付处理中
         		this.orderPaying(orderInfo);
             }else{
@@ -120,7 +122,7 @@ public class WxPayServiceImpl implements WxPayService {
 	
 	/**
 	 * 将订单更新为支付处理中
-	 * @param orderNo
+	 * @param orderInfo
 	 */
 	private void orderPaying(OrderInfo orderInfo){
 		if(orderInfo == null){
@@ -233,7 +235,7 @@ public class WxPayServiceImpl implements WxPayService {
 	
 	/**
 	 * 将订单更新为成功
-	 * @param orderNo
+	 * @param orderInfo
 	 */
 	private void orderSuccess(OrderInfo orderInfo){
 		if(orderInfo == null){
