@@ -96,7 +96,7 @@
   }
   
   function launchPay(expressId) {
-    window.location.href = "http://127.0.0.1:8080/wxpay/pay?expressId=" + expressId;
+    window.location.href = "http://www.glove1573.cn/wxpay/pay?expressId=" + expressId;
   }
 
 </script>
