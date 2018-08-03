@@ -96,7 +96,22 @@
   }
   
   function launchPay(expressId) {
-    window.location.href = "http://www.glove1573.cn/wxpay/pay?expressId=" + expressId;
+    $.post("/order/1/create",
+      {
+        "expressId": expressId,
+        "openId": '${openId}'
+      },
+      function (result) {
+        if (result.status != 200) {
+          alert(result.msg);
+          return;
+        } else {
+          var orderNo = result.msg;
+          alert(orderNo);
+          window.location.href = "http://www.glove1573.cn/wxpay/pay?orderNo=" + orderNo;
+        }
+      }
+    );
   }
 
 </script>

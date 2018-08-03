@@ -1,7 +1,6 @@
 package com.school.service.wechat.impl;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.net.InetAddress;
 import java.util.Date;
 import java.util.HashMap;
@@ -25,11 +24,11 @@ import com.school.dao.customer.CustomerMapper;
 import com.school.dao.order.OrderInfoMapper;
 import com.school.domain.entity.customer.Customer;
 import com.school.domain.entity.order.OrderInfo;
+import com.school.enumeration.DistributionTypeEnum;
 import com.school.enumeration.ExpressTypeEnum;
 import com.school.enumeration.OrderStatusEnum;
 import com.school.enumeration.ReceiveExpressStatusEnum;
 import com.school.service.express.ExpressReceiveService;
-import com.school.service.order.OrderInfoService;
 import com.school.service.wechat.WxPayService;
 import com.school.util.core.utils.AmountUtils;
 
@@ -43,8 +42,6 @@ public class WxPayServiceImpl implements WxPayService {
     private OrderInfoMapper orderInfoMapper;
     @Autowired
     private CustomerMapper customerMapper;
-    @Autowired
-    private OrderInfoService orderInfoService;
     @Autowired
     private ExpressReceiveService expressReceiveService;
 
@@ -235,8 +232,11 @@ public class WxPayServiceImpl implements WxPayService {
             // 更新快件状态
             Integer expressType = orderInfo.getExpressType();
             if (ExpressTypeEnum.RECEIVE.getFlag() == expressType) {
-                expressReceiveService.updateReceiveExpressStatus(orderInfo.getExpressId(),
-                                                                 ReceiveExpressStatusEnum.WAIT_INTO_BOX.getFlag());
+                expressReceiveService.updateReceiveExpress(orderInfo.getExpressId(),
+                                                           ReceiveExpressStatusEnum.WAIT_INTO_BOX.getFlag(),
+                                                           DistributionTypeEnum.DISTRIBUTION.getFlag());
+            } else {
+                //TODO 寄件状态更新
             }
         }
         return resXml;

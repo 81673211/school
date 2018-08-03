@@ -11,10 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.school.domain.entity.order.OrderInfo;
-import com.school.service.order.OrderInfoService;
 import com.school.service.wechat.WxPayService;
-import com.school.vo.request.OrderCreateVo;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,24 +22,13 @@ public class WxPayController {
 
 	@Autowired
 	private WxPayService wxPayService;
-	@Autowired
-	private OrderInfoService orderInfoService;
 
 	/**
 	 * 微信支付
 	 */
 	@RequestMapping(value = "/pay")
-	public ModelAndView wxpay(Long expressId) {
+	public ModelAndView wxpay(String orderNo) {
 		try {
-			String orderNo;
-			OrderInfo orderInfo = orderInfoService.findByExpressReceiveId(expressId);
-			if (orderInfo == null) {
-				OrderCreateVo orderCreateVo = new OrderCreateVo();
-				orderCreateVo.setExpressId(expressId);
-				orderNo = orderInfoService.createReceiveOrder(orderCreateVo);
-			} else {
-				orderNo = orderInfo.getOrderNo();
-			}
 			ModelAndView mv = new ModelAndView();
 			// 统一下单
 			if (StringUtils.isBlank(orderNo)) {
@@ -56,7 +42,7 @@ public class WxPayController {
 			mv.addObject("resultMap",resultMap);
 			return mv;
 		} catch (Exception e) {
-			log.error("收件ID:{}, 支付失败，原因:", expressId, e.getMessage());
+			log.error("订单号:{}, 支付失败，原因:", orderNo, e.getMessage());
 			throw new RuntimeException(e.getMessage());
 		}
 	}

@@ -47,6 +47,8 @@ public interface ExpressReceiveService extends BaseService<ExpressReceive, Expre
      */
     void updateReceiveExpressStatus(Long id, Integer status) throws ExpressException;
 
+    void updateReceiveExpress(Long id, Integer status, Integer expressWay);
+
     /**
      * <b>Description:通过手机号绑定用户ID.</b><br>
      * <b>Author:fred</b>

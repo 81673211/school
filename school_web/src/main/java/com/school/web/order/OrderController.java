@@ -62,10 +62,10 @@ public class OrderController extends BaseEasyWebController {
             return response;
         }
         try {
-            orderInfoService.createReceiveOrder(vo);
-            return response.writeSuccess("创建订单成功");
+            return response.writeSuccess(orderInfoService.createReceiveOrder(vo));
         } catch (Exception e) {
-            return response.writeFailure("创建订单失败");
+            log.error("创建订单失败，{}", e.getMessage());
+            return response.writeFailure("创建订单失败, " + e.getMessage());
         }
     }
 

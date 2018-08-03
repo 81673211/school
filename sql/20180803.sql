@@ -207,7 +207,7 @@ CREATE TABLE `order_info` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '订单号',
   `order_no` varchar(30) NOT NULL COMMENT '订单号',
   `customer_id` bigint(20) NOT NULL COMMENT '客户id',
-  `express_type` int(1) NOT NULL COMMENT '0=寄件，1=收件',
+  `express_type` int(1) COMMENT '0=寄件，1=收件',
   `express_id` bigint(20) NOT NULL COMMENT '快件ID',
   `express_code` varchar(50) DEFAULT NULL,
   `amount` decimal(10,2) NOT NULL COMMENT '订单金额',

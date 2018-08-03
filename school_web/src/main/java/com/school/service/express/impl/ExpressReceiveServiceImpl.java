@@ -152,6 +152,20 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
     }
 
     @Override
+    public void updateReceiveExpress(Long id, Integer status, Integer expressWay) {
+        ExpressReceive expressReceive = new ExpressReceive();
+        expressReceive.setId(id);
+        expressReceive.setExpressStatus(status);
+        expressReceive.setExpressWay(expressWay);
+        int count = expressReceiveMapper.updateByPrimaryKeySelective(expressReceive);
+        if (count <= 0) {
+            String msg = "update receive express status failed,when update table 'express_receive' the number of affected rows is 0";
+            Log.error.error(msg);
+            throw new RuntimeException(msg);
+        }
+    }
+
+    @Override
     public void bindCustomerByPhone(String phone, Long customerId) {
         expressReceiveMapper.bindCustomerByPhone(phone, customerId);
     }
