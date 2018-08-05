@@ -52,6 +52,7 @@
     </div>
     <div>
         <select class="form-control" id="company" onchange="calcAmount();">
+            <option value="">[---请选择---]</option>
             <c:if test="${companyList != null and companyList.size() > 0}">
                 <c:forEach items="${companyList}" varStatus="var" var="item">
                     <option value="${item.id}">${item.name}</option>
@@ -65,13 +66,13 @@
             <option value="1">入柜</option>
         </select>
     </div>
-    <div>价格（￥<span class="price" id="price">0.01</span>元）</div>
+    <div>价格（￥<span class="price" id="price">0.00</span>元）</div>
     <div class="row btnGroup">
         <%--<div class="col-xs-6">--%>
         <%--<button class="btn btn-danger " type="button">重置</button>--%>
         <%--</div>--%>
         <div class="col-xs-6">
-            <button class="btn btn-success " type="button" id="confirm">确定</button>
+            <button class="btn btn-success " type="button" id="confirm" disabled="disabled">确定</button>
         </div>
     </div>
 </div>
@@ -94,6 +95,7 @@
     }
 
     function calcAmount() {
+        var openId = $("#openId").val();
         var data = {openId: openId};
         var receiverAddr = $("#receiverAddr").val();
         var companyId = $("#company").val();
@@ -103,39 +105,34 @@
         if (receiverProvinceId != '') {
             data.receiverProvinceId = receiverProvinceId;
         } else {
-            alert("请选择收件人省份");
             return false;
         }
         if (receiverCityId != '') {
             data.receiverCityId = receiverCityId;
         } else {
-            alert("请选择收件人市区");
             return false;
         }
         if (receiverDistrictId != '') {
             data.receiverDistrictId = receiverDistrictId;
         } else {
-            alert("请选择收件人区县");
             return false;
         }
         if (receiverAddr != '') {
             data.receiverAddr = receiverAddr;
         } else {
-            alert("请输入收件人详细地址");
             return false;
         }
         if (companyId != '') {
             data.companyId = companyId;
         } else {
-            alert("请选择快递公司");
             return false;
         }
         $.get("/calc/0", data, function (result) {
             if (result.status != 200) {
                 alert(result.msg);
             } else {
-                var element = $("#price");
-                element.html(result.data);
+                $("#price").html(result.data);
+                $("#confirm").attr("disabled",false);
             }
         });
 
