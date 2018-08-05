@@ -94,9 +94,52 @@
     }
 
     function calcAmount() {
-        var element = $("#price");
-        var a = parseFloat(element.text()) + parseFloat(0.01);
-        element.html(a);
+        var data = {openId: openId};
+        var receiverAddr = $("#receiverAddr").val();
+        var companyId = $("#company").val();
+        var receiverProvinceId = $("#province").val();
+        var receiverCityId = $("#city").val();
+        var receiverDistrictId = $("#area").val();
+        if (receiverProvinceId != '') {
+            data.receiverProvinceId = receiverProvinceId;
+        } else {
+            alert("请选择收件人省份");
+            return false;
+        }
+        if (receiverCityId != '') {
+            data.receiverCityId = receiverCityId;
+        } else {
+            alert("请选择收件人市区");
+            return false;
+        }
+        if (receiverDistrictId != '') {
+            data.receiverDistrictId = receiverDistrictId;
+        } else {
+            alert("请选择收件人区县");
+            return false;
+        }
+        if (receiverAddr != '') {
+            data.receiverAddr = receiverAddr;
+        } else {
+            alert("请输入收件人详细地址");
+            return false;
+        }
+        if (companyId != '') {
+            data.companyId = companyId;
+        } else {
+            alert("请选择快递公司");
+            return false;
+        }
+        $.get("/calc/0", data, function (result) {
+            if (result.status != 200) {
+                alert(result.msg);
+            } else {
+                var element = $("#price");
+                element.html(result.data);
+            }
+        });
+
+
     }
 
     $("#confirm").click(function () {
@@ -159,7 +202,6 @@
         $.post("/express/0/create", data, function (result) {
             if (result.status != 200) {
                 alert(result.msg);
-                return;
             } else {
                 var orderNo = result.data;
                 alert(orderNo);
