@@ -26,4 +26,6 @@ public interface OrderInfoMapper extends BaseDao {
     OrderInfo findByOrderNo(String orderNo);
 
     OrderInfo findByExpressIdAndType(@Param("expressId") Long expressId, @Param("expressType") int expressType);
+
+	List<OrderInfo> getNotPayOrder(Map<String, Object> map);
 }

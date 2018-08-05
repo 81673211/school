@@ -10,6 +10,6 @@
 	
 	<import resource="profile/applicationContext-profile.xml" />
 	
-<!-- 	<import resource="schedule/applicationContext-quartz.xml" /> -->
+	<import resource="schedule/applicationContext-quartz.xml" />
 
 </beans>

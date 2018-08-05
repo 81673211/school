@@ -8,11 +8,43 @@
 		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-				
+				<!-- 1.未决流水查询：处于支付处理中的订单，下单10分钟后。（每5分钟执行一次） -->
+				<ref bean="NotPayOrderTrigger"/>
+				<!-- 2.未决流水超时：将下单超过2小时依旧处于未支付的订单置为超时（每个小时执行一次） -->
+				<ref bean="NotPayOrderExpireTigger"/>
 			</list>
 		</property>
 		<property name="configLocation"
 			value="classpath:config/quartz.properties" />
+		<property name="startupDelay" value="10"/> <!-- 项目启动后延迟开始 -->	
+	</bean>
+		
+	<!-- 未决流水查询 -->
+	<bean id="NotPayOrderTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="NotPayOrderJob" />
+		<!-- 每5分钟运行一次 -->
+		<property name="cronExpression" value="0 0/1 * * * ?" />
+	</bean>
+	<bean id="NotPayOrderJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="NotPayOrderQuartz" />
+		<property name="targetMethod" value="execute" />
+		<property name="concurrent" value="false"/><!--配置为false不允许任务并发执行--> 
+	</bean>
+	
+	<!-- 未决流水超时 -->
+	<bean id="NotPayOrderExpireTigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="NotPayOrderExpireJob" />
+		<!-- 每天运行一次 -->
+		<property name="cronExpression" value="0 0/1 * * * ?" />
+	</bean>
+	<bean id="NotPayOrderExpireJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="NotPayOrderExpireQuartz" />
+		<property name="targetMethod" value="execute" />
+		<property name="concurrent" value="false"/><!--配置为false不允许任务并发执行--> 
 	</bean>
 </beans>
 

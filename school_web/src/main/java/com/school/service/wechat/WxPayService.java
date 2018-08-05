@@ -16,5 +16,5 @@ public interface WxPayService {
 	 * 微信通知
 	 */
 	String wxPayNotify(HttpServletRequest request) throws Exception;
-
+	
 }

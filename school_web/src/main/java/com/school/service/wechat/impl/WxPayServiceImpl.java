@@ -29,6 +29,7 @@ import com.school.enumeration.ExpressTypeEnum;
 import com.school.enumeration.OrderStatusEnum;
 import com.school.enumeration.ReceiveExpressStatusEnum;
 import com.school.service.express.ExpressReceiveService;
+import com.school.service.order.OrderInfoService;
 import com.school.service.wechat.WxPayService;
 import com.school.util.core.utils.AmountUtils;
 
@@ -44,6 +45,8 @@ public class WxPayServiceImpl implements WxPayService {
     private CustomerMapper customerMapper;
     @Autowired
     private ExpressReceiveService expressReceiveService;
+    @Autowired
+    private OrderInfoService orderInfoService;
 
     @Override
     public TreeMap<String, String> doUnifiedOrder(String orderNo) throws Exception {
@@ -109,7 +112,7 @@ public class WxPayServiceImpl implements WxPayService {
                 treeMap.put("paySign", paySign);
                 treeMap.put("openId", openId);
                 // 将订单置为支付处理中
-                this.orderPaying(orderInfo);
+                orderInfoService.orderPaying(orderInfo);
             } else {
                 throw new Exception("微信统一下单失败:" + result.get("err_code_des"));
             }
@@ -118,19 +121,6 @@ public class WxPayServiceImpl implements WxPayService {
             log.error("微信统一下单失败：" + e.getMessage());
             throw new Exception("微信统一下单失败");
         }
-    }
-
-    /**
-     * 将订单更新为支付处理中
-     * @param orderInfo
-     */
-    private void orderPaying(OrderInfo orderInfo) {
-        if (orderInfo == null) {
-            return;
-        }
-        orderInfo.setStatus(OrderStatusEnum.PAYING.getCode());
-        orderInfo.setSucTime(new Date());
-        orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
     }
 
     /**
@@ -228,7 +218,7 @@ public class WxPayServiceImpl implements WxPayService {
             }
 
             // 将订单置为成功
-            this.orderSuccess(orderInfo);
+            orderInfoService.orderSuccess(orderInfo);
             // 更新快件状态
             Integer expressType = orderInfo.getExpressType();
             if (ExpressTypeEnum.RECEIVE.getFlag() == expressType) {
@@ -240,19 +230,6 @@ public class WxPayServiceImpl implements WxPayService {
             }
         }
         return resXml;
-    }
-
-    /**
-     * 将订单更新为成功
-     * @param orderInfo
-     */
-    private void orderSuccess(OrderInfo orderInfo) {
-        if (orderInfo == null) {
-            return;
-        }
-        orderInfo.setStatus(OrderStatusEnum.SUCCESS.getCode());
-        orderInfo.setSucTime(new Date());
-        orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
     }
 
     /**

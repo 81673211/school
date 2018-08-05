@@ -15,8 +15,14 @@ import com.school.exception.OrderException;
 import com.school.service.base.impl.BaseServiceImpl;
 import com.school.service.calc.CalcCostService;
 import com.school.service.order.OrderInfoService;
+import com.school.util.core.utils.DateUtil;
 import com.school.util.core.utils.RandomUtil;
 import com.school.vo.request.OrderCreateVo;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -134,6 +140,54 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
         orderInfo.setOrderNo(RandomUtil.GenerateOrderNo(Constants.idWorker, ConstantMap.ORDER_NO_TYPE_ORDER));
         orderInfo.setNotifyUrl(Constants.WXPAY_NOTIFY_URL);
         return orderInfo;
+    }
+
+	@Override
+	public List<OrderInfo> getNotPayOrder() {
+		Map<String, Object> map = new HashMap<String,Object>();
+		map.put("tenMinutesAgo", DateUtil.offsiteMinute(new Date(), -10));
+		return orderInfoMapper.getNotPayOrder(map);
+	}
+	
+	/**
+     * 将订单更新为成功
+     * @param orderInfo
+     */
+    @Override
+    public void orderSuccess(OrderInfo orderInfo) {
+        if (orderInfo == null) {
+            return;
+        }
+        orderInfo.setStatus(OrderStatusEnum.SUCCESS.getCode());
+        orderInfo.setSucTime(new Date());
+        orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
+    }
+    
+    /**
+     * 将订单更新为支付处理中
+     * @param orderInfo
+     */
+    @Override
+    public void orderPaying(OrderInfo orderInfo) {
+        if (orderInfo == null) {
+            return;
+        }
+        orderInfo.setStatus(OrderStatusEnum.PAYING.getCode());
+        orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
+    }
+    
+    /**
+     * 将订单更新为失败
+     * @param orderInfo
+     */
+    @Override
+    public void orderFailed(OrderInfo orderInfo) {
+    	if (orderInfo == null) {
+    		return;
+    	}
+    	orderInfo.setStatus(OrderStatusEnum.FAILED.getCode());
+    	orderInfo.setSucTime(new Date());
+    	orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
     }
 
 }

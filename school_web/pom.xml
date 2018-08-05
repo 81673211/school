@@ -330,6 +330,11 @@
 		    <artifactId>wxpay-sdk</artifactId>
 		    <version>0.0.3</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+		</dependency>
 	</dependencies>
 	<build>
 		<pluginManagement>

@@ -1,5 +1,7 @@
 package com.school.service.order;
 
+import java.util.List;
+
 import com.school.dao.order.OrderInfoMapper;
 import com.school.domain.entity.order.OrderInfo;
 import com.school.exception.OrderException;
@@ -15,4 +17,12 @@ public interface OrderInfoService extends BaseService<OrderInfo, OrderInfoMapper
 	String createReceiveOrder(OrderCreateVo vo) throws OrderException;
 
 	OrderInfo findByExpressReceiveId(Long expressId);
+	
+	List<OrderInfo> getNotPayOrder();
+
+	void orderSuccess(OrderInfo orderInfo);
+
+	void orderPaying(OrderInfo orderInfo);
+
+	void orderFailed(OrderInfo orderInfo);
 }

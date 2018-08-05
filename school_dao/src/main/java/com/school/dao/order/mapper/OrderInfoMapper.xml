@@ -214,4 +214,9 @@
     order by created_time DESC
     LIMIT 1
   </select>
+  
+  <select id="getNotPayOrder" parameterType="map" resultType="com.school.domain.entity.order.OrderInfo">
+  	select * from order_info o
+	where o.status = 3 and o.created_time &lt;= #{tenMinutesAgo,jdbcType=VARCHAR}
+  </select>
 </mapper>

@@ -366,6 +366,16 @@ public class DateUtil {
 	public static DateTime offsiteHour(Date date, int offsite) {
 		return offsiteDate(date, Calendar.HOUR_OF_DAY, offsite);
 	}
+	
+	/**
+	 * 偏移分钟
+	 * @param date 日期
+	 * @param offsite 偏移分钟数，正数向未来偏移，负数向历史偏移
+	 * @return 偏移后的日期
+	 */
+	public static DateTime offsiteMinute(Date date, int offsite) {
+		return offsiteDate(date, Calendar.MINUTE, offsite);
+	}
 
 	/**
 	 * 偏移周
