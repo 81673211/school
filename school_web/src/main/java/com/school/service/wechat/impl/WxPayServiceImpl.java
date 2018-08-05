@@ -1,18 +1,5 @@
 package com.school.service.wechat.impl;
 
-import java.math.BigDecimal;
-import java.net.InetAddress;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.alibaba.fastjson.JSON;
 import com.github.wxpay.sdk.WXPay;
 import com.github.wxpay.sdk.WXPayConfigImpl;
@@ -24,15 +11,23 @@ import com.school.dao.customer.CustomerMapper;
 import com.school.dao.order.OrderInfoMapper;
 import com.school.domain.entity.customer.Customer;
 import com.school.domain.entity.order.OrderInfo;
-import com.school.enumeration.DistributionTypeEnum;
-import com.school.enumeration.ExpressTypeEnum;
-import com.school.enumeration.OrderStatusEnum;
-import com.school.enumeration.ReceiveExpressStatusEnum;
+import com.school.enumeration.*;
 import com.school.service.express.ExpressReceiveService;
+import com.school.service.express.ExpressSendService;
 import com.school.service.wechat.WxPayService;
 import com.school.util.core.utils.AmountUtils;
-
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
+import java.net.InetAddress;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 @Slf4j
 @Service
@@ -44,6 +39,8 @@ public class WxPayServiceImpl implements WxPayService {
     private CustomerMapper customerMapper;
     @Autowired
     private ExpressReceiveService expressReceiveService;
+    @Autowired
+    private ExpressSendService expressSendService;
 
     @Override
     public TreeMap<String, String> doUnifiedOrder(String orderNo) throws Exception {
@@ -122,6 +119,7 @@ public class WxPayServiceImpl implements WxPayService {
 
     /**
      * 将订单更新为支付处理中
+     *
      * @param orderInfo
      */
     private void orderPaying(OrderInfo orderInfo) {
@@ -135,6 +133,7 @@ public class WxPayServiceImpl implements WxPayService {
 
     /**
      * 修改订单状态，获取微信回调结果
+     *
      * @param request
      * @return
      * @throws Exception
@@ -205,13 +204,13 @@ public class WxPayServiceImpl implements WxPayService {
         //本地计算签名与微信返回签名不同||返回结果为不成功
         if (!sign.equals(localSign) || !"SUCCESS".equals(result_code) || !"SUCCESS".equals(return_code)) {
             resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>"
-                     + "<return_msg><![CDATA[FAIL]]></return_msg>" + "</xml> ";
+                    + "<return_msg><![CDATA[FAIL]]></return_msg>" + "</xml> ";
             log.error("验证签名失败或返回错误:" + resXml);
         } else {
             log.info("支付成功");
             log.debug("公众号支付成功，out_trade_no(订单号)为：" + out_trade_no);
             resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>"
-                     + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
+                    + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
 
             // 校验金额是否正确
             OrderInfo orderInfo = orderInfoMapper.findByOrderNo(out_trade_no);
@@ -233,10 +232,10 @@ public class WxPayServiceImpl implements WxPayService {
             Integer expressType = orderInfo.getExpressType();
             if (ExpressTypeEnum.RECEIVE.getFlag() == expressType) {
                 expressReceiveService.updateReceiveExpress(orderInfo.getExpressId(),
-                                                           ReceiveExpressStatusEnum.WAIT_INTO_BOX.getFlag(),
-                                                           DistributionTypeEnum.DISTRIBUTION.getFlag());
+                        ReceiveExpressStatusEnum.WAIT_INTO_BOX.getFlag(),
+                        DistributionTypeEnum.DISTRIBUTION.getFlag());
             } else {
-                //TODO 寄件状态更新
+                expressSendService.updateSendExpressStatus(orderInfo.getExpressId(), SendExpressStatusEnum.WAIT_SMQJ.getFlag());
             }
         }
         return resXml;
@@ -244,6 +243,7 @@ public class WxPayServiceImpl implements WxPayService {
 
     /**
      * 将订单更新为成功
+     *
      * @param orderInfo
      */
     private void orderSuccess(OrderInfo orderInfo) {
@@ -257,6 +257,7 @@ public class WxPayServiceImpl implements WxPayService {
 
     /**
      * 解析XML 获得名称为para的参数值
+     *
      * @param xml
      * @param para
      * @return
@@ -269,7 +270,7 @@ public class WxPayServiceImpl implements WxPayService {
             return null;
         }
         return xml.substring(start + ("<" + para + ">").length(), end).replace("<![CDATA[", "").replace("]]>",
-                                                                                                        "");
+                "");
     }
 
 }

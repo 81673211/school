@@ -28,9 +28,12 @@
                                  发起寄件
                              </c:when>
                              <c:when test="${item.expressStatus == 1}">
-                                 代理点已签收
+                                 等待上门取件
                              </c:when>
                              <c:when test="${item.expressStatus == 2}">
+                                 代收点已签收
+                             </c:when>
+                             <c:when test="${item.expressStatus == 3}">
                                  已寄出
                              </c:when>
                          </c:choose></span></label>

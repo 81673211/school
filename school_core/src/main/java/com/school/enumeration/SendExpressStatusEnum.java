@@ -9,6 +9,7 @@ import java.util.Map;
 public enum SendExpressStatusEnum {
 
     CREATE(0, "已发起寄件"),
+    WAIT_SMQJ(2, "等待上门取件"),
     PROXY_RECIEVED(1, "代理点已签收"),
     BE_SEND(2, "已寄出");
 
@@ -20,23 +21,23 @@ public enum SendExpressStatusEnum {
         this.flag = flag;
         this.message = message;
     }
-    
-    public static SendExpressStatusEnum parseObj(Integer code){
-    	for (SendExpressStatusEnum o : SendExpressStatusEnum.values()) {
-    		if(o.flag == code){
-    			return o;
-    		}
-		}
-    	return null;
+
+    public static SendExpressStatusEnum parseObj(Integer code) {
+        for (SendExpressStatusEnum o : SendExpressStatusEnum.values()) {
+            if (o.flag == code) {
+                return o;
+            }
+        }
+        return null;
     }
-    
-    public static Map<Object, String> getAllStatusEnum(){
-    	Map<Object, String> resultMap = new HashMap<Object,String>();
-    	SendExpressStatusEnum[] sendExpressStatusEnums = SendExpressStatusEnum.values();
-    	for (SendExpressStatusEnum sendExpressStatusEnum : sendExpressStatusEnums) {
-			resultMap.put(sendExpressStatusEnum.flag, sendExpressStatusEnum.message);
-		}
-    	return resultMap;
+
+    public static Map<Object, String> getAllStatusEnum() {
+        Map<Object, String> resultMap = new HashMap<Object, String>();
+        SendExpressStatusEnum[] sendExpressStatusEnums = SendExpressStatusEnum.values();
+        for (SendExpressStatusEnum sendExpressStatusEnum : sendExpressStatusEnums) {
+            resultMap.put(sendExpressStatusEnum.flag, sendExpressStatusEnum.message);
+        }
+        return resultMap;
     }
 
     public int getFlag() {
