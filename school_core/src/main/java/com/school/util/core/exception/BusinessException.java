@@ -1,6 +1,6 @@
 /**
  * Title: MOBAO <BR>
- * Description: todo Copyright: Copyright (c) 2014-2015<BR>
+ * Description: Copyright: Copyright (c) 2014-2015<BR>
  * Company: 成都摩宝网络科技有限公司(www.mobo360.com/)<BR>
  * 
  * @author linqingsong
