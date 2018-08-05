@@ -3,18 +3,15 @@ package com.school.service.express.impl;
 import com.school.dao.customer.CustomerMapper;
 import com.school.dao.express.ExpressCompanyMapper;
 import com.school.dao.express.ExpressSendMapper;
-import com.school.dao.order.OrderInfoMapper;
 import com.school.dao.region.RegionMapper;
 import com.school.domain.entity.customer.Customer;
 import com.school.domain.entity.express.ExpressCompany;
 import com.school.domain.entity.express.ExpressSend;
-import com.school.domain.entity.order.OrderInfo;
 import com.school.domain.entity.region.Region;
 import com.school.enumeration.ExpressTypeEnum;
 import com.school.exception.ExpressException;
 import com.school.exception.ExpressStatusException;
 import com.school.service.base.impl.BaseServiceImpl;
-import com.school.service.calc.CalcCostService;
 import com.school.service.express.ExpressSendService;
 import com.school.service.order.OrderInfoService;
 import com.school.util.core.Log;
@@ -24,12 +21,10 @@ import com.school.vo.request.SendExpressCreateVo;
 import com.school.vo.request.SendExpressModifyVo;
 import com.school.vo.response.SendExpressListResponseVo;
 import com.school.vo.response.SendExpressResponseVo;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,7 +49,7 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
     private OrderInfoService orderInfoService;
 
     @Override
-    public void createSendExpress(SendExpressCreateVo expressVo) throws ExpressException {
+    public String createSendExpress(SendExpressCreateVo expressVo) throws ExpressException {
         try {
             ExpressSend expressSend = converterVo2Po(expressVo, ExpressSend.class);
             boxExpressCompany(expressSend);
@@ -67,7 +62,7 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
             }
             OrderCreateVo vo = new OrderCreateVo();
             vo.setExpressId(expressSend.getId());
-            orderInfoService.createSendOrder(vo);
+            return orderInfoService.createSendOrder(vo);
         } catch (Exception e) {
             String message = "throw exception when create send express";
             Log.error.error(message, e);

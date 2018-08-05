@@ -157,7 +157,14 @@
             return false;
         }
         $.post("/express/0/create", data, function (result) {
-            alert(result.msg);
+            if (result.status != 200) {
+                alert(result.msg);
+                return;
+            } else {
+                var orderNo = result.data;
+                alert(orderNo);
+                window.location.href = "http://www.glove1573.cn/wxpay/pay?orderNo=" + orderNo;
+            }
         });
     });
 

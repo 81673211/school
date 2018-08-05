@@ -10,7 +10,7 @@ public interface OrderInfoService extends BaseService<OrderInfo, OrderInfoMapper
 
 	OrderInfo findByOrderNo(String orderNo);
 
-	void createSendOrder(OrderCreateVo vo) throws OrderException;
+	String createSendOrder(OrderCreateVo vo) throws OrderException;
 
 	String createReceiveOrder(OrderCreateVo vo) throws OrderException;
 

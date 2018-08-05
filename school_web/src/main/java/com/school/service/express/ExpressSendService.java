@@ -19,9 +19,9 @@ public interface ExpressSendService extends BaseService<ExpressSend, ExpressSend
      * 创建寄件快件流程
      *
      * @param expressVo
-     * @return
+     * @return 返回订单号
      */
-    void createSendExpress(SendExpressCreateVo expressVo) throws ExpressException;
+    String createSendExpress(SendExpressCreateVo expressVo) throws ExpressException;
 
     /**
      * 编辑寄件快件

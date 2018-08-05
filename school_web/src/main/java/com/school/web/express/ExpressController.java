@@ -1,17 +1,5 @@
 package com.school.web.express;
 
-import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.school.common.model.DataResponse;
 import com.school.common.model.Response;
 import com.school.domain.entity.customer.Customer;
@@ -24,15 +12,20 @@ import com.school.service.express.ExpressSendService;
 import com.school.service.region.RegionService;
 import com.school.service.wechat.OauthService;
 import com.school.vo.BaseVo;
-import com.school.vo.request.ExpressGetVo;
-import com.school.vo.request.ExpressStatusModifyVo;
-import com.school.vo.request.ReceiveExpressCreateVo;
-import com.school.vo.request.ReceiveExpressModifyVo;
-import com.school.vo.request.SendExpressCreateVo;
-import com.school.vo.request.SendExpressModifyVo;
+import com.school.vo.request.*;
 import com.school.web.base.BaseEasyWebController;
-
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 /**
  * @author jame
@@ -65,14 +58,14 @@ public class ExpressController extends BaseEasyWebController {
      */
     @RequestMapping(value = "/0/create", method = RequestMethod.POST)
     public Response createSendExpress(@Validated SendExpressCreateVo expressVo, BindingResult bindingResult) {
-        Response response = new Response();
+        DataResponse<String> response = new DataResponse<>();
         checkValid(bindingResult, response);
         if (response.getStatus() != HTTP_SUCCESS) {
             return response;
         }
         try {
-            expressSendService.createSendExpress(expressVo);
-            return response.writeSuccess("创建寄件快件成功");
+            String orderNo = expressSendService.createSendExpress(expressVo);
+            return response.writeSuccess("创建寄件快件成功", orderNo);
         } catch (Exception e) {
             return response.writeFailure("创建寄件快件失败");
         }
@@ -329,7 +322,7 @@ public class ExpressController extends BaseEasyWebController {
      * @return
      */
     @RequestMapping(value = "/sending", method = RequestMethod.GET)
-    public ModelAndView sending(@RequestParam(value = "openId") String openId) {
+    public ModelAndView sending(@RequestParam(value = "openId", required = true) String openId) {
         ModelAndView modelAndView = new ModelAndView();
         try {
             List<BaseVo> regionList = regionService.selectRegionList(null);
