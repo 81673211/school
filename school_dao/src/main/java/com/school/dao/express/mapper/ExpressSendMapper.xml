@@ -232,12 +232,14 @@
         select es.* from express_send es
         <where>
             <if test="keyword != null and keyword != '' ">
-                and (es.name like concat('%',#{keyword},'%')
-                or es.code like concat('%',#{keyword},'%')
+                and (es.code like concat('%',#{keyword},'%')
                 or es.sender_name like concat('%',#{keyword},'%')
                 or es.sender_phone like concat('%',#{keyword},'%')
                 or es.receiver_name like concat('%',#{keyword},'%')
                 or es.receiver_phone like concat('%',#{keyword},'%'))
+            </if>
+            <if test="status != null and status != ''">
+            	and es.express_status = #{status,jdbcType=INTEGER}
             </if>
         </where>
         ORDER BY es.id desc

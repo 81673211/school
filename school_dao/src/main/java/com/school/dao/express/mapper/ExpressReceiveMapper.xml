@@ -238,6 +238,9 @@
                 or er.receiver_name like concat('%',#{keyword},'%')
                 or er.receiver_phone like concat('%',#{keyword},'%'))
             </if>
+            <if test="status != null and status != ''">
+            	and er.express_status = #{status,jdbcType=INTEGER}
+            </if>
         </where>
         ORDER BY er.id desc
     </select>
