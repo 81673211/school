@@ -51,14 +51,17 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
     }
 
     @Override
-    public void createSendOrder(OrderCreateVo vo) throws OrderException {
+    public String createSendOrder(OrderCreateVo vo) throws OrderException {
         try {
             ExpressSend expressSend = expressSendMapper.selectByPrimaryKey(vo.getExpressId());
-            if (!(orderInfoMapper.insertSelective(initOrderInfo(expressSend)) > 0)) {
+            OrderInfo orderInfo = initOrderInfo(expressSend);
+            if (!(orderInfoMapper.insertSelective(orderInfo) > 0)) {
                 String message =
                         "create send order error,when insert table 'order_info' the number of affected rows is 0";
                 log.error(message);
                 throw new OrderException(message);
+            } else {
+                return orderInfo.getOrderNo();
             }
         } catch (Exception e) {
             String message = "throw exception when create send order";
@@ -98,8 +101,8 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
             throw new RuntimeException("快递已成功支付过，请勿重复支付.");
         }
         return OrderStatusEnum.FAILED.getCode() == status ||
-               OrderStatusEnum.PAYING.getCode() == status ||
-               OrderStatusEnum.EXPIRED.getCode() == status;
+                OrderStatusEnum.PAYING.getCode() == status ||
+                OrderStatusEnum.EXPIRED.getCode() == status;
     }
 
     @Override
