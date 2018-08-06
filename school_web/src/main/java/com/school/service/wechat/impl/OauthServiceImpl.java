@@ -78,70 +78,71 @@ public class OauthServiceImpl implements OauthService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        OAuthToken authToken = null;
-        try {
-            JSONObject json = JSON.parseObject(response);
-            authToken = new OAuthToken(json.getString("access_token"),
-                                       json.getIntValue("expires_in"),
-                                       json.getString("refresh_token"),
-                                       json.getString("openid"),
-                                       json.getString("scope"),
-                                       System.currentTimeMillis());
-            redisTemplate.opsForValue().set(authToken.getOpenId(), JSON.toJSONString(authToken));
-            log.info("set into redis, openId:{}", authToken.getOpenId());
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
+        JSONObject json = JSON.parseObject(response);
+        OAuthToken authToken = new OAuthToken(json.getString("access_token"),
+                                              json.getIntValue("expires_in"),
+                                              json.getString("refresh_token"),
+                                              json.getString("openid"),
+                                              json.getString("scope"),
+                                              System.currentTimeMillis());
+        redisTemplate.opsForValue().set(authToken.getOpenId(), JSON.toJSONString(authToken));
         return authToken;
     }
 
     @Override
     public boolean check(String openId) {
-        String accessToken = redisTemplate.opsForValue().get(openId);
-        OAuthToken authToken = JSON.parseObject(accessToken, OAuthToken.class);
-        if (authToken == null) {
-            log.warn("有未授权访问网页发生，openId:{}", openId);
-            return false;
-        }
-        if (hasExpired(authToken)) {
-            log.info("get refreshToken");
-            String refreshTokenUrl = WechatUrl.OAUTH_TOKEN_REFRESH_URL
-                    .replace("${APPID}", ConstantWeChat.APPID)
-                    .replace("${REFRESH_TOKEN}", authToken.getRefreshToken());
-            String response;
-            try {
-                response = HttpUtil.get(refreshTokenUrl, "utf8", false);
-                log.info("getRefreshAuthToken response:{}", response);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+        try {
+            log.info("start check auth, openId:{}", openId);
+            String accessToken = redisTemplate.opsForValue().get(openId);
+            log.info("cached auth token, accessToken:{}", accessToken);
+            OAuthToken authToken = JSON.parseObject(accessToken, OAuthToken.class);
+            if (authToken == null) {
+                log.warn("有未授权访问网页发生，openId:{}", openId);
+                return false;
             }
-            JSONObject json = JSON.parseObject(response);
-            if (json.containsKey("errcode")) {
-                throw new RuntimeException(json.getString("errmsg"));
+            if (hasExpired(authToken)) {
+                log.info("get refreshToken");
+                String refreshTokenUrl = WechatUrl.OAUTH_TOKEN_REFRESH_URL
+                        .replace("${APPID}", ConstantWeChat.APPID)
+                        .replace("${REFRESH_TOKEN}", authToken.getRefreshToken());
+                String response;
+                try {
+                    response = HttpUtil.get(refreshTokenUrl, "utf8", false);
+                    log.info("getRefreshAuthToken response:{}", response);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                JSONObject json = JSON.parseObject(response);
+                if (json.containsKey("errcode")) {
+                    throw new RuntimeException(json.getString("errmsg"));
+                }
+                authToken = new OAuthToken(json.getString("access_token"),
+                                                      json.getIntValue("expires_in"),
+                                                      json.getString("refresh_token"),
+                                                      json.getString("openid"),
+                                                      json.getString("scope"),
+                                                      System.currentTimeMillis());
+                redisTemplate.opsForValue().set(authToken.getOpenId(), JSON.toJSONString(authToken));
+                return true;
+            } else {
+    //            String checkUrl = WechatUrl.OAUTH_TOKEN_CHECK_URL
+    //                    .replace("${ACCESS_TOKEN}", authToken.getAccessToken())
+    //                    .replace("${OPEN_ID}", openId);
+    //            String response;
+    //            try {
+    //                response = HttpUtil.get(checkUrl, "utf8", false);
+    //                log.info("checkAuthToken response:{}", response);
+    //            } catch (IOException e) {
+    //                throw new RuntimeException(e);
+    //            }
+    //            JSONObject jsonObject = JSON.parseObject(response);
+    //            if (jsonObject.get("errcode"))
+                return true;
             }
-            authToken = new OAuthToken(json.getString("access_token"),
-                                                  json.getIntValue("expires_in"),
-                                                  json.getString("refresh_token"),
-                                                  json.getString("openid"),
-                                                  json.getString("scope"),
-                                                  System.currentTimeMillis());
-            redisTemplate.opsForValue().set(authToken.getOpenId(), JSON.toJSONString(authToken));
-            return true;
-        } else {
-//            String checkUrl = WechatUrl.OAUTH_TOKEN_CHECK_URL
-//                    .replace("${ACCESS_TOKEN}", authToken.getAccessToken())
-//                    .replace("${OPEN_ID}", openId);
-//            String response;
-//            try {
-//                response = HttpUtil.get(checkUrl, "utf8", false);
-//                log.info("checkAuthToken response:{}", response);
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//            JSONObject jsonObject = JSON.parseObject(response);
-//            if (jsonObject.get("errcode"))
-            return true;
+        } catch (RuntimeException e) {
+            log.error(e.getMessage());
         }
+        return false;
     }
 
     private boolean hasExpired(OAuthToken token) {
