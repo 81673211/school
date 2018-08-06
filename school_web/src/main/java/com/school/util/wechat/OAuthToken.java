@@ -1,6 +1,5 @@
 package com.school.util.wechat;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -9,7 +8,6 @@ import lombok.Data;
  * @version 1.0
  */
 @Data
-@AllArgsConstructor
 public class OAuthToken {
 	/**
 	 * 网页授权接口调用凭证,注意：此access_token与基础支持的access_token不同
@@ -41,4 +39,16 @@ public class OAuthToken {
 	 */
 	private long cacheTime;
 
+	public OAuthToken() {
+	}
+
+	public OAuthToken(String accessToken, int expiresIn, String refreshToken, String openId, String scope,
+					  long cacheTime) {
+		this.accessToken = accessToken;
+		this.expiresIn = expiresIn;
+		this.refreshToken = refreshToken;
+		this.openId = openId;
+		this.scope = scope;
+		this.cacheTime = cacheTime;
+	}
 }
