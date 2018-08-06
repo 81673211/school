@@ -74,7 +74,7 @@ public class OauthServiceImpl implements OauthService {
         String response;
         try {
             response = HttpUtil.get(getOAuthTokenUrl, "utf8", false);
-            log.info("getAuthToken response:{}", response);
+            log.info("getAuthToken, code:{}, response:{}", code, response);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
