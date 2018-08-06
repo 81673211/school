@@ -86,14 +86,13 @@ public class OauthServiceImpl implements OauthService {
                                               json.getString("scope"),
                                               System.currentTimeMillis());
         String toJSONString = JSON.toJSONString(authToken);
-        log.info("toJSONString:{}", toJSONString);
         redisTemplate.opsForValue().set("authToken:" + authToken.getOpenId(), toJSONString);
         return authToken;
     }
 
     @Override
     public boolean check(String openId) {
-        String accessToken = redisTemplate.opsForValue().get(openId);
+        String accessToken = redisTemplate.opsForValue().get("authToken:" + openId);
         OAuthToken authToken = JSON.parseObject(accessToken, OAuthToken.class);
         if (authToken == null) {
             log.warn("有未授权访问网页发生，openId:{}", openId);
@@ -121,7 +120,7 @@ public class OauthServiceImpl implements OauthService {
                                        json.getString("openid"),
                                        json.getString("scope"),
                                        System.currentTimeMillis());
-            redisTemplate.opsForValue().set(authToken.getOpenId(), JSON.toJSONString(authToken));
+            redisTemplate.opsForValue().set("authToken:" + authToken.getOpenId(), JSON.toJSONString(authToken));
             return true;
         } else {
             //            String checkUrl = WechatUrl.OAUTH_TOKEN_CHECK_URL
@@ -141,6 +140,6 @@ public class OauthServiceImpl implements OauthService {
     }
 
     private boolean hasExpired(OAuthToken token) {
-        return (System.currentTimeMillis() - token.getCacheTime()) > token.getExpiresIn();
+        return (System.currentTimeMillis() - token.getCacheTime()) > token.getExpiresIn() * 1000;
     }
 }
