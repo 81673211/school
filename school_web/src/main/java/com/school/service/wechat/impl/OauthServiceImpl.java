@@ -87,7 +87,7 @@ public class OauthServiceImpl implements OauthService {
                                               System.currentTimeMillis());
         String toJSONString = JSON.toJSONString(authToken);
         log.info("toJSONString:{}", toJSONString);
-        redisTemplate.opsForValue().set(authToken.getOpenId(), toJSONString);
+        redisTemplate.opsForValue().set("authToken:" + authToken.getOpenId(), toJSONString);
         return authToken;
     }
 
