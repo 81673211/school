@@ -112,6 +112,7 @@ public class OauthServiceImpl implements OauthService {
             }
             JSONObject json = JSON.parseObject(response);
             if (json.containsKey("errcode")) {
+                //TODO 判断是否refreshToken超时，若是，则重新授权即可
                 throw new RuntimeException(json.getString("errmsg"));
             }
             authToken = new OAuthToken(json.getString("access_token"),
