@@ -78,15 +78,20 @@ public class OauthServiceImpl implements OauthService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        JSONObject json = JSON.parseObject(response);
-        OAuthToken authToken = new OAuthToken(json.getString("access_token"),
-                                              json.getIntValue("expires_in"),
-                                              json.getString("refresh_token"),
-                                              json.getString("openid"),
-                                              json.getString("scope"),
-                                              System.currentTimeMillis());
-        redisTemplate.opsForValue().set(authToken.getOpenId(), JSON.toJSONString(authToken));
-        log.info("set into redis, openId:{}", authToken.getOpenId());
+        OAuthToken authToken = null;
+        try {
+            JSONObject json = JSON.parseObject(response);
+            authToken = new OAuthToken(json.getString("access_token"),
+                                       json.getIntValue("expires_in"),
+                                       json.getString("refresh_token"),
+                                       json.getString("openid"),
+                                       json.getString("scope"),
+                                       System.currentTimeMillis());
+            redisTemplate.opsForValue().set(authToken.getOpenId(), JSON.toJSONString(authToken));
+            log.info("set into redis, openId:{}", authToken.getOpenId());
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
         return authToken;
     }
 
