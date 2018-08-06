@@ -48,6 +48,7 @@ public class OAuthInterceptor implements HandlerInterceptor{
 			Object arg2) throws IOException {
 
 		String requestURI = request.getRequestURI();
+		log.info("requestUri:{}", requestURI);
 		if (requestURI.startsWith("/wx/proxy")) {
 			return true;
 		}

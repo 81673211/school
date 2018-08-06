@@ -86,6 +86,7 @@ public class OauthServiceImpl implements OauthService {
                                               json.getString("scope"),
                                               System.currentTimeMillis());
         redisTemplate.opsForValue().set(authToken.getOpenId(), JSON.toJSONString(authToken));
+        log.info("set into redis, openId:{}", authToken.getOpenId());
         return authToken;
     }
 
