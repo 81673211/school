@@ -17,4 +17,6 @@ public interface OauthService {
     UserWechat getDetail(String openId, String accessToken);
 
     OAuthToken getOAuthToken(String code);
+
+    boolean check(String openId);
 }

@@ -36,4 +36,9 @@ public class OAuthToken {
 	 */
 	private String scope;
 
+	/**
+	 * 缓存时间.
+	 */
+	private long cacheTime;
+
 }

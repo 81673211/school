@@ -46,9 +46,17 @@ public class OAuthInterceptor implements HandlerInterceptor{
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
 			Object arg2) throws IOException {
-		String code = request.getParameter("code");
-		OAuthToken oAuthToken = oauthService.getOAuthToken(code);
-		String openId = oAuthToken.getOpenId();
+
+		String requestURI = request.getRequestURI();
+		if (requestURI.startsWith("/wx/proxy")) {
+			return true;
+		}
+		String openId = request.getParameter("openId");
+		if (StringUtils.isBlank(openId)) {
+		    log.info("openId not found");
+		    return false;
+        }
+		oauthService.check(openId);
 		Customer customer = customerService.getByOpenId(openId);
 		log.info("customer:{}, openId:{}", customer, openId);
 		if (customer == null || !customer.isSubscribed()) {

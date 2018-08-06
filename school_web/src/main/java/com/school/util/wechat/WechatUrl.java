@@ -23,5 +23,9 @@ public final class WechatUrl {
             "https://api.weixin.qq.com/sns/oauth2/access_token?appid=${APPID}&secret=${APPSECRET}&code=${CODE}&grant_type=authorization_code";
     public static final String USER_INFO_URL =
             "https://api.weixin.qq.com/sns/userinfo?access_token=${ACCESS_TOKEN}&openid=${OPEN_ID}&lang=zh_CN";
+    public static final String OAUTH_TOKEN_REFRESH_URL =
+            "https://api.weixin.qq.com/sns/oauth2/refresh_token?appid=${APPID}&grant_type=refresh_token&refresh_token=${REFRESH_TOKEN}";
+    public static final String OAUTH_TOKEN_CHECK_URL =
+            "https://api.weixin.qq.com/sns/auth?access_token=${ACCESS_TOKEN}&openid=${OPEN_ID}";
 
 }

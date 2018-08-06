@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
@@ -27,6 +29,9 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class OauthServiceImpl implements OauthService {
+
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     @Override
     public UserWechat getDetail(String openId, String accessToken) {
@@ -59,7 +64,6 @@ public class OauthServiceImpl implements OauthService {
         }
     }
 
-
     @Override
     public OAuthToken getOAuthToken(String code) {
 
@@ -70,14 +74,71 @@ public class OauthServiceImpl implements OauthService {
         String response;
         try {
             response = HttpUtil.get(getOAuthTokenUrl, "utf8", false);
+            log.info("getAuthToken response:{}", response);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         JSONObject json = JSON.parseObject(response);
-        return new OAuthToken(json.getString("access_token"),
-                              json.getIntValue("expires_in"),
-                              json.getString("refresh_token"),
-                              json.getString("openid"),
-                              json.getString("scope"));
+        OAuthToken authToken = new OAuthToken(json.getString("access_token"),
+                                              json.getIntValue("expires_in"),
+                                              json.getString("refresh_token"),
+                                              json.getString("openid"),
+                                              json.getString("scope"),
+                                              System.currentTimeMillis());
+        redisTemplate.opsForValue().set(authToken.getOpenId(), JSON.toJSONString(authToken));
+        return authToken;
+    }
+
+    @Override
+    public boolean check(String openId) {
+        String accessToken = redisTemplate.opsForValue().get(openId);
+        OAuthToken authToken = JSON.parseObject(accessToken, OAuthToken.class);
+        if (authToken == null) {
+            log.warn("有未授权访问网页发生，openId:{}", openId);
+            return false;
+        }
+        if (hasExpired(authToken)) {
+            log.info("get refreshToken");
+            String refreshTokenUrl = WechatUrl.OAUTH_TOKEN_REFRESH_URL
+                    .replace("${APPID}", ConstantWeChat.APPID)
+                    .replace("${REFRESH_TOKEN}", authToken.getRefreshToken());
+            String response;
+            try {
+                response = HttpUtil.get(refreshTokenUrl, "utf8", false);
+                log.info("getRefreshAuthToken response:{}", response);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            JSONObject json = JSON.parseObject(response);
+            if (json.containsKey("errcode")) {
+                throw new RuntimeException(json.getString("errmsg"));
+            }
+            authToken = new OAuthToken(json.getString("access_token"),
+                                                  json.getIntValue("expires_in"),
+                                                  json.getString("refresh_token"),
+                                                  json.getString("openid"),
+                                                  json.getString("scope"),
+                                                  System.currentTimeMillis());
+            redisTemplate.opsForValue().set(authToken.getOpenId(), JSON.toJSONString(authToken));
+            return true;
+        } else {
+//            String checkUrl = WechatUrl.OAUTH_TOKEN_CHECK_URL
+//                    .replace("${ACCESS_TOKEN}", authToken.getAccessToken())
+//                    .replace("${OPEN_ID}", openId);
+//            String response;
+//            try {
+//                response = HttpUtil.get(checkUrl, "utf8", false);
+//                log.info("checkAuthToken response:{}", response);
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//            JSONObject jsonObject = JSON.parseObject(response);
+//            if (jsonObject.get("errcode"))
+            return true;
+        }
+    }
+
+    private boolean hasExpired(OAuthToken token) {
+        return (System.currentTimeMillis() - token.getCacheTime()) > token.getExpiresIn();
     }
 }
