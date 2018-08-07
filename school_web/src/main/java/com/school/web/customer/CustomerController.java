@@ -58,7 +58,7 @@ public class CustomerController extends BaseEasyWebController {
 
     @RequestMapping(value = "/verifyCode")
     @ResponseBody
-    public String sendVerifyCode(String phone) {
+    public String sendVerifyCode(String phone, String openId) {
         try {
             if (StringUtils.isBlank(phone)) {
                 throw new RuntimeException("手机号不能为空");

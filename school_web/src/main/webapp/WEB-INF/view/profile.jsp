@@ -90,7 +90,7 @@
         $("#feedback-err").fadeOut(5000);
         return;
       }
-      $.post("/customer/verifyCode", {"phone": phone}, function (result) {
+      $.post("/customer/verifyCode", {"phone": phone, "openId":$("#phone").val()}, function (result) {
         if (result == "1") {
           var i = 60;
           var codeNum;
