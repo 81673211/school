@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.school.cache.RedisKeyNS;
 import com.school.service.wechat.OauthService;
 import com.school.util.Constants;
 import com.school.util.core.utils.HttpUtil;
@@ -57,7 +58,8 @@ public class OauthServiceImpl implements OauthService {
         try {
             String url = WechatUrl.USER_AUTH_URL
                     .replace("${APPID}", ConstantWeChat.APPID)
-                    .replace("${REDIRECT_URL}", URLEncoder.encode("http://www.glove1573.cn/wx/proxy", Constants.CHARSET_UTF8))
+                    .replace("${REDIRECT_URL}",
+                             URLEncoder.encode("http://www.glove1573.cn/wx/proxy", Constants.CHARSET_UTF8))
                     .replace("${SCOPE}", ConstantWeChat.SCOPE_SNSAPI_USERINFO)
                     .replace("${STATE}", URLEncoder.encode(state, Constants.CHARSET_UTF8));
             return url;
@@ -88,13 +90,14 @@ public class OauthServiceImpl implements OauthService {
                                               json.getString("scope"),
                                               System.currentTimeMillis());
         String toJSONString = JSON.toJSONString(authToken);
-        redisTemplate.opsForValue().set("authToken:" + authToken.getOpenId(), toJSONString);
+        redisTemplate.opsForValue().set(RedisKeyNS.CACHE_NAMESPACE_AUTH_TOKEN + authToken.getOpenId(),
+                                        toJSONString);
         return authToken;
     }
 
     @Override
     public int check(String openId) {
-        String accessToken = redisTemplate.opsForValue().get("authToken:" + openId);
+        String accessToken = redisTemplate.opsForValue().get(RedisKeyNS.CACHE_NAMESPACE_AUTH_TOKEN + openId);
         OAuthToken authToken = JSON.parseObject(accessToken, OAuthToken.class);
         if (authToken == null) {
             log.warn("有未授权访问网页发生，openId:{}", openId);
@@ -129,7 +132,8 @@ public class OauthServiceImpl implements OauthService {
                                        json.getString("openid"),
                                        json.getString("scope"),
                                        System.currentTimeMillis());
-            redisTemplate.opsForValue().set("authToken:" + authToken.getOpenId(), JSON.toJSONString(authToken));
+            redisTemplate.opsForValue().set(RedisKeyNS.CACHE_NAMESPACE_AUTH_TOKEN + authToken.getOpenId(),
+                                            JSON.toJSONString(authToken));
             return AuthResultEnum.SUCCESS.getCode();
         } else {
             return AuthResultEnum.SUCCESS.getCode();

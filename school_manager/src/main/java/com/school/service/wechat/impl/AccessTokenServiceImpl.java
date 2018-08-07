@@ -11,10 +11,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.school.cache.RedisKeyNS;
 import com.school.service.wechat.AccessTokenService;
+import com.school.util.ConstantWeChat;
 import com.school.util.Constants;
+import com.school.util.WechatUrl;
 import com.school.util.core.utils.HttpUtil;
-import com.school.util.wechat.ConstantWeChat;
-import com.school.util.wechat.WechatUrl;
 
 import lombok.extern.slf4j.Slf4j;
 

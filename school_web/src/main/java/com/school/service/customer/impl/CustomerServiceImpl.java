@@ -80,7 +80,7 @@ public class CustomerServiceImpl implements CustomerService {
         if (StringUtils.isBlank(phone)) {
             throw new RuntimeException("手机号不能为空");
         }
-        String cacheKey = RedisKeyNS.CUSTOMER_PROFILE_VERIFY_CODE + phone;
+        String cacheKey = RedisKeyNS.CACHE_CUSTOMER_PROFILE_VERIFY_CODE + phone;
         String verifyCode = redisTemplate.opsForValue().get(cacheKey);
         if (verifyCode != null) {
             redisTemplate.opsForValue().set(cacheKey, verifyCode, EXPIRE_TIME, TimeUnit.MINUTES);
@@ -140,7 +140,7 @@ public class CustomerServiceImpl implements CustomerService {
             if (StringUtils.isBlank(reqVerifyCode)) {
                 throw new RuntimeException("验证码不能为空");
             }
-            String cacheKey = RedisKeyNS.CUSTOMER_PROFILE_VERIFY_CODE + reqPhone;
+            String cacheKey = RedisKeyNS.CACHE_CUSTOMER_PROFILE_VERIFY_CODE + reqPhone;
             String verifyCode = redisTemplate.opsForValue().get(cacheKey);
             if (verifyCode == null) {
                 throw new RuntimeException("无效的验证码");

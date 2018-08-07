@@ -10,5 +10,9 @@ package com.school.cache;
 public final class RedisKeyNS {
     private RedisKeyNS() {}
 
-    public static final String CUSTOMER_PROFILE_VERIFY_CODE = "redis:customer:profile:verify:code:";
+    public static final String CACHE_CUSTOMER_PROFILE_VERIFY_CODE = "redis:customer:profile:verify:code:";
+
+    public static final String CACHE_BASE_ACCESS_TOKEN = "redis:base:access_token";
+
+    public static final String CACHE_NAMESPACE_AUTH_TOKEN = "redis:auth:access_token:";
 }
