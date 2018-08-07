@@ -44,7 +44,8 @@ public class OAuthInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
                              Object arg2) {
         String openId = request.getParameter("openId");
-        if (StringUtils.isBlank(openId)) {
+        String requestURI = request.getRequestURI();
+        if (!requestURI.startsWith("/customer/verifyCode") && StringUtils.isBlank(openId)) {
             log.info("openId not found");
             return false;
         }
