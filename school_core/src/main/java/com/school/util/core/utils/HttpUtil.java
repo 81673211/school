@@ -1,9 +1,5 @@
 package com.school.util.core.utils;
 
-import com.school.util.core.exception.UtilException;
-import org.apache.log4j.Logger;
-
-import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,6 +16,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+
+import org.apache.log4j.Logger;
+
+import com.school.util.core.exception.UtilException;
 
 
 /**
@@ -70,33 +70,6 @@ public class HttpUtil {
 			throw new UtilException(StrUtil.format("Unsupported encoding: [{}]", charset), e);
 		}
 		return encodeContnt;
-	}
-
-	/**
-	 * 获取客户端IP
-	 * 
-	 * @param request 请求对象
-	 * @return IP地址
-	 */
-	public static String getClientIP(HttpServletRequest request) {
-		String ip = request.getHeader("X-Forwarded-For");
-		if (isUnknow(ip)) {
-			ip = request.getHeader("Proxy-Client-IP");
-		}
-		if (isUnknow(ip)) {
-			ip = request.getHeader("WL-Proxy-Client-IP");
-		}
-		if (isUnknow(ip)) {
-			ip = request.getHeader("X-Real-IP");
-		}
-		if (isUnknow(ip)) {
-			ip = request.getRemoteAddr();
-		}
-		// 多级反向代理检测
-		if (ip != null && ip.indexOf(",") > 0) {
-			ip = ip.trim().split(",")[0];
-		}
-		return ip;
 	}
 
 	/**

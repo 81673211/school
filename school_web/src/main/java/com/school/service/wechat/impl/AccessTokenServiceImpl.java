@@ -39,7 +39,7 @@ public class AccessTokenServiceImpl implements AccessTokenService {
                     .replace("${APPID}", ConstantWeChat.APPID)
                     .replace("${APPSECRET}", ConstantWeChat.APPSECRET);
             try {
-                String response = HttpUtil.get(url, "utf8", false);
+                String response = HttpUtil.get(url, Constants.CHARSET_UTF8, false);
                 if (StringUtils.isBlank(response)) {
                     throw new RuntimeException("get access_token failed, response is blank");
                 }

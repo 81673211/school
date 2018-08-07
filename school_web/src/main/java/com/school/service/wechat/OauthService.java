@@ -18,5 +18,5 @@ public interface OauthService {
 
     OAuthToken getOAuthToken(String code);
 
-    boolean check(String openId);
+    int check(String openId);
 }

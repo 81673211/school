@@ -1,19 +1,19 @@
 package com.school.common.interceptor;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.school.domain.entity.customer.Customer;
 import com.school.service.customer.CustomerService;
 import com.school.service.wechat.OauthService;
-import com.school.util.wechat.OAuthToken;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -45,29 +45,38 @@ public class OAuthInterceptor implements HandlerInterceptor{
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
-			Object arg2) throws IOException {
-
-		String requestURI = request.getRequestURI();
-		log.info("requestUri:{}", requestURI);
-		if (requestURI.startsWith("/wx/proxy")) {
-			return true;
-		}
+			Object arg2) {
 		String openId = request.getParameter("openId");
 		if (StringUtils.isBlank(openId)) {
 		    log.info("openId not found");
 		    return false;
         }
-		oauthService.check(openId);
-		Customer customer = customerService.getByOpenId(openId);
-		log.info("customer:{}, openId:{}", customer, openId);
-		if (customer == null || !customer.isSubscribed()) {
-			response.sendRedirect("/index.html");
-		} else if (StringUtils.isBlank(customer.getPhone())) {
-			response.sendRedirect("/customer/profile");
-		} else {
-			return true;
-		}
-		return false;
+		handleAuthResult(oauthService.check(openId), request, response);
+		return true;
 	}
 
+	private void handleAuthResult(int authResult, HttpServletRequest request, HttpServletResponse response) {
+		if (authResult == 1) {
+			Map<String, String[]> parameterMap = request.getParameterMap();
+			String requestURI = request.getRequestURI();
+			StringBuilder state = new StringBuilder();
+			state.append(requestURI);
+			if (!CollectionUtils.isEmpty(parameterMap)) {
+				state.append("?");
+				parameterMap.forEach((key, value) -> {
+					if (!"openId".equals(key)) {
+						state.append(key).append("=").append(value[0]);
+					}
+				});
+			}
+			log.info("re-auth state:{}", state);
+			try {
+				response.sendRedirect(oauthService.getOAuthUrl(state.toString()));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			throw new RuntimeException("认证失败");
+		}
+	}
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSONObject;
 import com.school.service.wechat.AccessTokenService;
 import com.school.service.wechat.MenuService;
+import com.school.util.Constants;
 import com.school.util.core.utils.HttpUtil;
 import com.school.util.wechat.WechatUrl;
 import com.school.util.wechat.button.Menu;
@@ -36,7 +37,7 @@ public class MenuServiceImpl implements MenuService {
         String url = WechatUrl.MENU_CREATE_URL.replace("${ACCESS_TOKEN}", accessToken);
         // 调用接口创建菜单
         try {
-            String content = HttpUtil.post(url, JSONObject.toJSONString(menu), "utf8", false);
+            String content = HttpUtil.post(url, JSONObject.toJSONString(menu), Constants.CHARSET_UTF8, false);
             LOGGER.info("create menu response content:{}", content);
         } catch (IOException e) {
             LOGGER.error("invoke create menu request error, {}", e.getMessage());
@@ -47,7 +48,7 @@ public class MenuServiceImpl implements MenuService {
     public Menu get() {
         String accessToken = accessTokenService.get();
         try {
-            String content = HttpUtil.get(WechatUrl.MENU_GET_URL.replace("${ACCESS_TOKEN}", accessToken), "utf8",
+            String content = HttpUtil.get(WechatUrl.MENU_GET_URL.replace("${ACCESS_TOKEN}", accessToken), Constants.CHARSET_UTF8,
                                           false);
             return JSONObject.parseObject(content, Menu.class);
         } catch (IOException e) {

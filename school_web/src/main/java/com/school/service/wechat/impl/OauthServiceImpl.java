@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.school.service.wechat.OauthService;
+import com.school.util.Constants;
 import com.school.util.core.utils.HttpUtil;
+import com.school.util.wechat.AuthResultEnum;
 import com.school.util.wechat.ConstantWeChat;
 import com.school.util.wechat.OAuthToken;
 import com.school.util.wechat.UserWechat;
@@ -39,7 +41,7 @@ public class OauthServiceImpl implements OauthService {
                 "${OPEN_ID}", openId);
         String response;
         try {
-            response = HttpUtil.get(userInfoUrl, "utf8", false);
+            response = HttpUtil.get(userInfoUrl, Constants.CHARSET_UTF8, false);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -55,9 +57,9 @@ public class OauthServiceImpl implements OauthService {
         try {
             String url = WechatUrl.USER_AUTH_URL
                     .replace("${APPID}", ConstantWeChat.APPID)
-                    .replace("${REDIRECT_URL}", URLEncoder.encode("http://www.glove1573.cn/wx/proxy", "utf8"))
+                    .replace("${REDIRECT_URL}", URLEncoder.encode("http://www.glove1573.cn/wx/proxy", Constants.CHARSET_UTF8))
                     .replace("${SCOPE}", ConstantWeChat.SCOPE_SNSAPI_USERINFO)
-                    .replace("${STATE}", state);
+                    .replace("${STATE}", URLEncoder.encode(state, Constants.CHARSET_UTF8));
             return url;
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
@@ -73,7 +75,7 @@ public class OauthServiceImpl implements OauthService {
                 .replace("${CODE}", code);
         String response;
         try {
-            response = HttpUtil.get(getOAuthTokenUrl, "utf8", false);
+            response = HttpUtil.get(getOAuthTokenUrl, Constants.CHARSET_UTF8, false);
             log.info("getAuthToken, code:{}, response:{}", code, response);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -91,12 +93,12 @@ public class OauthServiceImpl implements OauthService {
     }
 
     @Override
-    public boolean check(String openId) {
+    public int check(String openId) {
         String accessToken = redisTemplate.opsForValue().get("authToken:" + openId);
         OAuthToken authToken = JSON.parseObject(accessToken, OAuthToken.class);
         if (authToken == null) {
             log.warn("有未授权访问网页发生，openId:{}", openId);
-            return false;
+            return AuthResultEnum.FAIL.getCode();
         }
         if (hasExpired(authToken)) {
             log.info("get refreshToken");
@@ -105,15 +107,21 @@ public class OauthServiceImpl implements OauthService {
                     .replace("${REFRESH_TOKEN}", authToken.getRefreshToken());
             String response;
             try {
-                response = HttpUtil.get(refreshTokenUrl, "utf8", false);
+                response = HttpUtil.get(refreshTokenUrl, Constants.CHARSET_UTF8, false);
                 log.info("getRefreshAuthToken response:{}", response);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                log.error(e.getMessage());
+                return AuthResultEnum.FAIL.getCode();
             }
             JSONObject json = JSON.parseObject(response);
             if (json.containsKey("errcode")) {
-                //TODO 判断是否refreshToken超时，若是，则重新授权即可
-                throw new RuntimeException(json.getString("errmsg"));
+                if (json.getIntValue("errcode") == 42002) {
+                    log.info("refreshToken超时，重新授权， openId:{}", openId);
+                    return AuthResultEnum.EXPIRE.getCode();
+                } else {
+                    log.error(json.getString("errmsg"));
+                    return AuthResultEnum.FAIL.getCode();
+                }
             }
             authToken = new OAuthToken(json.getString("access_token"),
                                        json.getIntValue("expires_in"),
@@ -122,21 +130,9 @@ public class OauthServiceImpl implements OauthService {
                                        json.getString("scope"),
                                        System.currentTimeMillis());
             redisTemplate.opsForValue().set("authToken:" + authToken.getOpenId(), JSON.toJSONString(authToken));
-            return true;
+            return AuthResultEnum.SUCCESS.getCode();
         } else {
-            //            String checkUrl = WechatUrl.OAUTH_TOKEN_CHECK_URL
-            //                    .replace("${ACCESS_TOKEN}", authToken.getAccessToken())
-            //                    .replace("${OPEN_ID}", openId);
-            //            String response;
-            //            try {
-            //                response = HttpUtil.get(checkUrl, "utf8", false);
-            //                log.info("checkAuthToken response:{}", response);
-            //            } catch (IOException e) {
-            //                throw new RuntimeException(e);
-            //            }
-            //            JSONObject jsonObject = JSON.parseObject(response);
-            //            if (jsonObject.get("errcode"))
-            return true;
+            return AuthResultEnum.SUCCESS.getCode();
         }
     }
 

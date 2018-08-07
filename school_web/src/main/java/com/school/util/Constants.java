@@ -12,4 +12,6 @@ public final class Constants {
     private Constants() {}
 
     public static final String CACHE_NAMESPACE_ACCESS_TOKEN = "redis:access_token";
+
+    public static final String CHARSET_UTF8 = "UTF-8";
 }
