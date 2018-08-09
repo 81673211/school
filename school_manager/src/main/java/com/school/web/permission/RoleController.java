@@ -4,8 +4,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import lombok.extern.slf4j.Slf4j;
-
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,8 +22,9 @@ import com.school.service.user.AdminUserService;
 import com.school.util.SessionUtils;
 import com.school.util.core.exception.FuBusinessException;
 import com.school.util.core.pager.PageInfo;
-import com.school.util.core.utils.StrUtil;
 import com.school.web.base.BaseEasyWebController;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller
@@ -101,7 +101,7 @@ public class RoleController extends BaseEasyWebController {
 	@RequestMapping("/save.do")
 	public AjaxResult save(Role role,String resIds){
 		try{
-			if(StrUtil.isBlank(role.getRoleName())){
+			if(StringUtils.isBlank(role.getRoleName())){
 				return AjaxResult.fail("请填写角色名称");
 			}
 			roleService.saveOrUpdate(role);

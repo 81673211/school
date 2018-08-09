@@ -7,9 +7,7 @@ import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,8 +36,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class WechatController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(WechatController.class);
-
     @Autowired
     private EventService eventService;
     @Autowired
@@ -50,8 +46,6 @@ public class WechatController {
     @RequestMapping(method = RequestMethod.POST)
     public void eventHandle(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String result = eventService.process(request);
-        LOGGER.info("result:{}", result);
-
         PrintWriter out = response.getWriter();
         out.println(result);
         out.close();

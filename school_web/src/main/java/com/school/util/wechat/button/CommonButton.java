@@ -1,6 +1,7 @@
 package com.school.util.wechat.button;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  *
@@ -10,6 +11,7 @@ import lombok.Data;
  * <br><b>Date:</b> 14/06/2018 12:39
  */
 @Data
+@EqualsAndHashCode
 public class CommonButton extends Button {
 
     private String type;

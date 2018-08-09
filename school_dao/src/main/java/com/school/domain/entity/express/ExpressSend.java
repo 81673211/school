@@ -1,7 +1,6 @@
 package com.school.domain.entity.express;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
+import com.alibaba.fastjson.annotation.JSONField;
 
 /**
  * @author jame
@@ -17,11 +16,11 @@ public class ExpressSend extends Express{
     private Long receiverCityId;
     private Long receiverDistrictId;
 
-    @JsonIgnore
+    @JSONField(serialize = false)
     private String receiverProvince;
-    @JsonIgnore
+    @JSONField(serialize = false)
     private String receiverCity;
-    @JsonIgnore
+    @JSONField(serialize = false)
     private String receiverDistrict;
 
 

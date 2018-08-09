@@ -1,11 +1,7 @@
 package com.school.web.base;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.net.URLEncoder;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -14,14 +10,9 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import lombok.extern.slf4j.Slf4j;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.WebUtils;
@@ -32,13 +23,11 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.serializer.SimpleDateFormatSerializer;
 import com.google.common.collect.Maps;
 import com.school.util.core.ConstantCore;
-import com.school.util.core.entity.ExcelTitle;
 import com.school.util.core.exception.FuBusinessException;
 import com.school.util.core.pager.PageInfo;
 import com.school.util.core.utils.CamelAndUnderlineUtil;
-import com.school.util.core.utils.DateUtil;
-import com.school.util.core.utils.JsonUtils;
-import com.school.util.core.utils.excel.util.ExcelExportUtil;
+
+import lombok.extern.slf4j.Slf4j;
 
 
 /**
@@ -224,23 +213,6 @@ public abstract class BaseEasyWebController {
 		return mav;
 	}
 	
-	/**
-	 * excel 导出 
-	 * 
-	 * 1.只能采用POST请求
-	 * 2.excel导出无分页
-	 */
-	@RequestMapping(value = "excel.htm",method = RequestMethod.POST)
-	public void exportExcel(HttpServletRequest request,HttpServletResponse reponse) throws FuBusinessException {
-		
-		Map<String, Object> searchParams = WebUtils.getParametersStartingWith(request, "search_");
-		
-		List dataset = onExportXls(searchParams,request);
-		
-		downLoadExcle(request, reponse, (String)searchParams.get("title"), this.exportClass,dataset);
-	}
-	
-	
 	/* 以下为回调函数列表,意义见前,在各子类中实现 */
 	protected void onList(PageInfo pageInfo,Map<String, Object> searchParams,HttpServletRequest request, ModelAndView mav) throws FuBusinessException {}
 	
@@ -288,53 +260,6 @@ public abstract class BaseEasyWebController {
 	protected List onExportXls(Map<String, Object> searchParams, HttpServletRequest request) throws FuBusinessException { return null;};
 	
 	/**
-	 * 导出
-	 * @param request
-	 * @param response
-	 * @param Title 导出的文件名
-	 * @param pojoClass 导出数据的对象类型
-	 * @param dataset 需要导出的数据集合
-	 */
-	protected void downLoadExcle(HttpServletRequest request,HttpServletResponse response,String Title, Class<?> pojoClass, Collection<?> dataset) {
-	    
-		 
-		 response.setContentType("application/vnd.ms-excel");
-		 OutputStream out = null;  
-		 response.setHeader("Content-disposition", "attachment; filename=fine.xls");// 设定输出文
-		 String newtitle = null;
-		 try{
-			 final String userAgent = request.getHeader("USER-AGENT");
-			 if (StringUtils.contains(userAgent, "MSIE")||StringUtils.contains(userAgent, "like Gecko")){// IE9,IE11
-				 newtitle = URLEncoder.encode(Title, "UTF8");
-				
-			 }else {
-				 newtitle = new String(Title.getBytes(), "ISO8859-1");
-	            }
-			 response.setHeader("content-disposition","attachment;filename="+ newtitle +DateUtil.formatDate(new Date())+ ".xls");
-		     
-		     out= response.getOutputStream();
-		      
-		     HSSFWorkbook workbook = null;
-			 workbook = ExcelExportUtil.exportExcel(new ExcelTitle(Title), pojoClass, dataset);
-			 workbook.write(out);
-		        
-	        } catch (FileNotFoundException e) {
-	        	log.error("downLoadExcle error1",e);
-	        } catch (IOException e) {
-	        	log.error("downLoadExcle error2",e);
-	        }
-	        
-		 finally{
-			 try {
-				out.flush();
-				out.close();
-			} catch (IOException e) {
-				log.error("downLoadExcle error3",e);
-			}
-		 }
-	}
-	
-	/**
      * TODO用于想前台BSGrid返回JSon格式数据
      * 
      * @param page
@@ -367,10 +292,10 @@ public abstract class BaseEasyWebController {
         out.flush();
         out.close();
     }
-    
+
     /**
      * 用于Ajax数据存储提示,
-     * 
+     *
      * @param status true 或 false
      * @param msg 对应的消息
      * @return
@@ -379,7 +304,7 @@ public abstract class BaseEasyWebController {
         Map<String, Object> msgMap = new HashMap<String, Object>();
         msgMap.put("status", status);
         msgMap.put("msg", msg);
-        return JsonUtils.toJsonStringFastJson(msgMap);
+        return JSON.toJSONString(msgMap);
     }
 	
 	public void setListView(String listView) {

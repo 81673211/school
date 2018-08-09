@@ -1,9 +1,5 @@
 package com.school.domain.vo.security;
 
-import lombok.Data;
-
-import java.util.List;
-
 public class MenuJson {
 	private Long id;
 	private Long pId;

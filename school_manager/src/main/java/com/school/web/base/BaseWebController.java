@@ -6,7 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -239,7 +239,7 @@ public abstract class BaseWebController {
 	public String getIpAddress(HttpServletRequest request) {
 		String ip = request.getHeader("X-Forwarded-For");
 		if (StringUtils.isBlank(ip)
-				|| StringUtils.equalsIgnoreCase(ip, "unknown")) {
+			|| StringUtils.equalsIgnoreCase(ip, "unknown")) {
 			ip = request.getHeader("Proxy-Client-IP");
 		}
 		if (StringUtils.isBlank(ip)
@@ -330,7 +330,7 @@ public abstract class BaseWebController {
 		String searchParams = request.getParameter("searchParams");
 		String pageNoStr = request.getParameter("listPageNo");
 		StringBuilder searchParamsStr = new StringBuilder();
-		if (StrUtil.isNotBlank(searchParams)) {
+		if (StringUtils.isNotBlank(searchParams)) {
 			Map<String, String> map = StrToMapUtil.transStringToMap(searchParams);
 			if (map != null) {
 				for (String key : map.keySet()) {
@@ -342,7 +342,7 @@ public abstract class BaseWebController {
 				}
 			}
 		}
-		if (StrUtil.isNotBlank(pageNoStr)) {
+		if (StringUtils.isNotBlank(pageNoStr)) {
             searchParamsStr.append("pageNo=").append(pageNoStr);
         }
 		return searchParamsStr.toString();

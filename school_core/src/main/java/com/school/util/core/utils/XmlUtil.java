@@ -125,28 +125,6 @@ public class XmlUtil {
 		}
 	}
 
-	/**
-	 * 将XML文档写入到文件
-	 * 
-	 * @param doc XML文档
-	 * @param absolutePath 文件绝对路径，不存在会自动创建
-	 * @param charset 字符集
-	 */
-	public static void xmlToFile(Document doc, String absolutePath, String charset) {
-		BufferedWriter writer = null;
-		try {
-			writer = FileUtil.getBufferedWriter(absolutePath, charset, false);
-			Source source = new DOMSource(doc);
-			final Transformer xformer = TransformerFactory.newInstance().newTransformer();
-			xformer.setOutputProperty(OutputKeys.ENCODING, charset);
-			xformer.transform(source, new StreamResult(writer));
-		} catch (Exception e) {
-			throw new UtilException("Trans xml document to string error!", e);
-		} finally {
-			FileUtil.close(writer);
-		}
-	}
-
 	// -------------------------------------------------------------------------------------- Create
 	/**
 	 * 创建XML文档

@@ -26,35 +26,6 @@ public class IoUtil {
 
 	/** 默认缓存大小 */
 	public final static int DEFAULT_BUFFER_SIZE = 1024;
-
-	//-------------------------------------------------------------------------------------- Copy start
-	/**
-	 * 将Reader中的内容复制到Writer中
-	 * 使用默认缓存大小
-	 * @param reader Reader
-	 * @param writer Writer
-	 * @return 拷贝的字节数
-	 * @throws IOException
-	 */
-	public static int copy(Reader reader, Writer writer) throws IOException {
-		return copy(reader, writer, DEFAULT_BUFFER_SIZE);
-	}
-	
-	/**
-	 * 将Reader中的内容复制到Writer中
-	 */
-	public static int copy(Reader reader, Writer writer, int bufferSize) throws IOException {
-		char[] buffer = new char[bufferSize];
-		int count = 0;
-		int readSize;
-		while ((readSize = reader.read(buffer, 0, bufferSize)) >= 0) {
-			writer.write(buffer, 0, readSize);
-			count += readSize;
-		}
-		writer.flush();
-		
-		return count;
-	}
 	
 	/**
 	 * 拷贝流，使用默认Buffer大小
@@ -158,18 +129,6 @@ public class IoUtil {
 	}
 	
 	/**
-	 * 从FileChannel中读取内容
-	 * @param fileChannel 文件管道
-	 * @param charset 字符集
-	 * @return 内容
-	 * @throws IOException
-	 */
-	public static String getString(FileChannel fileChannel, String charset) throws IOException {
-		final MappedByteBuffer buffer = fileChannel.map(FileChannel.MapMode.READ_ONLY, 0, fileChannel.size()).load();
-		return CharsetUtil.str(buffer, charset);
-	}
-	
-	/**
 	 * String 转为 流
 	 * @param content 内容
 	 * @param charset 编码
@@ -214,17 +173,5 @@ public class IoUtil {
 				FileUtil.close(osw);
 			}
 		}
-	}
-	
-	/**
-	 * 打印内容，调用系统的System.out.println方法
-	 * @param content 内容，会调用toString方法， 当内容中有 {} 表示变量占位符
-	 * @param param 参数
-	 */
-	public static void echo(Object content, Object... param) {
-		if(content == null) {
-			System.out.println(content);
-		}
-		System.out.println(StrUtil.format(content.toString(), param));
 	}
 }

@@ -1,7 +1,5 @@
 package com.school.util.wechat.button;
 
-import java.util.List;
-
 import lombok.Data;
 
 /**

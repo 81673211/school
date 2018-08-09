@@ -24,5 +24,5 @@ public interface Dialect {
 		}
 	}
 
-	public abstract String getPageSql(String sql, PageInfo page);
+	String getPageSql(String sql, PageInfo page);
 }

@@ -154,31 +154,12 @@ public class StatusManage {
 	
 	public static final Map<Integer, String> shortMessageStatusMap = new HashMap<Integer, String>();
 	
-	/**
-	 * 是否为批量上架：1-是
-	 */
-	public static final Integer IS_UP_ALL_YES = 1;
-	
-	/**
-	 * 是否为批量上架：0-否
-	 */
-	public static final Integer IS_UP_ALL_NO = 0;
-	
-	/**
-	 * 常用的商品标签
-	 */
-	public static final Map<String, Object> goodLabels = new HashMap<String, Object>();
-	
 	public static final Map<Integer, String> userInfoStatusMap = new HashMap<Integer, String>();
 	public static final Map<Integer, String> sexMap = new HashMap<Integer, String>();
 
 
 	
-	public static final DecimalFormat MONEY_FORMAT = new DecimalFormat("##,##0.00");
-	
 	static {
-		goodTypeStatusMap.put(GOOD_TYPE_STATUS_ON, "启用");
-		goodTypeStatusMap.put(GOOD_TYPE_STATUS_OFF, "不启用");
 		
 		isPostMap.put(IS_POST_YES, "是");
 		isPostMap.put(IS_POST_NO, "否");
@@ -188,17 +169,7 @@ public class StatusManage {
 		
 		isRecommendMap.put(IS_RECOMMEND_YES, "是");
 		isRecommendMap.put(IS_RECOMMEND_NO, "否");
-		
-		goodInfoStatusMap.put(GOOD_INFO_STATUS_UP, "上架");
-		goodInfoStatusMap.put(GOOD_INFO_STATUS_DOWN, "下架");
-		goodInfoStatusMap.put(GOOD_INFO_STATUS_AUTH_WAIT, "待审核");
-		goodInfoStatusMap.put(GOOD_INFO_STATUS_AUTH_SUCCESS, "审核通过");
-		goodInfoStatusMap.put(GOOD_INFO_STATUS_AUTH_FAILED, "审核不通过");
-		
-		goodInfoAuthStatusMap.put(GOOD_INFO_STATUS_AUTH_WAIT, "待审核");
-		goodInfoAuthStatusMap.put(GOOD_INFO_STATUS_AUTH_SUCCESS, "审核通过");
-		goodInfoAuthStatusMap.put(GOOD_INFO_STATUS_AUTH_FAILED, "审核不通过");
-		
+
 		adminUserStatusMap.put(ADMIN_USER_STATUS_ON, "有效");
 		adminUserStatusMap.put(ADMIN_USER_STATUS_OFF, "失效");
 		

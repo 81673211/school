@@ -4,20 +4,17 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.school.service.customer.CustomerService;
-import com.school.service.wechat.OauthService;
 import com.school.service.wechat.EventService;
 import com.school.util.wechat.WechatEventTypeEnum;
 import com.school.util.wechat.WechatMessageUtil;
 import com.school.util.wechat.WechatMsgTypeEnum;
 import com.school.util.wechat.message.TextMessage;
-import com.school.web.wechat.WechatController;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *
@@ -27,24 +24,25 @@ import com.school.web.wechat.WechatController;
  * <br><b>Date:</b> 13/06/2018 16:29
  */
 @Service
+@Slf4j
 public class EventServiceImpl implements EventService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(WechatController.class);
     private static final String SUCCESS = "success";
 
     @Autowired
     private CustomerService customerService;
-    @Autowired
-    private OauthService oauthService;
 
     @Override
-    public String process(HttpServletRequest request) throws Exception {
-        Map<String, String> paramMap = WechatMessageUtil.parseXml(request);
-        LOGGER.info("paramMap:{}", paramMap.toString());
+    public String process(HttpServletRequest request) {
+        Map<String, String> paramMap;
+        try {
+            paramMap = WechatMessageUtil.parseXml(request);
+        } catch (Exception e) {
+           log.error("微信事件通知request转map异常,{}", e.getMessage());
+           throw new RuntimeException(e);
+        }
         String msgType = paramMap.get("MsgType");
-        LOGGER.info("msgType:{}", msgType);
         String event = paramMap.get("Event");
-        LOGGER.info("event:{}", event);
         String openId = paramMap.get("FromUserName");
         if (WechatMsgTypeEnum.EVENT.getCode().equals(msgType)) {
             if (WechatEventTypeEnum.SUBSCRIBE.getCode().equals(event)) {

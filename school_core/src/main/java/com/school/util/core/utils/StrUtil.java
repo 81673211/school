@@ -6,7 +6,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Random;
+
+import org.apache.commons.lang3.ArrayUtils;
 
 /**
  * 字符串工具类 
@@ -14,23 +15,9 @@ import java.util.Random;
 public class StrUtil {
 
 	public static final String DOT = ".";
-	public static final String SLASH = "/";
-	public static final String BACKSLASH = "\\";
+
 	public static final String EMPTY = "";
-	public static final String CRLF = "\r\n";
-	public static final String NEWLINE = "\n";
-	
-	public static final String HTML_NBSP		= "&nbsp;";
-	public static final String HTML_AMP		= "&amp";
-	public static final String HTML_QUOTE 	= "&quot;";
-	public static final String HTML_LT 			= "&lt;";
-	public static final String HTML_GT 			= "&gt;";
-	
-	public static final String EMPTY_JSON 	= "{}";
-	
-	private static Random random = new Random();
-	private static char[] stringNumber = "0123456789".toCharArray();
-	
+
 	/**
 	 * 字符串是否为空白 空白的定义如下： <br>
 	 * 1、为null <br>
@@ -49,10 +36,6 @@ public class StrUtil {
 		return (number == null || number.intValue() == 0);
 	}
 	
-	public static boolean isNotBlank(Number number) {
-		return false == isBlank(number);
-	}
-	
 	/**
 	 * 字符串是否为非空白 空白的定义如下： <br>
 	 * 1、不为null <br>
@@ -65,21 +48,7 @@ public class StrUtil {
 	public static boolean isNotBlank(String str) {
 		return false == isBlank(str);
 	}
-	
-	/**
-	 * 是否包含空字符串
-	 * @param strs 字符串列表
-	 * @return 是否包含空字符串
-	 */
-	public static boolean hasBlank(String... strs) {
-		for (String str : strs) {
-			if(isBlank(str)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
+
 	/**
 	 * 字符串是否为空，空的定义如下
 	 * 1、为null <br>
@@ -90,33 +59,7 @@ public class StrUtil {
 	public static boolean isEmpty(String str) {
 		return str == null || str.length() == 0;
 	}
-	
-	/**
-	 * 字符串是否为非空白 空白的定义如下： <br>
-	 * 1、不为null <br>
-	 * 2、不为""<br>
-	 * 
-	 * @param str 被检测的字符串
-	 * @return 是否为非空
-	 */
-	public static boolean isNotEmpty(String str) {
-		return false == isEmpty(str);
-	}
-	
-	/**
-	 * 是否包含空字符串
-	 * @param strs 字符串列表
-	 * @return 是否包含空字符串
-	 */
-	public static boolean hasEmpty(String... strs) {
-		for (String str : strs) {
-			if(isEmpty(str)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
+
 	/**
 	 * 去除字符串两边的空格符，如果为null返回null
 	 * @param str 字符串
@@ -126,38 +69,6 @@ public class StrUtil {
 		return (null == str) ? null : str.trim();
 	}
 
-	/**
-	 * 获得set或get方法对应的标准属性名<br/>
-	 * 例如：setName 返回 name
-	 * @param getOrSetMethodName 
-	 * @return 如果是set或get方法名，返回field， 否则null
-	 */
-	public static String getGeneralField(String getOrSetMethodName){
-		if(getOrSetMethodName.startsWith("get") || getOrSetMethodName.startsWith("set")) {
-			return cutPreAndLowerFirst(getOrSetMethodName, 3);
-		}
-		return null;
-	}
-	
-	/**
-	 * 生成set方法名<br/>
-	 * 例如：name 返回 setName
-	 * @param fieldName 属性名
-	 * @return setXxx
-	 */
-	public static String genSetter(String fieldName){
-		return upperFirstAndAddPre(fieldName, "set");
-	}
-	
-	/**
-	 * 生成get方法名
-	 * @param fieldName 属性名
-	 * @return getXxx
-	 */
-	public static String genGetter(String fieldName){
-		return upperFirstAndAddPre(fieldName, "get");
-	}
-	
 	/**
 	 * 去掉首部指定长度的字符串并将剩余字符串首字母小写<br/>
 	 * 例如：str=setName, preLength=3 -> return name
@@ -203,81 +114,7 @@ public class StrUtil {
 		return Character.toUpperCase(str.charAt(0)) + str.substring(1);
 	}
 	
-	/**
-	 * 小写首字母<br>
-	 * 例如：str = Name, return name
-	 * @param str 字符串
-	 * @return 字符串
-	 */
-	public static String lowerFirst(String str) {
-		return Character.toLowerCase(str.charAt(0)) + str.substring(1);
-	}
-	
-	/**
-	 * 去掉指定前缀
-	 * @param str 字符串
-	 * @param prefix 前缀
-	 * @return 切掉后的字符串，若前缀不是 preffix， 返回原字符串
-	 */
-	public static String removePrefix(String str, String prefix) {
-		if(str != null && str.startsWith(prefix)) {
-			return str.substring(prefix.length());
-		}
-		return str;
-	}
-	
-	/**
-	 * 忽略大小写去掉指定前缀
-	 * @param str 字符串
-	 * @param prefix 前缀
-	 * @return 切掉后的字符串，若前缀不是 prefix， 返回原字符串
-	 */
-	public static String removePrefixIgnoreCase(String str, String prefix) {
-		if (str != null && str.toLowerCase().startsWith(prefix.toLowerCase())) {
-			return str.substring(prefix.length());
-		}
-		return str;
-	}
-	
-	/**
-	 * 去掉指定后缀
-	 * @param str 字符串
-	 * @param suffix 后缀
-	 * @return 切掉后的字符串，若后缀不是 suffix， 返回原字符串
-	 */
-	public static String removeSuffix(String str, String suffix) {
-		if (str != null && str.endsWith(suffix)) {
-			return str.substring(0, str.length() - suffix.length());
-		}
-		return str;
-	}
-	
-	/**
-	 * 忽略大小写去掉指定后缀
-	 * @param str 字符串
-	 * @param suffix 后缀
-	 * @return 切掉后的字符串，若后缀不是 suffix， 返回原字符串
-	 */
-	public static String removeSuffixIgnoreCase(String str, String suffix) {
-		if (str != null && str.toLowerCase().endsWith(suffix.toLowerCase())) {
-			return str.substring(0, str.length() - suffix.length());
-		}
-		return str;
-	}
-	
-	/**
-	 * 清理空白字符
-	 * @param str 被清理的字符串
-	 * @return 清理后的字符串
-	 */
-	public static String cleanBlank(String str) {
-		if(str == null) {
-			return null;
-		}
-		
-		return str.replaceAll("\\s*", EMPTY);
-	}
-	
+
 	/**
 	 * 切分字符串<br/>
 	 * a#b#c -> [a,b,c]
@@ -409,16 +246,7 @@ public class StrUtil {
 		return new String(newStrArray);
 	}
 	
-	/**
-	 * 切割前部分
-	 * @param string 字符串
-	 * @param toIndex 切割到的位置（不包括）
-	 * @return 切割后的字符串
-	 */
-	public static String subPre(String string, int toIndex) {
-		return sub(string, 0, toIndex);
-	}
-	
+
 	/**
 	 * 切割后部分
 	 * @param string 字符串
@@ -460,39 +288,7 @@ public class StrUtil {
 		}
 		return sb.toString();
 	}
-	
-	/**
-	 * 给定字符串转换字符编码<br/>
-	 * 如果参数为空，则返回原字符串，不报错。
-	 * @param str 被转码的字符串
-	 * @param sourceCharset 原字符集
-	 * @param destCharset 目标字符集
-	 * @return 转换后的字符串
-	 */
-	public static String convertCharset(String str, String sourceCharset, String destCharset) {
-		if(isBlank(str) || isBlank(sourceCharset) || isBlank(destCharset)) {
-			return str;
-		}
-		try {
-			return new String(str.getBytes(sourceCharset), destCharset);
-		} catch (UnsupportedEncodingException e) {
-			return str;
-		}
-	}
-	
-	/**
-	 * 比较两个字符串是否相同，如果为null或者空串则算不同
-	 * @param str1 字符串1
-	 * @param str2 字符串2
-	 * @return 是否非空相同
-	 */
-	public static boolean equalsNotEmpty(String str1, String str2) {
-		if(isEmpty(str1)) {
-			return false;
-		}
-		return str1.equals(str2);
-	}
-	
+
 	/**
 	 * 格式化文本
 	 * @param template 文本模板，被替换的部分用 {} 表示
@@ -500,7 +296,7 @@ public class StrUtil {
 	 * @return 格式化后的文本
 	 */
 	public static String format(String template, Object... values) {
-		if(CollectionUtil.isEmpty(values) || isBlank(template)) {
+		if(ArrayUtils.isEmpty(values) || isBlank(template)) {
 			return template;
 		}
 		
@@ -599,23 +395,5 @@ public class StrUtil {
 		return sb.toString();
 	}
 	
-	/**
-	 * 方法描述：方法描述：生成指定长度随机字符串
-	 * <br>创建人：duanxiyong    
-	 * <br>创建时间：2016年9月30日 下午2:06:28    
-	 * <br>最后修改人：duanxiyong    
-	 * <br>最后修改时间：2016年9月30日 下午2:06:28    
-	 * <br>修改备注：    
-	 * <br>@version 1.0
-	 */
-    public static String randNumber(int length) {
-    	if(length<1){
-    		return null;
-    	}
-    	char[] randBuffer = new char[length];
-    	for (int i = 0; i < randBuffer.length; ++i) {
-    		randBuffer[i] = stringNumber[random.nextInt(stringNumber.length)];
-    	}
-    	return new String(randBuffer);
-	}
+
 }

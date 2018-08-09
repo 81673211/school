@@ -5,8 +5,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import lombok.extern.slf4j.Slf4j;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,8 +21,9 @@ import com.school.service.resource.ResourceInfoService;
 import com.school.service.security.MenuInfoService;
 import com.school.util.core.exception.FuBusinessException;
 import com.school.util.core.pager.PageInfo;
-import com.school.util.core.utils.StrUtil;
 import com.school.web.base.BaseEasyWebController;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller
@@ -104,7 +103,7 @@ public class ResourceInfoController extends BaseEasyWebController {
 	@RequestMapping("/save.do")
 	public AjaxResult save(ResourceInfo resourceInfo){
 		try{
-			if(StrUtil.isBlank(resourceInfo.getResName())){
+			if(StringUtils.isBlank(resourceInfo.getResName())){
 				return AjaxResult.fail("请填写资源名称");
 			}
 			resourceInfoService.saveOrUpdate(resourceInfo);

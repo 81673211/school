@@ -1,9 +1,10 @@
 package com.school.service.base.impl;
 
-import com.school.util.core.entity.AbstractEntity;
-import com.school.util.core.pojo.PageForMyBatis;
-import com.school.util.core.utils.BeanMapUtil;
-import com.school.util.core.utils.GenericsUtils;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -11,10 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
+import com.school.util.core.entity.AbstractEntity;
+import com.school.util.core.utils.GenericsUtils;
 
 /**
  * @Description MyBatis Service 基类 公共方法
@@ -202,77 +201,5 @@ public abstract class MyBatisBaseServiceImpl<M extends AbstractEntity> {
 		
 		return paramMap;
 	}
-		
-	/**
-	 * @Description: 分页排序构建方法
-	 * @param PageForMyBatis 分页对象
-	 * @param searchParams 查询条件  
-	 * @return 参数值  
-	 */
-	@SuppressWarnings("unchecked")
-	protected Map<String,Object> buildParamsWithLimit(PageForMyBatis page,Map<String,Object> searchParams){
-		
-		return buildParamsWithLimit(page.getStartIndex(),page.getEndIndex(),searchParams,page.getSortMap());
-	}
-		 
-	   
-	/**
-	 * @Description: 将MyBatis实体参数转换为Map形式 
-	 * @param Entity 实体对象   
-	 * @return 转换后的Map  
-	 */
-	@SuppressWarnings("unchecked")
-	protected Map<String,Object> convertToMap(M Entity){
-		
-		Map<String,Object> paramMap = null; 
-		
-		try{
-			paramMap = BeanMapUtil.bean2Map(Entity);
-		}catch(Exception e){
-			throw new RuntimeException("获取参数失败", e);
-		}
-		
-		return paramMap;
-	}
 
-	@SuppressWarnings("unchecked")
-	protected Map<String,Object> convertToMap(Object Entity){
-		
-		Map<String,Object> paramMap = null; 
-		
-		try{
-			paramMap = BeanMapUtil.bean2Map(Entity);
-		}catch(Exception e){
-			throw new RuntimeException("获取参数失败", e);
-		}
-		
-		return paramMap;
-	}
-    @SuppressWarnings("unchecked")
-	public  List<M> getAll() throws Exception{
-    	return this.getSessionTemplate().selectList(getSqlName(SQL_FINDLISTBY));
-    }
-    
-    public  void saveOrUpdate(M m) throws Exception{
-    	
-    	if (m == null) {
-            return;
-        }
-
-        if (m.getId() == null) {
-        	this.getSessionTemplate().insert(getSqlName(SQL_SAVE),m);
-        } else {
-        	this.getSessionTemplate().update(getSqlName(SQL_UPDATE),m);
-        }
-    }
-    
-    @SuppressWarnings("unchecked")
-	public  M get(Long id) throws Exception{
-    	return (M)this.getSessionTemplate().selectOne(getSqlName(SQL_GETBYID),id);
-    }
-    
-    public  void deleteById(Long id) throws Exception{
-    	this.getSessionTemplate().insert(getSqlName(SQL_DELETEBYID),id);
-    }
-    
 }

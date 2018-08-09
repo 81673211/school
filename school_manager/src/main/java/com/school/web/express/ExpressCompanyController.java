@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +20,6 @@ import com.school.service.express.ExpressCompanyService;
 import com.school.util.SessionUtils;
 import com.school.util.core.exception.FuBusinessException;
 import com.school.util.core.pager.PageInfo;
-import com.school.util.core.utils.StrUtil;
 import com.school.web.base.BaseEasyWebController;
 
 import lombok.extern.slf4j.Slf4j;
@@ -93,7 +93,7 @@ public class ExpressCompanyController extends BaseEasyWebController {
 	@RequestMapping("/save.do")
 	public AjaxResult save(HttpServletRequest request,ExpressCompany expressCompany){
 		try{
-			if(StrUtil.isBlank(expressCompany.getName())){
+			if(StringUtils.isBlank(expressCompany.getName())){
 				return AjaxResult.fail("请填写快递公司名称");
 			}
 			AdminUser sessionUser = SessionUtils.getSessionUser(request);

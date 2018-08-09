@@ -1,23 +1,18 @@
 package com.school.service.security.impl;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.school.dao.security.RoleMapper;
 import com.school.domain.entity.security.Role;
-import com.school.domain.entity.user.AdminUser;
 import com.school.domain.vo.security.MenuJson;
 import com.school.service.base.impl.BaseServiceImpl;
 import com.school.service.security.RoleService;
-import com.school.util.core.utils.StrUtil;
 
 /** 
  * @author  作者：方梁
@@ -36,7 +31,7 @@ public class RoleServiceImpl extends BaseServiceImpl<Role, RoleMapper> implement
 
 	@Override
 	public Role saveOrUpdate(Role role) {
-		if(StrUtil.isBlank(role.getId())){
+		if(role.getId() == null){
 			this.save(role);
 		}else{
 			Role r = this.get(role.getId());

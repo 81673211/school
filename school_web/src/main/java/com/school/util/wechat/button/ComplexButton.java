@@ -1,8 +1,7 @@
 package com.school.util.wechat.button;
 
-import java.util.List;
-
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  *
@@ -12,6 +11,7 @@ import lombok.Data;
  * <br><b>Date:</b> 14/06/2018 12:40
  */
 @Data
+@EqualsAndHashCode
 public class ComplexButton extends Button {
     private Button[] sub_button;
 }

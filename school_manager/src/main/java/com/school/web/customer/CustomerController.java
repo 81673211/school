@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +18,6 @@ import com.school.domain.entity.customer.Customer;
 import com.school.service.customer.CustomerService;
 import com.school.util.core.exception.FuBusinessException;
 import com.school.util.core.pager.PageInfo;
-import com.school.util.core.utils.StrUtil;
 import com.school.web.base.BaseEasyWebController;
 
 import lombok.extern.slf4j.Slf4j;
@@ -91,7 +91,7 @@ public class CustomerController extends BaseEasyWebController {
 	@RequestMapping("/save.do")
 	public AjaxResult save(Customer customer){
 		try{
-			if(StrUtil.isBlank(customer.getName())){
+			if(StringUtils.isBlank(customer.getName())){
 				return AjaxResult.fail("请填写名字");
 			}
 			customerService.saveOrUpdate(customer);

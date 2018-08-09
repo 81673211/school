@@ -1,14 +1,17 @@
 package com.school.domain.entity.express;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
-
 import java.util.Date;
+
+import com.alibaba.fastjson.annotation.JSONField;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * @author jame
  */
 @Data
+@EqualsAndHashCode
 public class ExpressReceive extends Express{
     private String senderPhone;
     private String senderName;
@@ -21,11 +24,11 @@ public class ExpressReceive extends Express{
     private String receiverAddr;
     private Date intoBoxTime;
 
-    @JsonIgnore
+    @JSONField(serialize = false)
     private String senderProvince;
-    @JsonIgnore
+    @JSONField(serialize = false)
     private String senderCity;
-    @JsonIgnore
+    @JSONField(serialize = false)
     private String senderDistrict;
 
     public Date getIntoBoxTime() {
