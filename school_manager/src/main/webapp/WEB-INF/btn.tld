@@ -9,7 +9,7 @@
     <uri>http://www.sdyy.tag</uri>
     <tag>
         <name>hasUrlPerm</name>
-        <tag-class>com.school.util.core.tags.HasUrlPermissionTag</tag-class>
+        <tag-class>com.school.manager.context.HasUrlPermissionTag</tag-class>
         <attribute>
             <name>link</name>
             <required>false</required>

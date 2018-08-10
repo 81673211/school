@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.school.biz.dao.security.MenuInfoMapper">
+	<resultMap id="BaseResultMap" type="com.school.biz.domain.entity.security.MenuInfo">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="pid" property="pid" jdbcType="BIGINT" />
+		<result column="resource_url" property="resourceUrl" jdbcType="VARCHAR" />
+		<result column="resource_name" property="resourceName" jdbcType="VARCHAR" />
+		<result column="mindex" property="mindex" jdbcType="INTEGER" />
+		<result column="level" property="level" jdbcType="INTEGER" />
+		<result column="leaf" property="leaf" jdbcType="INTEGER" />
+		<result column="icon" property="icon" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, pid, resource_url, resource_name, mindex, level, leaf, icon
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from menu_info
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from menu_info
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert" parameterType="com.school.biz.domain.entity.security.MenuInfo">
+		insert into menu_info (id, pid, resource_url,
+		resource_name, mindex, level, leaf, icon
+		)
+		values (#{id,jdbcType=BIGINT}, #{pid,jdbcType=BIGINT},
+		#{resourceUrl,jdbcType=VARCHAR},
+		#{resourceName,jdbcType=VARCHAR}, #{mindex,jdbcType=INTEGER}, #{level,jdbcType=INTEGER},
+		#{leaf,jdbcType=INTEGER}, #{icon,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.school.biz.domain.entity.security.MenuInfo">
+		insert into menu_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="pid != null">
+				pid,
+			</if>
+			<if test="resourceUrl != null">
+				resource_url,
+			</if>
+			<if test="resourceName != null">
+				resource_name,
+			</if>
+			<if test="mindex != null">
+				mindex,
+			</if>
+			<if test="level != null">
+				level,
+			</if>
+			<if test="leaf != null">
+				leaf,
+			</if>
+			<if test="icon != null">
+				icon,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="pid != null">
+				#{pid,jdbcType=BIGINT},
+			</if>
+			<if test="resourceUrl != null">
+				#{resourceUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="resourceName != null">
+				#{resourceName,jdbcType=VARCHAR},
+			</if>
+			<if test="mindex != null">
+				#{mindex,jdbcType=INTEGER},
+			</if>
+			<if test="level != null">
+				#{level,jdbcType=INTEGER},
+			</if>
+			<if test="leaf != null">
+				#{leaf,jdbcType=INTEGER},
+			</if>
+			<if test="icon != null">
+				#{icon,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.school.biz.domain.entity.security.MenuInfo">
+		update menu_info
+		<set>
+			<if test="pid != null">
+				pid = #{pid,jdbcType=BIGINT},
+			</if>
+			<if test="resourceUrl != null">
+				resource_url = #{resourceUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="resourceName != null">
+				resource_name = #{resourceName,jdbcType=VARCHAR},
+			</if>
+			<if test="mindex != null">
+				mindex = #{mindex,jdbcType=INTEGER},
+			</if>
+			<if test="level != null">
+				level = #{level,jdbcType=INTEGER},
+			</if>
+			<if test="leaf != null">
+				leaf = #{leaf,jdbcType=INTEGER},
+			</if>
+			<if test="icon != null">
+				icon = #{icon,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.school.biz.domain.entity.security.MenuInfo">
+		update menu_info
+		set pid = #{pid,jdbcType=BIGINT},
+		resource_url = #{resourceUrl,jdbcType=VARCHAR},
+		resource_name = #{resourceName,jdbcType=VARCHAR},
+		mindex = #{mindex,jdbcType=INTEGER},
+		level = #{level,jdbcType=INTEGER},
+		leaf = #{leaf,jdbcType=INTEGER},
+		icon = #{icon,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<!-- 根据父id查询菜单列表 -->
+	<select id="findByParentId" resultType="com.school.biz.domain.entity.security.MenuInfo">
+		select * from menu_info where pid=#{pid} order by mindex asc
+	</select>
+	
+	<select id="findSecondMenus" parameterType="map" resultType="com.school.biz.domain.entity.security.LeftMenu">
+		select mi.id,mi.pid,res.res_url resource_url,mi.resource_name,mi.mindex,mi.level,mi.remark 
+		from (
+			  select ri.id,ri.res_name,ri.res_url,ri.menu_id from resource_info ri
+			  inner join role_resource rr on ri.id = rr.resource_id
+			  where rr.role_id = (select au.role_id from admin_user au where au.id = #{userId}) and ri.parent_res_id = 0
+			 ) res
+		inner join menu_info mi on res.menu_id = mi.id
+		where mi.pid = #{pid}
+		ORDER BY mi.mindex
+	</select>
+	
+	<resultMap type="com.school.biz.domain.entity.security.LeftMenu" id="leftMenuResult">
+		<id property="id" column="id" />
+		<result property="userId" column="user_id" />
+		<collection property="menuList" column="{pid=id,userId=user_id}" ofType="com.school.biz.domain.entity.security.LeftMenu" select="findSecondMenus" />
+	</resultMap>
+	<select id="getMyLeftMenus" parameterType="map" resultMap="leftMenuResult">
+		select mi.id,mi.pid,permission.resource_url,mi.resource_name,mi.mindex,mi.level,mi.remark icon,concat(#{userId}) user_id 
+		from menu_info mi 
+		inner join (
+				select temp.id,temp.resource_url from (
+											select IF(mi.pid&lt;&gt;0,mi.pid,mi.id) id,IF(mi.pid&lt;&gt;0,NULL,res.res_url) resource_url
+											from (
+													select ri.menu_id,ri.res_url 
+													from resource_info ri
+													inner join role_resource rr on ri.id = rr.resource_id
+													where rr.role_id = (select au.role_id from admin_user au where au.id = #{userId}) and ri.parent_res_id = 0
+												 ) res
+											inner join menu_info mi on res.menu_id = mi.id
+											)temp
+				group by temp.id
+		) permission on mi.id = permission.id
+		ORDER BY mi.mindex
+	</select>
+	
+	<select id="getAll" resultType="com.school.biz.domain.entity.security.MenuInfo">
+		select mi.* from menu_info mi
+		ORDER BY mi.id asc
+	</select>
+	
+	<select id="getOwnMenuIdList" parameterType="java.lang.Long" resultType="java.lang.Long">
+		select mi.id from menu_info mi
+		where mi.id = #{menuId} or mi.pid = #{menuId}
+	</select>
+</mapper>

@@ -9,7 +9,7 @@
 	<uri></uri>
 	<tag>
 		<name>createPager</name>
-		<tag-class>com.school.util.core.pager.Pager</tag-class>
+		<tag-class>com.school.biz.util.pager.Pager</tag-class>
 		<body-content>JSP</body-content>
 		<attribute>
 			<name>curPage</name>

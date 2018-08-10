@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.school.biz.dao.customer.CustomerMapper">
+    <resultMap id="BaseResultMap" type="com.school.biz.domain.entity.customer.Customer">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="open_id" property="openId" jdbcType="VARCHAR"/>
+        <result column="nickname" property="nickname" jdbcType="VARCHAR"/>
+        <result column="is_subscribed" property="isSubscribed" jdbcType="TINYINT"/>
+        <result column="subscribed_time" property="subscribedTime" jdbcType="TIMESTAMP"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="addr" property="addr" jdbcType="VARCHAR"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="avatar" property="avatar" jdbcType="VARCHAR"/>
+        <result column="sex" property="sex" jdbcType="CHAR"/>
+        <result column="version" property="version" jdbcType="INTEGER"/>
+        <result column="creator" property="creator" jdbcType="VARCHAR"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+        <result column="modifier" property="modifier" jdbcType="VARCHAR"/>
+        <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP"/>
+        <result column="is_deleted" property="isDeleted" jdbcType="BIT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, open_id, nickname, is_subscribed, subscribed_time, name, phone, addr, email, avatar, sex, version, creator, created_time, modifier,
+    modified_time, is_deleted
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from customer
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from customer
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+    <insert id="insert" parameterType="com.school.biz.domain.entity.customer.Customer">
+    insert into customer (open_id, is_subscribed, subscribed_time)
+    values
+    (
+      #{openId,jdbcType=VARCHAR},
+      #{subscribed, jdbcType=TINYINT},
+      #{subscribedTime, jdbcType=TIMESTAMP}
+    )
+  </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.school.biz.domain.entity.customer.Customer">
+        update customer
+        <set>
+            <if test="nickname != null and nickname != ''">
+                nickname = #{nickname, jdbcType=VARCHAR},
+            </if>
+            <if test="subscribed != null">
+                is_subscribed = #{subscribed, jdbcType=TINYINT},
+            </if>
+            <if test="subscribedTime != null">
+                subscribed_time = #{subscribedTime, jdbcType=TIMESTAMP}
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="addr != null">
+                addr = #{addr,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="avatar != null">
+                avatar = #{avatar,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                sex = #{sex,jdbcType=CHAR},
+            </if>
+            <if test="version != null">
+                version = #{version,jdbcType=INTEGER},
+            </if>
+            <if test="creator != null">
+                creator = #{creator,jdbcType=VARCHAR},
+            </if>
+            <if test="createdTime != null">
+                created_time = #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifier != null">
+                modifier = #{modifier,jdbcType=VARCHAR},
+            </if>
+            <if test="modifiedTime != null">
+                modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDeleted != null">
+                is_deleted = #{isDeleted,jdbcType=BIT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.school.biz.domain.entity.customer.Customer">
+    update customer
+    set name = #{name,jdbcType=VARCHAR},
+      is_subscribed=#{subscribed,jdbcType=TINYINT},
+      subscribed_time=#{subscribedTime,jdbcType=TIMESTAMP},
+      nickname=#{nickname,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      addr = #{addr,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      avatar = #{avatar,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=CHAR},
+      version = version + 1,
+      creator = #{creator,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier = #{modifier,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=BIT}
+    where id = #{id,jdbcType=BIGINT} and version = #{version, jdbcType=INTEGER}
+  </update>
+
+    <select id="queryPage" resultType="com.school.biz.domain.entity.customer.Customer" parameterType="map">
+        select c.* from customer c
+        where c.phone is not null
+        <if test="status != null and status != '' ">
+            and c.status = #{status}
+        </if>
+        <if test="keyword != null and keyword != '' ">
+            and c.name like concat('%',#{keyword},'%')
+        </if>
+        ORDER BY c.id desc
+    </select>
+
+    <select id="selectByOpenId" resultType="com.school.biz.domain.entity.customer.Customer"
+            parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from customer
+        where open_id = #{openId, jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectByPhone" resultType="com.school.biz.domain.entity.customer.Customer"
+            parameterType="java.lang.String">
+      select
+      <include refid="Base_Column_List"/>
+      from customer
+      where phone = #{phone, jdbcType=VARCHAR}
+    </select>
+
+
+    <select id="selectByParams" resultType="com.school.biz.domain.entity.customer.Customer" parameterType="map">
+        select * from customer t where 1=1
+        <where>
+            <if test="phone != null and phone != '' ">
+                and t.phone=#{phone,jdbcType=VARCHAR}
+            </if>
+        </where>
+        and t.is_deleted=0
+        order by t.id desc
+    </select>
+</mapper>

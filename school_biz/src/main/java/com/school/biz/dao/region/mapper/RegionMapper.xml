@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.school.biz.dao.region.RegionMapper">
+    <resultMap id="BaseResultMap" type="com.school.biz.domain.entity.region.Region">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="area_name" property="areaName" jdbcType="VARCHAR"/>
+        <result column="parent_id" property="parentId" jdbcType="BIGINT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,
+        area_name,
+        parent_id
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from regional_division_dict
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    </delete>
+    <insert id="insert" parameterType="com.school.biz.domain.entity.region.Region">
+
+    </insert>
+    <insert id="insertSelective" keyProperty="id" useGeneratedKeys="true"
+            parameterType="com.school.biz.domain.entity.region.Region">
+
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.school.biz.domain.entity.region.Region">
+
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.school.biz.domain.entity.region.Region">
+
+    </update>
+
+    <select id="queryPage" resultType="com.school.biz.domain.entity.region.Region" parameterType="map">
+
+    </select>
+
+    <!-- 管理台列表查询 -->
+    <select id="queryForManagerPage" resultType="com.school.biz.domain.entity.region.Region" parameterType="map">
+        select es.* from express_send es
+        <where>
+            <if test="keyword != null and keyword != '' ">
+                and (es.name like concat('%',#{keyword},'%')
+                or es.code like concat('%',#{keyword},'%')
+                or es.phone like concat('%',#{keyword},'%'))
+            </if>
+        </where>
+        ORDER BY es.id desc
+    </select>
+
+
+    <select id="selectByParams" resultType="com.school.biz.domain.entity.region.Region" parameterType="map">
+        select * from regional_division_dict t
+        <where>
+            <if test="parentId != null and parentId != '' ">
+                and t.parent_id=#{parentId,jdbcType=BIGINT}
+            </if>
+            <if test="parentId == null or parentId == '' ">
+                and t.parent_id=0
+            </if>
+        </where>
+        order by t.id asc
+    </select>
+</mapper>

@@ -16,8 +16,7 @@
 	<context:component-scan base-package="com.school"/>
 
 	<!-- 使用annotation定义事务 -->
-	<tx:annotation-driven proxy-target-class="true"
-		transaction-manager="transactionManager" />
+	<tx:annotation-driven proxy-target-class="true" />
 	<!-- MyBatis 事务配置 -->
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
@@ -25,24 +24,20 @@
 		<qualifier value="MyBatisTX" />
 	</bean>
 
-	<!-- JSR303 Validator定义 -->
-<!-- 	<bean id="validator" -->
-<!-- 		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" /> -->
-
 	<!-- MyBatis配置 -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="mysqlDataSource" />
 		<!-- 自动扫描entity目录, 省掉Configuration.xml里的手工配置 -->
-		<property name="typeAliasesPackage" value="com.school.domain.entity" />
+		<property name="typeAliasesPackage" value="com.school.biz.domain.entity" />
 		<property name="configLocation" value="classpath:mybatis/mybatis-config.xml" />
 		<!-- 显式指定Mapper文件位置 -->
-		<property name="mapperLocations" value="classpath*:com/school/dao/**/**/*Mapper.xml" />
+		<property name="mapperLocations" value="classpath*:com/school/biz/dao/**/**/*Mapper.xml" />
 	</bean>
 
 	<!-- 扫描basePackage下所有以Dao 接口 -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
-		<property name="basePackage" value="com.school.dao" />
+		<property name="basePackage" value="com.school.biz.dao" />
 	</bean>
 
 	<!-- MyBatis sessionTemplate注册 -->

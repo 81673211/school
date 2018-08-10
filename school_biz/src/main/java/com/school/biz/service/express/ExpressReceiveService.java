@@ -1,0 +1,79 @@
+package com.school.biz.service.express;
+
+import java.util.List;
+import java.util.Map;
+
+import com.school.biz.dao.express.ExpressReceiveMapper;
+import com.school.biz.domain.entity.express.ExpressReceive;
+import com.school.biz.exception.ExpressException;
+import com.school.biz.service.base.BaseService;
+
+/**
+ * @author jame
+ */
+public interface ExpressReceiveService extends BaseService<ExpressReceive, ExpressReceiveMapper> {
+
+    /**
+     * 创建收件快件流程
+     *
+     */
+    void createReceiveExpress(ExpressReceive expressReceive);
+
+    /**
+     * 编辑收件快件
+     *
+     */
+    void modifyReceiveExpress(ExpressReceive expressReceive);
+
+    /**
+     * 获取收件快件信息
+     *
+     * @param id
+     * @return
+     * @throws ExpressException
+     */
+    ExpressReceive getReceiveExpress(Long id);
+
+    /**
+     * 修改收件状态
+     *
+     * @param id
+     * @param status
+     */
+    void updateReceiveExpressStatus(Long id, Integer status);
+
+    void updateReceiveExpress(Long id, Integer status, Integer expressWay);
+
+    /**
+     * <b>Description:通过手机号绑定用户ID.</b><br>
+     * <b>Author:fred</b>
+     * <br><b>Date:01/08/2018 10:56.</b>
+     * <br><b>BackLog:</b>
+     */
+    void bindCustomerByPhone(String phone, Long customerId);
+
+    /**
+     * 收件列表，通过指定的状态值查询,
+     * 默认条件isDelete=0
+     *
+     * @param status
+     * @param phone
+     * @return
+     * @throws ExpressException
+     */
+    List<ExpressReceive> selectExpressList(Integer[] status, String phone);
+
+
+    /**
+     * 初始化省市区详细内容
+     *
+     * @param expressSend
+     * @return
+     */
+    ExpressReceive initProvinceCityDistrict(ExpressReceive expressSend);
+
+    //-------- from manager --------
+    List<ExpressReceive> queryPage(Map<String,Object> paramMap);
+
+    void saveOrUpdate(ExpressReceive expressReceive);
+}

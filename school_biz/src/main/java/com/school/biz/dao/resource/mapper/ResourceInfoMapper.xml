@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.school.biz.dao.resource.ResourceInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.school.biz.domain.entity.resource.ResourceInfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="res_name" property="resName" jdbcType="VARCHAR" />
+    <result column="res_url" property="resUrl" jdbcType="VARCHAR" />
+    <result column="parent_res_id" property="parentResId" jdbcType="BIGINT" />
+    <result column="menu_id" property="menuId" jdbcType="BIGINT" />
+    <result column="res_remark" property="resRemark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, res_name, res_url, parent_res_id, menu_id, res_remark
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from resource_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from resource_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.school.biz.domain.entity.resource.ResourceInfo" >
+    insert into resource_info (id, res_name, res_url, 
+      parent_res_id, menu_id, res_remark
+      )
+    values (#{id,jdbcType=BIGINT}, #{resName,jdbcType=VARCHAR}, #{resUrl,jdbcType=VARCHAR}, 
+      #{parentResId,jdbcType=BIGINT}, #{menuId,jdbcType=BIGINT}, #{resRemark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.school.biz.domain.entity.resource.ResourceInfo" >
+    insert into resource_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="resName != null" >
+        res_name,
+      </if>
+      <if test="resUrl != null" >
+        res_url,
+      </if>
+      <if test="parentResId != null" >
+        parent_res_id,
+      </if>
+      <if test="menuId != null" >
+        menu_id,
+      </if>
+      <if test="resRemark != null" >
+        res_remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="resName != null" >
+        #{resName,jdbcType=VARCHAR},
+      </if>
+      <if test="resUrl != null" >
+        #{resUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="parentResId != null" >
+        #{parentResId,jdbcType=BIGINT},
+      </if>
+      <if test="menuId != null" >
+        #{menuId,jdbcType=BIGINT},
+      </if>
+      <if test="resRemark != null" >
+        #{resRemark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.school.biz.domain.entity.resource.ResourceInfo" >
+    update resource_info
+    <set >
+      <if test="resName != null" >
+        res_name = #{resName,jdbcType=VARCHAR},
+      </if>
+      <if test="resUrl != null" >
+        res_url = #{resUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="parentResId != null" >
+        parent_res_id = #{parentResId,jdbcType=BIGINT},
+      </if>
+      <if test="menuId != null" >
+        menu_id = #{menuId,jdbcType=BIGINT},
+      </if>
+      <if test="resRemark != null" >
+        res_remark = #{resRemark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.school.biz.domain.entity.resource.ResourceInfo" >
+    update resource_info
+    set res_name = #{resName,jdbcType=VARCHAR},
+      res_url = #{resUrl,jdbcType=VARCHAR},
+      parent_res_id = #{parentResId,jdbcType=BIGINT},
+      menu_id = #{menuId,jdbcType=BIGINT},
+      res_remark = #{resRemark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="queryPage" resultType="com.school.biz.domain.entity.resource.ResourceInfoVo" parameterType="map">
+		select ri.id,ri.res_name,ri.res_url,ri.parent_res_id,ri.menu_id,ri.res_remark,
+		IFNULL(ri2.res_name,'无') parent_res_name,mi.resource_name menu_name
+		from resource_info ri
+		left join resource_info ri2 on ri.parent_res_id = ri2.id
+		left join menu_info mi on ri.menu_id = mi.id
+		<where>
+			<if test="ownMenuIdList != null and ownMenuIdList.size > 0">
+   	           and ri.menu_id in
+	   	       <foreach item="item" index="index" collection="ownMenuIdList" 
+                     open="(" separator="," close=")">
+                    #{item}
+               </foreach>
+   	   	   	</if>
+			<if test="parentResId != null and parentResId != '' ">
+				and ri.parent_res_id = #{parentResId}
+			</if>
+			<if test="keyword != null and keyword != '' ">
+				and (ri.res_name like concat('%',#{keyword},'%')
+					 or ri.res_url like concat('%',#{keyword},'%'))
+			</if>
+		</where>
+		ORDER BY ri.id asc
+	</select>
+	
+	<select id="detail" parameterType="java.lang.Long" resultType="com.school.biz.domain.entity.resource.ResourceInfoVo">
+		select ri.id,ri.res_name,ri.res_url,ri.parent_res_id,ri.menu_id,ri.res_remark,
+		IFNULL(ri2.res_name,'无') parent_res_name,mi.resource_name menu_name
+		from resource_info ri
+		left join resource_info ri2 on ri.parent_res_id = ri2.id
+		left join menu_info mi on ri.menu_id = mi.id
+		where ri.id = #{id}
+	</select>
+	
+	<select id="getAllParentResources" resultType="com.school.biz.domain.entity.resource.ResourceInfoVo">
+		select ri.*
+		from resource_info ri
+		where ri.parent_res_id = 0
+		ORDER BY ri.id asc
+	</select>
+	
+	<select id="getOwnResources" parameterType="java.lang.Long" resultType="com.school.biz.domain.entity.resource.ResourceInfo">
+		select ri.* from resource_info ri 
+		where ri.id in(
+					   select rr.resource_id from role_resource rr
+				       where rr.role_id = (select au.role_id from admin_user au where au.id = #{userId})
+					   )
+	</select>
+	
+	<select id="checkResNameIsNotExist" parameterType="java.lang.String" resultType="java.lang.Boolean">
+		select IF(count(1)>0,0,1)
+		from resource_info ri
+		where ri.res_name = #{resName}
+	</select>
+	
+	<select id="checkResUrlIsNotExist" parameterType="java.lang.String" resultType="java.lang.Boolean">
+		select IF(count(1)>0,0,1)
+		from resource_info ri
+		where ri.res_url = #{resUrl}
+	</select>
+</mapper>

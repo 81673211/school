@@ -18,11 +18,11 @@
   
  <!--设置别名-->
  <typeAliases>
-   	<package name="com.school.domain.entity"/>
+   	<package name="com.school.biz.domain.entity"/>
  </typeAliases>
  
  <plugins>
- 	<plugin interceptor="com.school.util.core.mybatis.PaginationInterceptor">
+ 	<plugin interceptor="com.school.biz.util.mybatis.PaginationInterceptor">
  	<property name="pageSqlId" value=".*Page$"/>
  		<property name="dialect" value="mysql"/>
  	</plugin>
