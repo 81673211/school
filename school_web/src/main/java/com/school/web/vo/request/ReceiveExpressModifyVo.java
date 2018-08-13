@@ -12,6 +12,8 @@ import lombok.Data;
 @Validated
 @Data
 public class ReceiveExpressModifyVo {
+    @NotNull(message = "openId不能为空")
+    private String openId;
     @NotNull(message = "参数错误")
     private Long id;
     @NotNull(message = "请选择收件方式")

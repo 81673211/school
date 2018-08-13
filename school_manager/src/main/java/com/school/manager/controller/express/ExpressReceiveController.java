@@ -14,13 +14,15 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
 import com.school.biz.constant.ConstantUrl;
-import com.school.biz.domain.bo.wechat.template.ReceiveExpressAtProxyTemplateData;
+import com.school.biz.domain.bo.wechat.template.ReceiveExpressArrivalTemplateData;
 import com.school.biz.domain.bo.wechat.template.Template;
 import com.school.biz.domain.bo.wechat.template.TemplateData;
 import com.school.biz.domain.entity.customer.Customer;
 import com.school.biz.domain.entity.express.ExpressCompany;
 import com.school.biz.domain.entity.express.ExpressReceive;
+import com.school.biz.enumeration.ExpressTypeEnum;
 import com.school.biz.enumeration.ReceiveExpressStatusEnum;
+import com.school.biz.enumeration.WechatTemplateEnum;
 import com.school.biz.exception.FuBusinessException;
 import com.school.biz.service.customer.CustomerService;
 import com.school.biz.service.express.ExpressCompanyService;
@@ -124,14 +126,8 @@ public class ExpressReceiveController extends BaseEasyWebController {
             }
             expressReceiveService.saveOrUpdate(expressReceive);
             if (customer != null && StringUtils.isNotBlank(customer.getOpenId())) {
-                TemplateData templateData = new ReceiveExpressAtProxyTemplateData.Builder()
-                        .buildKeyword1(expressCompany.getName())
-                        .buildKeyword2(expressReceive.getCode()).build();
-                Template template = new Template.Builder()
-                        .buildId("ugYEPmc1T91iN9VpGR8oR_IqN5Aowm7mulR8ERH9BgM")
-                        .buildToUser(customer.getOpenId())
-                        .buildTemplateData(templateData).build();
-                templateService.send(template);
+                templateService.send(WechatTemplateEnum.RECEIVE_EXPRESS_ARRIVAL.getType(), customer.getOpenId(),
+                                     expressReceive, ExpressTypeEnum.RECEIVE.getFlag());
             }
             return AjaxResult.success("保存成功", JSON.toJSON(expressReceive));
         } catch (Exception e) {

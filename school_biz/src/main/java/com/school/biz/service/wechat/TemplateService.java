@@ -1,6 +1,7 @@
 package com.school.biz.service.wechat;
 
 import com.school.biz.domain.bo.wechat.template.Template;
+import com.school.biz.domain.entity.express.Express;
 
 /**
  *
@@ -18,4 +19,6 @@ public interface TemplateService {
      * <br><b>BackLog:</b>
      */
     void send(Template template);
+
+    void send(String templateType, String openId, Express express, int expressType);
 }

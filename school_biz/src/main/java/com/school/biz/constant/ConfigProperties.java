@@ -15,7 +15,7 @@ import jodd.props.Props;
  */
 public final class ConfigProperties {
 
-    private static Props p = new Props();
+    public static Props p = new Props();
 
     static {
         loadConfigProp();

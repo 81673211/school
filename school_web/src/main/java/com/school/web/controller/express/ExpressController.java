@@ -23,12 +23,14 @@ import com.school.biz.domain.entity.express.ExpressSend;
 import com.school.biz.domain.entity.region.Region;
 import com.school.biz.enumeration.ExpressTypeEnum;
 import com.school.biz.enumeration.ReceiveExpressStatusEnum;
+import com.school.biz.enumeration.WechatTemplateEnum;
 import com.school.biz.service.calc.CalcCostService;
 import com.school.biz.service.customer.CustomerService;
 import com.school.biz.service.express.ExpressCompanyService;
 import com.school.biz.service.express.ExpressReceiveService;
 import com.school.biz.service.express.ExpressSendService;
 import com.school.biz.service.region.RegionService;
+import com.school.biz.service.wechat.TemplateService;
 import com.school.web.controller.base.BaseEasyWebController;
 import com.school.web.vo.request.ExpressGetVo;
 import com.school.web.vo.request.ExpressStatusModifyVo;
@@ -64,6 +66,8 @@ public class ExpressController extends BaseEasyWebController {
     private RegionService regionService;
     @Autowired
     private CalcCostService calcCostService;
+    @Autowired
+    private TemplateService templateService;
 
     /**
      * 寄件
@@ -98,13 +102,15 @@ public class ExpressController extends BaseEasyWebController {
      * @return
      */
     @RequestMapping(value = "/1/create", method = RequestMethod.POST)
-    public Response createReceiveExpress(@Validated ReceiveExpressCreateVo expressVo, BindingResult bindingResult) {
+    public Response createReceiveExpress(@Validated ReceiveExpressCreateVo expressVo,
+                                         BindingResult bindingResult) {
         Response response = new Response();
         checkValid(bindingResult, response);
         if (response.getStatus() != HTTP_SUCCESS) {
             return response;
         }
-        if (expressVo.getCompanyCode() == null || expressVo.getCompanyName() == null || expressVo.getCompanyId() == null) {
+        if (expressVo.getCompanyCode() == null || expressVo.getCompanyName() == null
+            || expressVo.getCompanyId() == null) {
             return response.writeFailure(PARAM_ERROR);
         }
         try {
@@ -141,7 +147,6 @@ public class ExpressController extends BaseEasyWebController {
         }
     }
 
-
     /**
      * 收件 编辑
      *
@@ -150,7 +155,8 @@ public class ExpressController extends BaseEasyWebController {
      * @return
      */
     @RequestMapping(value = "/1/modify", method = RequestMethod.POST)
-    public Response modifySendExpress(@Validated ReceiveExpressModifyVo expressVo, BindingResult bindingResult) {
+    public Response modifySendExpress(@Validated ReceiveExpressModifyVo expressVo,
+                                      BindingResult bindingResult) {
         Response response = new Response();
         checkValid(bindingResult, response);
         if (response.getStatus() != HTTP_SUCCESS) {
@@ -160,6 +166,8 @@ public class ExpressController extends BaseEasyWebController {
             ExpressReceive expressReceive = new ExpressReceive();
             BeanUtils.copyProperties(expressReceive, expressVo);
             expressReceiveService.modifyReceiveExpress(expressReceive);
+            templateService.send(WechatTemplateEnum.RECEIVE_EXPRESS_DISTRIBUTION_SELF.getType(),
+                                 expressVo.getOpenId(), expressReceive, ExpressTypeEnum.RECEIVE.getFlag());
             return response.writeSuccess("编辑收件快件成功");
         } catch (Exception e) {
             return response.writeFailure("编辑收件快件失败");
@@ -187,7 +195,6 @@ public class ExpressController extends BaseEasyWebController {
         }
     }
 
-
     /**
      * 获取 收件信息
      *
@@ -208,7 +215,6 @@ public class ExpressController extends BaseEasyWebController {
             return response.writeFailure("获取收件快件失败");
         }
     }
-
 
     /**
      * 寄件   修改寄件的快件状态
@@ -233,7 +239,6 @@ public class ExpressController extends BaseEasyWebController {
         return response;
     }
 
-
     /**
      * 收件   修改收件的快件状态
      *
@@ -242,7 +247,8 @@ public class ExpressController extends BaseEasyWebController {
      * @return
      */
     @RequestMapping(value = "/1/updateStatus", method = RequestMethod.POST)
-    public Response updateReceiveExpressStatus(@Validated ExpressStatusModifyVo vo, BindingResult bindingResult) {
+    public Response updateReceiveExpressStatus(@Validated ExpressStatusModifyVo vo,
+                                               BindingResult bindingResult) {
         Response response = new Response();
         checkValid(bindingResult, response);
         if (response.getStatus() != HTTP_SUCCESS) {
@@ -257,7 +263,6 @@ public class ExpressController extends BaseEasyWebController {
         return response;
     }
 
-
     /**
      * 收件  查询收件列表
      *
@@ -265,8 +270,9 @@ public class ExpressController extends BaseEasyWebController {
      * @return
      */
     @RequestMapping(value = "/1/list", method = RequestMethod.GET)
-    public ModelAndView selectReceiveExpressList(@RequestParam(value = "status", required = false) String status,
-                                                 @RequestParam(value = "openId") String openId)
+    public ModelAndView selectReceiveExpressList(
+            @RequestParam(value = "status", required = false) String status,
+            @RequestParam(value = "openId") String openId)
             throws InvocationTargetException, IllegalAccessException {
         ModelAndView mav = new ModelAndView();
         Customer customer = customerService.getByOpenId(openId);
@@ -291,7 +297,8 @@ public class ExpressController extends BaseEasyWebController {
             }
             mav.addObject("list", receiveExpressListResponseVos);
             mav.addObject("openId", openId);
-            if (split.length == 1 && ReceiveExpressStatusEnum.FINISHED.getFlag() == Integer.parseInt(split[0])) {
+            if (split.length == 1 && ReceiveExpressStatusEnum.FINISHED.getFlag() == Integer.parseInt(
+                    split[0])) {
                 mav.setViewName("received");
             } else {
                 mav.setViewName("receive");
@@ -299,7 +306,6 @@ public class ExpressController extends BaseEasyWebController {
         }
         return mav;
     }
-
 
     /**
      * 寄件  查询寄件列表
@@ -326,7 +332,8 @@ public class ExpressController extends BaseEasyWebController {
                 for (ExpressSend expressSend : list) {
                     SendExpressListResponseVo vo = new SendExpressListResponseVo();
                     BeanUtils.copyProperties(vo, expressSend);
-                    vo.setOrderPrice(expressSendService.getOrderPrice(expressSend.getId(), ExpressTypeEnum.SEND));
+                    vo.setOrderPrice(
+                            expressSendService.getOrderPrice(expressSend.getId(), ExpressTypeEnum.SEND));
                     vos.add(vo);
                 }
             }
@@ -350,7 +357,6 @@ public class ExpressController extends BaseEasyWebController {
         return response;
     }
 
-
     /**
      * 寄件  页面跳转
      *
@@ -372,6 +378,5 @@ public class ExpressController extends BaseEasyWebController {
         }
         return modelAndView;
     }
-
 
 }
