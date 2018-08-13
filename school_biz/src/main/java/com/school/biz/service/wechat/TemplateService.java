@@ -1,6 +1,6 @@
 package com.school.biz.service.wechat;
 
-import com.school.biz.domain.bo.wechat.Template;
+import com.school.biz.domain.bo.wechat.template.Template;
 
 /**
  *

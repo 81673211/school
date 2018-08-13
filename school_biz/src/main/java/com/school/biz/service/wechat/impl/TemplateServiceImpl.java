@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import com.alibaba.fastjson.JSONObject;
-import com.school.biz.domain.bo.wechat.Template;
+import com.school.biz.domain.bo.wechat.template.Template;
 import com.school.biz.service.wechat.AccessTokenService;
 import com.school.biz.service.wechat.TemplateService;
 import com.school.biz.util.HttpUtil;

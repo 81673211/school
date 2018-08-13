@@ -16,12 +16,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
+
 import com.school.biz.constant.ConstantUrl;
 import com.school.biz.exception.FuBusinessException;
 import com.school.biz.service.customer.CustomerService;
 import com.school.biz.util.pager.PageInfo;
 import com.school.manager.vo.AjaxResult;
-import com.school.biz.domain.bo.wechat.Template;
+import com.school.biz.domain.bo.wechat.template.Template;
 import com.school.biz.domain.entity.customer.Customer;
 import com.school.biz.domain.entity.express.ExpressCompany;
 import com.school.biz.domain.entity.express.ExpressReceive;

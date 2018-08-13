@@ -1,4 +1,4 @@
-package com.school.biz.domain.bo.wechat;
+package com.school.biz.domain.bo.wechat.template;
 
 import java.util.List;
 
