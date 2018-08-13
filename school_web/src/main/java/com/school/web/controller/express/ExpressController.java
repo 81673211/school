@@ -165,6 +165,7 @@ public class ExpressController extends BaseEasyWebController {
             ExpressReceive expressReceive = new ExpressReceive();
             BeanUtils.copyProperties(expressVo, expressReceive);
             expressReceiveService.modifyReceiveExpress(expressReceive);
+            expressReceive = expressReceiveService.get(expressVo.getId());
             templateService.send(WechatTemplateEnum.RECEIVE_EXPRESS_DISTRIBUTION_SELF.getType(),
                                  expressVo.getOpenId(), expressReceive, ExpressTypeEnum.RECEIVE.getFlag());
             return response.writeSuccess("编辑收件快件成功");
