@@ -4,8 +4,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.BindingResult;
@@ -77,15 +77,14 @@ public class ExpressController extends BaseEasyWebController {
      * @return
      */
     @RequestMapping(value = "/0/create", method = RequestMethod.POST)
-    public Response createSendExpress(@Validated SendExpressCreateVo expressVo, BindingResult bindingResult)
-            throws InvocationTargetException, IllegalAccessException {
+    public Response createSendExpress(@Validated SendExpressCreateVo expressVo, BindingResult bindingResult) {
         DataResponse<String> response = new DataResponse<>();
         checkValid(bindingResult, response);
         if (response.getStatus() != HTTP_SUCCESS) {
             return response;
         }
         ExpressSend expressSend = new ExpressSend();
-        BeanUtils.copyProperties(expressSend, expressVo);
+        BeanUtils.copyProperties(expressVo, expressSend);
         Customer customer = customerService.getByOpenId(expressVo.getOpenId());
         expressSend.setCustomerId(customer.getId());
         expressSend.setSenderPhone(customer.getPhone());
@@ -115,7 +114,7 @@ public class ExpressController extends BaseEasyWebController {
         }
         try {
             ExpressReceive expressReceive = new ExpressReceive();
-            BeanUtils.copyProperties(expressReceive, expressVo);
+            BeanUtils.copyProperties(expressVo, expressReceive);
             expressReceiveService.createReceiveExpress(expressReceive);
             return response.writeSuccess("创建收件快件成功");
         } catch (Exception e) {
@@ -139,7 +138,7 @@ public class ExpressController extends BaseEasyWebController {
         }
         try {
             ExpressSend expressSend = new ExpressSend();
-            BeanUtils.copyProperties(expressSend, expressVo);
+            BeanUtils.copyProperties(expressVo, expressSend);
             expressSendService.modifySendExpress(expressSend);
             return response.writeSuccess("编辑寄件快件成功");
         } catch (Exception e) {
@@ -164,7 +163,7 @@ public class ExpressController extends BaseEasyWebController {
         }
         try {
             ExpressReceive expressReceive = new ExpressReceive();
-            BeanUtils.copyProperties(expressReceive, expressVo);
+            BeanUtils.copyProperties(expressVo, expressReceive);
             expressReceiveService.modifyReceiveExpress(expressReceive);
             templateService.send(WechatTemplateEnum.RECEIVE_EXPRESS_DISTRIBUTION_SELF.getType(),
                                  expressVo.getOpenId(), expressReceive, ExpressTypeEnum.RECEIVE.getFlag());
@@ -272,8 +271,7 @@ public class ExpressController extends BaseEasyWebController {
     @RequestMapping(value = "/1/list", method = RequestMethod.GET)
     public ModelAndView selectReceiveExpressList(
             @RequestParam(value = "status", required = false) String status,
-            @RequestParam(value = "openId") String openId)
-            throws InvocationTargetException, IllegalAccessException {
+            @RequestParam(value = "openId") String openId) {
         ModelAndView mav = new ModelAndView();
         Customer customer = customerService.getByOpenId(openId);
         String phone = customer.getPhone();
@@ -290,7 +288,7 @@ public class ExpressController extends BaseEasyWebController {
             if (!CollectionUtils.isEmpty(receiveList)) {
                 for (ExpressReceive expressReceive : receiveList) {
                     ReceiveExpressListResponseVo vo = new ReceiveExpressListResponseVo();
-                    BeanUtils.copyProperties(vo, expressReceive);
+                    BeanUtils.copyProperties(expressReceive, vo);
                     vo.setDistributionCost(calcCostService.calcReceiveDistributionCost(expressReceive));
                     receiveExpressListResponseVos.add(vo);
                 }
@@ -331,7 +329,7 @@ public class ExpressController extends BaseEasyWebController {
             if (!CollectionUtils.isEmpty(list)) {
                 for (ExpressSend expressSend : list) {
                     SendExpressListResponseVo vo = new SendExpressListResponseVo();
-                    BeanUtils.copyProperties(vo, expressSend);
+                    BeanUtils.copyProperties(expressSend, vo);
                     vo.setOrderPrice(
                             expressSendService.getOrderPrice(expressSend.getId(), ExpressTypeEnum.SEND));
                     vos.add(vo);
