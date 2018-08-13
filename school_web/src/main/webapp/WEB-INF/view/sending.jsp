@@ -84,6 +84,9 @@
 
 <script>
     function change(e, id) {
+        if (id == 'city') {
+            $("#area").html("<option value=''>[---请选择---]</option>");
+        }
         var html = "";
         $.get("/region/list", {"parentId": e.value}, function (result) {
             html += "<option value=''>[---请选择---]</option>";
@@ -132,7 +135,7 @@
                 alert(result.msg);
             } else {
                 $("#price").html(result.data);
-                $("#confirm").attr("disabled",false);
+                $("#confirm").attr("disabled", false);
             }
         });
 
