@@ -18,6 +18,9 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSON;
 
 import com.school.biz.constant.ConstantUrl;
+import com.school.biz.domain.bo.wechat.template.ReceiveExpressAtProxyTemplateData;
+import com.school.biz.domain.bo.wechat.template.Template.Builder;
+import com.school.biz.domain.bo.wechat.template.TemplateData;
 import com.school.biz.exception.FuBusinessException;
 import com.school.biz.service.customer.CustomerService;
 import com.school.biz.util.pager.PageInfo;
@@ -126,18 +129,13 @@ public class ExpressReceiveController extends BaseEasyWebController {
             }
             expressReceiveService.saveOrUpdate(expressReceive);
             if (customer != null && StringUtils.isNotBlank(customer.getOpenId())) {
-                Template template = new Template();
-                template.setToUser(customer.getOpenId());
-                template.setId("ugYEPmc1T91iN9VpGR8oR_IqN5Aowm7mulR8ERH9BgM");
-                template.setFirst("您有一个新的快递已到代理点");
-                template.setRemark("请到待收快件页面选择自提或配送，如有疑问请致电：66776677");
-                List<String> keywords = new ArrayList<>();
-                keywords.add(expressCompany.getName());
-                keywords.add(expressReceive.getCode());
-                keywords.add(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()));
-                keywords.add("东门外侧");
-                keywords.add(ReceiveExpressStatusEnum.PROXY_RECIEVED.getMessage());
-                template.setKeywords(keywords);
+                TemplateData templateData = new ReceiveExpressAtProxyTemplateData.Builder()
+                        .buildKeyword1(expressCompany.getName())
+                        .buildKeyword2(expressReceive.getCode()).build();
+                Template template = new Template.Builder()
+                        .buildId("ugYEPmc1T91iN9VpGR8oR_IqN5Aowm7mulR8ERH9BgM")
+                        .buildToUser(customer.getOpenId())
+                        .buildTemplateData(templateData).build();
                 templateService.send(template);
             }
             return AjaxResult.success("保存成功", JSON.toJSON(expressReceive));
