@@ -15,7 +15,8 @@ import lombok.Getter;
 public enum WechatTemplateEnum {
 
     RECEIVE_EXPRESS_ARRIVAL("wx_template_id_0", "收件快递已到达代收点"),
-    RECEIVE_EXPRESS_DISTRIBUTION_SELF("wx_template_id_1", "收件快递自提");
+    RECEIVE_EXPRESS_DISTRIBUTION_SELF("wx_template_id_1", "收件快递自提"),
+    RECEIVE_EXPRESS_FINISH("wx_template_id_2", "收件快递完成");
 
     private String type;
     private String message;

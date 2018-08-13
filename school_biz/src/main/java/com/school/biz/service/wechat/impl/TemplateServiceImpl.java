@@ -10,6 +10,7 @@ import com.alibaba.fastjson.JSON;
 import com.school.biz.constant.ConfigProperties;
 import com.school.biz.domain.bo.wechat.template.ReceiveExpressArrivalTemplateData;
 import com.school.biz.domain.bo.wechat.template.ReceiveExpressDistributionSelfTemplateData;
+import com.school.biz.domain.bo.wechat.template.ReceiveExpressFinishTemplateData;
 import com.school.biz.domain.bo.wechat.template.Template;
 import com.school.biz.domain.bo.wechat.template.TemplateData;
 import com.school.biz.domain.bo.wechat.template.TemplateDataItem;
@@ -72,6 +73,16 @@ public class TemplateServiceImpl implements TemplateService {
             templateData = new ReceiveExpressDistributionSelfTemplateData.Builder()
                     .buildKeyword1(express.getCode())
                     .buildKeyword2(express.getCompanyName()).build();
+            template = new Template.Builder()
+                    .buildId(templateId)
+                    .buildToUser(openId)
+                    .buildTemplateData(templateData).build();
+            send(template);
+        } else if (WechatTemplateEnum.RECEIVE_EXPRESS_FINISH.getType().equals(templateType)) {
+            templateData = new ReceiveExpressFinishTemplateData.Builder()
+                    .buildKeyword1("铜锣湾")
+                    .buildKeyword2(express.getCode())
+                    .build();
             template = new Template.Builder()
                     .buildId(templateId)
                     .buildToUser(openId)

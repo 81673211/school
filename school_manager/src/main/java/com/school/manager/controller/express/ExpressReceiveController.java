@@ -126,8 +126,16 @@ public class ExpressReceiveController extends BaseEasyWebController {
             }
             expressReceiveService.saveOrUpdate(expressReceive);
             if (customer != null && StringUtils.isNotBlank(customer.getOpenId())) {
-                templateService.send(WechatTemplateEnum.RECEIVE_EXPRESS_ARRIVAL.getType(), customer.getOpenId(),
-                                     expressReceive, ExpressTypeEnum.RECEIVE.getFlag());
+                Integer status = expressReceive.getExpressStatus();
+                if (ReceiveExpressStatusEnum.PROXY_RECIEVED.getFlag() == status) {
+                    templateService.send(WechatTemplateEnum.RECEIVE_EXPRESS_ARRIVAL.getType(),
+                                         customer.getOpenId(),
+                                         expressReceive, ExpressTypeEnum.RECEIVE.getFlag());
+                } else if (ReceiveExpressStatusEnum.FINISHED.getFlag() == status) {
+                    templateService.send(WechatTemplateEnum.RECEIVE_EXPRESS_FINISH.getType(),
+                                         customer.getOpenId(), expressReceive,
+                                         ExpressTypeEnum.RECEIVE.getFlag());
+                }
             }
             return AjaxResult.success("保存成功", JSON.toJSON(expressReceive));
         } catch (Exception e) {
