@@ -94,6 +94,11 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
         return findByExpressIdAndType(expressId, ExpressTypeEnum.RECEIVE.getFlag());
     }
 
+    @Override
+    public OrderInfo findByExpressSendId(Long expressId) {
+        return findByExpressIdAndType(expressId, ExpressTypeEnum.SEND.getFlag());
+    }
+
     private OrderInfo findByExpressIdAndType(Long expressId, int expressType) {
         return orderInfoMapper.findByExpressIdAndType(expressId, expressType);
     }

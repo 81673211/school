@@ -1,5 +1,6 @@
 package com.school.biz.service.express.impl;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,16 +15,20 @@ import com.school.biz.dao.express.ExpressSendMapper;
 import com.school.biz.dao.region.RegionMapper;
 import com.school.biz.domain.entity.express.ExpressCompany;
 import com.school.biz.domain.entity.express.ExpressSend;
+import com.school.biz.domain.entity.order.OrderInfo;
 import com.school.biz.domain.entity.region.Region;
+import com.school.biz.enumeration.ExpressTypeEnum;
 import com.school.biz.exception.ExpressException;
 import com.school.biz.service.base.impl.BaseServiceImpl;
 import com.school.biz.service.express.ExpressSendService;
 import com.school.biz.service.order.OrderInfoService;
-import com.school.biz.util.Log;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author jame
  */
+@Slf4j
 @Service
 @Transactional(rollbackFor = ExpressException.class)
 public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, ExpressSendMapper>
@@ -46,7 +51,7 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
         Long count = expressSendMapper.insertSelective(expressSend);
         if (!(count > 0L)) {
             String message = "create send express error,when insert table 'express_send' the number of affected rows is 0";
-            Log.error.error(message);
+            log.error(message);
             throw new RuntimeException(message);
         }
         return orderInfoService.createSendOrder(expressSend.getId());
@@ -62,7 +67,7 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
             boxExpressCompany(expressSend);
             if (!(expressSendMapper.updateByPrimaryKeySelective(expressSend) > 0)) {
                 String message = "modify send express error,when update table 'express_send' the number of affected rows is 0";
-                Log.error.error(message);
+                log.error(message);
                 throw new ExpressException(message);
             }
 //            // 修改完成后检查省市区快递公司等是否发生改变，改变了则重新创建订单，待修改；以及状态检查；修改不再创建订单
@@ -79,7 +84,7 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
 //            }
         } catch (Exception e) {
             String message = "throw exception when modify send express";
-            Log.error.error(message, e);
+            log.error(message, e);
             throw new RuntimeException(message, e);
         }
     }
@@ -89,7 +94,7 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
         ExpressSend expressSend = expressSendMapper.selectByPrimaryKey(id);
         if (expressSend == null) {
             String message = "get send express error,when select table 'express_send' the number of affected rows is 0,id=" + id;
-            Log.error.error(message);
+            log.error(message);
             throw new RuntimeException(message);
         }
         return expressSend;
@@ -104,7 +109,7 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
         int count = expressSendMapper.updateByPrimaryKeySelective(expressSend);
         if (!(count > 0)) {
             String msg = "update send express status failed,when update table 'express_send' the number of affected rows is 0";
-            Log.error.error(msg);
+            log.error(msg);
             throw new RuntimeException(msg);
         }
     }
@@ -147,6 +152,16 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
         expressSend.setCompanyName(expressCompany.getName());
     }
 
+    @Override
+    public BigDecimal getOrderPrice(Long expressId, ExpressTypeEnum expressType) {
+        OrderInfo orderInfo;
+        if (ExpressTypeEnum.RECEIVE.getFlag() == expressType.getFlag()) {
+            orderInfo = orderInfoService.findByExpressReceiveId(expressId);
+        } else {
+            orderInfo = orderInfoService.findByExpressSendId(expressId);
+        }
+        return orderInfo.getAmount();
+    }
 
     @Override
     public List<ExpressSend> queryPage(Map<String, Object> paramMap) {

@@ -69,7 +69,7 @@
     <div id="iframe_box" class="Hui-article">
         <div class="show_iframe">
             <div style="display:none" class="loading"></div>
-            <iframe scrolling="yes" frameborder="0" src="${ctx}/caseinfo"></iframe>
+            欢迎使用系统！
         </div>
     </div>
 </section>

@@ -1,5 +1,6 @@
 package com.school.biz.service.express.impl;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,18 +17,22 @@ import com.school.biz.domain.entity.customer.Customer;
 import com.school.biz.domain.entity.express.Express;
 import com.school.biz.domain.entity.express.ExpressCompany;
 import com.school.biz.domain.entity.express.ExpressReceive;
+import com.school.biz.domain.entity.order.OrderInfo;
 import com.school.biz.domain.entity.region.Region;
 import com.school.biz.enumeration.DistributionTypeEnum;
+import com.school.biz.enumeration.ExpressTypeEnum;
 import com.school.biz.enumeration.ReceiveExpressStatusEnum;
 import com.school.biz.exception.ExpressException;
 import com.school.biz.service.base.impl.BaseServiceImpl;
 import com.school.biz.service.express.ExpressReceiveService;
 import com.school.biz.service.order.OrderInfoService;
-import com.school.biz.util.Log;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author jame
  */
+@Slf4j
 @Service
 @Transactional(rollbackFor = ExpressException.class)
 public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, ExpressReceiveMapper>
@@ -53,12 +58,12 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
             if (!(count > 0L)) {
                 String message =
                         "create receive express error,when insert table 'express_receive' the number of affected rows is 0";
-                Log.error.error(message);
+                log.error(message);
                 throw new ExpressException(message);
             }
         } catch (Exception e) {
             String message = "throw exception when create receive express";
-            Log.error.error(message, e);
+            log.error(message, e);
             throw new RuntimeException(message, e);
         }
     }
@@ -89,7 +94,7 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
         if (!(expressReceiveMapper.updateByPrimaryKeySelective(expressReceive) > 0)) {
             String message =
                     "modify receive express error,when update table 'express_receive' the number of affected rows is 0";
-            Log.error.error(message);
+            log.error(message);
             throw new RuntimeException(message);
         }
     }
@@ -101,7 +106,7 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
             String message =
                     "get receive express error,when select table 'express_receive' the number of affected rows is 0,id="
                     + id;
-            Log.error.error(message);
+            log.error(message);
             throw new RuntimeException(message);
         }
 //            initProvinceCityDistrict(expressReceive);
@@ -118,7 +123,7 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
         if (count <= 0) {
             String msg =
                     "update receive express status failed,when update table 'express_receive' the number of affected rows is 0";
-            Log.error.error(msg);
+            log.error(msg);
             throw new RuntimeException(msg);
         }
     }
@@ -133,7 +138,7 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
         if (count <= 0) {
             String msg =
                     "update receive express status failed,when update table 'express_receive' the number of affected rows is 0";
-            Log.error.error(msg);
+            log.error(msg);
             throw new RuntimeException(msg);
         }
     }
@@ -184,13 +189,24 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
         if (list.isEmpty()) {
             String errorMsg = "未找到对应的快递公司，快递公司编号:" + expressSend.getCompanyCode() + "，快递公司名称:" + expressSend
                     .getCompanyName();
-            Log.error.error(errorMsg);
+            log.error(errorMsg);
             throw new ExpressException(errorMsg);
         }
         ExpressCompany expressCompany = list.get(0);
         expressSend.setCompanyId(expressCompany.getId());
         expressSend.setCompanyCode(expressCompany.getCode());
         expressSend.setCompanyName(expressCompany.getName());
+    }
+
+    @Override
+    public BigDecimal getOrderPrice(Long expressId, ExpressTypeEnum expressType) {
+        OrderInfo orderInfo;
+        if (ExpressTypeEnum.SEND.getFlag() == expressType.getFlag()) {
+            orderInfo = orderInfoService.findByExpressSendId(expressId);
+        } else {
+            orderInfo = orderInfoService.findByExpressReceiveId(expressId);
+        }
+        return orderInfo.getAmount();
     }
 
     @Override

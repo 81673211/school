@@ -16,7 +16,9 @@ public interface OrderInfoService extends BaseService<OrderInfo, OrderInfoMapper
 	String createReceiveOrder(Long expressId);
 
 	OrderInfo findByExpressReceiveId(Long expressId);
-	
+
+	OrderInfo findByExpressSendId(Long expressId);
+
 	List<OrderInfo> getNotPayOrder();
 
 	void orderSuccess(OrderInfo orderInfo);

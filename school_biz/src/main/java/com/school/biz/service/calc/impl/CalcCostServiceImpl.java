@@ -7,12 +7,14 @@ import org.springframework.stereotype.Service;
 import com.school.biz.domain.entity.express.ExpressReceive;
 import com.school.biz.domain.entity.express.ExpressSend;
 import com.school.biz.service.calc.CalcCostService;
-import com.school.biz.util.Log;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author jame
  */
 @Service
+@Slf4j
 public class CalcCostServiceImpl implements CalcCostService {
 
     @Override
@@ -21,7 +23,7 @@ public class CalcCostServiceImpl implements CalcCostService {
             return BigDecimal.valueOf(0.01);
         } catch (Exception e) {
             String msg = "calc receive distribution cost error";
-            Log.error.error(msg, e);
+            log.error(msg, e);
             throw new RuntimeException(msg, e);
         }
     }
@@ -32,7 +34,7 @@ public class CalcCostServiceImpl implements CalcCostService {
             return BigDecimal.valueOf(0.01);
         } catch (Exception e) {
             String msg = "calc send distribution cost error";
-            Log.error.error(msg, e);
+            log.error(msg, e);
             throw new RuntimeException(msg, e);
         }
     }

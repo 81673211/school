@@ -15,7 +15,7 @@
 <body>
 	<div style="padding-bottom: 30px;">
 		<div class="login_log">
-			<img src="../../static/image/logo1.png">
+			<%--<img src="../../static/image/logo1.png">--%>
 		</div>
         <div class="loginTop">
 			<div class="loginTop_con">

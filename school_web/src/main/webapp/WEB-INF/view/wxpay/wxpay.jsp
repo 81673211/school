@@ -17,6 +17,7 @@
 <input id="signType" type="hidden" name="signType" value="${resultMap.signType}" />
 <input id="paySign" type="hidden" name="paySign" value="${resultMap.paySign}" />
 <input id="openId" type="hidden" name="openId" value="${resultMap.openId}" />
+<input id="expressType" type="hidden" name="expressType" value="${resultMap.expressType}"/>
 </body>
 <script type="text/javascript">
   $(function () {
@@ -35,9 +36,16 @@
       },
       function (res) {
         if (res.err_msg == "get_brand_wcpay_request:ok") {
-          window.location.href =
-            "http://www.glove1573.cn/express/1/list?status=0,1,2,3,4&openId=" + $("#openId").val();
-        }     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+          // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+          if ($("#expressType").val() == 1) {
+            //收件
+            window.location.href =
+              "http://www.glove1573.cn/express/1/list?status=0,1,2,3,4&openId=" + $("#openId").val();
+          } else {
+            //寄件
+            window.location.href = "http://www.glove1573.cn/express/0/list?openId=" + $("#openId").val();
+          }
+        }
       }
     );
   }

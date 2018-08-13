@@ -11,11 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
-import com.school.biz.extension.wxpay.sdk.WXPay;
-import com.school.biz.extension.wxpay.sdk.WXPayConfigImpl;
-import com.school.biz.extension.wxpay.sdk.WXPayConstants;
-import com.school.biz.extension.wxpay.sdk.WXPayConstants.SignType;
-import com.school.biz.extension.wxpay.sdk.WXPayUtil;
 import com.school.biz.constant.ConfigProperties;
 import com.school.biz.dao.customer.CustomerMapper;
 import com.school.biz.dao.order.OrderInfoMapper;
@@ -26,11 +21,16 @@ import com.school.biz.enumeration.ExpressTypeEnum;
 import com.school.biz.enumeration.OrderStatusEnum;
 import com.school.biz.enumeration.ReceiveExpressStatusEnum;
 import com.school.biz.enumeration.SendExpressStatusEnum;
-import com.school.biz.util.AmountUtils;
+import com.school.biz.extension.wxpay.sdk.WXPay;
+import com.school.biz.extension.wxpay.sdk.WXPayConfigImpl;
+import com.school.biz.extension.wxpay.sdk.WXPayConstants;
+import com.school.biz.extension.wxpay.sdk.WXPayConstants.SignType;
+import com.school.biz.extension.wxpay.sdk.WXPayUtil;
 import com.school.biz.service.express.ExpressReceiveService;
 import com.school.biz.service.express.ExpressSendService;
 import com.school.biz.service.order.OrderInfoService;
 import com.school.biz.service.wechat.WxPayService;
+import com.school.biz.util.AmountUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -112,6 +112,7 @@ public class WxPayServiceImpl implements WxPayService {
                 String paySign = WXPayUtil.generateSignature(treeMap, config.getKey(), SignType.HMACSHA256);
                 treeMap.put("paySign", paySign);
                 treeMap.put("openId", openId);
+                treeMap.put("expressType", orderInfo.getExpressType().toString());
                 // 将订单置为支付处理中
                 orderInfoService.orderPaying(orderInfo);
             } else {

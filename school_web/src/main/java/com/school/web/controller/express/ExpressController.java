@@ -21,6 +21,7 @@ import com.school.biz.domain.entity.express.ExpressCompany;
 import com.school.biz.domain.entity.express.ExpressReceive;
 import com.school.biz.domain.entity.express.ExpressSend;
 import com.school.biz.domain.entity.region.Region;
+import com.school.biz.enumeration.ExpressTypeEnum;
 import com.school.biz.enumeration.ReceiveExpressStatusEnum;
 import com.school.biz.service.calc.CalcCostService;
 import com.school.biz.service.customer.CustomerService;
@@ -38,6 +39,7 @@ import com.school.web.vo.request.SendExpressModifyVo;
 import com.school.web.vo.response.DataResponse;
 import com.school.web.vo.response.ReceiveExpressListResponseVo;
 import com.school.web.vo.response.Response;
+import com.school.web.vo.response.SendExpressListResponseVo;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -318,8 +320,17 @@ public class ExpressController extends BaseEasyWebController {
                     statuses[i] = Integer.parseInt(split[i]);
                 }
             }
-            List list = expressSendService.selectExpressList(statuses, openId);
-            modelAndView.addObject("list", list);
+            List<ExpressSend> list = expressSendService.selectExpressList(statuses, openId);
+            List<SendExpressListResponseVo> vos = new ArrayList<>();
+            if (!CollectionUtils.isEmpty(list)) {
+                for (ExpressSend expressSend : list) {
+                    SendExpressListResponseVo vo = new SendExpressListResponseVo();
+                    BeanUtils.copyProperties(vo, expressSend);
+                    vo.setOrderPrice(expressSendService.getOrderPrice(expressSend.getId(), ExpressTypeEnum.SEND));
+                    vos.add(vo);
+                }
+            }
+            modelAndView.addObject("list", vos);
             modelAndView.setViewName("sent");
         } catch (Exception e) {
             modelAndView.setViewName("redirect:/error");

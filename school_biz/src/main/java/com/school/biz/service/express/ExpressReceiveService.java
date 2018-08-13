@@ -1,10 +1,12 @@
 package com.school.biz.service.express;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
 import com.school.biz.dao.express.ExpressReceiveMapper;
 import com.school.biz.domain.entity.express.ExpressReceive;
+import com.school.biz.enumeration.ExpressTypeEnum;
 import com.school.biz.exception.ExpressException;
 import com.school.biz.service.base.BaseService;
 
@@ -71,6 +73,15 @@ public interface ExpressReceiveService extends BaseService<ExpressReceive, Expre
      * @return
      */
     ExpressReceive initProvinceCityDistrict(ExpressReceive expressSend);
+
+    /**
+     * 获取快件对应订单的金额
+     *
+     * @param expressId
+     * @param expressType
+     * @return
+     */
+    BigDecimal getOrderPrice(Long expressId, ExpressTypeEnum expressType);
 
     //-------- from manager --------
     List<ExpressReceive> queryPage(Map<String,Object> paramMap);
