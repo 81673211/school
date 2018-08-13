@@ -1,8 +1,5 @@
 package com.school.manager.controller.express;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -16,24 +13,22 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
-
 import com.school.biz.constant.ConstantUrl;
 import com.school.biz.domain.bo.wechat.template.ReceiveExpressAtProxyTemplateData;
-import com.school.biz.domain.bo.wechat.template.Template.Builder;
-import com.school.biz.domain.bo.wechat.template.TemplateData;
-import com.school.biz.exception.FuBusinessException;
-import com.school.biz.service.customer.CustomerService;
-import com.school.biz.util.pager.PageInfo;
-import com.school.manager.vo.AjaxResult;
 import com.school.biz.domain.bo.wechat.template.Template;
+import com.school.biz.domain.bo.wechat.template.TemplateData;
 import com.school.biz.domain.entity.customer.Customer;
 import com.school.biz.domain.entity.express.ExpressCompany;
 import com.school.biz.domain.entity.express.ExpressReceive;
 import com.school.biz.enumeration.ReceiveExpressStatusEnum;
+import com.school.biz.exception.FuBusinessException;
+import com.school.biz.service.customer.CustomerService;
 import com.school.biz.service.express.ExpressCompanyService;
 import com.school.biz.service.express.ExpressReceiveService;
 import com.school.biz.service.wechat.TemplateService;
+import com.school.biz.util.pager.PageInfo;
 import com.school.manager.controller.base.BaseEasyWebController;
+import com.school.manager.vo.AjaxResult;
 
 import lombok.extern.slf4j.Slf4j;
 
