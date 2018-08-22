@@ -1,4 +1,4 @@
-package com.school.biz.component;
+package com.school.manager.util;
 
 import javax.annotation.PostConstruct;
 
@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
  * <br><b>Date:</b> 14/06/2018 13:13
  */
 @Component
-//@Lazy(value = false)
+@Lazy(value = false)
 @Slf4j
 public class MenuManager {
 
@@ -68,8 +68,14 @@ public class MenuManager {
         btn22.setKey("22");
         btn22.setUrl(oauthService.getOAuthUrl("/express/1/list?status=5"));
 
+        CommonButton btn23 = new CommonButton();
+        btn23.setName("帮我取件");
+        btn23.setType("view");
+        btn23.setKey("23");
+        btn23.setUrl(oauthService.getOAuthUrl("/abc"));
+
         CommonButton btn31 = new CommonButton();
-        btn31.setName("完善个人信息");
+        btn31.setName("个人信息");
         btn31.setType("view");
         btn31.setUrl(oauthService.getOAuthUrl("/customer/profile"));
         btn31.setKey("31");
@@ -79,6 +85,12 @@ public class MenuManager {
         btn32.setType("view");
         btn32.setUrl("http://www.glove1573.cn/contact_us.html");
         btn32.setKey("32");
+
+        CommonButton btn33 = new CommonButton();
+        btn33.setName("意见及建议");
+        btn33.setType("view");
+        btn33.setUrl(oauthService.getOAuthUrl("/help/suggestion"));
+        btn33.setKey("33");
 
         /**
          * 微信：  mainBtn1,mainBtn2,mainBtn3底部的三个一级菜单。
@@ -91,12 +103,12 @@ public class MenuManager {
 
         ComplexButton mainBtn2 = new ComplexButton();
         mainBtn2.setName("我的收件");
-        mainBtn2.setSub_button(new Button[] {btn21, btn22});
+        mainBtn2.setSub_button(new Button[] {btn21, btn22, btn23 });
 
 
         ComplexButton mainBtn3 = new ComplexButton();
         mainBtn3.setName("个人中心");
-        mainBtn3.setSub_button(new Button[] {btn31, btn32});
+        mainBtn3.setSub_button(new Button[] {btn31, btn32, btn33 });
 
 
         /**

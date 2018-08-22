@@ -19,6 +19,8 @@ public class CustomerProfileEditVo implements Serializable {
 
     private String phone;
 
+    private String idNumber;
+
     private String name;
 
     private String email;

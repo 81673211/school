@@ -1,3 +1,4 @@
+
 package com.school.biz.domain.entity.customer;
 
 import java.util.Date;
@@ -19,6 +20,8 @@ public class Customer {
     private String name;
 
     private String phone;
+
+    private String idNumber;
 
     private String addr;
 

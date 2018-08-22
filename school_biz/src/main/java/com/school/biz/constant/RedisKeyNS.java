@@ -16,4 +16,6 @@ public final class RedisKeyNS {
     public static final String CACHE_BASE_ACCESS_TOKEN = "redis:base:access_token";
 
     public static final String CACHE_NAMESPACE_AUTH_TOKEN = "redis:auth:access_token:";
+
+    public static final String CACHE_NAMESPACE_SUGGESTION = "redis:suggestion:";
 }

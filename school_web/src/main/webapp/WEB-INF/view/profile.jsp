@@ -34,6 +34,10 @@
         <input id="phone" type="text" class="form-control" placeholder="手机号" value="${customer.phone}">
         <label class="input-control-icon-right"><i class="icon icon-asterisk"></i></label>
     </div>
+    <div class="input-control has-icon-right">
+        <input id="idNumber" type="text" class="form-control" placeholder="身份证号" value="${customer.idNumber}">
+        <label class="input-control-icon-right"><i class="icon icon-asterisk"></i></label>
+    </div>
     <div class="row" id="verify_code">
         <div class="input-control has-icon-right col-xs-6">
             <input id="code" type="text" class="form-control" placeholder="验证码">
@@ -46,7 +50,7 @@
         <input id="email" type="text" class="form-control" placeholder="邮箱" value="${customer.email}">
     </div>
     <div class="input-control has-icon-right">
-        <input id="addr" type="text" class="form-control" placeholder="地址" value="${customer.addr}">
+        <input id="addr" type="text" class="form-control" placeholder="寝室详细地址" value="${customer.addr}">
         <label class="input-control-icon-right"><i class="icon icon-asterisk"></i></label>
     </div>
     <div class="row btnGroup">
@@ -113,6 +117,7 @@
     $("#name").val('');
     $("#email").val('');
     $("#addr").val('');
+    $("#idNumber").val('');
     if ($("#phone").attr("readonly") != 'readonly') {
       $("#phone").val('');
       $("#code").val('');
@@ -125,6 +130,7 @@
     var name = $("#name").val();
     var email = $("#email").val();
     var addr = $("#addr").val();
+    var idNumber = $("#idNumber").val();
     var phone = '';
     var code = '';
     if ($("#phone").attr("readonly") != 'readonly') {
@@ -143,6 +149,9 @@
     }
     if (phone != '') {
       data.phone = phone;
+    }
+    if (idNumber != '') {
+      data.idNumber = idNumber;
     }
     if (code != '') {
       data.code = code;

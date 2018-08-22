@@ -117,6 +117,10 @@ public class CustomerServiceImpl extends BaseServiceImpl<Customer, CustomerMappe
         if (StringUtils.isNotBlank(addr)) {
             customer.setAddr(addr);
         }
+        String idNumber = request.getIdNumber();
+        if (StringUtils.isNotBlank(idNumber)) {
+            customer.setIdNumber(idNumber);
+        }
         String requestPhone = request.getPhone();
         boolean bindExpress = false;
         if (StringUtils.isNotBlank(requestPhone)) {
@@ -137,7 +141,8 @@ public class CustomerServiceImpl extends BaseServiceImpl<Customer, CustomerMappe
             if (StringUtils.isBlank(reqPhone)) {
                 throw new RuntimeException("手机号不能为空");
             }
-            if (!Pattern.matches("^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\\d{8}$", reqPhone)) {
+            if (!Pattern.matches("^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\\d{8}$",
+                                 reqPhone)) {
                 throw new RuntimeException("手机号格式错误");
             }
             if (StringUtils.isBlank(reqVerifyCode)) {
@@ -171,9 +176,9 @@ public class CustomerServiceImpl extends BaseServiceImpl<Customer, CustomerMappe
 
     @Override
     public void saveOrUpdate(Customer customer) {
-        if(customer.getId() == null){
+        if (customer.getId() == null) {
             this.save(customer);
-        }else{
+        } else {
             this.update(customer);
         }
     }

@@ -9,6 +9,7 @@
         <result column="subscribed_time" property="subscribedTime" jdbcType="TIMESTAMP"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="id_number" property="idNumber" jdbcType="VARCHAR"/>
         <result column="addr" property="addr" jdbcType="VARCHAR"/>
         <result column="email" property="email" jdbcType="VARCHAR"/>
         <result column="avatar" property="avatar" jdbcType="VARCHAR"/>
@@ -21,7 +22,7 @@
         <result column="is_deleted" property="isDeleted" jdbcType="BIT"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, open_id, nickname, is_subscribed, subscribed_time, name, phone, addr, email, avatar, sex, version, creator, created_time, modifier,
+    id, open_id, nickname, is_subscribed, subscribed_time, name, phone, id_number, addr, email, avatar, sex, version, creator, created_time, modifier,
     modified_time, is_deleted
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
@@ -55,21 +56,24 @@
                 is_subscribed = #{subscribed, jdbcType=TINYINT},
             </if>
             <if test="subscribedTime != null">
-                subscribed_time = #{subscribedTime, jdbcType=TIMESTAMP}
+                subscribed_time = #{subscribedTime, jdbcType=TIMESTAMP},
             </if>
-            <if test="name != null">
+            <if test="name != null and name != ''">
                 name = #{name,jdbcType=VARCHAR},
             </if>
-            <if test="phone != null">
+            <if test="phone != null and phone != ''">
                 phone = #{phone,jdbcType=VARCHAR},
             </if>
-            <if test="addr != null">
+            <if test="idNumber != null and idNumber != ''">
+                id_number = #{idNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="addr != null and addr != ''">
                 addr = #{addr,jdbcType=VARCHAR},
             </if>
-            <if test="email != null">
+            <if test="email != null and email != ''">
                 email = #{email,jdbcType=VARCHAR},
             </if>
-            <if test="avatar != null">
+            <if test="avatar != null and avatar != ''">
                 avatar = #{avatar,jdbcType=VARCHAR},
             </if>
             <if test="sex != null">
@@ -78,13 +82,13 @@
             <if test="version != null">
                 version = #{version,jdbcType=INTEGER},
             </if>
-            <if test="creator != null">
+            <if test="creator != null and creator != ''">
                 creator = #{creator,jdbcType=VARCHAR},
             </if>
             <if test="createdTime != null">
                 created_time = #{createdTime,jdbcType=TIMESTAMP},
             </if>
-            <if test="modifier != null">
+            <if test="modifier != null and modifier != ''">
                 modifier = #{modifier,jdbcType=VARCHAR},
             </if>
             <if test="modifiedTime != null">
@@ -103,6 +107,7 @@
       subscribed_time=#{subscribedTime,jdbcType=TIMESTAMP},
       nickname=#{nickname,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=VARCHAR},
+      id_number = #{idNumber,jdbcType=VARCHAR},
       addr = #{addr,jdbcType=VARCHAR},
       email = #{email,jdbcType=VARCHAR},
       avatar = #{avatar,jdbcType=VARCHAR},
