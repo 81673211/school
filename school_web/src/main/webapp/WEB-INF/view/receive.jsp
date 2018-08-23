@@ -15,10 +15,9 @@
         <div class="list section with-divider">
             <c:forEach items="${list}" varStatus="var" var="item">
                     <a class="item multi-lines with-avatar">
-                    <c:choose>
-                        <c:when test="${item.companyName == '顺丰快递'}"><div class="avatar black circle">顺</div></c:when>
-                        <c:when test="${item.companyName == '申通'}"><div class="avatar blue circle">天</div></c:when>
-                    </c:choose>
+                        <jsp:include page="snippet/item_logo.jsp">
+                            <jsp:param name="companyName" value="${item.companyName}"/>
+                        </jsp:include>
                     <div class="content">
                         <div>
                             <div class="title inline">

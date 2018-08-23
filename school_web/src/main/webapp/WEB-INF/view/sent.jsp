@@ -6,60 +6,63 @@
 <head>
     <meta charset="UTF-8">
     <title>我寄出的快件</title>
-    <meta name="viewport"
-          content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-    <link rel="stylesheet" href="../../css/cssReset.css">
-    <!-- ZUI 标准版压缩后的 CSS 文件 -->
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/css/zui.min.css">
-    <link rel="stylesheet" href="../../css/sudi.css">
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link href="/css/mzui.min.css" rel="stylesheet" />
 </head>
 <body>
-<div class="wrap container receivedExpress">
-    <h3 class="">我寄出的快件</h3>
-    <c:if test="${list != null and list.size() > 0}">
-        <c:forEach items="${list}" varStatus="var" var="item">
-            <div>
-                <div class="row">
-                    <div class="col-xs-7">
-                        <label for="">快递名称:<span>${item.companyName}</span></label>
-                        <label for="">运单号:<span>${item.code}</span></label>
-                        <label for="">状态:<span>
-                         <c:choose>
-                             <c:when test="${item.expressStatus == 0}">
-                                 发起寄件
-                             </c:when>
-                             <c:when test="${item.expressStatus == 1}">
-                                 等待上门取件
-                             </c:when>
-                             <c:when test="${item.expressStatus == 2}">
-                                 代收点已签收
-                             </c:when>
-                             <c:when test="${item.expressStatus == 3}">
-                                 已寄出
-                             </c:when>
-                         </c:choose></span></label>
-                    </div>
-                    <div class="col-xs-5">
-                        <label for=""><span>${item.receiverName}</span></label>
-                        <label for=""><span>${item.receiverPhone}</span></label>
-                    </div>
-                </div>
-                <div>
-                    <label for="">地址:<span>${item.receiverProvince}&nbsp;&nbsp;${item.receiverCity}&nbsp;&nbsp;${item.receiverDistrict}&nbsp;&nbsp;${item.receiverAddr}</span></label>
-                    <label for="" class="pull-right timeExp"><span>${item.endTime}</span></label>
-                </div>
-                <div>
-                    <label for="">金额:<span><fmt:formatNumber value="${item.orderPrice}" pattern="0.00" /></span></label>
-                </div>
-            </div>
-        </c:forEach>
-    </c:if>
-</div>
 
-<!-- ZUI Javascript 依赖 jQuery -->
+<c:choose>
+    <c:when test="${list != null and list.size() > 0}">
+        <div class="list section with-divider">
+            <c:forEach items="${list}" varStatus="var" var="item">
+                <a class="item multi-lines with-avatar">
+                    <jsp:include page="snippet/item_logo.jsp">
+                        <jsp:param name="companyName" value="${item.companyName}"/>
+                    </jsp:include>
+                    <div class="content">
+                        <div>
+                            <div class="title inline">
+                                <span>${item.code}</span>
+                                <span>
+                                    <c:choose>
+                                        <c:when test="${item.expressStatus == 0}">
+                                            <label class="label label-sm gray outline rounded">发起寄件</label>
+                                        </c:when>
+                                        <c:when test="${item.expressStatus == 1}">
+                                            <label class="label label-sm gray outline rounded">等待上门取件</label>
+                                        </c:when>
+                                        <c:when test="${item.expressStatus == 2}">
+                                            <label class="label label-sm gray outline rounded">代收点已签收</label>
+                                        </c:when>
+                                        <c:when test="${item.expressStatus == 3}">
+                                            <label class="label label-sm gray outline rounded">已寄出</label>
+                                        </c:when>
+                                    </c:choose>
+                                </span>
+                            </div>
+                            <div>
+                                <small class="muted"><fmt:formatDate value="${item.createdTime}" pattern="yyyy-MM-dd HH:mm" /></small>
+                            </div>
+                            <div>
+                                <small class="muted">${item.receiverProvince} ${item.receiverCity} ${item.receiverDistrict}</small>
+                            </div>
+                            <div>
+                                <small class="muted">${item.receiverName} ${item.receiverPhone}</small>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </c:forEach>
+        </div>
+    </c:when>
+    <c:otherwise>
+        <div class="center-content" style="margin-top: 40%">
+            当前没有已寄出的快递!
+        </div>
+    </c:otherwise>
+</c:choose>
+
 <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/lib/jquery/jquery.js"></script>
-<!-- ZUI 标准版压缩后的 JavaScript 文件 -->
 <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/js/zui.min.js"></script>
-
 </body>
 </html>
