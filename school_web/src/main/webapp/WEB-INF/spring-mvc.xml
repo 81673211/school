@@ -73,8 +73,6 @@
       <mvc:mapping path="/customer/**" />
       <mvc:mapping path="/express/**" />
       <mvc:exclude-mapping path="/express/company"/>
-
-      <!--<mvc:exclude-mapping path="/customer/profile"/>-->
       <mvc:exclude-mapping path="/help/suggestion"/>
       <bean class="com.school.web.interceptor.OAuthInterceptor"/>
     </mvc:interceptor>

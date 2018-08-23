@@ -16,10 +16,10 @@
         <textarea class="textarea form-control" rows="3" id="content"></textarea>
     </div>
     <div style="margin-top: 30px;text-align: center">
-        <span class="col-xs-6" id="reset">
+        <span id="reset">
             <button type="button" class="btn warning rounded" style="margin-right: 30px">重置</button>
         </span>
-        <span class="col-xs-6" id="confirm">
+        <span id="confirm">
             <button type="button" class="btn success rounded">提交</button>
         </span>
     </div>

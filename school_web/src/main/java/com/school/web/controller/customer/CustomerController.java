@@ -49,9 +49,6 @@ public class CustomerController extends BaseEasyWebController {
             if (StringUtils.isBlank(request.getAddr())) {
                 throw new RuntimeException("地址不能为空");
             }
-            if (StringUtils.isBlank(request.getIdNumber())) {
-                throw new RuntimeException("身份证号不能为空");
-            }
             customerService.update(request);
         } catch (Exception e) {
             return e.getMessage();
