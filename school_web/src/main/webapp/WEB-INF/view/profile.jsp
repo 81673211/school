@@ -25,7 +25,7 @@
 <input type="hidden" value="${customer.openId}" id="openId" />
 
 
-<div class="profile-haeder space shadow">
+<div class="profile-haeder shadow">
     <div class="red dock blur-lg back" style="background-image: url(/img/profile_backimg.jpg)"></div>
     <div class="front dock text-white">
         <div class="avatar avatar-xl circle space-sm">
