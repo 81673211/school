@@ -12,13 +12,13 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.school.biz.constant.ConfigProperties;
 import com.school.biz.constant.Constants;
-import com.school.biz.constant.WechatUrl;
-import com.school.biz.util.HttpUtil;
 import com.school.biz.constant.RedisKeyNS;
-import com.school.biz.service.wechat.OauthService;
-import com.school.biz.enumeration.AuthResultEnum;
+import com.school.biz.constant.WechatUrl;
 import com.school.biz.domain.bo.wechat.OAuthToken;
 import com.school.biz.domain.bo.wechat.UserWechat;
+import com.school.biz.enumeration.AuthResultEnum;
+import com.school.biz.service.wechat.OauthService;
+import com.school.biz.util.HttpUtil;
 
 import lombok.extern.slf4j.Slf4j;
 

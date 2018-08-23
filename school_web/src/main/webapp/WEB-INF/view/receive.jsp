@@ -10,66 +10,83 @@
     <link href="/css/mzui.min.css" rel="stylesheet" />
 </head>
 <body>
-<div class="heading">
-    <div class="title"><h3>待收快件</h3></div>
-</div>
-
-<div class="list section">
-    <c:if test="${list != null and list.size() > 0}">
-        <c:forEach items="${list}" varStatus="var" var="item">
-            <a class="item multi-lines with-avatar">
-                <div class="avatar circle blue outline">${var.count}</div>
-                <div class="content">
-                    <div>
-                        <span class="title">${item.code}</span>
+<c:choose>
+    <c:when test="${list != null and list.size() > 0}">
+        <div class="list section with-divider">
+            <c:forEach items="${list}" varStatus="var" var="item">
+                    <a class="item multi-lines with-avatar">
+                    <c:choose>
+                        <c:when test="${item.companyName == '顺丰快递'}"><div class="avatar black circle">顺</div></c:when>
+                        <c:when test="${item.companyName == '申通'}"><div class="avatar blue circle">天</div></c:when>
+                    </c:choose>
+                    <div class="content">
                         <div>
-                            <small class="text-gray">${item.companyName}</small>
-                            &nbsp;
-                            <small class="muted"><fmt:formatDate value="${item.createdTime}"
-                                                                 pattern="yyyy-MM-dd HH:mm" /></small>
+                            <div class="title inline">
+                                <span>${item.code}</span>
+                                <span>
+                                    <c:choose>
+                                        <c:when test="${item.expressStatus == 1}">
+                                            <label class="label label-sm gray outline rounded">等待自提</label>
+                                        </c:when>
+                                        <c:when test="${item.expressStatus == 2}">
+                                            <label class="label label-sm gray outline rounded">等待入柜</label>
+                                        </c:when>
+                                        <c:when test="${item.expressStatus == 3}">
+                                            <label class="label label-sm gray outline rounded">快件已入柜</label>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <label class="label label-sm gray outline rounded">快件入柜超时</label>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </span>
+                            </div>
+                            <div>
+                                <small class="muted"><fmt:formatDate value="${item.createdTime}" pattern="yyyy-MM-dd HH:mm" /></small>
+                            </div>
+                            <div>
+                                <c:choose>
+                                    <c:when test="${item.expressStatus == 0 || item.expressStatus == 1}">
+                                        <small class="muted">如选择配送，需要支付(￥<fmt:formatNumber value="${item.distributionCost}" pattern="0.00" />)</small>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <span><br/></span>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
+
                         </div>
                     </div>
-                    <div class="inline-block pull-right">
+                    <div class="pull-right">
                         <c:choose>
                             <c:when test="${item.expressStatus == 0}">
-                                <button type="button" class="btn primary-pale btn-sm text-tint pull-left"
-                                        onclick="launchPay(${item.id})">配送(￥<fmt:formatNumber
-                                        value="${item.distributionCost}" pattern="0.00" />)
-                                </button>
-                                &nbsp;&nbsp;
-                                <button type="button" class="btn primary-pale btn-sm text-tint pull-right"
-                                        onclick="receiveWay(${item.id},0)">自提
-                                </button>
+                                <div >
+                                    <button type="button" class="btn btn-sm info outline rounded" style="margin-bottom: 5px" onclick="launchPay(${item.id})">配送</button>
+                                </div>
+                                <div >
+                                    <button type="button" class="btn btn-sm gray outline rounded" onclick="receiveWay(${item.id},0)">自提</button>
+                                </div>
                             </c:when>
                             <c:when test="${item.expressStatus == 1}">
-                                <button type="button" class="btn primary-pale btn-sm text-tint pull-left"
-                                        onclick="launchPay(${item.id})">配送(￥<fmt:formatNumber
-                                        value="${item.distributionCost}" pattern="0.00" />)
-                                </button>
-                                &nbsp;&nbsp;
-                                <label class="btn primary-pale btn-sm text-tint pull-right">等待自提</label>
+                                <div>
+                                    <button type="button" class="btn btn-sm info outline rounded" onclick="launchPay(${item.id})">配送</button>
+                                </div>
                             </c:when>
-                            <c:when test="${item.expressStatus == 2}">
-                                <label class="btn primary-pale btn-sm text-tint pull-right">等待入柜</label>
-                            </c:when>
-                            <c:when test="${item.expressStatus == 3}">
-                                <label class="btn primary-pale btn-sm text-tint pull-right">快件已入柜</label>
-                            </c:when>
-                            <c:otherwise>
-                                <label class="btn primary-pale btn-sm text-tint pull-right">快件入柜超时</label>
-                            </c:otherwise>
                         </c:choose>
 
                     </div>
-                </div>
-            </a>
-        </c:forEach>
-    </c:if>
-</div>
+                </a>
+            </c:forEach>
+        </div>
+    </c:when>
+    <c:otherwise>
+        <div class="center-content" style="margin-top: 40%">
+            当前没有待收取的快递!
+        </div>
+    </c:otherwise>
+</c:choose>
 
-<!-- ZUI Javascript 依赖 jQuery -->
+
 <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/lib/jquery/jquery.js"></script>
-<!-- ZUI 标准版压缩后的 JavaScript 文件 -->
 <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/js/zui.min.js"></script>
 
 
