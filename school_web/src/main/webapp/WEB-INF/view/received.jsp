@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -8,23 +9,24 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <link href="/css/mzui.min.css" rel="stylesheet" />
 </head>
-<body class="white">
-<div class="heading">
-    <div class="title text-center secondary-pale"><h3>我收到过的快件</h3></div>
-</div>
+<body>
 <c:choose>
     <c:when test="${list != null and list.size() > 0}">
-        <div class="list with-divider">
+        <div class="list section with-divider">
             <c:forEach items="${list}" varStatus="var" var="item">
                 <a class="item multi-lines with-avatar">
-                    <div class="avatar circle blue outline">${var.count}</div>
+                    <c:choose>
+                        <c:when test="${item.companyName == '顺丰快递'}"><div class="avatar black circle">顺</div></c:when>
+                        <c:when test="${item.companyName == '申通'}"><div class="avatar blue circle">天</div></c:when>
+                    </c:choose>
                     <div class="content">
-                        <span class="title">${item.code}</span>
                         <div>
-                            <small class="text-gray">${item.companyName}</small>&nbsp;
-                            <small class="text-gray">${item.senderPhone}</small>&nbsp;
-                            <small class="text-gray">${item.senderName}</small>&nbsp;
-                            <small class="muted">${item.endTime}</small>
+                            <div class="title inline">
+                                <span>${item.code}</span>
+                            </div>
+                            <div>
+                                <small class="muted"><fmt:formatDate value="${item.createdTime}" pattern="yyyy-MM-dd HH:mm" /></small>
+                            </div>
                         </div>
                     </div>
                 </a>
@@ -32,7 +34,9 @@
         </div>
     </c:when>
     <c:otherwise>
-        <img width="30%" height="40%" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1531471715&di=43b8048018a66b97871eb8a092013fee&imgtype=jpg&er=1&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F011618576a5a5c0000018c1bea80fe.jpg%401280w_1l_2o_100sh.jpg" />
+        <div class="center-content" style="margin-top: 40%">
+            当前没有已收取的快递!
+        </div>
     </c:otherwise>
 </c:choose>
 
