@@ -75,8 +75,8 @@
     </form>
 </section>
 
-<div class="alert alert-success-inverse text-center" id="feedback-suc">修改成功</div>
-<div class="alert alert-warning-inverse text-center" id="feedback-err"></div>
+<div class="alert success text-center" id="feedback-suc">修改成功</div>
+<div class="alert warning text-center" id="feedback-err"></div>
 
 <!-- ZUI Javascript 依赖 jQuery -->
 <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/lib/jquery/jquery.js"></script>

@@ -25,8 +25,8 @@
     </div>
 </div>
 
-<div class="alert alert-success-inverse text-center" id="feedback-suc">提交成功</div>
-<div class="alert alert-warning-inverse text-center" id="feedback-err"></div>
+<div class="alert success text-center" id="feedback-suc">提交成功</div>
+<div class="alert warning text-center" id="feedback-err"></div>
 </div>
 
 <!-- ZUI Javascript 依赖 jQuery -->
@@ -51,7 +51,7 @@
     if (content == '') {
       $("#feedback-err").html("请填写意见或建议");
       $("#feedback-err").show();
-      $("#feedback-err").fadeOut(5000);
+      $("#feedback-err").fadeOut(3000);
       return;
     }
     var data = {openId: openId, content: content};
@@ -59,10 +59,13 @@
       if (result.status != 200) {
         $("#feedback-err").html(result.msg);
         $("#feedback-err").show();
-        $("#feedback-err").fadeOut(5000);
+        $("#feedback-err").fadeOut(3000);
       } else {
         $("#feedback-suc").show();
-        $("#feedback-suc").fadeOut(5000);
+        $("#feedback-suc").fadeOut(3000);
+        setTimeout(function () {
+          location.reload();
+        }, 3000);
       }
     });
   });
