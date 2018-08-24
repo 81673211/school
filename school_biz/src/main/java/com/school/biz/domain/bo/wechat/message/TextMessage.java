@@ -1,4 +1,4 @@
-package com.school.biz.domain.bo.wechat;
+package com.school.biz.domain.bo.wechat.message;
 
 import lombok.Data;
 
