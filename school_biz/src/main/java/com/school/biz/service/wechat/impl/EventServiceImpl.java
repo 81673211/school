@@ -42,13 +42,6 @@ public class EventServiceImpl implements EventService {
         if (WechatMsgTypeEnum.EVENT.getCode().equals(msgType)) {
             if (WechatEventTypeEnum.SUBSCRIBE.getCode().equals(event)) {
                 customerService.subscribe(openId);
-//                TextMessage textMessage = new TextMessage();
-//                textMessage.setMsgType(WechatMsgTypeEnum.TEXT.getCode());
-//                textMessage.setToUserName(openId);
-//                textMessage.setFromUserName(paramMap.get("ToUserName"));
-//                textMessage.setCreateTime(System.currentTimeMillis());
-//                textMessage.setContent("欢迎您");
-//                return WechatMessageUtil.textMessageToXml(textMessage);
                 NewsMessage newsMessage = new NewsMessage();
                 newsMessage.setMsgType(WechatMsgTypeEnum.NEWS.getCode());
                 newsMessage.setToUserName(openId);
