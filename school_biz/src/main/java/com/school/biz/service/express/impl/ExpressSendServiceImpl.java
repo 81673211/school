@@ -1,36 +1,38 @@
 package com.school.biz.service.express.impl;
 
-import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.school.biz.dao.customer.CustomerMapper;
 import com.school.biz.dao.express.ExpressCompanyMapper;
 import com.school.biz.dao.express.ExpressSendMapper;
 import com.school.biz.dao.region.RegionMapper;
+import com.school.biz.domain.entity.customer.Customer;
 import com.school.biz.domain.entity.express.ExpressCompany;
 import com.school.biz.domain.entity.express.ExpressSend;
 import com.school.biz.domain.entity.order.OrderInfo;
 import com.school.biz.domain.entity.region.Region;
+import com.school.biz.enumeration.DistributionTypeEnum;
 import com.school.biz.enumeration.ExpressTypeEnum;
 import com.school.biz.exception.ExpressException;
 import com.school.biz.service.base.impl.BaseServiceImpl;
+import com.school.biz.service.calc.CalcCostService;
 import com.school.biz.service.express.ExpressSendService;
 import com.school.biz.service.order.OrderInfoService;
-
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author jame
  */
 @Slf4j
 @Service
-@Transactional(rollbackFor = ExpressException.class)
+@Transactional(rollbackFor = Exception.class)
 public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, ExpressSendMapper>
         implements ExpressSendService {
 
@@ -44,9 +46,12 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
     private RegionMapper regionMapper;
     @Autowired
     private OrderInfoService orderInfoService;
+    @Autowired
+    private CalcCostService calcCostService;
 
     @Override
     public String createSendExpress(ExpressSend expressSend) {
+        expressSend.setServiceAmt(calcCostService.calcSendDistributionCost(DistributionTypeEnum.DISTRIBUTION.getFlag()));
         boxExpressCompany(expressSend);
         Long count = expressSendMapper.insertSelective(expressSend);
         if (!(count > 0L)) {
@@ -54,11 +59,22 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
             log.error(message);
             throw new RuntimeException(message);
         }
-        return orderInfoService.createSendOrder(expressSend.getId());
+        updateCustomer(expressSend);
+        return orderInfoService.createSendOrder(expressSend);
     }
 
-    private void boxCustomer(ExpressSend expressSend, String openId) {
-
+    /**
+     * 修改用户的身份证号
+     *
+     * @param expressSend
+     */
+    private void updateCustomer(ExpressSend expressSend) {
+        if (StringUtils.isNotBlank(expressSend.getIdCard())) {
+            Customer customer = new Customer();
+            customer.setId(expressSend.getCustomerId());
+            customer.setIdNumber(expressSend.getIdCard());
+            customerMapper.updateByPrimaryKeySelective(customer);
+        }
     }
 
     @Override
@@ -102,7 +118,6 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
 
     @Override
     public void updateSendExpressStatus(Long id, Integer status) {
-        //TODO 快件状态检查，检查状态是否遵循定义的流程，如果按照非流程处理则抛出异常,比如：修改快件状态时，需要去提前检查快件当前状态是否满足修改的条件
         ExpressSend expressSend = new ExpressSend();
         expressSend.setId(id);
         expressSend.setExpressStatus(status);
@@ -170,10 +185,11 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
 
     @Override
     public void saveOrUpdate(ExpressSend expressSend) {
-        if(expressSend.getId() == null){
+        if (expressSend.getId() == null) {
             this.save(expressSend);
-        }else{
+        } else {
             this.update(expressSend);
         }
     }
+
 }

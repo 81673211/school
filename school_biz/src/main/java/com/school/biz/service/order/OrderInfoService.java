@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.school.biz.dao.order.OrderInfoMapper;
+import com.school.biz.domain.entity.express.ExpressSend;
 import com.school.biz.domain.entity.order.OrderInfo;
 import com.school.biz.service.base.BaseService;
 
@@ -11,7 +12,7 @@ public interface OrderInfoService extends BaseService<OrderInfo, OrderInfoMapper
 
 	OrderInfo findByOrderNo(String orderNo);
 
-	String createSendOrder(Long expressId);
+	String createSendOrder(ExpressSend expressSend);
 
 	String createReceiveOrder(Long expressId);
 

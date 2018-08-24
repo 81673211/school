@@ -1,14 +1,12 @@
 package com.school.biz.service.calc.impl;
 
-import java.math.BigDecimal;
-
+import com.school.biz.domain.entity.express.ExpressSend;
+import com.school.biz.enumeration.DistributionTypeEnum;
+import com.school.biz.service.calc.CalcCostService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import com.school.biz.domain.entity.express.ExpressReceive;
-import com.school.biz.domain.entity.express.ExpressSend;
-import com.school.biz.service.calc.CalcCostService;
-
-import lombok.extern.slf4j.Slf4j;
+import java.math.BigDecimal;
 
 /**
  * @author jame
@@ -18,24 +16,25 @@ import lombok.extern.slf4j.Slf4j;
 public class CalcCostServiceImpl implements CalcCostService {
 
     @Override
-    public BigDecimal calcReceiveDistributionCost(ExpressReceive expressReceive) {
-        try {
-            return BigDecimal.valueOf(0.01);
-        } catch (Exception e) {
-            String msg = "calc receive distribution cost error";
-            log.error(msg, e);
-            throw new RuntimeException(msg, e);
+    public BigDecimal calcReceiveDistributionCost(Integer expressWay) {
+        if (expressWay.equals(DistributionTypeEnum.DISTRIBUTION.getFlag())) {
+            return BigDecimal.valueOf(0.2);
+        } else {
+            return BigDecimal.ZERO;
         }
     }
 
     @Override
-    public BigDecimal calcSendDistributionCost(ExpressSend expressSend) {
-        try {
-            return BigDecimal.valueOf(0.01);
-        } catch (Exception e) {
-            String msg = "calc send distribution cost error";
-            log.error(msg, e);
-            throw new RuntimeException(msg, e);
+    public BigDecimal calcSendDistributionCost(Integer expressWay) {
+        if (expressWay.equals(DistributionTypeEnum.DISTRIBUTION.getFlag())) {
+            return BigDecimal.valueOf(0.1);
+        } else {
+            return BigDecimal.ZERO;
         }
+    }
+
+    @Override
+    public BigDecimal calcSendTransportCost(ExpressSend expressSend) {
+        return BigDecimal.valueOf(0.01);
     }
 }

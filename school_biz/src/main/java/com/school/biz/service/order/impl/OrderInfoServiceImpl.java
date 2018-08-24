@@ -1,14 +1,5 @@
 package com.school.biz.service.order.impl;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.school.biz.constant.ConfigProperties;
 import com.school.biz.constant.Constants;
 import com.school.biz.dao.express.ExpressReceiveMapper;
@@ -25,8 +16,15 @@ import com.school.biz.service.calc.CalcCostService;
 import com.school.biz.service.order.OrderInfoService;
 import com.school.biz.util.DateUtil;
 import com.school.biz.util.IdWorkerUtil;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -35,8 +33,6 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
 
     @Autowired
     private OrderInfoMapper orderInfoMapper;
-    @Autowired
-    private ExpressSendMapper expressSendMapper;
     @Autowired
     private ExpressReceiveMapper expressReceiveMapper;
     @Autowired
@@ -48,8 +44,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
     }
 
     @Override
-    public String createSendOrder(Long expressId) {
-        ExpressSend expressSend = expressSendMapper.selectByPrimaryKey(expressId);
+    public String createSendOrder(ExpressSend expressSend) {
         OrderInfo orderInfo = initOrderInfo(expressSend);
         if (!(orderInfoMapper.insertSelective(orderInfo) > 0)) {
             String message =
@@ -85,8 +80,8 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
             throw new RuntimeException("快递已成功支付过，请勿重复支付.");
         }
         return OrderStatusEnum.FAILED.getCode() == status ||
-               OrderStatusEnum.PAYING.getCode() == status ||
-               OrderStatusEnum.EXPIRED.getCode() == status;
+                OrderStatusEnum.PAYING.getCode() == status ||
+                OrderStatusEnum.EXPIRED.getCode() == status;
     }
 
     @Override
@@ -115,11 +110,12 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
         if (express instanceof ExpressSend) {
             ExpressSend expressSend = (ExpressSend) express;
             orderInfo.setExpressType(ExpressTypeEnum.SEND.getFlag());
-            orderInfo.setAmount(calcCostService.calcSendDistributionCost(expressSend));
+            orderInfo.setAmount(calcCostService.calcSendTransportCost(expressSend).add(
+                    calcCostService.calcSendDistributionCost(expressSend.getExpressWay())));
         } else if (express instanceof ExpressReceive) {
             ExpressReceive expressReceive = (ExpressReceive) express;
             orderInfo.setExpressType(ExpressTypeEnum.RECEIVE.getFlag());
-            orderInfo.setAmount(calcCostService.calcReceiveDistributionCost(expressReceive));
+            orderInfo.setAmount(calcCostService.calcReceiveDistributionCost(expressReceive.getExpressWay()));
         } else {
             String errorMsg = "error express type.";
             log.error(errorMsg);
@@ -143,6 +139,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
 
     /**
      * 将订单更新为成功
+     *
      * @param orderInfo
      */
     @Override
@@ -157,6 +154,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
 
     /**
      * 将订单更新为支付处理中
+     *
      * @param orderInfo
      */
     @Override
@@ -170,6 +168,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
 
     /**
      * 将订单更新为失败
+     *
      * @param orderInfo
      */
     @Override
@@ -189,9 +188,9 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
 
     @Override
     public void saveOrUpdate(OrderInfo orderInfo) {
-        if(orderInfo.getId() == null){
+        if (orderInfo.getId() == null) {
             this.save(orderInfo);
-        }else{
+        } else {
             this.update(orderInfo);
         }
     }

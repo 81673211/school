@@ -22,7 +22,17 @@ public class ExpressSend extends Express{
     private String receiverCity;
     @JSONField(serialize = false)
     private String receiverDistrict;
+    @JSONField(serialize = false)
+    private String idCard;
 
+
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
+    }
 
     public String getSenderPhone() {
         return senderPhone;

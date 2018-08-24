@@ -22,6 +22,8 @@
         <result column="express_way" property="expressWay" jdbcType="INTEGER"/>
         <result column="customer_id" property="customerId" jdbcType="BIGINT"/>
         <result column="end_time" property="endTime" jdbcType="TIMESTAMP"/>
+        <result column="express_type" property="expressType" jdbcType="INTEGER"/>
+        <result column="service_amt" property="amount" jdbcType="DECIMAL" />
     </resultMap>
     <sql id="Base_Column_List">
         id,
@@ -43,8 +45,10 @@
         express_status,
         express_way,
         customer_id,
-        end_time
-  </sql>
+        end_time,
+        express_type,
+        service_amt
+    </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
         <include refid="Base_Column_List"/>
@@ -52,9 +56,9 @@
         where id = #{id,jdbcType=BIGINT}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from express_send
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
+        delete from express_send
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
     <insert id="insert" parameterType="com.school.biz.domain.entity.express.ExpressSend">
 
     </insert>
@@ -110,6 +114,12 @@
             <if test="customerId != null">
                 customer_id,
             </if>
+            <if test="expressType != null">
+                express_type,
+            </if>
+            <if test="serviceAmt != null">
+                service_amt,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="code != null">
@@ -159,6 +169,12 @@
             </if>
             <if test="customerId != null">
                 #{customerId,jdbcType=INTEGER},
+            </if>
+            <if test="expressType != null">
+                #{expressType,jdbcType=INTEGER},
+            </if>
+            <if test="serviceAmt != null">
+                #{serviceAmt,jdbcType=DECIMAL},
             </if>
         </trim>
     </insert>
@@ -216,6 +232,12 @@
             <if test="endTime != null">
                 end_time = #{endTime,jdbcType=TIMESTAMP},
             </if>
+            <if test="expressType != null">
+                express_type = #{expressType,jdbcType=INTEGER},
+            </if>
+            <if test="serviceAmt != null">
+                service_amt = #{serviceAmt,jdbcType=DECIMAL},
+            </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
@@ -239,7 +261,7 @@
                 or es.receiver_phone like concat('%',#{keyword},'%'))
             </if>
             <if test="status != null and status != ''">
-            	and es.express_status = #{status,jdbcType=INTEGER}
+                and es.express_status = #{status,jdbcType=INTEGER}
             </if>
         </where>
         ORDER BY es.id desc

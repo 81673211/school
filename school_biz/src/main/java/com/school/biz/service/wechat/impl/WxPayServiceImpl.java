@@ -179,7 +179,7 @@ public class WxPayServiceImpl implements WxPayService {
         treeMap.put("transaction_id", transaction_id);
 
         String localSign = WXPayUtil.generateSignature(treeMap, ConfigProperties.WXPAY_KEY,
-                                                       SignType.HMACSHA256);
+                SignType.HMACSHA256);
 
         log.info("本地签名是：" + localSign);
         log.debug("本地签名是：" + localSign);
@@ -188,13 +188,13 @@ public class WxPayServiceImpl implements WxPayService {
         //本地计算签名与微信返回签名不同||返回结果为不成功
         if (!sign.equals(localSign) || !"SUCCESS".equals(result_code) || !"SUCCESS".equals(return_code)) {
             resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>"
-                     + "<return_msg><![CDATA[FAIL]]></return_msg>" + "</xml> ";
+                    + "<return_msg><![CDATA[FAIL]]></return_msg>" + "</xml> ";
             log.error("验证签名失败或返回错误:" + resXml);
         } else {
             log.info("支付成功");
             log.debug("公众号支付成功，out_trade_no(订单号)为：" + out_trade_no);
             resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>"
-                     + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
+                    + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
 
             // 校验金额是否正确
             OrderInfo orderInfo = orderInfoMapper.findByOrderNo(out_trade_no);
@@ -216,11 +216,11 @@ public class WxPayServiceImpl implements WxPayService {
             Integer expressType = orderInfo.getExpressType();
             if (ExpressTypeEnum.RECEIVE.getFlag() == expressType) {
                 expressReceiveService.updateReceiveExpress(orderInfo.getExpressId(),
-                                                           ReceiveExpressStatusEnum.WAIT_INTO_BOX.getFlag(),
-                                                           DistributionTypeEnum.DISTRIBUTION.getFlag());
+                        ReceiveExpressStatusEnum.WAIT_INTO_BOX.getFlag(),
+                        DistributionTypeEnum.DISTRIBUTION.getFlag());
             } else {
                 expressSendService.updateSendExpressStatus(orderInfo.getExpressId(),
-                                                           SendExpressStatusEnum.WAIT_SMQJ.getFlag());
+                        SendExpressStatusEnum.WAIT_SMQJ.getFlag());
             }
         }
         return resXml;
@@ -241,7 +241,7 @@ public class WxPayServiceImpl implements WxPayService {
             return null;
         }
         return xml.substring(start + ("<" + para + ">").length(), end).replace("<![CDATA[", "").replace("]]>",
-                                                                                                        "");
+                "");
     }
 
 }

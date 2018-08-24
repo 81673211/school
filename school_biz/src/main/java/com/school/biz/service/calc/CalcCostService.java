@@ -1,9 +1,8 @@
 package com.school.biz.service.calc;
 
-import java.math.BigDecimal;
-
-import com.school.biz.domain.entity.express.ExpressReceive;
 import com.school.biz.domain.entity.express.ExpressSend;
+
+import java.math.BigDecimal;
 
 /**
  * @author jame
@@ -15,16 +14,24 @@ public interface CalcCostService {
     /**
      * 计算收件类型的配送费用
      *
-     * @param expressReceive
+     * @param expressWay
      * @return
      */
-    BigDecimal calcReceiveDistributionCost(ExpressReceive expressReceive);
+    BigDecimal calcReceiveDistributionCost(Integer expressWay);
 
     /**
      * 计算寄件类型的配送费用
      *
+     * @param expressWay
+     * @return
+     */
+    BigDecimal calcSendDistributionCost(Integer expressWay);
+
+    /**
+     * 计算寄件的运送费
+     *
      * @param expressSend
      * @return
      */
-    BigDecimal calcSendDistributionCost(ExpressSend expressSend);
+    BigDecimal calcSendTransportCost(ExpressSend expressSend);
 }

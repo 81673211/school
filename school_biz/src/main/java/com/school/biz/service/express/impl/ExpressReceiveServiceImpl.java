@@ -1,14 +1,5 @@
 package com.school.biz.service.express.impl;
 
-import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.school.biz.dao.customer.CustomerMapper;
 import com.school.biz.dao.express.ExpressCompanyMapper;
 import com.school.biz.dao.express.ExpressReceiveMapper;
@@ -24,10 +15,18 @@ import com.school.biz.enumeration.ExpressTypeEnum;
 import com.school.biz.enumeration.ReceiveExpressStatusEnum;
 import com.school.biz.exception.ExpressException;
 import com.school.biz.service.base.impl.BaseServiceImpl;
+import com.school.biz.service.calc.CalcCostService;
 import com.school.biz.service.express.ExpressReceiveService;
 import com.school.biz.service.order.OrderInfoService;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author jame
@@ -48,6 +47,8 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
     private RegionMapper regionMapper;
     @Autowired
     private OrderInfoService orderInfoService;
+    @Autowired
+    private CalcCostService calcCostService;
 
     @Override
     public void createReceiveExpress(ExpressReceive expressReceive) {
@@ -85,9 +86,9 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
         }
         //0自提；1入柜，null表示还未选择过
         Integer expressWay = expressReceiveMapper.selectByPrimaryKey(expressReceive.getId())
-                                                 .getExpressWay();
+                .getExpressWay();
         if ((expressWay == null || expressWay != DistributionTypeEnum.DISTRIBUTION.getFlag())
-            && expressReceive.getExpressWay() == 1) {
+                && expressReceive.getExpressWay() == 1) {
             //修改后选择入柜方式才生成订单
             orderInfoService.createReceiveOrder(expressReceive.getId());
         }
@@ -105,7 +106,7 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
         if (expressReceive == null) {
             String message =
                     "get receive express error,when select table 'express_receive' the number of affected rows is 0,id="
-                    + id;
+                            + id;
             log.error(message);
             throw new RuntimeException(message);
         }
@@ -134,6 +135,7 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
         expressReceive.setId(id);
         expressReceive.setExpressStatus(status);
         expressReceive.setExpressWay(expressWay);
+        expressReceive.setServiceAmt(calcCostService.calcReceiveDistributionCost(expressWay));
         int count = expressReceiveMapper.updateByPrimaryKeySelective(expressReceive);
         if (count <= 0) {
             String msg =
@@ -216,9 +218,9 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
 
     @Override
     public void saveOrUpdate(ExpressReceive expressReceive) {
-        if(expressReceive.getId() == null){
+        if (expressReceive.getId() == null) {
             this.save(expressReceive);
-        }else{
+        } else {
             this.update(expressReceive);
         }
     }

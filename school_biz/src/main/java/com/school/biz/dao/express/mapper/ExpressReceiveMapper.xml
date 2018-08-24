@@ -22,6 +22,9 @@
         <result column="express_way" property="expressWay" jdbcType="INTEGER"/>
         <result column="into_box_time" property="intoBoxTime" jdbcType="TIMESTAMP"/>
         <result column="customer_id" property="customerId" jdbcType="BIGINT"/>
+        <result column="service_amt" property="amount" jdbcType="DECIMAL"/>
+        <result column="express_type" property="expressType" jdbcType="INTEGER"/>
+        <result column="receive_code" property="receiveCode" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
         id,
@@ -43,8 +46,11 @@
         express_status,
         express_way,
         into_box_time,
-        customer_id
-  </sql>
+        customer_id,
+        service_amt,
+        express_type,
+        receive_code
+    </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
         <include refid="Base_Column_List"/>
@@ -52,9 +58,9 @@
         where id = #{id,jdbcType=BIGINT}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from express_receive
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
+        delete from express_receive
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
     <insert id="insert" parameterType="com.school.biz.domain.entity.express.ExpressReceive">
 
     </insert>
@@ -110,6 +116,15 @@
             <if test="customerId != null">
                 customer_id,
             </if>
+            <if test="serviceAmt != null">
+                service_amt,
+            </if>
+            <if test="expressType != null">
+                express_type,
+            </if>
+            <if test="receiveCode != null">
+                receive_code,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="code != null">
@@ -159,6 +174,15 @@
             </if>
             <if test="customerId != null">
                 #{customerId,jdbcType=INTEGER},
+            </if>
+            <if test="serviceAmt != null">
+                #{serviceAmt,jdbcType=DECIMAL},
+            </if>
+            <if test="expressType != null">
+                #{expressType,jdbcType=INTEGER},
+            </if>
+            <if test="receiveCode != null">
+                #{receiveCode,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -214,7 +238,16 @@
                 express_way = #{expressWay,jdbcType=INTEGER},
             </if>
             <if test="intoBoxTime != null">
-                intoBoxTime = #{intoBoxTime,jdbcType=TIMESTAMP},
+                into_box_time = #{intoBoxTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="serviceAmt != null">
+                service_amt = #{serviceAmt,jdbcType=DECIMAL},
+            </if>
+            <if test="expressType != null">
+                express_type = #{expressType,jdbcType=INTEGER},
+            </if>
+            <if test="receiveCode != null">
+                receive_code = #{receiveCode,jdbcType=VARCHAR},
             </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
@@ -228,7 +261,8 @@
     </select>
 
     <!-- 管理台列表查询 -->
-    <select id="queryForManagerPage" resultType="com.school.biz.domain.entity.express.ExpressReceive" parameterType="map">
+    <select id="queryForManagerPage" resultType="com.school.biz.domain.entity.express.ExpressReceive"
+            parameterType="map">
         select er.* from express_receive er
         <where>
             <if test="keyword != null and keyword != '' ">
@@ -239,7 +273,7 @@
                 or er.receiver_phone like concat('%',#{keyword},'%'))
             </if>
             <if test="status != null and status != ''">
-            	and er.express_status = #{status,jdbcType=INTEGER}
+                and er.express_status = #{status,jdbcType=INTEGER}
             </if>
         </where>
         ORDER BY er.id desc
