@@ -9,6 +9,7 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
+import com.school.biz.domain.bo.wechat.message.Item;
 import com.school.biz.domain.bo.wechat.message.NewsMessage;
 import com.school.biz.domain.bo.wechat.message.TextMessage;
 import com.thoughtworks.xstream.XStream;
@@ -30,6 +31,7 @@ public final class WechatMessageUtil {
 
     public static String newsMessageToXml(NewsMessage newsMessage) {
         XStream xstream = new XStream();
+        xstream.aliasType("item", Item.class);
         xstream.alias("xml", newsMessage.getClass());
         return xstream.toXML(newsMessage);
     }
