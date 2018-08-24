@@ -60,7 +60,7 @@ public class EventServiceImpl implements EventService {
                 item.setTitle("使用说明");
                 item.setDescription("手把手告诉您怎么享用一二三速递的贴心服务");
                 item.setPicUrl("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1535683819&di=567a928f300803d6c64ea1f0957f6415&imgtype=jpg&er=1&src=http%3A%2F%2Fwww.hhsn.cn%2Fueditor%2Fphp%2Fupload%2Fimage%2F20171116%2F1510800385166102.jpg");
-                item.setPicUrl("http://www.glove1573.cn/help/constact_us.html");
+                item.setUrl("http://www.glove1573.cn/contact_us.html");
                 items.add(item);
                 newsMessage.setArticles(items);
                 return WechatMessageUtil.newsMessageToXml(newsMessage);
