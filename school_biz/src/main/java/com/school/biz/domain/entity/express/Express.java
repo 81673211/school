@@ -1,5 +1,6 @@
 package com.school.biz.domain.entity.express;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import lombok.Data;
@@ -20,4 +21,6 @@ public class Express {
     private Integer expressWay;//快件方式：入柜/自己
     private Long customerId;
     private Date endTime;
+    private BigDecimal serviceAmt;
+    private Integer expressType;
 }

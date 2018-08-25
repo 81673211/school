@@ -18,6 +18,8 @@ public class OrderInfo {
 
     private BigDecimal amount;
 
+    private BigDecimal refundAmt;
+
     private Date createdTime;
 
     private String tradeSummary;
@@ -84,6 +86,14 @@ public class OrderInfo {
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
+    }
+
+    public BigDecimal getRefundAmt() {
+        return refundAmt;
+    }
+
+    public void setRefundAmt(BigDecimal refundAmt) {
+        this.refundAmt = refundAmt;
     }
 
     public Date getCreatedTime() {

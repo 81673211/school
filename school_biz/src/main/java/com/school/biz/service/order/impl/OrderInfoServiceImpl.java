@@ -1,30 +1,44 @@
 package com.school.biz.service.order.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSON;
 import com.school.biz.constant.ConfigProperties;
 import com.school.biz.constant.Constants;
 import com.school.biz.dao.express.ExpressReceiveMapper;
 import com.school.biz.dao.express.ExpressSendMapper;
 import com.school.biz.dao.order.OrderInfoMapper;
+import com.school.biz.dao.order.RefundOrderInfoMapper;
 import com.school.biz.domain.entity.express.Express;
 import com.school.biz.domain.entity.express.ExpressReceive;
 import com.school.biz.domain.entity.express.ExpressSend;
 import com.school.biz.domain.entity.order.OrderInfo;
+import com.school.biz.domain.entity.order.RefundOrderInfo;
 import com.school.biz.enumeration.ExpressTypeEnum;
 import com.school.biz.enumeration.OrderStatusEnum;
+import com.school.biz.enumeration.RefundOrderStatusEnum;
+import com.school.biz.extension.wxpay.sdk.WXPay;
+import com.school.biz.extension.wxpay.sdk.WXPayConfigImpl;
+import com.school.biz.extension.wxpay.sdk.WXPayConstants.SignType;
+import com.school.biz.extension.wxpay.sdk.WXPayUtil;
 import com.school.biz.service.base.impl.BaseServiceImpl;
 import com.school.biz.service.calc.CalcCostService;
 import com.school.biz.service.order.OrderInfoService;
+import com.school.biz.service.order.RefundOrderInfoService;
+import com.school.biz.util.AmountUtils;
 import com.school.biz.util.DateUtil;
 import com.school.biz.util.IdWorkerUtil;
+import com.school.biz.util.SessionUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,11 +50,15 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
     @Autowired
     private OrderInfoMapper orderInfoMapper;
     @Autowired
-    private ExpressSendMapper expressSendMapper;
-    @Autowired
     private ExpressReceiveMapper expressReceiveMapper;
     @Autowired
     private CalcCostService calcCostService;
+    @Autowired
+    private RefundOrderInfoMapper refundOrderInfoMapper;
+    @Autowired
+    private RefundOrderInfoService refundOrderInfoService;
+    @Autowired
+    private ExpressSendMapper expressSendMapper; 
 
     @Override
     public OrderInfo findByOrderNo(String orderNo) {
@@ -48,8 +66,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
     }
 
     @Override
-    public String createSendOrder(Long expressId) {
-        ExpressSend expressSend = expressSendMapper.selectByPrimaryKey(expressId);
+    public String createSendOrder(ExpressSend expressSend) {
         OrderInfo orderInfo = initOrderInfo(expressSend);
         if (!(orderInfoMapper.insertSelective(orderInfo) > 0)) {
             String message =
@@ -85,8 +102,8 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
             throw new RuntimeException("快递已成功支付过，请勿重复支付.");
         }
         return OrderStatusEnum.FAILED.getCode() == status ||
-               OrderStatusEnum.PAYING.getCode() == status ||
-               OrderStatusEnum.EXPIRED.getCode() == status;
+                OrderStatusEnum.PAYING.getCode() == status ||
+                OrderStatusEnum.EXPIRED.getCode() == status;
     }
 
     @Override
@@ -115,11 +132,12 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
         if (express instanceof ExpressSend) {
             ExpressSend expressSend = (ExpressSend) express;
             orderInfo.setExpressType(ExpressTypeEnum.SEND.getFlag());
-            orderInfo.setAmount(calcCostService.calcSendDistributionCost(expressSend));
+            orderInfo.setAmount(calcCostService.calcSendTransportCost(expressSend).add(
+                    calcCostService.calcSendDistributionCost(expressSend.getExpressWay())));
         } else if (express instanceof ExpressReceive) {
             ExpressReceive expressReceive = (ExpressReceive) express;
             orderInfo.setExpressType(ExpressTypeEnum.RECEIVE.getFlag());
-            orderInfo.setAmount(calcCostService.calcReceiveDistributionCost(expressReceive));
+            orderInfo.setAmount(calcCostService.calcReceiveDistributionCost(expressReceive.getExpressWay()));
         } else {
             String errorMsg = "error express type.";
             log.error(errorMsg);
@@ -143,10 +161,11 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
 
     /**
      * 将订单更新为成功
+     *
      * @param orderInfo
      */
     @Override
-    public void orderSuccess(OrderInfo orderInfo) {
+    public void orderUpdateToSuccess(OrderInfo orderInfo) {
         if (orderInfo == null) {
             return;
         }
@@ -157,10 +176,11 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
 
     /**
      * 将订单更新为支付处理中
+     *
      * @param orderInfo
      */
     @Override
-    public void orderPaying(OrderInfo orderInfo) {
+    public void orderUpdateToPaying(OrderInfo orderInfo) {
         if (orderInfo == null) {
             return;
         }
@@ -170,10 +190,11 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
 
     /**
      * 将订单更新为失败
+     *
      * @param orderInfo
      */
     @Override
-    public void orderFailed(OrderInfo orderInfo) {
+    public void orderUpdateToFailed(OrderInfo orderInfo) {
         if (orderInfo == null) {
             return;
         }
@@ -181,7 +202,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
         orderInfo.setSucTime(new Date());
         orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
     }
-
+    
     @Override
     public List<OrderInfo> queryPage(Map<String, Object> paramMap) {
         return orderInfoMapper.queryPage(paramMap);
@@ -189,10 +210,105 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
 
     @Override
     public void saveOrUpdate(OrderInfo orderInfo) {
-        if(orderInfo.getId() == null){
+        if (orderInfo.getId() == null) {
             this.save(orderInfo);
-        }else{
+        } else {
             this.update(orderInfo);
         }
     }
+
+	@Override
+	public void refund(HttpServletRequest request,String expressNo,BigDecimal refundFee) throws Exception {
+		Long operId = SessionUtils.getSessionUser(request).getId();
+		
+		ExpressSend expressSend = expressSendMapper.findByExpressNo(expressNo);
+		
+		// 根据快递号查询其所有支付成功订单（按支付金额降序）
+		List<OrderInfo> orderInfos = orderInfoMapper.findSuccessOrdersByExpressNo(expressNo);
+		
+		if(orderInfos == null || orderInfos.size() < 1){
+			throw new Exception("该快递没有成功交易记录");
+		}
+		
+		// 判断退款费用是否合法
+		boolean isRefundFeeIllegal = isRefundFeeIllegal(expressSend,orderInfos,refundFee);
+		if(!isRefundFeeIllegal){
+			throw new Exception("退款金额不能大于（快递金额-服务费）");
+		}
+		
+		/**
+		 *  退款逻辑：
+		 *      循环判断快递所有成功支付的订单，如果退款金额比该轮订单金额大，则退该订单全额，且继续循环；
+		 *  如果退款金额比该轮次订单金额小，则退退款金额，且跳出循环。
+		 */
+		for (OrderInfo orderInfo : orderInfos) {
+			if(refundFee.compareTo(orderInfo.getAmount()) == 1){
+				this.refundOrderInfo(orderInfo,orderInfo.getAmount(),operId);
+			}else{
+				this.refundOrderInfo(orderInfo,refundFee,operId);
+				break;
+			}
+		}
+		
+		
+		
+		
+	}
+	
+	private void refundOrderInfo(OrderInfo orderInfo,BigDecimal refundFee,Long operId) throws Exception{
+		// 插入退款订单
+		RefundOrderInfo refundOrderInfo = this.createRefundOrder(orderInfo,refundFee);
+		refundOrderInfo.setOperId(operId);
+		
+		HashMap<String, String> data = new HashMap<String, String>();
+        data.put("out_trade_no", orderInfo.getOrderNo());
+        data.put("nonce_str", WXPayUtil.generateUUID());
+        data.put("out_refund_no", refundOrderInfo.getRefundOrderNo());
+        data.put("total_fee", AmountUtils.changeY2F(orderInfo.getAmount().toString()));
+        data.put("refund_fee", AmountUtils.changeY2F(refundFee.toString()));
+        
+        try {
+			WXPayConfigImpl config = WXPayConfigImpl.getInstance();
+	        WXPay wxpay = new WXPay(config);
+	        Map<String, String> result = wxpay.refund(data);
+	        log.info("result:" + JSON.toJSONString(result));
+			if ("SUCCESS".equals(result.get("result_code"))) {
+				String localSign = WXPayUtil.generateSignature(result, ConfigProperties.WXPAY_KEY,
+						SignType.HMACSHA256);
+				if (!localSign.equals(result.get("sign"))) {
+					log.error("微信退款验签失败");
+				}
+				// 修改订单累计退款金额
+				orderInfo.setRefundAmt(orderInfo.getRefundAmt().add(refundFee));
+				orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
+			}else{
+				refundOrderInfoService.update(refundOrderInfo);
+				throw new Exception("微信退款失败:" + result.get("err_code_des"));
+			}
+        } catch (Exception e) {
+            log.error("微信退款失败：" + e.getMessage());
+            throw new Exception("微信退款失败");
+        }
+	}
+
+	private RefundOrderInfo createRefundOrder(OrderInfo orderInfo, BigDecimal refundFee) {
+		RefundOrderInfo refundOrderInfo = new RefundOrderInfo();
+		refundOrderInfo.setRefundOrderNo(IdWorkerUtil.generateOrderNo(Constants.ORDER_NO_TYPE_REFUND));
+		
+		refundOrderInfo.setOrderNo(orderInfo.getOrderNo());
+		refundOrderInfo.setCustomerId(orderInfo.getCustomerId());
+		refundOrderInfo.setExpressType(orderInfo.getExpressType());
+		refundOrderInfo.setExpressId(orderInfo.getExpressId());
+		refundOrderInfo.setExpressCode(orderInfo.getExpressCode());
+		
+		refundOrderInfo.setAmount(refundFee);
+		
+		refundOrderInfo.setCreatedTime(new Date());
+//		refundOrderInfo.setTradeSummary("");
+		refundOrderInfo.setStatus(RefundOrderStatusEnum.REFUNDING.getCode());
+		refundOrderInfo.setNotifyUrl("");
+		
+		refundOrderInfoMapper.insertSelective(refundOrderInfo);
+		return refundOrderInfo;
+	}
 }

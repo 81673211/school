@@ -11,8 +11,13 @@ public interface WxPayService {
 	TreeMap<String, String> doUnifiedOrder(String orderNo) throws Exception;
 
 	/**
-	 * 微信通知
+	 * 微信支付通知
 	 */
 	String wxPayNotify(String notifyXml) throws Exception;
+	
+	/**
+	 * 微信退款通知
+	 */
+	String wxRefundNotify(String notifyXml) throws Exception;
 	
 }

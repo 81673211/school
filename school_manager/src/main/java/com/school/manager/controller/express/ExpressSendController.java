@@ -1,10 +1,12 @@
 package com.school.manager.controller.express;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,9 +20,11 @@ import com.school.biz.util.pager.PageInfo;
 import com.school.manager.vo.AjaxResult;
 import com.school.biz.domain.entity.express.ExpressCompany;
 import com.school.biz.domain.entity.express.ExpressSend;
+import com.school.biz.domain.entity.order.OrderInfo;
 import com.school.biz.enumeration.SendExpressStatusEnum;
 import com.school.biz.service.express.ExpressCompanyService;
 import com.school.biz.service.express.ExpressSendService;
+import com.school.biz.service.order.OrderInfoService;
 import com.school.manager.controller.base.BaseEasyWebController;
 
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +39,9 @@ public class ExpressSendController extends BaseEasyWebController {
 	
 	@Autowired
 	private ExpressCompanyService expressCompanyService;
+	
+	@Autowired
+	private OrderInfoService orderInfoService;
 	
 	{
 		listView = "express/expressSend";
@@ -55,6 +62,8 @@ public class ExpressSendController extends BaseEasyWebController {
 			mav.addObject(ConstantUrl.DETAIL_URL, ConstantUrl.EXPRESS_SEND_DETAIL_URL);// 详情url
 			mav.addObject(ConstantUrl.EDIT_URL, ConstantUrl.EXPRESS_SEND_EDIT_URL);// 编辑url
 			mav.addObject(ConstantUrl.DEL_URL,ConstantUrl.EXPRESS_SEND_DEL_URL);// 删除url
+			mav.addObject("toRefundUrl", ConstantUrl.ORDER_TOREFUND_URL);// 跳转退款url
+			mav.addObject("refundUrl", ConstantUrl.ORDER_REFUND_URL);// 退款url
 		} catch (Exception e) {
 			log.error("寄件查询出现错误："+e.getMessage());
 			throw webExp(e);
@@ -123,6 +132,43 @@ public class ExpressSendController extends BaseEasyWebController {
 		} catch (Exception e) {
 			log.error("删除寄件出错：" + e.getMessage());
 			return AjaxResult.fail("删除失败");
+		}
+	}
+	
+	/**
+     * 退款页面
+     */
+    @RequestMapping(value = "/toRefund")
+    public ModelAndView toRefund(Long id, HttpServletRequest request) {
+        ModelAndView mav = new ModelAndView();
+        ExpressSend express = expressSendService.get(id);
+        
+        mav.setViewName("express/refund");
+        mav.addObject("express",express);
+        return mav;
+    }
+	
+	/**
+	 * 退款申请
+	 * @throws Exception 
+	 */
+    @ResponseBody
+	@RequestMapping("/refund.do")
+	public Object refund(HttpServletRequest request,String expressNo,BigDecimal refundAmt,BigDecimal currentOrderRefundAmt) throws Exception{
+		try{
+			if(StringUtils.isBlank(expressNo)){
+				throw new Exception("快递单号不能为空");
+			}
+			if(refundAmt == null || !(refundAmt.compareTo(new BigDecimal(0)) >0)){
+				throw new Exception("退款金额不正确");
+			}
+			
+			orderInfoService.refund(request,expressNo,refundAmt);
+			
+			return AjaxResult.success("退款申请成功");
+		}catch(Exception e){
+			log.error("退款申请失败");
+			return AjaxResult.fail(e.getMessage());
 		}
 	}
 }

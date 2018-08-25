@@ -20,6 +20,7 @@ insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_re
 /** 订单列表 */
 insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_remark) values (100, '订单列表', '/order/list.do', 0,(select mi.id from menu_info mi where mi.resource_name = '订单管理'),NULL);
 insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_remark) values (101, '订单详情', '/order/detail.do', (select ri.id from resource_info ri where ri.res_url='/order/list.do'),(select mi.id from menu_info mi where mi.resource_name = '订单管理'),NULL);
+insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_remark) values (102, '订单退款', '/order/refund.do', (select ri.id from resource_info ri where ri.res_url='/order/list.do'),(select mi.id from menu_info mi where mi.resource_name = '订单管理'),NULL);
 
 
 /** 3.快递公司管理 */

@@ -12,6 +12,8 @@
 				<ref bean="NotPayOrderTrigger"/>
 				<!-- 2.未决流水超时：将下单超过2小时依旧处于未支付的订单置为超时（每个小时执行一次） -->
 				<ref bean="NotPayOrderExpireTigger"/>
+				<!-- 3.未决退款查询：每2分钟查询一次 -->
+				<ref bean="NotRefundOrderTigger" />
 			</list>
 		</property>
 		<property name="configLocation"
@@ -24,7 +26,7 @@
 		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="NotPayOrderJob" />
 		<!-- 每5分钟运行一次 -->
-		<property name="cronExpression" value="0 0/1 * * * ?" />
+		<property name="cronExpression" value="0 0/5 * * * ?" />
 	</bean>
 	<bean id="NotPayOrderJob"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
@@ -43,6 +45,34 @@
 	<bean id="NotPayOrderExpireJob"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="NotPayOrderExpireQuartz" />
+		<property name="targetMethod" value="execute" />
+		<property name="concurrent" value="false"/><!--配置为false不允许任务并发执行--> 
+	</bean>
+	
+	<!-- 未决流水查询 -->
+	<bean id="NotPayOrderTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="NotPayOrderJob" />
+		<!-- 每5分钟运行一次 -->
+		<property name="cronExpression" value="0 0/2 * * * ?" />
+	</bean>
+	<bean id="NotPayOrderJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="NotPayOrderQuartz" />
+		<property name="targetMethod" value="execute" />
+		<property name="concurrent" value="false"/><!--配置为false不允许任务并发执行--> 
+	</bean>
+	
+	<!-- 未决退款查询 -->
+	<bean id="NotRefundOrderTigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="NotRefundOrderJob" />
+		<!-- 每2分钟查询一次 -->
+		<property name="cronExpression" value="0 0/2 * * * ?" />
+	</bean>
+	<bean id="NotRefundOrderJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="NotRefundOrderQuartz" />
 		<property name="targetMethod" value="execute" />
 		<property name="concurrent" value="false"/><!--配置为false不允许任务并发执行--> 
 	</bean>

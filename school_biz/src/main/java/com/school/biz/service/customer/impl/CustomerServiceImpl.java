@@ -117,10 +117,6 @@ public class CustomerServiceImpl extends BaseServiceImpl<Customer, CustomerMappe
         if (StringUtils.isNotBlank(addr)) {
             customer.setAddr(addr);
         }
-        String idNumber = request.getIdNumber();
-        if (StringUtils.isNotBlank(idNumber)) {
-            customer.setIdNumber(idNumber);
-        }
         String requestPhone = request.getPhone();
         boolean bindExpress = false;
         if (StringUtils.isNotBlank(requestPhone)) {
@@ -155,6 +151,8 @@ public class CustomerServiceImpl extends BaseServiceImpl<Customer, CustomerMappe
             }
             if (!reqVerifyCode.equals(verifyCode)) {
                 throw new RuntimeException("验证码错误");
+            } else {
+                redisTemplate.delete(cacheKey);
             }
         }
     }

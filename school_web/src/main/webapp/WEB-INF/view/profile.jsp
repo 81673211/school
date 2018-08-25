@@ -5,66 +5,78 @@
 <head>
     <meta charset="UTF-8">
     <title>个人信息</title>
-    <meta name="viewport"
-          content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <link rel="stylesheet" href="/css/cssReset.css">
-    <!-- ZUI 标准版压缩后的 CSS 文件 -->
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/css/zui.min.css">
-    <link rel="stylesheet" href="/css/sudi.css">
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link href="/css/mzui.min.css" rel="stylesheet" />
     <style>
-        .profile-haeder {position: relative; overflow: hidden; min-height: 8rem}
-        .profile-haeder > .front {background: rgba(0,0,0,0.49); text-align: center; padding: 1.5rem}
+        .profile-haeder {
+            position: relative;
+            overflow: hidden;
+            min-height: 8rem
+        }
+
+        .profile-haeder > .front {
+            background: rgba(0, 0, 0, 0.49);
+            text-align: center;
+            padding: 1.5rem
+        }
     </style>
 </head>
 <body>
 <input type="hidden" value="${customer.openId}" id="openId" />
-<div class="wrap container sendPiece">
-    <div class="profile-haeder space shadow">
-        <div class="front dock text-white">
-            <img src="${customer.avatar}" alt="" class="img-circle" style="height: 70px">
-            <h4 class="lead text-shadow-black">${customer.nickname}</h4>
-            <h4>编辑个人信息</h4>
-        </div>
-    </div>
 
-    <div class="input-control has-icon-right">
-        <input id="name" type="text" class="form-control" placeholder="姓名" value="${customer.name}">
-    </div>
-    <div class="input-control has-icon-right">
-        <input id="phone" type="text" class="form-control" placeholder="手机号" value="${customer.phone}">
-        <label class="input-control-icon-right"><i class="icon icon-asterisk"></i></label>
-    </div>
-    <div class="input-control has-icon-right">
-        <input id="idNumber" type="text" class="form-control" placeholder="身份证号" value="${customer.idNumber}">
-        <label class="input-control-icon-right"><i class="icon icon-asterisk"></i></label>
-    </div>
-    <div class="row" id="verify_code">
-        <div class="input-control has-icon-right col-xs-6">
-            <input id="code" type="text" class="form-control" placeholder="验证码">
-        </div>
-        <div class="col-xs-4">
-            <button class="btn getCode">获取验证码</button>
-        </div>
-    </div>
-    <div class="input-control has-icon-right">
-        <input id="email" type="text" class="form-control" placeholder="邮箱" value="${customer.email}">
-    </div>
-    <div class="input-control has-icon-right">
-        <input id="addr" type="text" class="form-control" placeholder="寝室详细地址" value="${customer.addr}">
-        <label class="input-control-icon-right"><i class="icon icon-asterisk"></i></label>
-    </div>
-    <div class="row btnGroup">
-        <div class="col-xs-6" id="reset">
-            <button class="btn btn-danger " type="button">重置</button>
-        </div>
-        <div class="col-xs-6" id="confirm">
-            <button class="btn btn-success " type="button">确定</button>
-        </div>
-    </div>
 
-    <div class="alert alert-success-inverse text-center" id="feedback-suc">修改成功</div>
-    <div class="alert alert-warning-inverse text-center" id="feedback-err"></div>
+<div class="profile-haeder shadow">
+    <div class="red dock blur-lg back" style="background-image: url(/img/profile_backimg.jpg)"></div>
+    <div class="front dock text-white">
+        <div class="avatar avatar-xl circle space-sm">
+            <img src="${customer.avatar}">
+        </div>
+        <h4 class="lead text-shadow-black">${customer.nickname}</h4>
+    </div>
 </div>
+
+<section class="section">
+    <form class="box" onsubmit="return false;">
+        <div class="control">
+            <label for="name">用户名</label>
+            <input id="name" type="text" class="input" placeholder="用户名" value="${customer.name}">
+        </div>
+        <div class="control">
+            <label for="phone">手机号</label>
+            <input id="phone" type="text" class="input" placeholder="手机号(必填)" value="${customer.phone}">
+        </div>
+        <div id="verify_code">
+            <div class="control flex">
+                <span style="margin-right: 20px">
+                    <input id="code" type="text" class="input" placeholder="验证码">
+                </span>
+                <span>
+                    <button class="btn gray getCode">获取验证码</button>
+                </span>
+            </div>
+        </div>
+        <div class="control">
+            <label for="email">电子邮箱</label>
+            <input id="email" type="email" class="input" placeholder="example@email.com"
+                   value="${customer.email}">
+        </div>
+        <div class="control">
+            <label for="addr">寝室地址</label>
+            <input id="addr" type="text" class="input" placeholder="寝室详细地址，方便小哥上门取件" value="${customer.addr}">
+        </div>
+        <div class="control">
+            <span id="confirm">
+                <button type="button" class="btn primary">提交</button>
+            </span>
+            <span id="reset">
+                <button type="button" class="btn">重置</button>
+            </span>
+        </div>
+    </form>
+</section>
+
+<div class="alert success text-center" id="feedback-suc">修改成功</div>
+<div class="alert warning text-center" id="feedback-err"></div>
 
 <!-- ZUI Javascript 依赖 jQuery -->
 <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/lib/jquery/jquery.js"></script>
@@ -86,15 +98,15 @@
         $("#feedback-err").html("手机号不能为空");
         $("#feedback-err").show();
         $("#feedback-err").fadeOut(5000);
-        return;
+        return false;
       }
       if (!phone.match(/^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/)) {
         $("#feedback-err").html("手机号格式错误");
         $("#feedback-err").show();
         $("#feedback-err").fadeOut(5000);
-        return;
+        return false;
       }
-      $.post("/customer/verifyCode", {"phone": phone, "openId":$("#openId").val()}, function (result) {
+      $.post("/customer/verifyCode", {"phone": phone, "openId": $("#openId").val()}, function (result) {
         if (result == "1") {
           var i = 60;
           var codeNum;
@@ -117,7 +129,6 @@
     $("#name").val('');
     $("#email").val('');
     $("#addr").val('');
-    $("#idNumber").val('');
     if ($("#phone").attr("readonly") != 'readonly') {
       $("#phone").val('');
       $("#code").val('');
@@ -130,14 +141,13 @@
     var name = $("#name").val();
     var email = $("#email").val();
     var addr = $("#addr").val();
-    var idNumber = $("#idNumber").val();
     var phone = '';
     var code = '';
     if ($("#phone").attr("readonly") != 'readonly') {
       phone = $("#phone").val();
       code = $("#code").val();
     }
-    var data = {openId : openId};
+    var data = {openId: openId};
     if (name != '') {
       data.name = name;
     }
@@ -150,9 +160,6 @@
     if (phone != '') {
       data.phone = phone;
     }
-    if (idNumber != '') {
-      data.idNumber = idNumber;
-    }
     if (code != '') {
       data.code = code;
     }
@@ -163,7 +170,8 @@
         $("#feedback-err").fadeOut(5000);
       } else {
         $("#feedback-suc").show();
-        $("#feedback-suc").fadeOut(5000);
+        $("#feedback-suc").fadeOut(3000);
+        setTimeout(function(){location.reload();}, 3000)
       }
     });
   });

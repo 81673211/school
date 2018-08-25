@@ -55,6 +55,7 @@ public class WechatController {
             throw new RuntimeException(e);
         }
         String result = eventService.process(paramMap);
+        log.info("result:{}", result);
         PrintWriter out = response.getWriter();
         out.println(result);
         out.close();

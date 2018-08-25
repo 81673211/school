@@ -72,7 +72,7 @@ public class NotPayOrderQuartz {
                             log.info("订单查询====》订单号：" + orderInfo.getOrderNo() + "查询成功，状态为：" + result
                                     .get("trade_state"));
                             // 将订单置为成功
-                            orderInfoService.orderSuccess(orderInfo);
+                            orderInfoService.orderUpdateToSuccess(orderInfo);
                             // 更新快件状态
                             Integer expressType = orderInfo.getExpressType();
                             if (ExpressTypeEnum.RECEIVE.getFlag() == expressType) {
@@ -93,7 +93,7 @@ public class NotPayOrderQuartz {
                             log.info("订单查询====》订单号：" + orderInfo.getOrderNo() + "查询成功，状态为：" + result
                                     .get("trade_state"));
                             // 将订单置为失败
-                            orderInfoService.orderFailed(orderInfo);
+                            orderInfoService.orderUpdateToFailed(orderInfo);
                             dealNum++;
                         }
                     }

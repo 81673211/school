@@ -23,7 +23,7 @@
     <div class="row">
         <div class="col-xs-3">
             <select class="form-control " id="province" onchange="change(this,'city');">
-                <option value="">[---请选择---]</option>
+                <option value="">[---请选择省份---]</option>
                 <c:if test="${regionList != null and regionList.size() > 0}">
                     <c:forEach items="${regionList}" varStatus="var" var="item">
                         <option value="${item.id}">${item.areaName}</option>
@@ -33,12 +33,12 @@
         </div>
         <div class="col-xs-3">
             <select class="form-control" id="city" onchange="change(this,'area');">
-                <option value="">[---请选择---]</option>
+                <option value="">[---请选择市/区---]</option>
             </select>
         </div>
         <div class="col-xs-3">
-            <select class="form-control" id="area" onchange="calcAmount();">
-                <option value="">[---请选择---]</option>
+            <select class="form-control" id="area">
+                <option value="">[---请选择区/县---]</option>
             </select>
         </div>
     </div>
@@ -50,9 +50,15 @@
         <input type="text" class="form-control" placeholder="电话" id="receiverPhone">
         <label class="input-control-icon-right"><i class="icon icon-asterisk"></i></label>
     </div>
+    <c:if test="${idCard!=true}">
+        <div class="input-control has-icon-right">
+            <input type="text" class="form-control" placeholder="身份证号" id="idCard">
+            <label class="input-control-icon-right"><i class="icon icon-asterisk"></i></label>
+        </div>
+    </c:if>
     <div>
-        <select class="form-control" id="company" onchange="calcAmount();">
-            <option value="">[---请选择---]</option>
+        <select class="form-control" id="company">
+            <option value="">[---请选择快递公司---]</option>
             <c:if test="${companyList != null and companyList.size() > 0}">
                 <c:forEach items="${companyList}" varStatus="var" var="item">
                     <option value="${item.id}">${item.name}</option>
@@ -61,12 +67,27 @@
         </select>
     </div>
     <div>
-        <select class="form-control" id="type" onchange="calcAmount();" disabled="disabled">
-            <option value="0">上门取件</option>
-            <option value="1">入柜</option>
+        <select class="form-control" id="expressWay" onchange="calcServiceAmt();">
+            <option value="">[---请选择寄件方式---]</option>
+            <option value="0">自发</option>
+            <option value="1">配送</option>
         </select>
     </div>
-    <div>价格（￥<span class="price" id="price">0.00</span>元）</div>
+    <div>
+        <select class="form-control" id="expressType" onchange="calcAmount();">
+            <option value="">[---请选择快件类型---]</option>
+            <option value="0">其他</option>
+            <option value="1">文件</option>
+            <option value="2">数码产品</option>
+            <option value="3">日用品</option>
+            <option value="4">服饰</option>
+            <option value="5">食品</option>
+            <option value="6">医药类产品</option>
+        </select>
+    </div>
+    <div>￥预收费:<span class="price" id="price">0.00</span>&nbsp;&nbsp;&nbsp;￥服务费:<span class="price"
+                                                                                     id="serviceAmt">0.00</span>元
+    </div>
     <div class="row btnGroup">
         <%--<div class="col-xs-6">--%>
         <%--<button class="btn btn-danger " type="button">重置</button>--%>
@@ -85,11 +106,15 @@
 <script>
     function change(e, id) {
         if (id == 'city') {
-            $("#area").html("<option value=''>[---请选择---]</option>");
+            $("#area").html("<option value=''>[---请选择区/县---]</option>");
         }
         var html = "";
         $.get("/region/list", {"parentId": e.value}, function (result) {
-            html += "<option value=''>[---请选择---]</option>";
+            if (id == 'city') {
+                html += "<option value=''>[---请选择市/区---]</option>";
+            } else {
+                html += "<option value=''>[---请选择区/县---]</option>";
+            }
             $.each(result.data, function (index, item) {
                 html += "<option value='" + item.id + "'>" + item.areaName + "</option>";
             });
@@ -97,8 +122,25 @@
         });
     }
 
+    function calcServiceAmt() {
+        var expressWay = $("#expressWay").val();
+        if (expressWay == 1) {
+            $.get("/calc/0/serviceAmt", {}, function (result) {
+                if (result.status != 200) {
+                    alert(result.msg);
+                } else {
+                    $("#serviceAmt").html(result.data);
+                }
+            });
+        } else {
+            $("#serviceAmt").html("0.00");
+        }
+    }
+
+
     function calcAmount() {
         var openId = $("#openId").val();
+        var expressWay = $("#expressWay").val();
         var data = {openId: openId};
         var receiverAddr = $("#receiverAddr").val();
         var companyId = $("#company").val();
@@ -130,6 +172,11 @@
         } else {
             return false;
         }
+        if (expressWay != '') {
+            data.expressWay = expressWay;
+        } else {
+            return false;
+        }
         $.get("/calc/0", data, function (result) {
             if (result.status != 200) {
                 alert(result.msg);
@@ -151,6 +198,9 @@
         var receiverProvinceId = $("#province").val();
         var receiverCityId = $("#city").val();
         var receiverDistrictId = $("#area").val();
+        var expressWay = $("#expressWay").val();
+        var expressType = $("#expressType").val();
+        var idCard = $("#idCard").val();
         if (openId == '') {
             alert("参数错误");
             return false;
@@ -193,10 +243,28 @@
             alert("请输入收件人电话");
             return false;
         }
+        if (idCard != '') {
+            data.idCard = idCard;
+        } else {
+            alert("请输入身份证号");
+            return false;
+        }
         if (companyId != '') {
             data.companyId = companyId;
         } else {
             alert("请选择快递公司");
+            return false;
+        }
+        if (expressWay != '') {
+            data.expressWay = expressWay;
+        } else {
+            alert("请选择寄件方式");
+            return false;
+        }
+        if (expressType != '') {
+            data.expressType = expressType;
+        } else {
+            alert("请选择寄件类型");
             return false;
         }
         $.post("/express/0/create", data, function (result) {

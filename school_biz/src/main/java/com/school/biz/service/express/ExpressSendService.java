@@ -1,14 +1,14 @@
 package com.school.biz.service.express;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
-
 import com.school.biz.dao.express.ExpressSendMapper;
 import com.school.biz.domain.entity.express.ExpressSend;
 import com.school.biz.enumeration.ExpressTypeEnum;
 import com.school.biz.exception.ExpressException;
 import com.school.biz.service.base.BaseService;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author jame
@@ -24,7 +24,6 @@ public interface ExpressSendService extends BaseService<ExpressSend, ExpressSend
 
     /**
      * 编辑寄件快件
-     *
      */
     void modifySendExpress(ExpressSend expressSend);
 
@@ -37,7 +36,7 @@ public interface ExpressSendService extends BaseService<ExpressSend, ExpressSend
     ExpressSend getSendExpress(Long id);
 
     /**
-     * 修改寄件状态
+     * 修改寄件
      *
      * @param id
      * @param status
@@ -73,7 +72,8 @@ public interface ExpressSendService extends BaseService<ExpressSend, ExpressSend
     BigDecimal getOrderPrice(Long expressId, ExpressTypeEnum expressType);
 
     //------ from manager -------
-    List<ExpressSend> queryPage(Map<String,Object> paramMap);
+    List<ExpressSend> queryPage(Map<String, Object> paramMap);
 
     void saveOrUpdate(ExpressSend expressSend);
+
 }

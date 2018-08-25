@@ -15,10 +15,9 @@
         <div class="list section with-divider">
             <c:forEach items="${list}" varStatus="var" var="item">
                     <a class="item multi-lines with-avatar">
-                    <c:choose>
-                        <c:when test="${item.companyName == '顺丰快递'}"><div class="avatar black circle">顺</div></c:when>
-                        <c:when test="${item.companyName == '申通'}"><div class="avatar blue circle">天</div></c:when>
-                    </c:choose>
+                        <jsp:include page="snippet/item_logo.jsp">
+                            <jsp:param name="companyName" value="${item.companyName}"/>
+                        </jsp:include>
                     <div class="content">
                         <div>
                             <div class="title inline">
@@ -103,32 +102,36 @@
   }
 
   function receiveWay(id, way) {
-    $.post("/express/1/modify", {"openId": '${openId}', "id": id, "expressWay": way}, function (result) {
-      if (result.status == 200 && way == 1) {
-        window.location.href = "http://www.glove1573.cn/wxpay/pay?expressId=" + id;
-      } else {
-        window.location.reload();
-      }
-    });
+    if (confirm("确认自提?")) {
+      $.post("/express/1/modify", {"openId": '${openId}', "id": id, "expressWay": way}, function (result) {
+        if (result.status == 200 && way == 1) {
+          window.location.href = "http://www.glove1573.cn/wxpay/pay?expressId=" + id;
+        } else {
+          window.location.reload();
+        }
+      });
+    }
   }
   
   function launchPay(expressId) {
-    $.post("/order/1/create",
-      {
-        "expressId": expressId,
-        "openId": '${openId}'
-      },
-      function (result) {
-        if (result.status != 200) {
-          alert(result.msg);
-          return;
-        } else {
-          var orderNo = result.msg;
-          alert(orderNo);
-          window.location.href = "http://www.glove1573.cn/wxpay/pay?orderNo=" + orderNo;
+    if (confirm("确认配送?")) {
+      $.post("/order/1/create",
+        {
+          "expressId": expressId,
+          "openId": '${openId}'
+        },
+        function (result) {
+          if (result.status != 200) {
+            alert(result.msg);
+            return;
+          } else {
+            var orderNo = result.msg;
+            alert(orderNo);
+            window.location.href = "http://www.glove1573.cn/wxpay/pay?orderNo=" + orderNo;
+          }
         }
-      }
-    );
+      );
+    }
   }
 
 </script>

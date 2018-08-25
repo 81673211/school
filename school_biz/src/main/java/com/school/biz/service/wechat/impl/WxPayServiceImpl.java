@@ -114,7 +114,7 @@ public class WxPayServiceImpl implements WxPayService {
                 treeMap.put("openId", openId);
                 treeMap.put("expressType", orderInfo.getExpressType().toString());
                 // 将订单置为支付处理中
-                orderInfoService.orderPaying(orderInfo);
+                orderInfoService.orderUpdateToPaying(orderInfo);
             } else {
                 throw new Exception("微信统一下单失败:" + result.get("err_code_des"));
             }
@@ -136,7 +136,7 @@ public class WxPayServiceImpl implements WxPayService {
     public String wxPayNotify(String notifyXml) throws Exception {
         String resXml = "";
         log.info("接收到的xml：" + notifyXml);
-        log.debug("收到微信异步回调：");
+        log.debug("收到微信支付异步回调：");
         log.debug(notifyXml);
         if (StringUtils.isBlank(notifyXml)) {
             log.error("xml为空!");
@@ -179,7 +179,7 @@ public class WxPayServiceImpl implements WxPayService {
         treeMap.put("transaction_id", transaction_id);
 
         String localSign = WXPayUtil.generateSignature(treeMap, ConfigProperties.WXPAY_KEY,
-                                                       SignType.HMACSHA256);
+                SignType.HMACSHA256);
 
         log.info("本地签名是：" + localSign);
         log.debug("本地签名是：" + localSign);
@@ -188,13 +188,13 @@ public class WxPayServiceImpl implements WxPayService {
         //本地计算签名与微信返回签名不同||返回结果为不成功
         if (!sign.equals(localSign) || !"SUCCESS".equals(result_code) || !"SUCCESS".equals(return_code)) {
             resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>"
-                     + "<return_msg><![CDATA[FAIL]]></return_msg>" + "</xml> ";
+                    + "<return_msg><![CDATA[FAIL]]></return_msg>" + "</xml> ";
             log.error("验证签名失败或返回错误:" + resXml);
         } else {
             log.info("支付成功");
             log.debug("公众号支付成功，out_trade_no(订单号)为：" + out_trade_no);
             resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>"
-                     + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
+                    + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
 
             // 校验金额是否正确
             OrderInfo orderInfo = orderInfoMapper.findByOrderNo(out_trade_no);
@@ -211,21 +211,140 @@ public class WxPayServiceImpl implements WxPayService {
             }
 
             // 将订单置为成功
-            orderInfoService.orderSuccess(orderInfo);
+            orderInfoService.orderUpdateToSuccess(orderInfo);
             // 更新快件状态
             Integer expressType = orderInfo.getExpressType();
             if (ExpressTypeEnum.RECEIVE.getFlag() == expressType) {
                 expressReceiveService.updateReceiveExpress(orderInfo.getExpressId(),
-                                                           ReceiveExpressStatusEnum.WAIT_INTO_BOX.getFlag(),
-                                                           DistributionTypeEnum.DISTRIBUTION.getFlag());
+                        ReceiveExpressStatusEnum.WAIT_INTO_BOX.getFlag(),
+                        DistributionTypeEnum.DISTRIBUTION.getFlag());
             } else {
                 expressSendService.updateSendExpressStatus(orderInfo.getExpressId(),
-                                                           SendExpressStatusEnum.WAIT_SMQJ.getFlag());
+                        SendExpressStatusEnum.WAIT_SMQJ.getFlag());
             }
         }
         return resXml;
     }
 
+    /**
+     * 退款通知
+     *
+     * @param notifyXml
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public String wxRefundNotify(String notifyXml) throws Exception {
+        String resXml = "";
+        log.info("接收到的xml：" + notifyXml);
+        log.debug("收到微信退款异步回调：");
+        log.debug(notifyXml);
+        if (StringUtils.isBlank(notifyXml)) {
+            log.error("xml为空!");
+            return null;
+        }
+
+        String appid = getXmlPara(notifyXml, "appid");
+        String bank_type = getXmlPara(notifyXml, "bank_type");
+        String cash_fee = getXmlPara(notifyXml, "cash_fee");
+        String fee_type = getXmlPara(notifyXml, "fee_type");
+        String is_subscribe = getXmlPara(notifyXml, "is_subscribe");
+        String mch_id = getXmlPara(notifyXml, "mch_id");
+        String nonce_str = getXmlPara(notifyXml, "nonce_str");
+        String openid = getXmlPara(notifyXml, "openid");
+        String out_trade_no = getXmlPara(notifyXml, "out_trade_no");
+        String out_refund_no = getXmlPara(notifyXml, "out_refund_no");
+        String refund_account = getXmlPara(notifyXml, "refund_account");
+        String refund_fee = getXmlPara(notifyXml, "refund_fee");
+        String refund_id = getXmlPara(notifyXml, "refund_id");
+        String refund_recv_accout = getXmlPara(notifyXml, "refund_recv_accout");
+        String refund_request_source = getXmlPara(notifyXml, "refund_request_source");
+        String refund_status = getXmlPara(notifyXml, "refund_status");
+        String req_info = getXmlPara(notifyXml, "req_info");
+        String result_code = getXmlPara(notifyXml, "result_code");
+        String return_code = getXmlPara(notifyXml, "return_code");
+        String settlement_refund_fee = getXmlPara(notifyXml, "settlement_refund_fee");
+        String sign = getXmlPara(notifyXml, "sign");
+        String time_end = getXmlPara(notifyXml, "time_end");
+        String total_fee = getXmlPara(notifyXml, "total_fee");
+        String trade_type = getXmlPara(notifyXml, "trade_type");
+        String transaction_id = getXmlPara(notifyXml, "transaction_id");
+
+        //根据返回xml计算本地签名
+        TreeMap<String, String> treeMap = new TreeMap<String, String>();
+        treeMap.put("appid", appid);
+        treeMap.put("bank_type", bank_type);
+        treeMap.put("cash_fee", cash_fee);
+        treeMap.put("fee_type", fee_type);
+        treeMap.put("is_subscribe", is_subscribe);
+        treeMap.put("mch_id", mch_id);
+        treeMap.put("nonce_str", nonce_str);
+        treeMap.put("openid", openid);
+        treeMap.put("out_trade_no", out_trade_no);
+        treeMap.put("out_refund_no", out_refund_no);
+        treeMap.put("refund_account", refund_account);
+        treeMap.put("refund_fee", refund_fee);
+        treeMap.put("refund_id", refund_id);
+        treeMap.put("refund_recv_accout", refund_recv_accout);
+        treeMap.put("refund_request_source", refund_request_source);
+        treeMap.put("refund_status", refund_status);
+        treeMap.put("req_info", req_info);
+        treeMap.put("result_code", result_code);
+        treeMap.put("return_code", return_code);
+        treeMap.put("settlement_refund_fee", settlement_refund_fee);
+        treeMap.put("time_end", time_end);
+        treeMap.put("total_fee", total_fee);
+        treeMap.put("trade_type", trade_type);
+        treeMap.put("transaction_id", transaction_id);
+
+        String localSign = WXPayUtil.generateSignature(treeMap, ConfigProperties.WXPAY_KEY,
+                SignType.HMACSHA256);
+
+        log.info("本地签名是：" + localSign);
+        log.debug("本地签名是：" + localSign);
+        log.debug("微信支付签名是：" + sign);
+
+        //本地计算签名与微信返回签名不同||返回结果为不成功
+        if (!sign.equals(localSign) || !"SUCCESS".equals(result_code) || !"SUCCESS".equals(return_code)) {
+            resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>"
+                    + "<return_msg><![CDATA[FAIL]]></return_msg>" + "</xml> ";
+            log.error("验证签名失败或返回错误:" + resXml);
+        } else {
+            log.info("退款成功");
+            log.debug("公众号退款成功，out_trade_no(订单号)为：" + out_trade_no);
+            resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>"
+                    + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
+
+            // 校验金额是否正确
+            OrderInfo orderInfo = orderInfoMapper.findByOrderNo(out_trade_no);
+
+            if (orderInfo == null) {
+                throw new Exception("订单不存在，订单号为：" + out_trade_no);
+            }
+
+            BigDecimal amtFromWx = new BigDecimal(total_fee);
+            BigDecimal amtFromSys = new BigDecimal(AmountUtils.changeY2F(orderInfo.getAmount().toString()));
+
+            if (!amtFromWx.equals(amtFromSys)) {
+                throw new Exception("订单金额不一致");
+            }
+
+            // 将订单置为成功
+            orderInfoService.orderUpdateToSuccess(orderInfo);
+            // 更新快件状态
+            Integer expressType = orderInfo.getExpressType();
+            if (ExpressTypeEnum.RECEIVE.getFlag() == expressType) {
+                expressReceiveService.updateReceiveExpress(orderInfo.getExpressId(),
+                        ReceiveExpressStatusEnum.WAIT_INTO_BOX.getFlag(),
+                        DistributionTypeEnum.DISTRIBUTION.getFlag());
+            } else {
+                expressSendService.updateSendExpressStatus(orderInfo.getExpressId(),
+                        SendExpressStatusEnum.WAIT_SMQJ.getFlag());
+            }
+        }
+        return resXml;
+    }
+    
     /**
      * 解析XML 获得名称为para的参数值
      *
@@ -241,7 +360,7 @@ public class WxPayServiceImpl implements WxPayService {
             return null;
         }
         return xml.substring(start + ("<" + para + ">").length(), end).replace("<![CDATA[", "").replace("]]>",
-                                                                                                        "");
+                "");
     }
 
 }

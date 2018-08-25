@@ -43,6 +43,11 @@ public final class Constants {
      * 订单号类型：手工上账订单号
      */
     public static final String ORDER_NO_TYPE_MANUAL_IN = "15";
+    
+    /**
+     * 订单号类型：退款订单号
+     */
+    public static final String ORDER_NO_TYPE_REFUND = "17";
 
 
     public static final String SCOPE_SNSAPI_USERINFO = "snsapi_userinfo";

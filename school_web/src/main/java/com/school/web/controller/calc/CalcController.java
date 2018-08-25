@@ -1,11 +1,12 @@
 package com.school.web.controller.calc;
 
+import com.school.biz.domain.entity.express.ExpressSend;
+import com.school.biz.enumeration.DistributionTypeEnum;
+import com.school.biz.service.calc.CalcCostService;
+import com.school.web.controller.base.BaseEasyWebController;
+import com.school.web.vo.request.SendExpressCalcVo;
 import com.school.web.vo.response.DataResponse;
 import com.school.web.vo.response.Response;
-import com.school.biz.domain.entity.express.ExpressSend;
-import com.school.biz.service.calc.CalcCostService;
-import com.school.web.vo.request.SendExpressCalcVo;
-import com.school.web.controller.base.BaseEasyWebController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,9 +42,17 @@ public class CalcController extends BaseEasyWebController {
         try {
             ExpressSend expressSend = new ExpressSend();
             BeanUtils.copyProperties(sendExpressCalcVo, expressSend);
-            return response.writeSuccess("寄件价格计算成功", calcCostService.calcSendDistributionCost(expressSend));
+            return response.writeSuccess("寄件价格计算成功", calcCostService.calcSendTransportCost(expressSend));
         } catch (Exception e) {
             return response.writeFailure("寄件价格计算失败");
         }
     }
+
+
+    @RequestMapping(value = "/0/serviceAmt", method = RequestMethod.GET)
+    public Response getSendServiceAmt() {
+        DataResponse<BigDecimal> response = new DataResponse<>();
+        return response.writeSuccess("获取寄件服务费成功", calcCostService.calcSendDistributionCost(DistributionTypeEnum.DISTRIBUTION.getFlag()));
+    }
+
 }

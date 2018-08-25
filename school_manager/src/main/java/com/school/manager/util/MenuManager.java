@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
  * <br><b>Date:</b> 14/06/2018 13:13
  */
 @Component
-@Lazy(value = false)
+//@Lazy(value = false)
 @Slf4j
 public class MenuManager {
 
@@ -97,12 +97,12 @@ public class MenuManager {
          */
 
         ComplexButton mainBtn1 = new ComplexButton();
-        mainBtn1.setName("我的寄件");
+        mainBtn1.setName("我要寄件");
         mainBtn1.setSub_button(new Button[] {btn11, btn12});
 
 
         ComplexButton mainBtn2 = new ComplexButton();
-        mainBtn2.setName("我的收件");
+        mainBtn2.setName("我要取件");
         mainBtn2.setSub_button(new Button[] {btn21, btn22, btn23 });
 
 

@@ -15,6 +15,10 @@ public class ConstantUrl {
 	 */
 	// 订单详情
 	public static final String ORDER_DETAIL_URL = "/order/detail.do";
+	// 退款
+	public static final String ORDER_TOREFUND_URL = "/order/toRefund";
+	// 退款
+	public static final String ORDER_REFUND_URL = "/order/refund.do";
 	
 	/** 快递管理 */
 	/**

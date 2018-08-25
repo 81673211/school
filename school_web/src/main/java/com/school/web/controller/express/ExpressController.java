@@ -1,21 +1,5 @@
 package com.school.web.controller.express;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.CollectionUtils;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.school.biz.domain.entity.customer.Customer;
 import com.school.biz.domain.entity.express.ExpressCompany;
 import com.school.biz.domain.entity.express.ExpressReceive;
@@ -32,18 +16,26 @@ import com.school.biz.service.express.ExpressSendService;
 import com.school.biz.service.region.RegionService;
 import com.school.biz.service.wechat.TemplateService;
 import com.school.web.controller.base.BaseEasyWebController;
-import com.school.web.vo.request.ExpressGetVo;
-import com.school.web.vo.request.ExpressStatusModifyVo;
-import com.school.web.vo.request.ReceiveExpressCreateVo;
-import com.school.web.vo.request.ReceiveExpressModifyVo;
-import com.school.web.vo.request.SendExpressCreateVo;
-import com.school.web.vo.request.SendExpressModifyVo;
+import com.school.web.vo.request.*;
 import com.school.web.vo.response.DataResponse;
 import com.school.web.vo.response.ReceiveExpressListResponseVo;
 import com.school.web.vo.response.Response;
 import com.school.web.vo.response.SendExpressListResponseVo;
-
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author jame
@@ -109,7 +101,7 @@ public class ExpressController extends BaseEasyWebController {
             return response;
         }
         if (expressVo.getCompanyCode() == null || expressVo.getCompanyName() == null
-            || expressVo.getCompanyId() == null) {
+                || expressVo.getCompanyId() == null) {
             return response.writeFailure(PARAM_ERROR);
         }
         try {
@@ -167,7 +159,7 @@ public class ExpressController extends BaseEasyWebController {
             expressReceiveService.modifyReceiveExpress(expressReceive);
             expressReceive = expressReceiveService.get(expressVo.getId());
             templateService.send(WechatTemplateEnum.RECEIVE_EXPRESS_DISTRIBUTION_SELF.getType(),
-                                 expressVo.getOpenId(), expressReceive, ExpressTypeEnum.RECEIVE.getFlag());
+                    expressVo.getOpenId(), expressReceive, ExpressTypeEnum.RECEIVE.getFlag());
             return response.writeSuccess("编辑收件快件成功");
         } catch (Exception e) {
             return response.writeFailure("编辑收件快件失败");
@@ -216,28 +208,28 @@ public class ExpressController extends BaseEasyWebController {
         }
     }
 
-    /**
-     * 寄件   修改寄件的快件状态
-     *
-     * @param vo
-     * @param bindingResult
-     * @return
-     */
-    @RequestMapping(value = "/0/up-status", method = RequestMethod.POST)
-    public Response updateSendExpressStatus(@Validated ExpressStatusModifyVo vo, BindingResult bindingResult) {
-        Response response = new Response();
-        checkValid(bindingResult, response);
-        if (response.getStatus() != HTTP_SUCCESS) {
-            return response;
-        }
-        try {
-            expressSendService.updateSendExpressStatus(vo.getId(), vo.getStatus());
-            response.writeSuccess("修改寄件状态成功");
-        } catch (Exception e) {
-            response.writeFailure("修改寄件状态失败");
-        }
-        return response;
-    }
+//    /**
+//     * 寄件   修改寄件的快件状态
+//     *
+//     * @param vo
+//     * @param bindingResult
+//     * @return
+//     */
+//    @RequestMapping(value = "/0/up-status", method = RequestMethod.POST)
+//    public Response updateSendExpressStatus(@Validated ExpressStatusModifyVo vo, BindingResult bindingResult) {
+//        Response response = new Response();
+//        checkValid(bindingResult, response);
+//        if (response.getStatus() != HTTP_SUCCESS) {
+//            return response;
+//        }
+//        try {
+//            expressSendService.updateSendExpressStatus(vo.getId(), vo.getStatus());
+//            response.writeSuccess("修改寄件状态成功");
+//        } catch (Exception e) {
+//            response.writeFailure("修改寄件状态失败");
+//        }
+//        return response;
+//    }
 
     /**
      * 收件   修改收件的快件状态
@@ -290,14 +282,13 @@ public class ExpressController extends BaseEasyWebController {
                 for (ExpressReceive expressReceive : receiveList) {
                     ReceiveExpressListResponseVo vo = new ReceiveExpressListResponseVo();
                     BeanUtils.copyProperties(expressReceive, vo);
-                    vo.setDistributionCost(calcCostService.calcReceiveDistributionCost(expressReceive));
+                    vo.setDistributionCost(expressReceive.getServiceAmt());
                     receiveExpressListResponseVos.add(vo);
                 }
             }
             mav.addObject("list", receiveExpressListResponseVos);
             mav.addObject("openId", openId);
-            if (split.length == 1 && ReceiveExpressStatusEnum.FINISHED.getFlag() == Integer.parseInt(
-                    split[0])) {
+            if (split.length == 1 && ReceiveExpressStatusEnum.FINISHED.getFlag() == Integer.parseInt(split[0])) {
                 mav.setViewName("received");
             } else {
                 mav.setViewName("receive");
@@ -333,6 +324,7 @@ public class ExpressController extends BaseEasyWebController {
                     BeanUtils.copyProperties(expressSend, vo);
                     vo.setOrderPrice(
                             expressSendService.getOrderPrice(expressSend.getId(), ExpressTypeEnum.SEND));
+                    vo.setServiceAmt(expressSend.getServiceAmt());
                     vos.add(vo);
                 }
             }
@@ -368,7 +360,9 @@ public class ExpressController extends BaseEasyWebController {
         try {
             List<Region> regionList = regionService.selectRegionList(null);
             List<ExpressCompany> companyList = expressCompanyService.findAll();
+            Customer customer = customerService.getByOpenId(openId);
             modelAndView.addObject("openId", openId);
+            modelAndView.addObject("idCard", StringUtils.isNotBlank(customer.getIdNumber()));
             modelAndView.addObject("regionList", regionList);
             modelAndView.addObject("companyList", companyList);
             modelAndView.setViewName("sending");
