@@ -64,7 +64,7 @@
             <label for="addr">寝室地址</label>
             <input id="addr" type="text" class="input" placeholder="寝室详细地址，方便小哥上门取件" value="${customer.addr}">
         </div>
-        <div class="control">
+        <div class="control text-center">
             <span id="confirm">
                 <button type="button" class="btn primary">提交</button>
             </span>
@@ -75,8 +75,8 @@
     </form>
 </section>
 
-<div class="alert success text-center" id="feedback-suc">修改成功</div>
-<div class="alert warning text-center" id="feedback-err"></div>
+<div class="alert success text-center" style="position: absolute;z-index: 999999" id="feedback-suc">修改成功</div>
+<div class="alert warning text-center" style="position: absolute;z-index: 999999" id="feedback-err"></div>
 
 <!-- ZUI Javascript 依赖 jQuery -->
 <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/lib/jquery/jquery.js"></script>

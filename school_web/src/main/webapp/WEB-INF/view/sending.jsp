@@ -5,98 +5,166 @@
 <head>
     <meta charset="UTF-8">
     <title>我要寄件</title>
-    <meta name="viewport"
-          content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-    <link rel="stylesheet" href="../../css/cssReset.css">
-    <!-- ZUI 标准版压缩后的 CSS 文件 -->
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/css/zui.min.css">
-    <link rel="stylesheet" href="../../css/sudi.css">
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link href="/css/mzui.min.css" rel="stylesheet" />
 </head>
 <body>
 <input type="hidden" value="${openId}" id="openId">
-<div class="wrap container sendPiece">
-    <h3 class="">我要寄件</h3>
-    <div class="input-control has-icon-right">
-        <input type="text" class="form-control" placeholder="收件人姓名" id="receiverName">
-        <label class="input-control-icon-right"><i class="icon icon-asterisk"></i></label>
-    </div>
-    <div class="row">
-        <div class="col-xs-3">
-            <select class="form-control " id="province" onchange="change(this,'city');">
-                <option value="">[---请选择省份---]</option>
-                <c:if test="${regionList != null and regionList.size() > 0}">
-                    <c:forEach items="${regionList}" varStatus="var" var="item">
-                        <option value="${item.id}">${item.areaName}</option>
-                    </c:forEach>
-                </c:if>
-            </select>
+
+
+<section class="section">
+    <form class="box" onsubmit="return false;">
+        <div class="control">
+            <label for="receiverName">收件人姓名 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>
+            <input id="receiverName" type="text" class="input">
         </div>
-        <div class="col-xs-3">
-            <select class="form-control" id="city" onchange="change(this,'area');">
-                <option value="">[---请选择市/区---]</option>
-            </select>
+        <div class="control">
+            <label>收件人地址 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>
+            <div class="flex-inline">
+                <div class="select" style="width: 30%;margin-right: 5px">
+                    <select id="province" name="province" onchange="change(this,'city');">
+                        <option value="">请选择省</option>
+                        <c:if test="${regionList != null and regionList.size() > 0}">
+                            <c:forEach items="${regionList}" varStatus="var" var="item">
+                                <option value="${item.id}">${item.areaName}</option>
+                            </c:forEach>
+                        </c:if>
+                    </select>
+                </div>
+                <div class="select" style="width: 33%;margin-right: 5px">
+                    <select id="city" name="city" onchange="change(this,'area');">
+                        <option value="">请选择市</option>
+                    </select>
+                </div>
+                <div class="select" style="width: 30%">
+                    <select id="area" name="area">
+                        <option value="">请选择区/县</option>
+                    </select>
+                </div>
+            </div>
         </div>
-        <div class="col-xs-3">
-            <select class="form-control" id="area">
-                <option value="">[---请选择区/县---]</option>
-            </select>
+        <div class="control">
+            <label for="receiverAddr">收件人详细地址 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>
+            <input id="receiverAddr" type="text" class="input">
         </div>
-    </div>
-    <div class="input-control has-icon-right">
-        <input type="text" class="form-control" placeholder="详细地址" id="receiverAddr">
-        <label class="input-control-icon-right"><i class="icon icon-asterisk"></i></label>
-    </div>
-    <div class="input-control has-icon-right">
-        <input type="text" class="form-control" placeholder="电话" id="receiverPhone">
-        <label class="input-control-icon-right"><i class="icon icon-asterisk"></i></label>
-    </div>
-    <c:if test="${idCard!=true}">
-        <div class="input-control has-icon-right">
-            <input type="text" class="form-control" placeholder="身份证号" id="idCard">
-            <label class="input-control-icon-right"><i class="icon icon-asterisk"></i></label>
+        <div class="control">
+            <label for="receiverPhone">收件人手机号 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>
+            <input id="receiverPhone" type="text" class="input">
         </div>
-    </c:if>
-    <div>
-        <select class="form-control" id="company">
-            <option value="">[---请选择快递公司---]</option>
-            <c:if test="${companyList != null and companyList.size() > 0}">
-                <c:forEach items="${companyList}" varStatus="var" var="item">
-                    <option value="${item.id}">${item.name}</option>
-                </c:forEach>
-            </c:if>
-        </select>
-    </div>
-    <div>
-        <select class="form-control" id="expressWay" onchange="calcServiceAmt();">
-            <option value="">[---请选择寄件方式---]</option>
-            <option value="0">自发</option>
-            <option value="1">配送</option>
-        </select>
-    </div>
-    <div>
-        <select class="form-control" id="expressType" onchange="calcAmount();">
-            <option value="">[---请选择快件类型---]</option>
-            <option value="0">其他</option>
-            <option value="1">文件</option>
-            <option value="2">数码产品</option>
-            <option value="3">日用品</option>
-            <option value="4">服饰</option>
-            <option value="5">食品</option>
-            <option value="6">医药类产品</option>
-        </select>
-    </div>
-    <div>￥预收费:<span class="price" id="price">0.00</span>&nbsp;&nbsp;&nbsp;￥服务费:<span class="price"
-                                                                                     id="serviceAmt">0.00</span>元
-    </div>
-    <div class="row btnGroup">
+
+        <c:if test="${idCard!=true}">
+            <div class="control">
+                <label for="idCard">寄件人身份证号 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>
+                <input id="idCard" type="text" class="input">
+            </div>
+        </c:if>
+
+        <div class="control">
+            <label for="company">选择快递公司 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>
+            <div class="select">
+                <select id="company" name="company">
+                    <option value="">请选择快递公司</option>
+                    <c:if test="${companyList != null and companyList.size() > 0}">
+                        <c:forEach items="${companyList}" varStatus="var" var="item">
+                            <option value="${item.id}">${item.name}</option>
+                        </c:forEach>
+                    </c:if>
+                </select>
+            </div>
+        </div>
+
+        <div class="control">
+            <label for="expressWay">选择寄件方式 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>
+            <div class="select">
+                <select id="expressWay" name="expressWay" onchange="calcServiceAmt();">
+                    <option value="">请选择寄件方式</option>
+                    <option value="0">自发</option>
+                    <option value="1">配送</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="control">
+            <label for="expressWay">选择寄件方式 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>
+            <div class="select">
+                <select id="expressType" name="expressType" onchange="calcAmount();">
+                    <option value="">请选择快件类型</option>
+                    <option value="0">其他</option>
+                    <option value="1">文件</option>
+                    <option value="2">数码产品</option>
+                    <option value="3">日用品</option>
+                    <option value="4">服饰</option>
+                    <option value="5">食品</option>
+                    <option value="6">医药类产品</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="text-right">
+            ￥预收费:<span class="price" id="price">0.00</span>&nbsp;&nbsp;&nbsp;￥服务费:<span class="price" id="serviceAmt">0.00</span>元
+        </div>
+
+        <div class="control text-center">
+            <span id="confirm">
+                <button type="button" class="btn primary">提交</button>
+            </span>
+            <span id="reset">
+                <button type="button" class="btn">重置</button>
+            </span>
+        </div>
+    </form>
+</section>
+
+
+
+
+
+
+
+<%--<div class="wrap container sendPiece">--%>
+
+
+    <%--<div>--%>
+        <%--<select class="form-control" id="company">--%>
+            <%--<option value="">[---请选择快递公司---]</option>--%>
+            <%--<c:if test="${companyList != null and companyList.size() > 0}">--%>
+                <%--<c:forEach items="${companyList}" varStatus="var" var="item">--%>
+                    <%--<option value="${item.id}">${item.name}</option>--%>
+                <%--</c:forEach>--%>
+            <%--</c:if>--%>
+        <%--</select>--%>
+    <%--</div>--%>
+    <%--<div>--%>
+        <%--<select class="form-control" id="expressWay" onchange="calcServiceAmt();">--%>
+            <%--<option value="">[---请选择寄件方式---]</option>--%>
+            <%--<option value="0">自发</option>--%>
+            <%--<option value="1">配送</option>--%>
+        <%--</select>--%>
+    <%--</div>--%>
+    <%--<div>--%>
+        <%--<select class="form-control" id="expressType" onchange="calcAmount();">--%>
+            <%--<option value="">[---请选择快件类型---]</option>--%>
+            <%--<option value="0">其他</option>--%>
+            <%--<option value="1">文件</option>--%>
+            <%--<option value="2">数码产品</option>--%>
+            <%--<option value="3">日用品</option>--%>
+            <%--<option value="4">服饰</option>--%>
+            <%--<option value="5">食品</option>--%>
+            <%--<option value="6">医药类产品</option>--%>
+        <%--</select>--%>
+    <%--</div>--%>
+    <%--<div>￥预收费:<span class="price" id="price">0.00</span>&nbsp;&nbsp;&nbsp;￥服务费:<span class="price"--%>
+                                                                                     <%--id="serviceAmt">0.00</span>元--%>
+    <%--</div>--%>
+    <%--<div class="row btnGroup">--%>
+        <%--&lt;%&ndash;<div class="col-xs-6">&ndash;%&gt;--%>
+        <%--&lt;%&ndash;<button class="btn btn-danger " type="button">重置</button>&ndash;%&gt;--%>
+        <%--&lt;%&ndash;</div>&ndash;%&gt;--%>
         <%--<div class="col-xs-6">--%>
-        <%--<button class="btn btn-danger " type="button">重置</button>--%>
+            <%--<button class="btn btn-success " type="button" id="confirm" disabled="disabled">确定</button>--%>
         <%--</div>--%>
-        <div class="col-xs-6">
-            <button class="btn btn-success " type="button" id="confirm" disabled="disabled">确定</button>
-        </div>
-    </div>
-</div>
+    <%--</div>--%>
+<%--</div>--%>
 
 <!-- ZUI Javascript 依赖 jQuery -->
 <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/lib/jquery/jquery.js"></script>
@@ -106,14 +174,14 @@
 <script>
     function change(e, id) {
         if (id == 'city') {
-            $("#area").html("<option value=''>[---请选择区/县---]</option>");
+            $("#area").html("<option value=''>[请选择区/县]</option>");
         }
         var html = "";
         $.get("/region/list", {"parentId": e.value}, function (result) {
             if (id == 'city') {
-                html += "<option value=''>[---请选择市/区---]</option>";
+                html += "<option value=''>[请选择市]</option>";
             } else {
-                html += "<option value=''>[---请选择区/县---]</option>";
+                html += "<option value=''>[请选择区/县]</option>";
             }
             $.each(result.data, function (index, item) {
                 html += "<option value='" + item.id + "'>" + item.areaName + "</option>";

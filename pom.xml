@@ -11,6 +11,7 @@
   <modules>
     <module>school_web</module>
     <module>school_manager</module>
+    <module>school_biz</module>
   </modules>
 
   <properties>
