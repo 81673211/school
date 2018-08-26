@@ -52,23 +52,13 @@
             <input id="receiverPhone" type="text" class="input">
         </div>
 
-        <c:if test="${idCard!=true}">
-            <div class="control">
-                <label for="idCard">寄件人身份证号 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>
-                <input id="idCard" type="text" class="input">
-            </div>
-        </c:if>
-
         <div class="control">
             <label for="company">选择快递公司 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>
             <div class="select">
                 <select id="company" name="company">
                     <option value="">请选择快递公司</option>
-                    <c:if test="${companyList != null and companyList.size() > 0}">
-                        <c:forEach items="${companyList}" varStatus="var" var="item">
-                            <option value="${item.id}">${item.name}</option>
-                        </c:forEach>
-                    </c:if>
+                    <option value="2">顺丰</option>
+                    <option value="1">其它</option>
                 </select>
             </div>
         </div>
@@ -115,60 +105,7 @@
     </form>
 </section>
 
-
-
-
-
-
-
-<%--<div class="wrap container sendPiece">--%>
-
-
-    <%--<div>--%>
-        <%--<select class="form-control" id="company">--%>
-            <%--<option value="">[---请选择快递公司---]</option>--%>
-            <%--<c:if test="${companyList != null and companyList.size() > 0}">--%>
-                <%--<c:forEach items="${companyList}" varStatus="var" var="item">--%>
-                    <%--<option value="${item.id}">${item.name}</option>--%>
-                <%--</c:forEach>--%>
-            <%--</c:if>--%>
-        <%--</select>--%>
-    <%--</div>--%>
-    <%--<div>--%>
-        <%--<select class="form-control" id="expressWay" onchange="calcServiceAmt();">--%>
-            <%--<option value="">[---请选择寄件方式---]</option>--%>
-            <%--<option value="0">自发</option>--%>
-            <%--<option value="1">配送</option>--%>
-        <%--</select>--%>
-    <%--</div>--%>
-    <%--<div>--%>
-        <%--<select class="form-control" id="expressType" onchange="calcAmount();">--%>
-            <%--<option value="">[---请选择快件类型---]</option>--%>
-            <%--<option value="0">其他</option>--%>
-            <%--<option value="1">文件</option>--%>
-            <%--<option value="2">数码产品</option>--%>
-            <%--<option value="3">日用品</option>--%>
-            <%--<option value="4">服饰</option>--%>
-            <%--<option value="5">食品</option>--%>
-            <%--<option value="6">医药类产品</option>--%>
-        <%--</select>--%>
-    <%--</div>--%>
-    <%--<div>￥预收费:<span class="price" id="price">0.00</span>&nbsp;&nbsp;&nbsp;￥服务费:<span class="price"--%>
-                                                                                     <%--id="serviceAmt">0.00</span>元--%>
-    <%--</div>--%>
-    <%--<div class="row btnGroup">--%>
-        <%--&lt;%&ndash;<div class="col-xs-6">&ndash;%&gt;--%>
-        <%--&lt;%&ndash;<button class="btn btn-danger " type="button">重置</button>&ndash;%&gt;--%>
-        <%--&lt;%&ndash;</div>&ndash;%&gt;--%>
-        <%--<div class="col-xs-6">--%>
-            <%--<button class="btn btn-success " type="button" id="confirm" disabled="disabled">确定</button>--%>
-        <%--</div>--%>
-    <%--</div>--%>
-<%--</div>--%>
-
-<!-- ZUI Javascript 依赖 jQuery -->
 <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/lib/jquery/jquery.js"></script>
-<!-- ZUI 标准版压缩后的 JavaScript 文件 -->
 <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/js/zui.min.js"></script>
 
 <script>
@@ -268,7 +205,6 @@
         var receiverDistrictId = $("#area").val();
         var expressWay = $("#expressWay").val();
         var expressType = $("#expressType").val();
-        var idCard = $("#idCard").val();
         if (openId == '') {
             alert("参数错误");
             return false;
@@ -309,12 +245,6 @@
             data.receiverPhone = receiverPhone;
         } else {
             alert("请输入收件人电话");
-            return false;
-        }
-        if (idCard != '') {
-            data.idCard = idCard;
-        } else {
-            alert("请输入身份证号");
             return false;
         }
         if (companyId != '') {
