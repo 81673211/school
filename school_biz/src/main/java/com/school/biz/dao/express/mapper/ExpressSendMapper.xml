@@ -23,7 +23,7 @@
         <result column="customer_id" property="customerId" jdbcType="BIGINT"/>
         <result column="end_time" property="endTime" jdbcType="TIMESTAMP"/>
         <result column="express_type" property="expressType" jdbcType="INTEGER"/>
-        <result column="service_amt" property="amount" jdbcType="DECIMAL" />
+        <result column="service_amt" property="serviceAmt" jdbcType="DECIMAL" />
     </resultMap>
     <sql id="Base_Column_List">
         id,

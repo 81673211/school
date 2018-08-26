@@ -22,7 +22,7 @@
         <result column="express_way" property="expressWay" jdbcType="INTEGER"/>
         <result column="into_box_time" property="intoBoxTime" jdbcType="TIMESTAMP"/>
         <result column="customer_id" property="customerId" jdbcType="BIGINT"/>
-        <result column="service_amt" property="amount" jdbcType="DECIMAL"/>
+        <result column="service_amt" property="serviceAmt" jdbcType="DECIMAL"/>
         <result column="express_type" property="expressType" jdbcType="INTEGER"/>
         <result column="receive_code" property="receiveCode" jdbcType="VARCHAR"/>
     </resultMap>
