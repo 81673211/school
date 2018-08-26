@@ -1,8 +1,7 @@
 package com.school.web.controller.region;
 
-import com.school.web.vo.response.DataResponse;
-import com.school.web.vo.response.Response;
-import com.school.biz.service.region.RegionService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.school.biz.service.region.RegionService;
+import com.school.web.vo.response.DataResponse;
+import com.school.web.vo.response.Response;
 
 /**
  * @author jame

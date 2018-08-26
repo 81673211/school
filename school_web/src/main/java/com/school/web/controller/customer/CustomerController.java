@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.school.biz.domain.vo.CustomerProfileEditVo;
 import com.school.biz.service.customer.CustomerService;
 import com.school.web.controller.base.BaseEasyWebController;
-import com.school.biz.domain.vo.CustomerProfileEditVo;
 
 import lombok.extern.slf4j.Slf4j;
 

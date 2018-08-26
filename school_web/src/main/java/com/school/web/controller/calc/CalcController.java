@@ -1,13 +1,7 @@
 package com.school.web.controller.calc;
 
-import com.school.biz.domain.entity.express.ExpressSend;
-import com.school.biz.enumeration.DistributionTypeEnum;
-import com.school.biz.service.calc.CalcCostService;
-import com.school.web.controller.base.BaseEasyWebController;
-import com.school.web.vo.request.SendExpressCalcVo;
-import com.school.web.vo.response.DataResponse;
-import com.school.web.vo.response.Response;
-import lombok.extern.slf4j.Slf4j;
+import java.math.BigDecimal;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -16,7 +10,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.math.BigDecimal;
+import com.school.biz.domain.entity.express.ExpressSend;
+import com.school.biz.enumeration.DistributionTypeEnum;
+import com.school.biz.service.calc.CalcCostService;
+import com.school.web.controller.base.BaseEasyWebController;
+import com.school.web.vo.request.SendExpressCalcVo;
+import com.school.web.vo.response.DataResponse;
+import com.school.web.vo.response.Response;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author jame

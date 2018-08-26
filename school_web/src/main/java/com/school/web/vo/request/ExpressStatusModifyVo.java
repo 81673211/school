@@ -1,8 +1,8 @@
 package com.school.web.vo.request;
 
-import org.springframework.validation.annotation.Validated;
-
 import javax.validation.constraints.NotNull;
+
+import org.springframework.validation.annotation.Validated;
 
 /**
  * @author jame

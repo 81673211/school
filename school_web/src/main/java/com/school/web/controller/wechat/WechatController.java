@@ -18,11 +18,11 @@ import org.springframework.web.servlet.ModelAndView;
 import com.school.biz.domain.bo.wechat.OAuthToken;
 import com.school.biz.domain.bo.wechat.UserWechat;
 import com.school.biz.domain.entity.customer.Customer;
+import com.school.biz.service.customer.CustomerService;
 import com.school.biz.service.wechat.EventService;
 import com.school.biz.service.wechat.OauthService;
-import com.school.biz.service.customer.CustomerService;
-import com.school.web.util.WechatSignatureCheckUtil;
 import com.school.biz.util.wechat.WechatMessageUtil;
+import com.school.web.util.WechatSignatureCheckUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
