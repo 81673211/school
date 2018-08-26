@@ -21,5 +21,7 @@ public interface ExpressCompanyService extends BaseService<ExpressCompany, Expre
 
     List<ExpressCompany> findAll();
 
+    List<ExpressCompany> findAllCooperate();
+
     ExpressCompany findByCode(String code);
 }

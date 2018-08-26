@@ -23,6 +23,8 @@ public class ExpressCompany {
 
     private Boolean isDeleted;
 
+    private Boolean isCooperate;
+
     public Long getId() {
         return id;
     }
@@ -74,6 +76,7 @@ public class ExpressCompany {
     public Date getCreatedTime() {
         return createdTime;
     }
+
     public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
     }
@@ -100,5 +103,13 @@ public class ExpressCompany {
 
     public void setIsDeleted(Boolean isDeleted) {
         this.isDeleted = isDeleted;
+    }
+
+    public Boolean getCooperate() {
+        return isCooperate;
+    }
+
+    public void setCooperate(Boolean cooperate) {
+        isCooperate = cooperate;
     }
 }
