@@ -1,30 +1,24 @@
 package com.school.web.quartz;
 
-import com.alibaba.fastjson.JSON;
-import com.school.biz.extension.wxpay.sdk.WXPay;
-import com.school.biz.extension.wxpay.sdk.WXPayConfigImpl;
-import com.school.biz.extension.wxpay.sdk.WXPayConstants.SignType;
-import com.school.biz.extension.wxpay.sdk.WXPayUtil;
-import com.school.biz.constant.ConfigProperties;
-import com.school.biz.service.express.ExpressService;
-import com.school.biz.util.DateUtil;
-import com.school.biz.domain.entity.order.OrderInfo;
-import com.school.biz.enumeration.DistributionTypeEnum;
-import com.school.biz.enumeration.ExpressTypeEnum;
-import com.school.biz.enumeration.ReceiveExpressStatusEnum;
-import com.school.biz.enumeration.SendExpressStatusEnum;
-import com.school.biz.service.express.ExpressReceiveService;
-import com.school.biz.service.express.ExpressSendService;
-import com.school.biz.service.order.OrderInfoService;
-
-import lombok.extern.slf4j.Slf4j;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.alibaba.fastjson.JSON;
+import com.school.biz.constant.ConfigProperties;
+import com.school.biz.domain.entity.order.OrderInfo;
+import com.school.biz.extension.wxpay.sdk.WXPay;
+import com.school.biz.extension.wxpay.sdk.WXPayConfigImpl;
+import com.school.biz.extension.wxpay.sdk.WXPayConstants.SignType;
+import com.school.biz.extension.wxpay.sdk.WXPayUtil;
+import com.school.biz.service.express.ExpressService;
+import com.school.biz.service.order.OrderInfoService;
+import com.school.biz.util.DateUtil;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 未决流水查询（用于更新订单状态）：处于支付处理中的订单，下单10分钟后。（每5分钟执行一次）
