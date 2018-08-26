@@ -361,14 +361,14 @@ public class ExpressController extends BaseEasyWebController {
         try {
             List<Region> regionList = regionService.selectRegionList(null);
             List<ExpressCompany> companyList = expressCompanyService.findAllCooperate();
-            Customer customer = customerService.getByOpenId(openId);
+             Customer customer = customerService.getByOpenId(openId);
             modelAndView.addObject("openId", openId);
             modelAndView.addObject("idCard", StringUtils.isNotBlank(customer.getIdNumber()));
             modelAndView.addObject("regionList", regionList);
             modelAndView.addObject("companyList", companyList);
             modelAndView.setViewName("sending");
         } catch (Exception e) {
-            modelAndView.setViewName("redirect:/error");
+             modelAndView.setViewName("redirect:/error");
         }
         return modelAndView;
     }
