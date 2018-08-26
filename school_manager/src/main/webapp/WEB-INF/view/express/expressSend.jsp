@@ -61,7 +61,7 @@
                         <th width="100">快递单号</th>
                         <th width="50">寄件人姓名</th>
                         <th width="50">寄件人电话</th>
-                        <th width="100">寄件人地址</th>
+<!--                         <th width="100">寄件人地址</th> -->
                         <th width="50">收件人姓名</th>
                         <th width="50">收件人电话</th>
                         <th width="100">收件人地址</th>
@@ -76,7 +76,7 @@
                         <td>{{el.code}}</td>
                         <td>{{el.senderName}}</td>
                         <td>{{el.senderPhone}}</td>
-                        <td>{{el.senderAddr}}</td>
+<!--                         <td>{{el.senderAddr}}</td> -->
                         <td>{{el.receiverName}}</td>
                         <td>{{el.receiverPhone}}</td>
                         <td>{{el.receiverAddr}}</td>
