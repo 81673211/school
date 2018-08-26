@@ -58,14 +58,17 @@
                 <thead>
                     <tr class="text-c">
                         <th width="25">编号</th>
-                        <th width="100">快递单号</th>
+                        <th width="50">快递单号</th>
                         <th width="50">寄件人姓名</th>
                         <th width="50">寄件人电话</th>
 <!--                         <th width="100">寄件人地址</th> -->
                         <th width="50">收件人姓名</th>
                         <th width="50">收件人电话</th>
-                        <th width="100">收件人地址</th>
+                        <th width="80">收件人地址</th>
                         <th width="50">快递公司</th>
+                        <th width="20">已支付</th>
+                        <th width="20">服务费</th>
+                        <th width="20">已退款</th>
                         <th width="50">状态</th>
                         <th width="50">操作</th>
                     </tr>
@@ -81,6 +84,9 @@
                         <td>{{el.receiverPhone}}</td>
                         <td>{{el.receiverAddr}}</td>
                         <td>{{el.companyName}}</td>
+                        <td>{{el.totalAmt}}</td>
+                        <td>{{el.serviceAmt}}</td>
+                        <td>{{el.totalRefundAmt}}</td>
                         <td>{{@expressSendStatusMap[el.expressStatus]}}</td>
                         <td class="but_xq">
                             <btn:hasUrlPerm link="${refundUrl}">

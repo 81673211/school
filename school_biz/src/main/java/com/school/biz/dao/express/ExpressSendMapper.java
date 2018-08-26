@@ -1,10 +1,11 @@
 package com.school.biz.dao.express;
 
-import com.school.biz.dao.base.BaseDao;
-import com.school.biz.domain.entity.express.ExpressSend;
-
 import java.util.List;
 import java.util.Map;
+
+import com.school.biz.dao.base.BaseDao;
+import com.school.biz.domain.entity.express.ExpressSend;
+import com.school.biz.domain.vo.express.ExpressSendVo;
 
 /**
  * @author jame
@@ -27,7 +28,7 @@ public interface ExpressSendMapper extends BaseDao {
     /**
      * 管理台列表查询
      */
-    List<ExpressSend> queryForManagerPage(Map<String, Object> paramMap);
+    List<ExpressSendVo> queryForManagerPage(Map<String, Object> paramMap);
 
     /**
      * 通过寄件单号查询寄件

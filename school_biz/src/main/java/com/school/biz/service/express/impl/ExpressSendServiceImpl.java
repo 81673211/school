@@ -1,5 +1,15 @@
 package com.school.biz.service.express.impl;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.school.biz.dao.customer.CustomerMapper;
 import com.school.biz.dao.express.ExpressCompanyMapper;
 import com.school.biz.dao.express.ExpressSendMapper;
@@ -8,22 +18,14 @@ import com.school.biz.domain.entity.customer.Customer;
 import com.school.biz.domain.entity.express.ExpressCompany;
 import com.school.biz.domain.entity.express.ExpressSend;
 import com.school.biz.domain.entity.region.Region;
-import com.school.biz.enumeration.DistributionTypeEnum;
+import com.school.biz.domain.vo.express.ExpressSendVo;
 import com.school.biz.exception.ExpressException;
 import com.school.biz.service.base.impl.BaseServiceImpl;
 import com.school.biz.service.calc.CalcCostService;
 import com.school.biz.service.express.ExpressSendService;
 import com.school.biz.service.order.OrderInfoService;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author jame
@@ -172,7 +174,7 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
     }
 
     @Override
-    public List<ExpressSend> queryPage(Map<String, Object> paramMap) {
+    public List<ExpressSendVo> queryPage(Map<String, Object> paramMap) {
         return expressSendMapper.queryForManagerPage(paramMap);
     }
 
