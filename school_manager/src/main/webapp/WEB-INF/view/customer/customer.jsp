@@ -32,35 +32,21 @@
             style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
     <div class="page-container">
         <div class="bk-gray pd-20 clearfix">
-<!--             <div class="revi-staus f-l"> -->
-<!--                 <span class="f-l lh-30">状态：</span> -->
-<!--                 <span class="select-box radius f-l" style="width: 120px;"> -->
-<!--                  <select class="select" size="1" name="status" :duplex="@inputStatus"> -->
-<!--                  	<option value="">全部</option> -->
-<!--                     <option :for="(k,v) in @customerStatusMap" :attr="{value:k}">{{v}}</option>  -->
-<!--                  </select> -->
-<!--              </span> -->
-<!--             </div> -->
             <div class="tran-serch f-l">
                 <input type="text" name="keywordSearch" id="" placeholder="客户名称/手机号" style="width:200px" class="input-text" :duplex="@inputText">
                 <button name="" id="" class="btn btn-primary radius" type="button" :click="@methods.query"><i class="Hui-iconfont"></i> 搜索</button>
             </div>
-<!--             <div class="f-r"> -->
-<%--                 <btn:hasUrlPerm link="${editUrl}"> --%>
-<!--                 	<a class="btn btn-danger ml-10" data-title="新建" :click="@methods.add(@methods.editUrl)" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 新增</a> -->
-<%--                 </btn:hasUrlPerm> --%>
-<!-- 	        </div> -->
         </div>
         <div class="mt-20">
             <table class="table table-border table-bordered table-hover table-bg table-sort" id="reviwtable">
                 <thead>
                     <tr class="text-c">
                         <th width="25">编号</th>
-<!--                         <th width="50">头像</th> -->
                         <th width="50">名称</th>
                         <th width="50">性别</th>
                         <th width="100">手机号</th>
                         <th width="100">电子邮箱</th>
+                        <th width="100">身份证</th>
                         <th width="100">创建时间</th>
                         <th width="100">修改时间</th>
                         <th width="100">住址</th>
@@ -75,6 +61,7 @@
                         <td>{{el.sex}}</td>
                         <td>{{el.phone}}</td>
                         <td>{{el.email}}</td>
+                        <td>{{el.idNumber}}</td>
                         <td>{{el.createdTime|date('yyyy-MM-dd HH:mm:ss')}}</td>
                         <td>{{el.modifiedTime|date('yyyy-MM-dd HH:mm:ss')}}</td>
                         <td>{{el.addr}}</td>

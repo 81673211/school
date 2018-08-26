@@ -38,7 +38,7 @@ public interface OrderInfoService extends BaseService<OrderInfo, OrderInfoMapper
     // 退款
     void refund(HttpServletRequest request, String expressNo, BigDecimal refundFee) throws Exception;
 
-    // 补单a
+    // 补单
     void reOrder(HttpServletRequest request, String expressNo, BigDecimal reOrderAmt) throws Exception;
 
 
