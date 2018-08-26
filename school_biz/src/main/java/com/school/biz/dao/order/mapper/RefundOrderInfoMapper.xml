@@ -218,4 +218,17 @@
   	select * from refund_order_info roi
   	where roi.express_code = #{expressCode} and roi.status = 1
   </select>
+  
+  <select id="queryPage" resultType="com.school.biz.domain.entity.order.RefundOrderInfo" parameterType="map">
+    select o.* from refund_order_info o
+    <where>
+      <if test="status != null and status != '' ">
+        and o.status = #{status}
+      </if>
+      <if test="keyword != null and keyword != '' ">
+        and o.refund_order_no like concat('%',#{keyword},'%')
+      </if>
+    </where>
+    ORDER BY o.created_time desc
+  </select>
 </mapper>

@@ -1,6 +1,7 @@
 package com.school.biz.service.order;
 
 import java.util.List;
+import java.util.Map;
 
 import com.school.biz.dao.order.RefundOrderInfoMapper;
 import com.school.biz.domain.entity.order.OrderInfo;
@@ -16,5 +17,7 @@ public interface RefundOrderInfoService extends BaseService<RefundOrderInfo, Ref
 	void refundOrderUpdateToFailed(RefundOrderInfo refundOrderInfo);
 
 	List<RefundOrderInfo> getNotRefundOrder();
+
+	List<OrderInfo> queryPage(Map<String, Object> searchParams);
 	
 }

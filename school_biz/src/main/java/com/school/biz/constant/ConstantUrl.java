@@ -11,10 +11,15 @@ public class ConstantUrl {
 	
 	/** 订单管理 */
 	/**
-	 * 订单详情
+	 * 支付订单列表
 	 */
 	// 订单详情
 	public static final String ORDER_DETAIL_URL = "/order/detail.do";
+	/**
+	 * 退款订单列表
+	 */
+	// 退款订单详情
+	public static final String REFUND_ORDER_DETAIL_URL = "/refundOrder/detail.do";
 	
 	/** 快递管理 */
 	/**

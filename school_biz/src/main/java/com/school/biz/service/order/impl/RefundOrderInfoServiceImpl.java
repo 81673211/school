@@ -2,12 +2,14 @@ package com.school.biz.service.order.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.school.biz.dao.order.RefundOrderInfoMapper;
+import com.school.biz.domain.entity.order.OrderInfo;
 import com.school.biz.domain.entity.order.RefundOrderInfo;
 import com.school.biz.enumeration.RefundOrderStatusEnum;
 import com.school.biz.service.base.impl.BaseServiceImpl;
@@ -56,6 +58,11 @@ public class RefundOrderInfoServiceImpl extends BaseServiceImpl<RefundOrderInfo,
 	@Override
 	public List<RefundOrderInfo> getNotRefundOrder() {
 		return refundOrderInfoMapper.getNotRefundOrder();
+	}
+
+	@Override
+	public List<OrderInfo> queryPage(Map<String, Object> paramMap) {
+		return refundOrderInfoMapper.queryPage(paramMap);
 	}
 
 }
