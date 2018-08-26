@@ -90,16 +90,13 @@
             </div>
         </div>
 
-        <div class="text-right">
+        <div class="text-right" style="margin-top: 20px; margin-bottom: 20px">
             ￥预收费:<span class="price" id="price">0.00</span>&nbsp;&nbsp;&nbsp;￥服务费:<span class="price" id="serviceAmt">0.00</span>元
         </div>
 
         <div class="control text-center">
             <span id="confirm">
                 <button type="button" class="btn primary">提交</button>
-            </span>
-            <span id="reset">
-                <button type="button" class="btn">重置</button>
             </span>
         </div>
     </form>
