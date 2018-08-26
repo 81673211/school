@@ -155,16 +155,16 @@ public class ExpressSendController extends BaseEasyWebController {
 	 */
     @ResponseBody
 	@RequestMapping(value="/refund.do",method=RequestMethod.POST)
-	public Object refund(HttpServletRequest request,String expressNo,BigDecimal refundAmt,BigDecimal currentOrderRefundAmt) throws Exception{
+	public Object refund(HttpServletRequest request,String expressSendNo,BigDecimal refundAmt,BigDecimal currentOrderRefundAmt) throws Exception{
 		try{
-			if(StringUtils.isBlank(expressNo)){
+			if(StringUtils.isBlank(expressSendNo)){
 				throw new Exception("快递单号不能为空");
 			}
 			if(refundAmt == null || !(refundAmt.compareTo(new BigDecimal(0)) >0)){
 				throw new Exception("退款金额不正确");
 			}
 			
-			orderInfoService.refund(request,expressNo,refundAmt);
+			orderInfoService.refund(request,expressSendNo,refundAmt);
 			
 			return AjaxResult.success("退款申请成功");
 		}catch(Exception e){

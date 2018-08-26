@@ -18,6 +18,7 @@ import com.school.biz.constant.ConstantUrl;
 import com.school.biz.domain.entity.express.ExpressCompany;
 import com.school.biz.domain.entity.express.ExpressReceive;
 import com.school.biz.domain.entity.order.OrderInfo;
+import com.school.biz.enumeration.ExpressTypeEnum;
 import com.school.biz.enumeration.OrderStatusEnum;
 import com.school.biz.enumeration.ReceiveExpressStatusEnum;
 import com.school.biz.exception.FuBusinessException;
@@ -49,6 +50,7 @@ public class OrderInfoController extends BaseEasyWebController {
 		try {
 			mav.addObject("listData",JSON.toJSON(orderInfoService.queryPage(searchParams)));
 			mav.addObject("orderStatusMap",JSON.toJSON(OrderStatusEnum.getAllStatusEnum()));
+			mav.addObject("expressTypes", JSON.toJSON(ExpressTypeEnum.getAllTypeEnum()));
 			mav.addObject(PAGE_PARAM_PAGECOUNT, pageInfo.getTotalPage());
 			mav.addObject(PAGE_PARAM_TOTALCOUNT, pageInfo.getTotalRecord());
 			

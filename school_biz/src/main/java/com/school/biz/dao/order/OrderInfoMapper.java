@@ -31,9 +31,9 @@ public interface OrderInfoMapper extends BaseDao {
 	List<OrderInfo> getNotPayOrder(Map<String, Object> map);
 
 	/**
-	 * 根据快递号查询其所有支付成功订单（按支付金额降序）
+	 * 根据快递id查询其所有支付成功订单（按支付金额降序）
 	 */
-	List<OrderInfo> findSuccessOrdersByExpressNo(String expressSendNo);
+	List<OrderInfo> findSuccessOrdersByExpressId(Long expressId);
 
     BigDecimal findAllPriceByExpress(@Param("expressId") Long expressId);
 }

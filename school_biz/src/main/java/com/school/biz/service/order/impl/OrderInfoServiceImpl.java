@@ -236,7 +236,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
 		ExpressSend expressSend = expressSendMapper.findByExpressSendNo(expressSendNo);
 
 		// 根据快递号查询其所有支付成功订单（按支付金额降序）
-		List<OrderInfo> orderInfos = orderInfoMapper.findSuccessOrdersByExpressNo(expressSendNo);
+		List<OrderInfo> orderInfos = orderInfoMapper.findSuccessOrdersByExpressId(expressSend.getId());
 
 		if(orderInfos == null || orderInfos.size() < 1){
 			throw new Exception("该快递没有成功交易记录");
@@ -277,9 +277,9 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
 		BigDecimal refundCurrMaxAmt = new BigDecimal("0");
 		// 取出每笔成功订单（订单金额-已退款金额），即每笔订单可退金额
 		for (OrderInfo orderInfo : orderInfos) {
-			refundCurrMaxAmt = refundCurrMaxAmt.add(orderInfo.getAmount().min(orderInfo.getRefundAmt()));
+			refundCurrMaxAmt = refundCurrMaxAmt.add(orderInfo.getAmount().subtract(orderInfo.getRefundAmt()));
 		}
-		BigDecimal finalRefundAmt = refundCurrMaxAmt.min(serviceAmt);
+		BigDecimal finalRefundAmt = refundCurrMaxAmt.subtract(serviceAmt);
 
 		if(refundFee.compareTo(finalRefundAmt) == 1){
 			flag = false;
@@ -384,7 +384,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
 		BigDecimal serviceAmt = expressSend.getServiceAmt();
 
 		// 查询寄件总金额
-		List<OrderInfo> orderInfos = orderInfoMapper.findSuccessOrdersByExpressNo(expressSend.getCode());
+		List<OrderInfo> orderInfos = orderInfoMapper.findSuccessOrdersByExpressId(expressSend.getId());
 		BigDecimal orderTotalAmt = new BigDecimal("0");
 		for (OrderInfo orderInfo : orderInfos) {
 			orderTotalAmt = orderTotalAmt.add(orderInfo.getAmount());
@@ -398,7 +398,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
 		}
 
 		// 如果 快递总金额-服务费>退款金额，则不是退全款
-		if(orderTotalAmt.min(serviceAmt).compareTo(refundTotalAmt) == 1){
+		if(orderTotalAmt.subtract(serviceAmt).compareTo(refundTotalAmt) == 1){
 			flag = false;
 		}
 

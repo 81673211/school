@@ -1,5 +1,8 @@
 package com.school.biz.enumeration;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <b>Description:快递类型枚举.</b><br>
  *
@@ -47,5 +50,14 @@ public enum ExpressTypeEnum {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+    
+    public static Map<Object, String> getAllTypeEnum(){
+    	Map<Object, String> resultMap = new HashMap<Object,String>();
+    	ExpressTypeEnum[] expressTypeEnums = ExpressTypeEnum.values();
+    	for (ExpressTypeEnum expressTypeEnum : expressTypeEnums) {
+			resultMap.put(expressTypeEnum.flag, expressTypeEnum.message);
+		}
+    	return resultMap;
     }
 }

@@ -11,6 +11,7 @@
           $id:'orderManage',
           data:${listData},
           orderStatusMap:${orderStatusMap},
+          expressTypes:${expressTypes},
           inputStatus:"${searchParams.status}",
           inputText:"${searchParams.keyword}",
           methods:{
@@ -61,7 +62,7 @@
                         <td>{{index+1}}</td>
                         <td>{{el.orderNo}}</td>
                         <td>{{el.expressCode}}</td>
-                        <td>{{el.expressType}}</td>
+                        <td>{{expressTypes[el.expressType]}}</td>
                         <td>{{el.amount}}</td>
                         <td>{{el.createdTime|date('yyyy-MM-dd HH:mm:ss')}}</td>
                         <td>{{el.sucTime|date('yyyy-MM-dd HH:mm:ss')}}</td>

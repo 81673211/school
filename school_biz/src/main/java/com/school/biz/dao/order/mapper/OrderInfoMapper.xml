@@ -231,9 +231,9 @@
 	where o.status = 3 and o.created_time &lt;= #{tenMinutesAgo,jdbcType=VARCHAR}
   </select>
 
-  <select id="findSuccessOrdersByExpressNo" parameterType="java.lang.String" resultType="com.school.biz.domain.entity.order.OrderInfo">
+  <select id="findSuccessOrdersByExpressId" parameterType="java.lang.Long" resultType="com.school.biz.domain.entity.order.OrderInfo">
   	select * from order_info oi
-	where oi.express_code = #{expressSendNo} and oi.status = 1
+	where oi.express_id = #{expressId} and oi.status = 1
 	order by oi.amount desc
   </select>
 
