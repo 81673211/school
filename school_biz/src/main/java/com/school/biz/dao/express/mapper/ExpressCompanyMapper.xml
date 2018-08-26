@@ -166,6 +166,9 @@
     <select id="selectByParams" resultType="com.school.biz.domain.entity.express.ExpressCompany" parameterType="map">
         select * from express_company t
         <where>
+            <if test="companyId != null and companyId != '' ">
+                and t.id=#{companyId,jdbcType=BIGINT}
+            </if>
             <if test="companyCode != null and companyCode != '' ">
                 and t.code=#{companyCode,jdbcType=VARCHAR}
             </if>

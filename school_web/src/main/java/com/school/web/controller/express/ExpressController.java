@@ -1,9 +1,28 @@
 package com.school.web.controller.express;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.school.biz.domain.entity.customer.Customer;
+import com.school.biz.domain.entity.express.ExpressCompany;
+import com.school.biz.domain.entity.express.ExpressReceive;
+import com.school.biz.domain.entity.express.ExpressSend;
+import com.school.biz.domain.entity.region.Region;
+import com.school.biz.enumeration.DistributionTypeEnum;
+import com.school.biz.enumeration.ExpressTypeEnum;
+import com.school.biz.enumeration.ReceiveExpressStatusEnum;
+import com.school.biz.enumeration.WechatTemplateEnum;
 import com.school.biz.service.calc.CalcCostService;
+import com.school.biz.service.customer.CustomerService;
+import com.school.biz.service.express.ExpressCompanyService;
+import com.school.biz.service.express.ExpressReceiveService;
+import com.school.biz.service.express.ExpressSendService;
+import com.school.biz.service.region.RegionService;
+import com.school.biz.service.wechat.TemplateService;
+import com.school.web.controller.base.BaseEasyWebController;
+import com.school.web.vo.request.*;
+import com.school.web.vo.response.DataResponse;
+import com.school.web.vo.response.ReceiveExpressListResponseVo;
+import com.school.web.vo.response.Response;
+import com.school.web.vo.response.SendExpressListResponseVo;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,34 +35,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.school.biz.domain.entity.customer.Customer;
-import com.school.biz.domain.entity.express.ExpressCompany;
-import com.school.biz.domain.entity.express.ExpressReceive;
-import com.school.biz.domain.entity.express.ExpressSend;
-import com.school.biz.domain.entity.region.Region;
-import com.school.biz.enumeration.DistributionTypeEnum;
-import com.school.biz.enumeration.ExpressTypeEnum;
-import com.school.biz.enumeration.ReceiveExpressStatusEnum;
-import com.school.biz.enumeration.WechatTemplateEnum;
-import com.school.biz.service.customer.CustomerService;
-import com.school.biz.service.express.ExpressCompanyService;
-import com.school.biz.service.express.ExpressReceiveService;
-import com.school.biz.service.express.ExpressSendService;
-import com.school.biz.service.region.RegionService;
-import com.school.biz.service.wechat.TemplateService;
-import com.school.web.controller.base.BaseEasyWebController;
-import com.school.web.vo.request.ExpressGetVo;
-import com.school.web.vo.request.ExpressStatusModifyVo;
-import com.school.web.vo.request.ReceiveExpressCreateVo;
-import com.school.web.vo.request.ReceiveExpressModifyVo;
-import com.school.web.vo.request.SendExpressCreateVo;
-import com.school.web.vo.request.SendExpressModifyVo;
-import com.school.web.vo.response.DataResponse;
-import com.school.web.vo.response.ReceiveExpressListResponseVo;
-import com.school.web.vo.response.Response;
-import com.school.web.vo.response.SendExpressListResponseVo;
-
-import lombok.extern.slf4j.Slf4j;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author jame
@@ -379,5 +372,34 @@ public class ExpressController extends BaseEasyWebController {
         }
         return modelAndView;
     }
+
+
+    /**
+     * 帮我收件
+     *
+     * @param expressVo
+     * @param bindingResult
+     * @return
+     */
+    @RequestMapping(value = "/1/help/create", method = RequestMethod.POST)
+    public Response createHelpReceiveExpress(@Validated HelpReceiveExpressCreateVo expressVo,
+                                             BindingResult bindingResult) {
+        DataResponse<String> response = new DataResponse<>();
+        checkValid(bindingResult, response);
+        if (response.getStatus() != HTTP_SUCCESS) {
+            return response;
+        }
+        try {
+            ExpressReceive expressReceive = new ExpressReceive();
+            BeanUtils.copyProperties(expressVo, expressReceive);
+            Customer customer = customerService.getByOpenId(expressVo.getOpenId());
+            expressReceive.setCustomerId(customer.getId());
+            String orderId = expressReceiveService.createHelpReceiveExpress(expressReceive);
+            return response.writeSuccess("创建帮我收件快件成功", orderId);
+        } catch (Exception e) {
+            return response.writeFailure("创建帮我收件快件失败");
+        }
+    }
+
 
 }

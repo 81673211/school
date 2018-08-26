@@ -33,7 +33,7 @@ import java.util.Map;
  */
 @Slf4j
 @Service
-@Transactional(rollbackFor = ExpressException.class)
+@Transactional(rollbackFor = Exception.class)
 public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, ExpressReceiveMapper>
         implements ExpressReceiveService {
 
@@ -49,6 +49,18 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
     private OrderInfoService orderInfoService;
     @Autowired
     private CalcCostService calcCostService;
+
+    @Override
+    public String createHelpReceiveExpress(ExpressReceive expressReceive) {
+        try {
+            createReceiveExpress(expressReceive);
+            return orderInfoService.createReceiveOrder(expressReceive.getId());
+        } catch (Exception e) {
+            String message = "throw exception when create help receive express";
+            log.error(message, e);
+            throw new RuntimeException(message, e);
+        }
+    }
 
     @Override
     public void createReceiveExpress(ExpressReceive expressReceive) {
@@ -70,10 +82,12 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
     }
 
     private void boxCustomer(ExpressReceive expressReceive) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("phone", expressReceive.getReceiverPhone());
-        List<Customer> list = customerMapper.selectByParams(map);
-        expressReceive.setCustomerId(list.get(0).getId());
+        if (expressReceive.getCustomerId() == null || expressReceive.getCustomerId() == 0L) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("phone", expressReceive.getReceiverPhone());
+            List<Customer> list = customerMapper.selectByParams(map);
+            expressReceive.setCustomerId(list.get(0).getId());
+        }
     }
 
     @Override
@@ -182,7 +196,9 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
      */
     private void boxExpressCompany(Express expressSend) throws ExpressException {
         Map<String, Object> param = new HashMap<>();
-        if (expressSend.getCompanyCode() != null) {
+        if (expressSend.getCompanyId() != null && expressSend.getCompanyId() != 0) {
+            param.put("companyId", expressSend.getCompanyId());
+        } else if (expressSend.getCompanyCode() != null) {
             param.put("companyCode", expressSend.getCompanyCode());
         } else if (expressSend.getCompanyName() != null) {
             param.put("companyName", expressSend.getCompanyName());

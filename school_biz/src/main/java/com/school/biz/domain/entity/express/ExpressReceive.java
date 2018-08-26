@@ -24,6 +24,9 @@ public class ExpressReceive extends Express{
     private String receiverAddr;
     private Date intoBoxTime;
 
+    private String helpReceiveAddr;
+    private String helpReceiveCode;
+
     @JSONField(serialize = false)
     private String senderProvince;
     @JSONField(serialize = false)
