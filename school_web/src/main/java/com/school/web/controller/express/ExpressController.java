@@ -391,7 +391,7 @@ public class ExpressController extends BaseEasyWebController {
             List<ExpressCompany> companyList = expressCompanyService.findAll();
             modelAndView.addObject("openId", openId);
             modelAndView.addObject("companyList", companyList);
-            modelAndView.setViewName("???");
+            modelAndView.setViewName("help_receive");
         } catch (Exception e) {
             modelAndView.setViewName("redirect:/error");
         }
@@ -419,8 +419,8 @@ public class ExpressController extends BaseEasyWebController {
             BeanUtils.copyProperties(expressVo, expressReceive);
             Customer customer = customerService.getByOpenId(expressVo.getOpenId());
             expressReceive.setCustomerId(customer.getId());
-            String orderId = expressReceiveService.createHelpReceiveExpress(expressReceive);
-            return response.writeSuccess("创建帮我收件成功", orderId);
+            String orderNo = expressReceiveService.createHelpReceiveExpress(expressReceive);
+            return response.writeSuccess("创建帮我收件成功", orderNo);
         } catch (Exception e) {
             return response.writeFailure("创建帮我收件失败");
         }

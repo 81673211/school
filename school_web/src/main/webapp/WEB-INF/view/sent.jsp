@@ -17,7 +17,7 @@
             <c:forEach items="${list}" varStatus="var" var="item">
                 <a class="item multi-lines with-avatar">
                     <jsp:include page="snippet/item_logo.jsp">
-                        <jsp:param name="companyName" value="${item.companyName}"/>
+                        <jsp:param name="companyId" value="${item.companyId}"/>
                     </jsp:include>
                     <div class="content">
                         <div>

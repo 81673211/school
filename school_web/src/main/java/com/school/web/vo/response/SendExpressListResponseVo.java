@@ -16,6 +16,7 @@ import lombok.Data;
 public class SendExpressListResponseVo {
     private Long id;
     private String code;
+    private Long companyId;
     private String companyName;
     private Integer expressStatus;
     private String receiverPhone;    //收件人电话

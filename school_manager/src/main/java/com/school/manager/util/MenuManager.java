@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
  * <br><b>Date:</b> 14/06/2018 13:13
  */
 @Component
-//@Lazy(value = false)
+@Lazy(value = false)
 @Slf4j
 public class MenuManager {
 
@@ -45,7 +45,7 @@ public class MenuManager {
 
     private Menu getMenu() {
         CommonButton btn11 = new CommonButton();
-        btn11.setName("我要寄件");
+        btn11.setName("代我寄件");
         btn11.setType("view");
         btn11.setKey("11");
         btn11.setUrl(oauthService.getOAuthUrl("/express/sending"));
@@ -72,7 +72,7 @@ public class MenuManager {
         btn23.setName("帮我取件");
         btn23.setType("view");
         btn23.setKey("23");
-        btn23.setUrl(oauthService.getOAuthUrl("/abc"));
+        btn23.setUrl(oauthService.getOAuthUrl("/express/help/receive"));
 
         CommonButton btn31 = new CommonButton();
         btn31.setName("个人信息");
@@ -97,7 +97,7 @@ public class MenuManager {
          */
 
         ComplexButton mainBtn1 = new ComplexButton();
-        mainBtn1.setName("代我寄件");
+        mainBtn1.setName("我的寄件");
         mainBtn1.setSub_button(new Button[] {btn11, btn12});
 
 
