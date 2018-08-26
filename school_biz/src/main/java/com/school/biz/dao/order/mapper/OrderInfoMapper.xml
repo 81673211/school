@@ -240,4 +240,8 @@
     <select id="findAllPriceByExpress" parameterType="java.lang.String" resultType="java.math.BigDecimal">
       select sum(t.amount) from order_info t where t.`status` in (0,1,3) and t.express_id = #{expressId, jdbcType=BIGINT} and t.express_type=0
     </select>
+    
+    <update id="fillExpressNo" parameterType="map">
+    	update order_info set express_code = #{expressNo} where express_id = #{expressId}
+    </update>
 </mapper>

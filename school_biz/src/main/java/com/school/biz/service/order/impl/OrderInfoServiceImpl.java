@@ -349,8 +349,8 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
 		}
 		OrderInfo reOrder = initReOrderInfo(expressSend, reOrderAmt);
 		orderInfoMapper.insertSelective(reOrder);
-		// 更改快递状态为4
-		expressSendService.updateSendExpressStatus(expressSend.getId(), SendExpressStatusEnum.WAIT_SEND.getFlag());
+		// 更改快递状态为等待补单支付
+		expressSendService.updateSendExpressStatus(expressSend.getId(), SendExpressStatusEnum.SUPPLEMENT.getFlag());
 	}
 
 	private OrderInfo initReOrderInfo(ExpressSend expressSend,BigDecimal reOrderAmt) {
@@ -404,4 +404,12 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
     public BigDecimal findAllPriceByExpress(Long expressId) {
         return orderInfoMapper.findAllPriceByExpress(expressId);
     }
+
+	@Override
+	public void fillExpressNo(Long expressId, String expressNo) {
+		Map<String, Object> map = new HashMap<String,Object>();
+		map.put("expressId", expressId);
+		map.put("expressNo", expressNo);
+		orderInfoMapper.fillExpressNo(map);
+	}
 }

@@ -36,4 +36,6 @@ public interface OrderInfoMapper extends BaseDao {
 	List<OrderInfo> findSuccessOrdersByExpressId(Long expressId);
 
     BigDecimal findAllPriceByExpress(@Param("expressId") Long expressId);
+
+	void fillExpressNo(Map<String, Object> map);
 }

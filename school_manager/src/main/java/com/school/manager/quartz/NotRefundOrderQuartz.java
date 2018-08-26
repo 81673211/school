@@ -65,12 +65,16 @@ public class NotRefundOrderQuartz {
                             log.info("退款查询====》退款订单号：" + refundOrderInfo.getRefundOrderNo() + "查询成功，状态为：" + getMapLike("refund_status", result));
                             // 将订单置为成功
                             refundOrderInfoService.refundOrderUpdateToSuccess(refundOrderInfo);
+                            // 同步快递状态
+                            expressService.updateExpressByRefund(refundOrderInfo);
                             dealNum++;
                         } else if ("REFUNDCLOSE".equals(getMapLike("refund_status", result))) {
                             // 如果退款已经失败，则将退款订单置为失败
                             log.info("退款查询====》退款订单号：" + refundOrderInfo.getRefundOrderNo() + "查询成功，状态为：" + getMapLike("refund_status", result));
                             // 将订单置为失败
                             refundOrderInfoService.refundOrderUpdateToFailed(refundOrderInfo);
+                            // 同步快递状态
+                            expressService.updateExpressByRefund(refundOrderInfo);
                             dealNum++;
                         }
                     }

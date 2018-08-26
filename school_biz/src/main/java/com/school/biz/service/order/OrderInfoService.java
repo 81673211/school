@@ -57,4 +57,11 @@ public interface OrderInfoService extends BaseService<OrderInfo, OrderInfoMapper
      * @return
      */
     boolean isRefundAll(ExpressSend expressSend);
+
+    /**
+     * 填充订单中的快递号
+     * @param id
+     * @param code
+     */
+	void fillExpressNo(Long id, String code);
 }

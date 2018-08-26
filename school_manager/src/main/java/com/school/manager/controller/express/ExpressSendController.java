@@ -113,6 +113,13 @@ public class ExpressSendController extends BaseEasyWebController {
 			ExpressCompany expressCompany = expressCompanyService.findByCode(expressSend.getCompanyCode());
 			expressSend.setCompanyId(expressCompany.getId());
 			expressSend.setCompanyName(expressCompany.getName());
+			// 修改时，如果是首次填写快递单号，则将订单中的快递号也补全
+			if(expressSend.getId() != null){
+				ExpressSend originalExpressSend = expressSendService.get(expressSend.getId());
+				if(StringUtils.isBlank(originalExpressSend.getCode()) && StringUtils.isNotBlank(expressSend.getCode())){
+					orderInfoService.fillExpressNo(expressSend.getId(),expressSend.getCode());
+				}
+			}
 			expressSendService.saveOrUpdate(expressSend);
 			return AjaxResult.success("保存成功", JSON.toJSON(expressSend));
 		}catch(Exception e){
