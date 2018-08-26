@@ -1,26 +1,12 @@
 package com.school.biz.service.wechat.impl;
 
-import java.math.BigDecimal;
-import java.net.InetAddress;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.alibaba.fastjson.JSON;
 import com.school.biz.constant.ConfigProperties;
 import com.school.biz.dao.customer.CustomerMapper;
 import com.school.biz.dao.order.OrderInfoMapper;
 import com.school.biz.domain.entity.customer.Customer;
 import com.school.biz.domain.entity.order.OrderInfo;
-import com.school.biz.enumeration.DistributionTypeEnum;
-import com.school.biz.enumeration.ExpressTypeEnum;
-import com.school.biz.enumeration.OrderStatusEnum;
-import com.school.biz.enumeration.ReceiveExpressStatusEnum;
-import com.school.biz.enumeration.SendExpressStatusEnum;
+import com.school.biz.enumeration.*;
 import com.school.biz.extension.wxpay.sdk.WXPay;
 import com.school.biz.extension.wxpay.sdk.WXPayConfigImpl;
 import com.school.biz.extension.wxpay.sdk.WXPayConstants;
@@ -32,8 +18,16 @@ import com.school.biz.service.express.ExpressService;
 import com.school.biz.service.order.OrderInfoService;
 import com.school.biz.service.wechat.WxPayService;
 import com.school.biz.util.AmountUtils;
-
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.net.InetAddress;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 @Slf4j
 @Service
@@ -43,8 +37,6 @@ public class WxPayServiceImpl implements WxPayService {
     private OrderInfoMapper orderInfoMapper;
     @Autowired
     private CustomerMapper customerMapper;
-    @Autowired
-    private ExpressReceiveService expressReceiveService;
     @Autowired
     private OrderInfoService orderInfoService;
     @Autowired

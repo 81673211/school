@@ -1,10 +1,9 @@
 package com.school.web.vo.request;
 
-import javax.validation.constraints.NotNull;
-
+import lombok.Data;
 import org.springframework.validation.annotation.Validated;
 
-import lombok.Data;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author jame
