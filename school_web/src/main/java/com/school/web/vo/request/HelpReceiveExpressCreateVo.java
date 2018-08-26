@@ -21,6 +21,8 @@ public class HelpReceiveExpressCreateVo {
     private Long companyId;
     @NotNull(message = "取件地址不为空")
     private String helpReceiveAddr;
+    @NotNull(message = "快递单号不为空")
+    private String code;
     //取件码，可不填
     private String helpReceiveCode;
 }

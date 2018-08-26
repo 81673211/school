@@ -375,6 +375,27 @@ public class ExpressController extends BaseEasyWebController {
 
 
     /**
+     * 帮我收件  页面跳转
+     *
+     * @param openId
+     * @return
+     */
+    @RequestMapping(value = "/help/receive", method = RequestMethod.GET)
+    public ModelAndView helpReceiveExpress(@RequestParam(value = "openId") String openId) {
+        ModelAndView modelAndView = new ModelAndView();
+        try {
+            List<ExpressCompany> companyList = expressCompanyService.findAll();
+            modelAndView.addObject("openId", openId);
+            modelAndView.addObject("companyList", companyList);
+            modelAndView.setViewName("sending");
+        } catch (Exception e) {
+            modelAndView.setViewName("redirect:/error");
+        }
+        return modelAndView;
+    }
+
+
+    /**
      * 帮我收件
      *
      * @param expressVo
