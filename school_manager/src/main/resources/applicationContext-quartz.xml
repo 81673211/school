@@ -39,8 +39,8 @@
 	<bean id="NotPayOrderExpireTigger"
 		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="NotPayOrderExpireJob" />
-		<!-- 每天运行一次 -->
-		<property name="cronExpression" value="0 0/1 * * * ?" />
+		<!-- 每天23:30运行一次 -->
+		<property name="cronExpression" value="0 30 23 * * ?" />
 	</bean>
 	<bean id="NotPayOrderExpireJob"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
