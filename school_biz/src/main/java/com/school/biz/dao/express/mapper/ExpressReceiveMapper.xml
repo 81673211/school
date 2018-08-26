@@ -24,7 +24,8 @@
         <result column="customer_id" property="customerId" jdbcType="BIGINT"/>
         <result column="service_amt" property="serviceAmt" jdbcType="DECIMAL"/>
         <result column="express_type" property="expressType" jdbcType="INTEGER"/>
-        <result column="receive_code" property="receiveCode" jdbcType="VARCHAR"/>
+        <result column="help_receive_code" property="helpReceiveCode" jdbcType="VARCHAR"/>
+        <result column="help_receive_addr" property="helpReceiveAddr" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
         id,
@@ -49,7 +50,8 @@
         customer_id,
         service_amt,
         express_type,
-        receive_code
+        help_receive_code,
+        help_receive_addr
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
@@ -122,8 +124,11 @@
             <if test="expressType != null">
                 express_type,
             </if>
-            <if test="receiveCode != null">
-                receive_code,
+            <if test="helpReceiveCode != null">
+                help_receive_code,
+            </if>
+            <if test="helpReceiveAddr != null">
+                help_receive_addr,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -181,8 +186,11 @@
             <if test="expressType != null">
                 #{expressType,jdbcType=INTEGER},
             </if>
-            <if test="receiveCode != null">
-                #{receiveCode,jdbcType=VARCHAR},
+            <if test="helpReceiveCode != null">
+                #{helpReceiveCode,jdbcType=VARCHAR},
+            </if>
+            <if test="helpReceiveAddr != null">
+                #{helpReceiveAddr,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -246,8 +254,11 @@
             <if test="expressType != null">
                 express_type = #{expressType,jdbcType=INTEGER},
             </if>
-            <if test="receiveCode != null">
-                receive_code = #{receiveCode,jdbcType=VARCHAR},
+            <if test="helpReceiveCode != null">
+                help_receive_code = #{helpReceiveCode,jdbcType=VARCHAR},
+            </if>
+            <if test="helpReceiveAddr != null">
+                help_receive_addr = #{helpReceiveAddr,jdbcType=VARCHAR},
             </if>
         </set>
         where id = #{id,jdbcType=BIGINT}

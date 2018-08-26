@@ -1,14 +1,14 @@
 package com.school.biz.service.express;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
-
 import com.school.biz.dao.express.ExpressReceiveMapper;
 import com.school.biz.domain.entity.express.ExpressReceive;
 import com.school.biz.enumeration.ExpressTypeEnum;
 import com.school.biz.exception.ExpressException;
 import com.school.biz.service.base.BaseService;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author jame
@@ -17,13 +17,11 @@ public interface ExpressReceiveService extends BaseService<ExpressReceive, Expre
 
     /**
      * 创建收件快件流程
-     *
      */
     void createReceiveExpress(ExpressReceive expressReceive);
 
     /**
      * 编辑收件快件
-     *
      */
     void modifyReceiveExpress(ExpressReceive expressReceive);
 
@@ -84,7 +82,14 @@ public interface ExpressReceiveService extends BaseService<ExpressReceive, Expre
     BigDecimal getOrderPrice(Long expressId, ExpressTypeEnum expressType);
 
     //-------- from manager --------
-    List<ExpressReceive> queryPage(Map<String,Object> paramMap);
+    List<ExpressReceive> queryPage(Map<String, Object> paramMap);
 
     void saveOrUpdate(ExpressReceive expressReceive);
+
+    /**
+     * 创建帮我取件流程
+     *
+     * @param expressReceive
+     */
+    String createHelpReceiveExpress(ExpressReceive expressReceive);
 }
