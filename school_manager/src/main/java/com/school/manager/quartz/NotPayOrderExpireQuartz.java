@@ -1,4 +1,4 @@
-package com.school.web.quartz;
+package com.school.manager.quartz;
 
 import java.util.HashMap;
 import java.util.List;

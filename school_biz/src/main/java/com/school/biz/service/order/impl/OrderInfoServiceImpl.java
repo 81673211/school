@@ -8,7 +8,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.school.biz.dao.express.ExpressSendMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,17 +16,19 @@ import com.alibaba.fastjson.JSON;
 import com.school.biz.constant.ConfigProperties;
 import com.school.biz.constant.Constants;
 import com.school.biz.dao.express.ExpressReceiveMapper;
+import com.school.biz.dao.express.ExpressSendMapper;
 import com.school.biz.dao.order.OrderInfoMapper;
 import com.school.biz.dao.order.RefundOrderInfoMapper;
 import com.school.biz.domain.entity.express.Express;
 import com.school.biz.domain.entity.express.ExpressReceive;
 import com.school.biz.domain.entity.express.ExpressSend;
 import com.school.biz.domain.entity.order.OrderInfo;
-import com.school.biz.enumeration.DistributionTypeEnum;
 import com.school.biz.domain.entity.order.RefundOrderInfo;
+import com.school.biz.enumeration.DistributionTypeEnum;
 import com.school.biz.enumeration.ExpressTypeEnum;
 import com.school.biz.enumeration.OrderStatusEnum;
 import com.school.biz.enumeration.RefundOrderStatusEnum;
+import com.school.biz.enumeration.SendExpressStatusEnum;
 import com.school.biz.extension.wxpay.sdk.WXPay;
 import com.school.biz.extension.wxpay.sdk.WXPayConfigImpl;
 import com.school.biz.extension.wxpay.sdk.WXPayConstants.SignType;
@@ -43,15 +44,6 @@ import com.school.biz.util.IdWorkerUtil;
 import com.school.biz.util.SessionUtils;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -70,6 +62,8 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
     private RefundOrderInfoService refundOrderInfoService;
     @Autowired
     private ExpressSendMapper expressSendMapper;
+    @Autowired
+    private ExpressSendService expressSendService;
 
     @Override
     public OrderInfo findByOrderNo(String orderNo) {
@@ -355,8 +349,8 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
 		}
 		OrderInfo reOrder = initReOrderInfo(expressSend, reOrderAmt);
 		orderInfoMapper.insertSelective(reOrder);
-		// 更改快递状态为
-
+		// 更改快递状态为4
+		expressSendService.updateSendExpressStatus(expressSend.getId(), SendExpressStatusEnum.WAIT_SEND.getFlag());
 	}
 
 	private OrderInfo initReOrderInfo(ExpressSend expressSend,BigDecimal reOrderAmt) {

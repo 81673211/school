@@ -5,12 +5,12 @@
 
 <head>
 	<%@include file="/WEB-INF/view/common/common.jsp" %>
-    <title>订单列表</title>
+    <title>退款订单列表</title>
     <script type="text/javascript">
-      var vm_orderManage=avalon.define({
-          $id:'orderManage',
+      var vm_refundOrderManage=avalon.define({
+          $id:'refundOrderManage',
           data:${listData},
-          orderStatusMap:${orderStatusMap},
+          refundOrderStatusMap:${refundOrderStatusMap},
           expressTypes:${expressTypes},
           inputStatus:"${searchParams.status}",
           inputText:"${searchParams.keyword}",
@@ -23,8 +23,8 @@
     </script>
 </head>
 
-<body :controller="orderManage">
-    <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 订单管理 <span class="c-gray en">&gt;</span> 订单列表 <a class="btn btn-success radius r"
+<body :controller="refundOrderManage">
+    <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 订单管理 <span class="c-gray en">&gt;</span> 退款订单列表 <a class="btn btn-success radius r"
             style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
     <div class="page-container">
         <div class="bk-gray pd-20 clearfix">
@@ -33,12 +33,12 @@
                 <span class="select-box radius f-l" style="width: 120px;">
                  <select class="select" size="1" name="status" :duplex="@inputStatus">
                  	<option value="">全部</option>
-                    <option :for="(k,v) in @orderStatusMap" :attr="{value:k}">{{v}}</option> 
+                    <option :for="(k,v) in @refundOrderStatusMap" :attr="{value:k}">{{v}}</option> 
                  </select>
              </span>
             </div>
             <div class="tran-serch f-l ml-50">
-                <input type="text" name="keywordSearch" id="" placeholder="订单号" style="width:200px" class="input-text" :duplex="@inputText">
+                <input type="text" name="keywordSearch" id="" placeholder="退款订单号" style="width:200px" class="input-text" :duplex="@inputText">
                 <button name="" id="" class="btn btn-primary radius" type="button" :click="@methods.query"><i class="Hui-iconfont"></i> 搜索</button>
             </div>
         </div>
@@ -47,20 +47,20 @@
                 <thead>
                     <tr class="text-c">
                         <th width="25">编号</th>
-                        <th width="100">订单号</th>
+                        <th width="100">退款订单号</th>
                         <th width="100">快递单号</th>
                         <th width="30">快递类型</th>
-                        <th width="100">订单金额</th>
+                        <th width="100">退款金额</th>
                         <th width="100">创建时间</th>
                         <th width="100">完成时间</th>
-                        <th width="100">订单状态</th>
+                        <th width="100">退款订单状态</th>
                         <th width="50">操作</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr class="text-c" :for="index,el in @data">
                         <td>{{index+1}}</td>
-                        <td>{{el.orderNo}}</td>
+                        <td>{{el.refundOrderNo}}</td>
                         <td>{{el.expressCode}}</td>
                         <td>{{expressTypes[el.expressType]}}</td>
                         <td>{{el.amount}}</td>
@@ -80,7 +80,7 @@
         <!--分页-->
 		<div class="pag-box withdarwal-pag" id="page">
 			<form method="post" id="searchForm"
-				action="${ctx}/order/list.do">
+				action="${ctx}/refundOrder/list.do">
 				<input name="search_status" id="testForm_state"
 					type="hidden"  :attr="{value:@inputStatus}" />
 				<input name="search_type" id="testForm_type" type="hidden"
@@ -93,6 +93,6 @@
 		</div>
     </div>
     <script type="text/javascript" src="${ctx}/static/lib/requirejs/requirejs.js" data-main="${ctx}/static/requirejs.config.js"></script>
-    <script type="text/javascript" src="${ctx}/static/model/order/order.js"></script>
+    <script type="text/javascript" src="${ctx}/static/model/order/refundOrder.js"></script>
 </body>
 </html>
