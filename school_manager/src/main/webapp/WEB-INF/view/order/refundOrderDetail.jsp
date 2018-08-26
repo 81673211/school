@@ -21,15 +21,15 @@
         <div class="panel">
             <div class="panel-body">
                 <div class="row cl">
-                    <div class="col-xs-4 text-r">快递号：</div>
+                    <div class="col-xs-4 text-r">快递单号：</div>
                     <div class="col-xs-8">
-                        <p>{{@data.expressNo}}</p>
+                        <p>{{@data.expressCode}}</p>
                     </div>
                 </div>
                 <div class="row cl">
                     <div class="col-xs-4 text-r">退款订单金额：</div>
                     <div class="col-xs-8">
-                        <p>{{@data.amount}}</p>
+                        <p>{{@data.amount}}元</p>
                     </div>
                 </div>
                 <div class="row cl">
@@ -39,9 +39,9 @@
                     </div>
                 </div>
                 <div class="row cl">
-                    <div class="col-xs-4 text-r">修改时间：</div>
+                    <div class="col-xs-4 text-r">完成时间：</div>
                     <div class="col-xs-8">
-                        <p>{{@data.modifiedTime|date('yyyy-MM-dd HH:mm:ss')}}</p>
+                        <p>{{@data.sucTime|date('yyyy-MM-dd HH:mm:ss')}}</p>
                     </div>
                 </div>
                 <div class="row cl">

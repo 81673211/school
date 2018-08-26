@@ -48,9 +48,9 @@
                 <button name="" id="" class="btn btn-primary radius" type="button" :click="@methods.query"><i class="Hui-iconfont"></i> 搜索</button>
             </div>
             <div class="f-r">
-                <btn:hasUrlPerm link="${editUrl}">
-                	<a class="btn btn-danger ml-10" data-title="新建" :click="@methods.add(@methods.editUrl)" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 新增</a>
-                </btn:hasUrlPerm>
+<%--                 <btn:hasUrlPerm link="${editUrl}"> --%>
+<!--                 	<a class="btn btn-danger ml-10" data-title="新建" :click="@methods.add(@methods.editUrl)" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 新增</a> -->
+<%--                 </btn:hasUrlPerm> --%>
 	        </div>
         </div>
         <div class="mt-20">
