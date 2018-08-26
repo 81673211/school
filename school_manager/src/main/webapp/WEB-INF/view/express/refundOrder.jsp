@@ -39,6 +39,6 @@
         </form>
     </div>    
 <script type="text/javascript" src="${ctx}/static/lib/requirejs/requirejs.js" data-main="${ctx}/static/requirejs.config.js"></script>
-<script type="text/javascript" src="${ctx}/static/model/order/refundOrder.js"></script>
+<script type="text/javascript" src="${ctx}/static/model/express/refundOrder.js"></script>
 </body>
 </html>

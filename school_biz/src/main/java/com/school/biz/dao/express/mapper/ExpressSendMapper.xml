@@ -282,4 +282,9 @@
         and t.is_deleted=0
         order by t.id desc
     </select>
+    
+    <select id="findByExpressSendNo" parameterType="java.lang.String" resultType="com.school.biz.domain.entity.express.ExpressSend">
+    	select * from express_send es
+    	where es.code = #{expressSendNo,jdbcType=VARCHAR}
+    </select>
 </mapper>

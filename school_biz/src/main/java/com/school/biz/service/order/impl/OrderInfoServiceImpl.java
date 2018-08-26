@@ -128,16 +128,17 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
      */
     private OrderInfo initOrderInfo(Express express) {
         OrderInfo orderInfo = new OrderInfo();
-        orderInfo.setTradeSummary("express");
         if (express instanceof ExpressSend) {
             ExpressSend expressSend = (ExpressSend) express;
             orderInfo.setExpressType(ExpressTypeEnum.SEND.getFlag());
             orderInfo.setAmount(calcCostService.calcSendTransportCost(expressSend).add(
                     calcCostService.calcSendDistributionCost(expressSend.getExpressWay())));
+            orderInfo.setTradeSummary("寄件快递费");
         } else if (express instanceof ExpressReceive) {
             ExpressReceive expressReceive = (ExpressReceive) express;
             orderInfo.setExpressType(ExpressTypeEnum.RECEIVE.getFlag());
             orderInfo.setAmount(calcCostService.calcReceiveDistributionCost(expressReceive.getExpressWay()));
+            orderInfo.setTradeSummary("收件服务费");
         } else {
             String errorMsg = "error express type.";
             log.error(errorMsg);
@@ -218,20 +219,20 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
     }
 
 	@Override
-	public void refund(HttpServletRequest request,String expressNo,BigDecimal refundFee) throws Exception {
+	public void refund(HttpServletRequest request,String expressSendNo,BigDecimal refundFee) throws Exception {
 		Long operId = SessionUtils.getSessionUser(request).getId();
 		
-		ExpressSend expressSend = expressSendMapper.findByExpressNo(expressNo);
+		ExpressSend expressSend = expressSendMapper.findByExpressSendNo(expressSendNo);
 		
 		// 根据快递号查询其所有支付成功订单（按支付金额降序）
-		List<OrderInfo> orderInfos = orderInfoMapper.findSuccessOrdersByExpressNo(expressNo);
+		List<OrderInfo> orderInfos = orderInfoMapper.findSuccessOrdersByExpressNo(expressSendNo);
 		
 		if(orderInfos == null || orderInfos.size() < 1){
 			throw new Exception("该快递没有成功交易记录");
 		}
 		
 		// 判断退款费用是否合法
-		boolean isRefundFeeIllegal = isRefundFeeIllegal(expressSend,orderInfos,refundFee);
+		boolean isRefundFeeIllegal = this.isRefundFeeIllegal(expressSend,orderInfos,refundFee);
 		if(!isRefundFeeIllegal){
 			throw new Exception("退款金额不能大于（快递金额-服务费）");
 		}
@@ -250,9 +251,30 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
 			}
 		}
 		
+	}
+	
+	/**
+	 * 判断退款金额是否合法
+	 */
+	private boolean isRefundFeeIllegal(ExpressSend expressSend, List<OrderInfo> orderInfos, BigDecimal refundFee) {
+		boolean flag = true;
 		
+		// 取出订单服务费
+		BigDecimal serviceAmt = expressSend.getServiceAmt();
 		
+		// 最大可退金额=每笔可退金额之和-服务费
+		BigDecimal refundCurrMaxAmt = new BigDecimal("0");
+		// 取出每笔成功订单（订单金额-已退款金额），即每笔订单可退金额
+		for (OrderInfo orderInfo : orderInfos) {
+			refundCurrMaxAmt = refundCurrMaxAmt.add(orderInfo.getAmount().min(orderInfo.getRefundAmt()));
+		}
+		BigDecimal finalRefundAmt = refundCurrMaxAmt.min(serviceAmt);
 		
+		if(refundFee.compareTo(finalRefundAmt) == 1){
+			flag = false;
+		}
+		
+		return flag;
 	}
 	
 	private void refundOrderInfo(OrderInfo orderInfo,BigDecimal refundFee,Long operId) throws Exception{
@@ -304,11 +326,71 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
 		refundOrderInfo.setAmount(refundFee);
 		
 		refundOrderInfo.setCreatedTime(new Date());
-//		refundOrderInfo.setTradeSummary("");
+		refundOrderInfo.setTradeSummary(orderInfo.getTradeSummary());
 		refundOrderInfo.setStatus(RefundOrderStatusEnum.REFUNDING.getCode());
-		refundOrderInfo.setNotifyUrl("");
 		
 		refundOrderInfoMapper.insertSelective(refundOrderInfo);
 		return refundOrderInfo;
+	}
+
+	/**
+	 * 补单
+	 * @throws Exception 
+	 */
+	@Override
+	public void reOrder(HttpServletRequest request, String expressSendNo, BigDecimal reOrderAmt) throws Exception {
+		ExpressSend expressSend = expressSendMapper.findByExpressSendNo(expressSendNo);
+		if(expressSend == null){
+			throw new Exception("订单号不存在");
+		}
+		OrderInfo reOrder = initReOrderInfo(expressSend, reOrderAmt);
+		orderInfoMapper.insertSelective(reOrder);
+		// 更改快递状态为
+		
+	}
+	
+	private OrderInfo initReOrderInfo(ExpressSend expressSend,BigDecimal reOrderAmt) {
+        OrderInfo orderInfo = new OrderInfo();
+        orderInfo.setTradeSummary("补单费用");
+        orderInfo.setExpressType(expressSend.getExpressType());
+        orderInfo.setExpressId(expressSend.getId());
+        orderInfo.setExpressCode(expressSend.getCode());
+        orderInfo.setCustomerId(expressSend.getCustomerId());
+        orderInfo.setStatus(OrderStatusEnum.UNPAY.getCode());
+        orderInfo.setOrderNo(IdWorkerUtil.generateOrderNo(Constants.ORDER_NO_TYPE_REORDER));
+        orderInfo.setNotifyUrl(ConfigProperties.WXPAY_NOTIFY_URL);
+        return orderInfo;
+    }
+	
+	/**
+	 * 是否退全款
+	 */
+	public boolean isRefundAll(ExpressSend expressSend){
+		boolean flag = true;
+		
+		// 取出订单服务费
+		BigDecimal serviceAmt = expressSend.getServiceAmt();
+		
+		// 查询寄件总金额
+		List<OrderInfo> orderInfos = orderInfoMapper.findSuccessOrdersByExpressNo(expressSend.getCode());
+		BigDecimal orderTotalAmt = new BigDecimal("0");
+		for (OrderInfo orderInfo : orderInfos) {
+			orderTotalAmt = orderTotalAmt.add(orderInfo.getAmount());
+		}
+		
+		// 查询退款总金额
+		List<RefundOrderInfo> refundOrderInfos = refundOrderInfoMapper.findSuccessRefundOrdersByExpressNo(expressSend.getCode());
+		BigDecimal refundTotalAmt = new BigDecimal("0");
+		for (RefundOrderInfo refundOrderInfo : refundOrderInfos) {
+			refundTotalAmt = refundTotalAmt.add(refundOrderInfo.getAmount());
+		}
+		
+		// 如果 快递总金额-服务费>退款金额，则不是退全款
+		if(orderTotalAmt.min(serviceAmt).compareTo(refundTotalAmt) == 1){
+			flag = false;
+		}
+		
+		return flag;
+		
 	}
 }

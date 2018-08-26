@@ -28,4 +28,9 @@ public interface ExpressSendMapper extends BaseDao {
      * 管理台列表查询
      */
     List<ExpressSend> queryForManagerPage(Map<String, Object> paramMap);
+
+    /**
+     * 通过寄件单号查询寄件
+     */
+	ExpressSend findByExpressSendNo(String expressSendNo);
 }

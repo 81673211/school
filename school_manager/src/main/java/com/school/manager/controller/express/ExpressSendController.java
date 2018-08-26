@@ -62,8 +62,8 @@ public class ExpressSendController extends BaseEasyWebController {
 			mav.addObject(ConstantUrl.DETAIL_URL, ConstantUrl.EXPRESS_SEND_DETAIL_URL);// 详情url
 			mav.addObject(ConstantUrl.EDIT_URL, ConstantUrl.EXPRESS_SEND_EDIT_URL);// 编辑url
 			mav.addObject(ConstantUrl.DEL_URL,ConstantUrl.EXPRESS_SEND_DEL_URL);// 删除url
-			mav.addObject("toRefundUrl", ConstantUrl.ORDER_TOREFUND_URL);// 跳转退款url
-			mav.addObject("refundUrl", ConstantUrl.ORDER_REFUND_URL);// 退款url
+			mav.addObject("toRefundUrl", ConstantUrl.EXPRESS_SEND_TOREFUND_URL);// 跳转退款url
+			mav.addObject("reOrderUrl",ConstantUrl.EXPRESS_SEND_REORDER_URL);// 跳转补单url
 		} catch (Exception e) {
 			log.error("寄件查询出现错误："+e.getMessage());
 			throw webExp(e);
@@ -171,4 +171,27 @@ public class ExpressSendController extends BaseEasyWebController {
 			return AjaxResult.fail(e.getMessage());
 		}
 	}
+    
+    /**
+     * 补单
+     */
+    @ResponseBody
+   	@RequestMapping("/reOrder.do")
+    public Object reOrder(HttpServletRequest request,String expressNo,BigDecimal reOrderAmt){
+    	try{
+			if(StringUtils.isBlank(expressNo)){
+				throw new Exception("快递单号不能为空");
+			}
+			if(reOrderAmt == null || !(reOrderAmt.compareTo(new BigDecimal(0)) >0)){
+				throw new Exception("补单金额不正确");
+			}
+			
+			orderInfoService.reOrder(request,expressNo,reOrderAmt);
+			
+			return AjaxResult.success("创建补单成功");
+		}catch(Exception e){
+			log.error("创建补单失败");
+			return AjaxResult.fail(e.getMessage());
+		}
+    }
 }

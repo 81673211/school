@@ -57,8 +57,6 @@ public class ExpressController extends BaseEasyWebController {
     @Autowired
     private RegionService regionService;
     @Autowired
-    private CalcCostService calcCostService;
-    @Autowired
     private TemplateService templateService;
 
     /**

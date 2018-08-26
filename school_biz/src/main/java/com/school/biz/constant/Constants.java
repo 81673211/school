@@ -45,6 +45,11 @@ public final class Constants {
     public static final String ORDER_NO_TYPE_MANUAL_IN = "15";
     
     /**
+     * 订单号类型：补单订单号
+     */
+    public static final String ORDER_NO_TYPE_REORDER = "16";
+    
+    /**
      * 订单号类型：退款订单号
      */
     public static final String ORDER_NO_TYPE_REFUND = "17";

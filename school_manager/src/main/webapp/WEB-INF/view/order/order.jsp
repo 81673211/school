@@ -17,9 +17,7 @@
               query:'func',//搜索事件
               detail:'func',//查看
               detailUrl:"${detailUrl}",//详情url
-              refund:"func",
-              refundUrl:"${refundUrl}",
-              toRefundUrl:"${toRefundUrl}"
+              refund:"func"
           }
       });
     </script>
@@ -74,9 +72,6 @@
                         	<btn:hasUrlPerm link="${detailUrl}">
 	                           	<a class="btn btn-primary-outline size-S radius" :click="@methods.detail(el.id,@methods.detailUrl)">详情</a>
                             </btn:hasUrlPerm>
-                        	<btn:hasUrlPerm link="${refundUrl}">
-	                           	<a class="ml-5 btn btn-primary-outline size-S radius" :click="@methods.refund(el.id,@methods.toRefundUrl)">退款</a>
-	                        </btn:hasUrlPerm>
                         </td>
                     </tr>
                 </tbody>

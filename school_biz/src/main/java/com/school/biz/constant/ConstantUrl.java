@@ -15,10 +15,6 @@ public class ConstantUrl {
 	 */
 	// 订单详情
 	public static final String ORDER_DETAIL_URL = "/order/detail.do";
-	// 退款
-	public static final String ORDER_TOREFUND_URL = "/order/toRefund";
-	// 退款
-	public static final String ORDER_REFUND_URL = "/order/refund.do";
 	
 	/** 快递管理 */
 	/**
@@ -40,6 +36,10 @@ public class ConstantUrl {
 	public static final String EXPRESS_SEND_EDIT_URL = "/express/expressSend/edit.do";
 	// 寄件删除
 	public static final String EXPRESS_SEND_DEL_URL = "/express/expressSend/del.do";
+	// 退款
+	public static final String EXPRESS_SEND_TOREFUND_URL = "/express/expressSend/toRefund";
+	// 补单
+	public static final String EXPRESS_SEND_REORDER_URL = "/express/expressSend/reOrder.do";
 	
 	
 	/** 快递公司管理 */

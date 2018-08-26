@@ -213,4 +213,9 @@
   <select id="getNotRefundOrder" resultType="com.school.biz.domain.entity.order.RefundOrderInfo">
   	select * from refund_order_info r where r.status = 0
   </select>
+  
+  <select id="findSuccessRefundOrdersByExpressNo" parameterMap="java.lang.String">
+  	select * from refund_order_info roi
+  	where roi.express_code = #{expressCode} and roi.status = 1
+  </select>
 </mapper>

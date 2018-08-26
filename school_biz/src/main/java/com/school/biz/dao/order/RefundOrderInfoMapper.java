@@ -18,4 +18,6 @@ public interface RefundOrderInfoMapper {
     int updateByPrimaryKey(RefundOrderInfo record);
 
 	List<RefundOrderInfo> getNotRefundOrder();
+
+	List<RefundOrderInfo> findSuccessRefundOrdersByExpressNo(String expressCode);
 }
