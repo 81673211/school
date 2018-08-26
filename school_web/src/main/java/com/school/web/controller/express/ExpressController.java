@@ -1,5 +1,20 @@
 package com.school.web.controller.express;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+
 import com.school.biz.domain.entity.customer.Customer;
 import com.school.biz.domain.entity.express.ExpressCompany;
 import com.school.biz.domain.entity.express.ExpressReceive;
@@ -17,26 +32,19 @@ import com.school.biz.service.express.ExpressSendService;
 import com.school.biz.service.region.RegionService;
 import com.school.biz.service.wechat.TemplateService;
 import com.school.web.controller.base.BaseEasyWebController;
-import com.school.web.vo.request.*;
+import com.school.web.vo.request.ExpressGetVo;
+import com.school.web.vo.request.ExpressStatusModifyVo;
+import com.school.web.vo.request.HelpReceiveExpressCreateVo;
+import com.school.web.vo.request.ReceiveExpressCreateVo;
+import com.school.web.vo.request.ReceiveExpressModifyVo;
+import com.school.web.vo.request.SendExpressCreateVo;
+import com.school.web.vo.request.SendExpressModifyVo;
 import com.school.web.vo.response.DataResponse;
 import com.school.web.vo.response.ReceiveExpressListResponseVo;
 import com.school.web.vo.response.Response;
 import com.school.web.vo.response.SendExpressListResponseVo;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.CollectionUtils;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author jame
@@ -360,12 +368,8 @@ public class ExpressController extends BaseEasyWebController {
         ModelAndView modelAndView = new ModelAndView();
         try {
             List<Region> regionList = regionService.selectRegionList(null);
-            List<ExpressCompany> companyList = expressCompanyService.findAllCooperate();
-             Customer customer = customerService.getByOpenId(openId);
             modelAndView.addObject("openId", openId);
-            modelAndView.addObject("idCard", StringUtils.isNotBlank(customer.getIdNumber()));
             modelAndView.addObject("regionList", regionList);
-            modelAndView.addObject("companyList", companyList);
             modelAndView.setViewName("sending");
         } catch (Exception e) {
              modelAndView.setViewName("redirect:/error");

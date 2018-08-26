@@ -97,7 +97,7 @@ public class MenuManager {
          */
 
         ComplexButton mainBtn1 = new ComplexButton();
-        mainBtn1.setName("我要寄件");
+        mainBtn1.setName("代我寄件");
         mainBtn1.setSub_button(new Button[] {btn11, btn12});
 
 
