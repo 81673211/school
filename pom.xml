@@ -11,7 +11,6 @@
   <modules>
     <module>school_web</module>
     <module>school_manager</module>
-    <module>school_biz</module>
   </modules>
 
   <properties>
@@ -30,7 +29,7 @@
     <dependencies>
       <dependency>
         <groupId>com.2rm1</groupId>
-        <artifactId>school_dao</artifactId>
+        <artifactId>school_biz</artifactId>
         <version>0.0.1-SNAPSHOT</version>
       </dependency>
       <dependency>

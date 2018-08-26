@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -62,7 +63,7 @@ public class ExpressSendController extends BaseEasyWebController {
 			mav.addObject(ConstantUrl.DETAIL_URL, ConstantUrl.EXPRESS_SEND_DETAIL_URL);// 详情url
 			mav.addObject(ConstantUrl.EDIT_URL, ConstantUrl.EXPRESS_SEND_EDIT_URL);// 编辑url
 			mav.addObject(ConstantUrl.DEL_URL,ConstantUrl.EXPRESS_SEND_DEL_URL);// 删除url
-			mav.addObject("toRefundUrl", ConstantUrl.EXPRESS_SEND_TOREFUND_URL);// 跳转退款url
+			mav.addObject("refundUrl", ConstantUrl.EXPRESS_SEND_REFUND_URL);// 跳转退款url
 			mav.addObject("reOrderUrl",ConstantUrl.EXPRESS_SEND_REORDER_URL);// 跳转补单url
 		} catch (Exception e) {
 			log.error("寄件查询出现错误："+e.getMessage());
@@ -138,13 +139,13 @@ public class ExpressSendController extends BaseEasyWebController {
 	/**
      * 退款页面
      */
-    @RequestMapping(value = "/toRefund")
+    @RequestMapping(value = "/refund.do",method=RequestMethod.GET)
     public ModelAndView toRefund(Long id, HttpServletRequest request) {
         ModelAndView mav = new ModelAndView();
-        ExpressSend express = expressSendService.get(id);
+        ExpressSend expressSend = expressSendService.get(id);
         
         mav.setViewName("express/refund");
-        mav.addObject("express",express);
+        mav.addObject("expressSend",expressSend);
         return mav;
     }
 	
@@ -153,7 +154,7 @@ public class ExpressSendController extends BaseEasyWebController {
 	 * @throws Exception 
 	 */
     @ResponseBody
-	@RequestMapping("/refund.do")
+	@RequestMapping(value="/refund.do",method=RequestMethod.POST)
 	public Object refund(HttpServletRequest request,String expressNo,BigDecimal refundAmt,BigDecimal currentOrderRefundAmt) throws Exception{
 		try{
 			if(StringUtils.isBlank(expressNo)){
@@ -173,10 +174,23 @@ public class ExpressSendController extends BaseEasyWebController {
 	}
     
     /**
+     * 补单页面
+     */
+    @RequestMapping(value = "/reOrder.do",method=RequestMethod.GET)
+    public ModelAndView toReorder(Long id, HttpServletRequest request) {
+        ModelAndView mav = new ModelAndView();
+        ExpressSend express = expressSendService.get(id);
+        
+        mav.setViewName("express/reOrder");
+        mav.addObject("express",express);
+        return mav;
+    }
+    
+    /**
      * 补单
      */
     @ResponseBody
-   	@RequestMapping("/reOrder.do")
+   	@RequestMapping(value="/reOrder.do",method=RequestMethod.POST)
     public Object reOrder(HttpServletRequest request,String expressNo,BigDecimal reOrderAmt){
     	try{
 			if(StringUtils.isBlank(expressNo)){
@@ -190,7 +204,7 @@ public class ExpressSendController extends BaseEasyWebController {
 			
 			return AjaxResult.success("创建补单成功");
 		}catch(Exception e){
-			log.error("创建补单失败！");
+			log.error("创建补单失败");
 			return AjaxResult.fail(e.getMessage());
 		}
     }

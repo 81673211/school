@@ -16,8 +16,7 @@
           methods:{
               query:'func',//搜索事件
               detail:'func',//查看
-              detailUrl:"${detailUrl}",//详情url
-              refund:"func"
+              detailUrl:"${detailUrl}"//详情url
           }
       });
     </script>

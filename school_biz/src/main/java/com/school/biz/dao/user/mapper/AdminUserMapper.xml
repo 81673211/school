@@ -128,7 +128,7 @@
   
   <select id="getLoginUserByLoginNameAndLoginPassword" parameterType="map" resultType="com.school.biz.domain.entity.user.AdminUser">
   	select au.* from admin_user au
-  	where au.login_name = #{userName} and au.password = #{password}
+  	where au.login_name = #{userName,jdbcType=VARCHAR} and au.password = #{password,jdbcType=VARCHAR}
   </select>
   
   <select id="queryPage" resultType="com.school.biz.domain.entity.user.AdminUserVo" parameterType="map">

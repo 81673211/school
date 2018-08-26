@@ -22,7 +22,7 @@
               detailUrl:"${detailUrl}",//详情url
               editUrl:"${editUrl}",//编辑url
               delUrl:"${delUrl}",//删除url
-              toRefundUrl:"${toRefundUrl}",//退款url
+              refundUrl:"${refundUrl}",//退款url
               reOrderUrl:"${reOrderUrl}"//补单url
           }
       });
@@ -87,10 +87,10 @@
 	                           	<a class="ml-5 btn btn-primary-outline size-S radius" :click="@methods.reOrder(el.id,@methods.reOrderUrl)">补单</a>
 	                        </btn:hasUrlPerm>
                             <btn:hasUrlPerm link="${refundUrl}">
-	                           	<a class="ml-5 btn btn-primary-outline size-S radius" :click="@methods.refund(el.id,@methods.toRefundUrl)">退款</a>
+	                           	<a class="ml-5 btn btn-primary-outline size-S radius" :click="@methods.refund(el.id,@methods.refundUrl)">退款</a>
 	                        </btn:hasUrlPerm>
                         	<btn:hasUrlPerm link="${detailUrl}">
-	                           	<a class="btn btn-primary-outline size-S radius" :click="@methods.detail(el.id,@methods.detailUrl)">详情</a>
+	                           	<a class="ml-5 btn btn-primary-outline size-S radius" :click="@methods.detail(el.id,@methods.detailUrl)">详情</a>
                             </btn:hasUrlPerm>
                             <btn:hasUrlPerm link="${editUrl}">
                             	<a class="ml-5 btn btn-primary-outline size-S radius" :click="@methods.edit(el.id, @methods.editUrl)">编辑</a>

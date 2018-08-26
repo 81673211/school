@@ -6,7 +6,7 @@
         <result column="code" property="code" jdbcType="VARCHAR"/>
         <result column="sender_phone" property="senderPhone" jdbcType="VARCHAR"/>
         <result column="sender_name" property="senderName" jdbcType="VARCHAR"/>
-        <result column="sender_addr" property="senderNameAddr" jdbcType="VARCHAR"/>
+        <result column="sender_addr" property="senderAddr" jdbcType="VARCHAR"/>
         <result column="receiver_phone" property="receiverPhone" jdbcType="VARCHAR"/>
         <result column="receiver_name" property="receiverName" jdbcType="VARCHAR"/>
         <result column="receiver_addr" property="receiverAddr" jdbcType="VARCHAR"/>

@@ -19,15 +19,14 @@
 </head>
 <body :controller="refundOrder">
     <div class="mt-30">
-        <form id="orderRefundForm" action="${ctx}/order/refund.do" method="post">
+        <form id="orderRefundForm" action="${ctx}/express/expressSend/refund.do" method="post">
              <div class="row cl mb-15">
                 <label class="form-label col-xs-3 col-sm-3 text-r">快递单号：</label>
                 <div class="formControls col-xs-9 col-sm-9">
-                	<input type="hidden" id="id" name="id" value="${orderInfo.id}">
-                	<input type="hidden" id="orderNo" name="orderNo" value="${orderInfo.orderNo}">
-                	<input type="hidden" id="currentOrderRefundAmt" name="currentOrderRefundAmt" value="${orderInfo.refundAmt}">
+                	<input type="hidden" id="id" name="id" value="${expressSend.id}">
+                	<input type="hidden" id="expressSendNo" name="expressSendNo" value="${expressSend.code}">
 <%--                     <input class="input-text" autocomplete="off" placeholder="" name="orderNo" value="${orderInfo.orderNo}" type="text"> --%>
-                    <p>${orderInfo.orderNo}</p>
+                    <p>${expressSend.code}</p>
                 </div>
             </div>
              <div class="row cl mb-15">
