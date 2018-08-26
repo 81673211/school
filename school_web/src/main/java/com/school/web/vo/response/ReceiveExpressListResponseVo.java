@@ -9,6 +9,7 @@ import java.util.Date;
 public class ReceiveExpressListResponseVo {
     private Long id;
     private String code;
+    private Long companyId;
     private String companyName;
     private Integer expressStatus;
     private String senderPhone;
@@ -36,6 +37,14 @@ public class ReceiveExpressListResponseVo {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 
     public String getCompanyName() {
