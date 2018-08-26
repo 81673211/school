@@ -168,7 +168,7 @@ public class ExpressSendController extends BaseEasyWebController {
 			
 			return AjaxResult.success("退款申请成功");
 		}catch(Exception e){
-			log.error("退款申请失败");
+			log.error("退款申请失败:" + e.getMessage());
 			return AjaxResult.fail(e.getMessage());
 		}
 	}
@@ -179,10 +179,10 @@ public class ExpressSendController extends BaseEasyWebController {
     @RequestMapping(value = "/reOrder.do",method=RequestMethod.GET)
     public ModelAndView toReorder(Long id, HttpServletRequest request) {
         ModelAndView mav = new ModelAndView();
-        ExpressSend express = expressSendService.get(id);
+        ExpressSend expressSend = expressSendService.get(id);
         
         mav.setViewName("express/reOrder");
-        mav.addObject("express",express);
+        mav.addObject("expressSend",expressSend);
         return mav;
     }
     
@@ -191,16 +191,16 @@ public class ExpressSendController extends BaseEasyWebController {
      */
     @ResponseBody
    	@RequestMapping(value="/reOrder.do",method=RequestMethod.POST)
-    public Object reOrder(HttpServletRequest request,String expressNo,BigDecimal reOrderAmt){
+    public Object reOrder(HttpServletRequest request,String expressSendNo,BigDecimal reOrderAmt){
     	try{
-			if(StringUtils.isBlank(expressNo)){
+			if(StringUtils.isBlank(expressSendNo)){
 				throw new Exception("快递单号不能为空");
 			}
 			if(reOrderAmt == null || !(reOrderAmt.compareTo(new BigDecimal(0)) >0)){
 				throw new Exception("补单金额不正确");
 			}
 			
-			orderInfoService.reOrder(request,expressNo,reOrderAmt);
+			orderInfoService.reOrder(request,expressSendNo,reOrderAmt);
 			
 			return AjaxResult.success("创建补单成功");
 		}catch(Exception e){

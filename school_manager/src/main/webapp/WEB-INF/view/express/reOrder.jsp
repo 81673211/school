@@ -7,7 +7,7 @@
 <head>
     <%@include file="/WEB-INF/view/common/common.jsp"%>
     <script type="text/javascript">
-    var vm_=avalon.define({
+    var vm_reOrder=avalon.define({
         $id:'reOrder',
         methods:{
         	validAndSubmit:'func'
@@ -18,13 +18,13 @@
 </head>
 <body :controller="reOrder">
     <div class="mt-30">
-        <form id="reOrderForm" action="${ctx}/order/refund.do" method="post">
+        <form id="reOrderForm" action="${ctx}/express/expressSend/reOrder.do" method="post">
              <div class="row cl mb-15">
                 <label class="form-label col-xs-3 col-sm-3 text-r">快递单号：</label>
                 <div class="formControls col-xs-9 col-sm-9">
-                	<input type="hidden" id="id" name="id" value="${orderInfo.id}">
-                	<input type="hidden" id="orderNo" name="orderNo" value="${orderInfo.orderNo}">
-                    <p>${orderInfo.orderNo}</p>
+                	<input type="hidden" id="id" name="id" value="${expressSend.id}">
+                	<input type="hidden" id="expressSendNo" name="expressSendNo" value="${expressSend.code}">
+                    <p>${expressSend.code}</p>
                 </div>
             </div>
              <div class="row cl mb-15">

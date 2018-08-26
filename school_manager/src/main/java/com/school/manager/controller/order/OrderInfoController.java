@@ -62,7 +62,7 @@ public class OrderInfoController extends BaseEasyWebController {
 	}
 	
 	/**
-	 * 查看详情a
+	 * 查看详情
 	 */
 	@RequestMapping("/detail.do")
 	public ModelAndView detail(Long id){

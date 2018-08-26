@@ -362,9 +362,10 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
 	private OrderInfo initReOrderInfo(ExpressSend expressSend,BigDecimal reOrderAmt) {
         OrderInfo orderInfo = new OrderInfo();
         orderInfo.setTradeSummary("补单费用");
-        orderInfo.setExpressType(expressSend.getExpressType());
+        orderInfo.setExpressType(ExpressTypeEnum.SEND.getFlag());// 补单都是寄件
         orderInfo.setExpressId(expressSend.getId());
         orderInfo.setExpressCode(expressSend.getCode());
+        orderInfo.setAmount(reOrderAmt);
         orderInfo.setCustomerId(expressSend.getCustomerId());
         orderInfo.setStatus(OrderStatusEnum.UNPAY.getCode());
         orderInfo.setOrderNo(IdWorkerUtil.generateOrderNo(Constants.ORDER_NO_TYPE_REORDER));
