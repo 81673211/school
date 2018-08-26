@@ -190,7 +190,7 @@ public class ExpressSendController extends BaseEasyWebController {
 			
 			return AjaxResult.success("创建补单成功");
 		}catch(Exception e){
-			log.error("创建补单失败");
+			log.error("创建补单失败！");
 			return AjaxResult.fail(e.getMessage());
 		}
     }
