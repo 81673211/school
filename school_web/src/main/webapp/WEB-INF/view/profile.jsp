@@ -64,7 +64,7 @@
             <label for="addr">寝室地址</label>
             <input id="addr" type="text" class="input" placeholder="寝室详细地址，方便小哥上门取件" value="${customer.addr}">
         </div>
-        <div class="control text-center">
+        <div class="control text-center" style="margin-top: 20px">
             <span id="confirm">
                 <button type="button" class="btn primary">提交</button>
             </span>
