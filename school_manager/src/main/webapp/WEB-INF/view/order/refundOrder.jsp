@@ -66,7 +66,7 @@
                         <td>{{el.amount}}</td>
                         <td>{{el.createdTime|date('yyyy-MM-dd HH:mm:ss')}}</td>
                         <td>{{el.sucTime|date('yyyy-MM-dd HH:mm:ss')}}</td>
-                        <td>{{@orderStatusMap[el.status]}}</td>
+                        <td>{{@refundOrderStatusMap[el.status]}}</td>
 <!--                         <td>{{el.status}}</td> -->
                         <td class="but_xq">
                         	<btn:hasUrlPerm link="${detailUrl}">

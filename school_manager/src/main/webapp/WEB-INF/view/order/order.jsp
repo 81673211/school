@@ -53,6 +53,7 @@
                         <th width="100">订单金额</th>
                         <th width="100">创建时间</th>
                         <th width="100">完成时间</th>
+                        <th width="100">订单摘要</th>
                         <th width="100">订单状态</th>
                         <th width="50">操作</th>
                     </tr>
@@ -66,8 +67,8 @@
                         <td>{{el.amount}}</td>
                         <td>{{el.createdTime|date('yyyy-MM-dd HH:mm:ss')}}</td>
                         <td>{{el.sucTime|date('yyyy-MM-dd HH:mm:ss')}}</td>
+                        <td>{{el.tradeSummary}}</td>
                         <td>{{@orderStatusMap[el.status]}}</td>
-<!--                         <td>{{el.status}}</td> -->
                         <td class="but_xq">
                         	<btn:hasUrlPerm link="${detailUrl}">
 	                           	<a class="btn btn-primary-outline size-S radius" :click="@methods.detail(el.id,@methods.detailUrl)">详情</a>
