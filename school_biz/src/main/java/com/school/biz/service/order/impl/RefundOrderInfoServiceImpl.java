@@ -1,6 +1,7 @@
 package com.school.biz.service.order.impl;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -63,6 +64,14 @@ public class RefundOrderInfoServiceImpl extends BaseServiceImpl<RefundOrderInfo,
 	@Override
 	public List<OrderInfo> queryPage(Map<String, Object> paramMap) {
 		return refundOrderInfoMapper.queryPage(paramMap);
+	}
+
+	@Override
+	public void fillExpressNo(Long expressId, String expressNo) {
+		Map<String, Object> map = new HashMap<String,Object>();
+		map.put("expressId", expressId);
+		map.put("expressNo", expressNo);
+		refundOrderInfoMapper.fillExpressNo(map);
 	}
 
 }

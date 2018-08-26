@@ -26,6 +26,7 @@ import com.school.biz.enumeration.SendExpressStatusEnum;
 import com.school.biz.service.express.ExpressCompanyService;
 import com.school.biz.service.express.ExpressSendService;
 import com.school.biz.service.order.OrderInfoService;
+import com.school.biz.service.order.RefundOrderInfoService;
 import com.school.manager.controller.base.BaseEasyWebController;
 
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +44,9 @@ public class ExpressSendController extends BaseEasyWebController {
 	
 	@Autowired
 	private OrderInfoService orderInfoService;
+	
+	@Autowired
+	private RefundOrderInfoService refundOrderInfoService;
 	
 	{
 		listView = "express/expressSend";
@@ -118,6 +122,7 @@ public class ExpressSendController extends BaseEasyWebController {
 				ExpressSend originalExpressSend = expressSendService.get(expressSend.getId());
 				if(StringUtils.isBlank(originalExpressSend.getCode()) && StringUtils.isNotBlank(expressSend.getCode())){
 					orderInfoService.fillExpressNo(expressSend.getId(),expressSend.getCode());
+					refundOrderInfoService.fillExpressNo(expressSend.getId(),expressSend.getCode());
 				}
 			}
 			expressSendService.saveOrUpdate(expressSend);

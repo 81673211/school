@@ -204,7 +204,8 @@
         and o.status = #{status}
       </if>
       <if test="keyword != null and keyword != '' ">
-        and o.order_no like concat('%',#{keyword},'%')
+        and (o.order_no like concat('%',#{keyword},'%')
+        	 or o.express_code like concat('%',#{keyword},'%'))
       </if>
     </where>
     ORDER BY o.created_time desc

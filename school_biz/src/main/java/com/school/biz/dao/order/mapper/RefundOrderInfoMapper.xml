@@ -232,4 +232,8 @@
     </where>
     ORDER BY o.created_time desc
   </select>
+  
+  <update id="fillExpressNo" parameterType="map">
+    	update refund_order_info set express_code = #{expressNo} where express_id = #{expressId}
+    </update>
 </mapper>

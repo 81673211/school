@@ -19,5 +19,7 @@ public interface RefundOrderInfoService extends BaseService<RefundOrderInfo, Ref
 	List<RefundOrderInfo> getNotRefundOrder();
 
 	List<OrderInfo> queryPage(Map<String, Object> searchParams);
+
+	void fillExpressNo(Long id, String code);
 	
 }
