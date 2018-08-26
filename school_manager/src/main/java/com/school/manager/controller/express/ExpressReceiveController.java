@@ -124,6 +124,13 @@ public class ExpressReceiveController extends BaseEasyWebController {
             if (customer != null) {
                 expressReceive.setCustomerId(customer.getId());
             }
+            // 如果未填写收件人姓名、地址，则自动补全
+            if(StringUtils.isBlank(expressReceive.getReceiverName())){
+            	expressReceive.setReceiverName(customer.getName());
+            }
+            if(StringUtils.isBlank(expressReceive.getReceiverAddr())){
+            	expressReceive.setReceiverAddr(customer.getAddr());
+            }
             expressReceiveService.saveOrUpdate(expressReceive);
             if (customer != null && StringUtils.isNotBlank(customer.getOpenId())) {
                 Integer status = expressReceive.getExpressStatus();
