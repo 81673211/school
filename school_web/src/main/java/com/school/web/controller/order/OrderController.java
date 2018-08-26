@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.school.biz.domain.entity.express.ExpressSend;
+import com.school.biz.enumeration.DistributionTypeEnum;
 import com.school.biz.service.express.ExpressSendService;
 import com.school.biz.service.order.OrderInfoService;
 import com.school.web.controller.base.BaseEasyWebController;

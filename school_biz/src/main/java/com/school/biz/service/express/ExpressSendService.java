@@ -63,13 +63,12 @@ public interface ExpressSendService extends BaseService<ExpressSend, ExpressSend
     ExpressSend initProvinceCityDistrict(ExpressSend expressSend);
 
     /**
-     * 获取快件对应订单的金额
+     * 获取寄件实际配送费用
      *
-     * @param expressId
-     * @param expressType
+     * @param expressSend
      * @return
      */
-    BigDecimal getOrderPrice(Long expressId, ExpressTypeEnum expressType);
+    BigDecimal getSendTransportPrice(ExpressSend expressSend);
 
     //------ from manager -------
     List<ExpressSend> queryPage(Map<String, Object> paramMap);

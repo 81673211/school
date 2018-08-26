@@ -1,5 +1,6 @@
 package com.school.biz.dao.order;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -33,4 +34,6 @@ public interface OrderInfoMapper extends BaseDao {
 	 * 根据快递号查询其所有支付成功订单（按支付金额降序）
 	 */
 	List<OrderInfo> findSuccessOrdersByExpressNo(String expressSendNo);
+
+    BigDecimal findAllPriceByExpress(@Param("expressId") Long expressId);
 }

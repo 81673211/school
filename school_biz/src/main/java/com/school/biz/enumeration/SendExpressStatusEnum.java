@@ -1,4 +1,4 @@
-	package com.school.biz.enumeration;
+package com.school.biz.enumeration;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +13,8 @@ public enum SendExpressStatusEnum {
     PROXY_RECIEVED(2, "代理点已签收"),
     SUPPLEMENT(3, "补单待支付"),
     WAIT_SEND(4, "准备寄出"),
-    BE_SEND(5, "已寄出");
+    BE_SEND(5, "已寄出"),
+    CANCEL(6, "已取消");
 
 
     private int flag;

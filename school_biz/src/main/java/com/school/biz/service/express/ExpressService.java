@@ -1,6 +1,7 @@
 package com.school.biz.service.express;
 
 import com.school.biz.domain.entity.order.OrderInfo;
+import com.school.biz.domain.entity.order.RefundOrderInfo;
 
 /**
  * @author jame
@@ -20,7 +21,7 @@ public interface ExpressService {
     /**
      * 退款之后的快件状态以及相关流程运转
      *
-     * @param orderInfo
+     * @param refundOrderInfo
      */
-    void updateExpressByRefund(OrderInfo orderInfo) throws RuntimeException;
+    void updateExpressByRefund(RefundOrderInfo refundOrderInfo) throws RuntimeException;
 }

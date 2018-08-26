@@ -6,18 +6,18 @@
 <head>
     <meta charset="UTF-8">
     <title>我待收的快件</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <link href="/css/mzui.min.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <link href="/css/mzui.min.css" rel="stylesheet"/>
 </head>
 <body>
 <c:choose>
     <c:when test="${list != null and list.size() > 0}">
         <div class="list section with-divider">
             <c:forEach items="${list}" varStatus="var" var="item">
-                    <a class="item multi-lines with-avatar">
-                        <jsp:include page="snippet/item_logo.jsp">
-                            <jsp:param name="companyName" value="${item.companyName}"/>
-                        </jsp:include>
+                <a class="item multi-lines with-avatar">
+                    <jsp:include page="snippet/item_logo.jsp">
+                        <jsp:param name="companyName" value="${item.companyName}"/>
+                    </jsp:include>
                     <div class="content">
                         <div>
                             <div class="title inline">
@@ -40,12 +40,15 @@
                                 </span>
                             </div>
                             <div>
-                                <small class="muted"><fmt:formatDate value="${item.createdTime}" pattern="yyyy-MM-dd HH:mm" /></small>
+                                <small class="muted"><fmt:formatDate value="${item.createdTime}"
+                                                                     pattern="yyyy-MM-dd HH:mm"/></small>
                             </div>
                             <div>
                                 <c:choose>
                                     <c:when test="${item.expressStatus == 0 || item.expressStatus == 1}">
-                                        <small class="muted">如选择配送，需要支付(￥<fmt:formatNumber value="${item.distributionCost}" pattern="0.00" />)</small>
+                                        <small class="muted">如选择配送，需要支付(￥<fmt:formatNumber
+                                                value="${item.distributionCost}" pattern="0.00"/>)
+                                        </small>
                                     </c:when>
                                     <c:otherwise>
                                         <span><br/></span>
@@ -58,16 +61,22 @@
                     <div class="pull-right">
                         <c:choose>
                             <c:when test="${item.expressStatus == 0}">
-                                <div >
-                                    <button type="button" class="btn btn-sm info outline rounded" style="margin-bottom: 5px" onclick="launchPay(${item.id})">配送</button>
+                                <div>
+                                    <button type="button" class="btn btn-sm info outline rounded"
+                                            style="margin-bottom: 5px" onclick="launchPay(${item.id})">配送
+                                    </button>
                                 </div>
-                                <div >
-                                    <button type="button" class="btn btn-sm gray outline rounded" onclick="receiveWay(${item.id},0)">自提</button>
+                                <div>
+                                    <button type="button" class="btn btn-sm gray outline rounded"
+                                            onclick="receiveWay(${item.id},0)">自提
+                                    </button>
                                 </div>
                             </c:when>
                             <c:when test="${item.expressStatus == 1}">
                                 <div>
-                                    <button type="button" class="btn btn-sm info outline rounded" onclick="launchPay(${item.id})">配送</button>
+                                    <button type="button" class="btn btn-sm info outline rounded"
+                                            onclick="launchPay(${item.id})">配送
+                                    </button>
                                 </div>
                             </c:when>
                         </c:choose>
@@ -91,48 +100,47 @@
 
 <script>
 
-  function receiveDetail(id) {
-    var html = "";
-    $.get("/express/1/get", {"openId": '${openId}', "id": id}, function (result) {
-      $.each(result.data, function (index, item) {
-        html += item;
-      });
-      alert(html);
-    });
-  }
+    function receiveDetail(id) {
+        var html = "";
+        $.get("/express/1/get", {"openId": '${openId}', "id": id}, function (result) {
+            $.each(result.data, function (index, item) {
+                html += item;
+            });
+            alert(html);
+        });
+    }
 
-  function receiveWay(id, way) {
-    if (confirm("确认自提?")) {
-      $.post("/express/1/modify", {"openId": '${openId}', "id": id, "expressWay": way}, function (result) {
-        if (result.status == 200 && way == 1) {
-          window.location.href = "http://www.glove1573.cn/wxpay/pay?expressId=" + id;
-        } else {
-          window.location.reload();
+    function receiveWay(id, way) {
+        if (confirm("确认自提?")) {
+            $.post("/express/1/modify", {"openId": '${openId}', "id": id, "expressWay": way}, function (result) {
+                if (result.status == 200) {
+                    window.location.reload();
+                } else {
+                }
+            });
         }
-      });
     }
-  }
-  
-  function launchPay(expressId) {
-    if (confirm("确认配送?")) {
-      $.post("/order/1/create",
-        {
-          "expressId": expressId,
-          "openId": '${openId}'
-        },
-        function (result) {
-          if (result.status != 200) {
-            alert(result.msg);
-            return;
-          } else {
-            var orderNo = result.msg;
-            alert(orderNo);
-            window.location.href = "http://www.glove1573.cn/wxpay/pay?orderNo=" + orderNo;
-          }
+
+    function launchPay(expressId) {
+        if (confirm("确认配送?")) {
+            $.post("/order/1/create",
+                    {
+                        "expressId": expressId,
+                        "openId": '${openId}'
+                    },
+                    function (result) {
+                        if (result.status != 200) {
+                            alert(result.msg);
+                            return;
+                        } else {
+                            var orderNo = result.msg;
+                            alert(orderNo);
+                            window.location.href = "http://www.glove1573.cn/wxpay/pay?orderNo=" + orderNo;
+                        }
+                    }
+            );
         }
-      );
     }
-  }
 
 </script>
 </body>

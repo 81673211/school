@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.school.biz.dao.base.BaseDao;
 import com.school.biz.domain.entity.customer.Customer;
+import org.apache.ibatis.annotations.Param;
 
 public interface CustomerMapper extends BaseDao {
     int deleteByPrimaryKey(Long id);
@@ -20,9 +21,8 @@ public interface CustomerMapper extends BaseDao {
     int updateByPrimaryKeySelective(Customer record);
 
     int updateByPrimaryKey(Customer record);
-    
+
     List<Customer> queryPage(Map<String, Object> paramMap);
 
-
-    Customer selectByOpenId(String openId);
+    Customer selectByOpenId(@Param("openId") String openId);
 }

@@ -7,10 +7,8 @@ import com.school.biz.dao.region.RegionMapper;
 import com.school.biz.domain.entity.customer.Customer;
 import com.school.biz.domain.entity.express.ExpressCompany;
 import com.school.biz.domain.entity.express.ExpressSend;
-import com.school.biz.domain.entity.order.OrderInfo;
 import com.school.biz.domain.entity.region.Region;
 import com.school.biz.enumeration.DistributionTypeEnum;
-import com.school.biz.enumeration.ExpressTypeEnum;
 import com.school.biz.exception.ExpressException;
 import com.school.biz.service.base.impl.BaseServiceImpl;
 import com.school.biz.service.calc.CalcCostService;
@@ -168,14 +166,9 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
     }
 
     @Override
-    public BigDecimal getOrderPrice(Long expressId, ExpressTypeEnum expressType) {
-        OrderInfo orderInfo;
-        if (ExpressTypeEnum.RECEIVE.getFlag() == expressType.getFlag()) {
-            orderInfo = orderInfoService.findByExpressReceiveId(expressId);
-        } else {
-            orderInfo = orderInfoService.findByExpressSendId(expressId);
-        }
-        return orderInfo.getAmount();
+    public BigDecimal getSendTransportPrice(ExpressSend expressSend) {
+        BigDecimal allPrice = orderInfoService.findAllPriceByExpress(expressSend.getId());
+        return allPrice.subtract(expressSend.getServiceAmt());
     }
 
     @Override

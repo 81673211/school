@@ -3,6 +3,7 @@ package com.school.web.controller.express;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.school.biz.service.calc.CalcCostService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import com.school.biz.domain.entity.express.ExpressCompany;
 import com.school.biz.domain.entity.express.ExpressReceive;
 import com.school.biz.domain.entity.express.ExpressSend;
 import com.school.biz.domain.entity.region.Region;
+import com.school.biz.enumeration.DistributionTypeEnum;
 import com.school.biz.enumeration.ExpressTypeEnum;
 import com.school.biz.enumeration.ReceiveExpressStatusEnum;
 import com.school.biz.enumeration.WechatTemplateEnum;
@@ -64,6 +66,8 @@ public class ExpressController extends BaseEasyWebController {
     private RegionService regionService;
     @Autowired
     private TemplateService templateService;
+    @Autowired
+    private CalcCostService calcCostService;
 
     /**
      * 寄件
@@ -286,7 +290,7 @@ public class ExpressController extends BaseEasyWebController {
                 for (ExpressReceive expressReceive : receiveList) {
                     ReceiveExpressListResponseVo vo = new ReceiveExpressListResponseVo();
                     BeanUtils.copyProperties(expressReceive, vo);
-                    vo.setDistributionCost(expressReceive.getServiceAmt());
+                    vo.setDistributionCost(calcCostService.calcReceiveDistributionCost(DistributionTypeEnum.DISTRIBUTION.getFlag()));
                     receiveExpressListResponseVos.add(vo);
                 }
             }
@@ -326,9 +330,9 @@ public class ExpressController extends BaseEasyWebController {
                 for (ExpressSend expressSend : list) {
                     SendExpressListResponseVo vo = new SendExpressListResponseVo();
                     BeanUtils.copyProperties(expressSend, vo);
-                    vo.setOrderPrice(
-                            expressSendService.getOrderPrice(expressSend.getId(), ExpressTypeEnum.SEND));
-                    vo.setServiceAmt(expressSend.getServiceAmt());
+//                    vo.setTransportPrice(
+//                            expressSendService.getSendTransportPrice(expressSend));
+//                    vo.setServiceAmt(expressSend.getServiceAmt());
                     vos.add(vo);
                 }
             }

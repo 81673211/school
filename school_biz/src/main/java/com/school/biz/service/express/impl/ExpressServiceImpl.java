@@ -1,15 +1,17 @@
 package com.school.biz.service.express.impl;
 
-import com.school.biz.domain.entity.express.ExpressReceive;
 import com.school.biz.domain.entity.express.ExpressSend;
 import com.school.biz.domain.entity.order.OrderInfo;
+import com.school.biz.domain.entity.order.RefundOrderInfo;
 import com.school.biz.enumeration.*;
 import com.school.biz.service.express.ExpressReceiveService;
 import com.school.biz.service.express.ExpressSendService;
 import com.school.biz.service.express.ExpressService;
+import com.school.biz.service.order.OrderInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
@@ -20,12 +22,15 @@ import java.util.Objects;
  */
 @Slf4j
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class ExpressServiceImpl implements ExpressService {
 
     @Autowired
     private ExpressSendService expressSendService;
     @Autowired
     private ExpressReceiveService expressReceiveService;
+    @Autowired
+    private OrderInfoService orderInfoService;
 
     @Override
     public void updateExpressByPay(OrderInfo orderInfo) throws RuntimeException {
@@ -41,6 +46,10 @@ public class ExpressServiceImpl implements ExpressService {
             }
             if (expressType == ExpressTypeEnum.SEND.getFlag()) {
                 ExpressSend sendExpress = expressSendService.getSendExpress(expressId);
+                if (sendExpress == null) {
+                    log.error("not find send express record,expressId:" + expressId);
+                    return;
+                }
                 //当前寄件状态为 已发起寄件
                 if (sendExpress.getExpressStatus().equals(SendExpressStatusEnum.CREATE.getFlag())) {
                     //改为等待上门取件
@@ -70,7 +79,15 @@ public class ExpressServiceImpl implements ExpressService {
     }
 
     @Override
-    public void updateExpressByRefund(OrderInfo orderInfo) throws RuntimeException {
-
+    public void updateExpressByRefund(RefundOrderInfo refundOrderInfo) throws RuntimeException {
+        ExpressSend sendExpress = expressSendService.getSendExpress(refundOrderInfo.getExpressId());
+        if (sendExpress == null) {
+            log.error("not find send express record,expressId:" + refundOrderInfo.getExpressId());
+            return;
+        }
+        //是否全额退款
+        if (orderInfoService.isRefundAll(sendExpress)) {
+            expressSendService.updateSendExpressStatus(sendExpress.getId(), SendExpressStatusEnum.CANCEL.getFlag());
+        }
     }
 }

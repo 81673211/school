@@ -35,6 +35,12 @@
                                             <label class="label label-sm gray outline rounded">代收点已签收</label>
                                         </c:when>
                                         <c:when test="${item.expressStatus == 3}">
+                                            <label class="label label-sm gray outline rounded">补单待支付</label>
+                                        </c:when>
+                                        <c:when test="${item.expressStatus == 4}">
+                                            <label class="label label-sm gray outline rounded">准备寄出</label>
+                                        </c:when>
+                                        <c:when test="${item.expressStatus == 5}">
                                             <label class="label label-sm gray outline rounded">已寄出</label>
                                         </c:when>
                                     </c:choose>
