@@ -49,7 +49,7 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
 
     @Override
     public String createSendExpress(ExpressSend expressSend) {
-        expressSend.setServiceAmt(calcCostService.calcSendDistributionCost(DistributionTypeEnum.DISTRIBUTION.getFlag()));
+        expressSend.setServiceAmt(calcCostService.calcSendDistributionCost(expressSend.getExpressWay()));
         boxExpressCompany(expressSend);
         Long count = expressSendMapper.insertSelective(expressSend);
         if (!(count > 0L)) {
