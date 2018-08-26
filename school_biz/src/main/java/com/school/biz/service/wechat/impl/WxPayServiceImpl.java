@@ -1,26 +1,12 @@
 package com.school.biz.service.wechat.impl;
 
-import java.math.BigDecimal;
-import java.net.InetAddress;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.alibaba.fastjson.JSON;
 import com.school.biz.constant.ConfigProperties;
 import com.school.biz.dao.customer.CustomerMapper;
 import com.school.biz.dao.order.OrderInfoMapper;
 import com.school.biz.domain.entity.customer.Customer;
 import com.school.biz.domain.entity.order.OrderInfo;
-import com.school.biz.enumeration.DistributionTypeEnum;
-import com.school.biz.enumeration.ExpressTypeEnum;
-import com.school.biz.enumeration.OrderStatusEnum;
-import com.school.biz.enumeration.ReceiveExpressStatusEnum;
-import com.school.biz.enumeration.SendExpressStatusEnum;
+import com.school.biz.enumeration.*;
 import com.school.biz.extension.wxpay.sdk.WXPay;
 import com.school.biz.extension.wxpay.sdk.WXPayConfigImpl;
 import com.school.biz.extension.wxpay.sdk.WXPayConstants;
@@ -28,11 +14,20 @@ import com.school.biz.extension.wxpay.sdk.WXPayConstants.SignType;
 import com.school.biz.extension.wxpay.sdk.WXPayUtil;
 import com.school.biz.service.express.ExpressReceiveService;
 import com.school.biz.service.express.ExpressSendService;
+import com.school.biz.service.express.ExpressService;
 import com.school.biz.service.order.OrderInfoService;
 import com.school.biz.service.wechat.WxPayService;
 import com.school.biz.util.AmountUtils;
-
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.net.InetAddress;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 @Slf4j
 @Service
@@ -43,11 +38,9 @@ public class WxPayServiceImpl implements WxPayService {
     @Autowired
     private CustomerMapper customerMapper;
     @Autowired
-    private ExpressReceiveService expressReceiveService;
-    @Autowired
     private OrderInfoService orderInfoService;
     @Autowired
-    private ExpressSendService expressSendService;
+    private ExpressService expressService;
 
     @Override
     public TreeMap<String, String> doUnifiedOrder(String orderNo) throws Exception {
@@ -213,15 +206,7 @@ public class WxPayServiceImpl implements WxPayService {
             // 将订单置为成功
             orderInfoService.orderSuccess(orderInfo);
             // 更新快件状态
-            Integer expressType = orderInfo.getExpressType();
-            if (ExpressTypeEnum.RECEIVE.getFlag() == expressType) {
-                expressReceiveService.updateReceiveExpress(orderInfo.getExpressId(),
-                        ReceiveExpressStatusEnum.WAIT_INTO_BOX.getFlag(),
-                        DistributionTypeEnum.DISTRIBUTION.getFlag());
-            } else {
-                expressSendService.updateSendExpressStatus(orderInfo.getExpressId(),
-                        SendExpressStatusEnum.WAIT_SMQJ.getFlag());
-            }
+            expressService.updateExpressByPay(orderInfo);
         }
         return resXml;
     }

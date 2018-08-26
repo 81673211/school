@@ -6,6 +6,7 @@ import com.school.biz.extension.wxpay.sdk.WXPayConfigImpl;
 import com.school.biz.extension.wxpay.sdk.WXPayConstants.SignType;
 import com.school.biz.extension.wxpay.sdk.WXPayUtil;
 import com.school.biz.constant.ConfigProperties;
+import com.school.biz.service.express.ExpressService;
 import com.school.biz.util.DateUtil;
 import com.school.biz.domain.entity.order.OrderInfo;
 import com.school.biz.enumeration.DistributionTypeEnum;
@@ -34,11 +35,8 @@ public class NotPayOrderQuartz {
 
     @Autowired
     private OrderInfoService orderInfoService;
-
     @Autowired
-    private ExpressReceiveService expressReceiveService;
-    @Autowired
-    private ExpressSendService expressSendService;
+    private ExpressService expressService;
 
     public void execute() throws Exception {
         log.info("==========NotPayOrderQuartz：未决流水查询==========");
@@ -75,17 +73,7 @@ public class NotPayOrderQuartz {
                             orderInfoService.orderSuccess(orderInfo);
                             // 更新快件状态
                             Integer expressType = orderInfo.getExpressType();
-                            if (ExpressTypeEnum.RECEIVE.getFlag() == expressType) {
-                                expressReceiveService.updateReceiveExpress(orderInfo.getExpressId(),
-                                                                           ReceiveExpressStatusEnum.WAIT_INTO_BOX
-                                                                                   .getFlag(),
-                                                                           DistributionTypeEnum.DISTRIBUTION
-                                                                                   .getFlag());
-                            } else {
-                                expressSendService.updateSendExpressStatus(orderInfo.getExpressId(),
-                                                                           SendExpressStatusEnum.WAIT_SMQJ
-                                                                                   .getFlag());
-                            }
+                            expressService.updateExpressByPay(orderInfo);
                             dealNum++;
                         } else if ("CLOSED".equals(result.get("trade_state")) || "PAYERROR".equals(
                                 result.get("trade_state"))) {

@@ -11,7 +11,9 @@ public enum SendExpressStatusEnum {
     CREATE(0, "已发起寄件"),
     WAIT_SMQJ(1, "等待上门取件"),
     PROXY_RECIEVED(2, "代理点已签收"),
-    BE_SEND(3, "已寄出");
+    SUPPLEMENT(3, "补单待支付"),
+    WAIT_SEND(4, "准备寄出"),
+    BE_SEND(5, "已寄出");
 
 
     private int flag;
