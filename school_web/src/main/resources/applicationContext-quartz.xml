@@ -49,20 +49,6 @@
 		<property name="concurrent" value="false"/><!--配置为false不允许任务并发执行--> 
 	</bean>
 	
-	<!-- 未决流水查询 -->
-	<bean id="NotPayOrderTrigger"
-		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail" ref="NotPayOrderJob" />
-		<!-- 每5分钟运行一次 -->
-		<property name="cronExpression" value="0 0/2 * * * ?" />
-	</bean>
-	<bean id="NotPayOrderJob"
-		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="NotPayOrderQuartz" />
-		<property name="targetMethod" value="execute" />
-		<property name="concurrent" value="false"/><!--配置为false不允许任务并发执行--> 
-	</bean>
-	
 	<!-- 未决退款查询 -->
 	<bean id="NotRefundOrderTigger"
 		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
