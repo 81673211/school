@@ -46,7 +46,6 @@
                         <th width="50">性别</th>
                         <th width="100">手机号</th>
                         <th width="100">电子邮箱</th>
-                        <th width="100">身份证</th>
                         <th width="100">创建时间</th>
                         <th width="100">修改时间</th>
                         <th width="100">住址</th>
@@ -61,7 +60,6 @@
                         <td>{{el.sex}}</td>
                         <td>{{el.phone}}</td>
                         <td>{{el.email}}</td>
-                        <td>{{el.idNumber}}</td>
                         <td>{{el.createdTime|date('yyyy-MM-dd HH:mm:ss')}}</td>
                         <td>{{el.modifiedTime|date('yyyy-MM-dd HH:mm:ss')}}</td>
                         <td>{{el.addr}}</td>

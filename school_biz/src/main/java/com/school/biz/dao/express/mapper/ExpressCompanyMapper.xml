@@ -194,7 +194,7 @@
     </select>
 
     <select id="findAllCooperate" resultType="com.school.biz.domain.entity.express.ExpressCompany">
-        select * from express_company ec where ec.is_cooperate = 1
+        select * from express_company ec where ec.is_cooperate = 1 and ec.code != 'OTHER'
     </select>
 
     <select id="findByCode" parameterType="java.lang.String"

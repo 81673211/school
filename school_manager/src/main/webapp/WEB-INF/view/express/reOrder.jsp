@@ -14,17 +14,16 @@
         }
     });
     </script>
-    <title>订单退款</title>
+    <title>补单</title>
 </head>
 <body :controller="reOrder">
     <div class="mt-30">
         <form id="reOrderForm" action="${ctx}/express/expressSend/reOrder.do" method="post">
              <div class="row cl mb-15">
-                <label class="form-label col-xs-3 col-sm-3 text-r">快递单号：</label>
+                <label class="form-label col-xs-3 col-sm-3 text-r">补单对象：</label>
                 <div class="formControls col-xs-9 col-sm-9">
-                	<input type="hidden" id="id" name="id" value="${expressSend.id}">
-                	<input type="hidden" id="expressSendNo" name="expressSendNo" value="${expressSend.code}">
-                    <p>${expressSend.code}</p>
+                	<input type="hidden" id="expressSendId" name="expressSendId" value="${expressSend.id}">
+                    <p>${expressSend.senderName}&emsp;(手机号：${expressSend.senderPhone})</p>
                 </div>
             </div>
              <div class="row cl mb-15">

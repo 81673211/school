@@ -21,12 +21,10 @@
     <div class="mt-30">
         <form id="orderRefundForm" action="${ctx}/express/expressSend/refund.do" method="post">
              <div class="row cl mb-15">
-                <label class="form-label col-xs-3 col-sm-3 text-r">快递单号：</label>
+                <label class="form-label col-xs-3 col-sm-3 text-r">退款对象：</label>
                 <div class="formControls col-xs-9 col-sm-9">
-                	<input type="hidden" id="id" name="id" value="${expressSend.id}">
-                	<input type="hidden" id="expressSendNo" name="expressSendNo" value="${expressSend.code}">
-<%--                     <input class="input-text" autocomplete="off" placeholder="" name="orderNo" value="${orderInfo.orderNo}" type="text"> --%>
-                    <p>${expressSend.code}</p>
+                	<input type="hidden" id="expressSendId" name="expressSendId" value="${expressSend.id}">
+                    <p>${expressSend.senderName}&emsp;(手机号：${expressSend.senderPhone})</p>
                 </div>
             </div>
              <div class="row cl mb-15">

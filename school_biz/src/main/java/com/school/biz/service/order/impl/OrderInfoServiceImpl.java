@@ -223,10 +223,10 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
     }
 
 	@Override
-	public void refund(HttpServletRequest request,String expressSendNo,BigDecimal refundFee) throws Exception {
+	public void refund(HttpServletRequest request,Long expressSendId,BigDecimal refundFee) throws Exception {
 		Long operId = SessionUtils.getSessionUser(request).getId();
 
-		ExpressSend expressSend = expressSendMapper.findByExpressSendNo(expressSendNo);
+		ExpressSend expressSend = expressSendMapper.selectByPrimaryKey(expressSendId);
 
 		// 根据快递号查询其所有支付成功订单（按支付金额降序）
 		List<OrderInfo> orderInfos = orderInfoMapper.findSuccessOrdersByExpressId(expressSend.getId());
@@ -342,8 +342,8 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
 	 * @throws Exception
 	 */
 	@Override
-	public void reOrder(HttpServletRequest request, String expressSendNo, BigDecimal reOrderAmt) throws Exception {
-		ExpressSend expressSend = expressSendMapper.findByExpressSendNo(expressSendNo);
+	public void reOrder(HttpServletRequest request, Long expressSendId, BigDecimal reOrderAmt) throws Exception {
+		ExpressSend expressSend = expressSendMapper.selectByPrimaryKey(expressSendId);
 		if(expressSend == null){
 			throw new Exception("订单号不存在");
 		}

@@ -162,16 +162,16 @@ public class ExpressSendController extends BaseEasyWebController {
 	 */
     @ResponseBody
 	@RequestMapping(value="/refund.do",method=RequestMethod.POST)
-	public Object refund(HttpServletRequest request,String expressSendNo,BigDecimal refundAmt,BigDecimal currentOrderRefundAmt) throws Exception{
+	public Object refund(HttpServletRequest request,Long expressSendId,BigDecimal refundAmt,BigDecimal currentOrderRefundAmt) throws Exception{
 		try{
-			if(StringUtils.isBlank(expressSendNo)){
-				throw new Exception("快递单号不能为空");
+			if(expressSendId == null){
+				throw new Exception("快递ID不能为空");
 			}
 			if(refundAmt == null || !(refundAmt.compareTo(new BigDecimal(0)) >0)){
 				throw new Exception("退款金额不正确");
 			}
 			
-			orderInfoService.refund(request,expressSendNo,refundAmt);
+			orderInfoService.refund(request,expressSendId,refundAmt);
 			
 			return AjaxResult.success("退款申请成功");
 		}catch(Exception e){
@@ -198,16 +198,16 @@ public class ExpressSendController extends BaseEasyWebController {
      */
     @ResponseBody
    	@RequestMapping(value="/reOrder.do",method=RequestMethod.POST)
-    public Object reOrder(HttpServletRequest request,String expressSendNo,BigDecimal reOrderAmt){
+    public Object reOrder(HttpServletRequest request,Long expressSendId,BigDecimal reOrderAmt){
     	try{
-			if(StringUtils.isBlank(expressSendNo)){
-				throw new Exception("快递单号不能为空");
+			if(expressSendId == null){
+				throw new Exception("快递ID不能为空");
 			}
 			if(reOrderAmt == null || !(reOrderAmt.compareTo(new BigDecimal(0)) >0)){
 				throw new Exception("补单金额不正确");
 			}
 			
-			orderInfoService.reOrder(request,expressSendNo,reOrderAmt);
+			orderInfoService.reOrder(request,expressSendId,reOrderAmt);
 			
 			return AjaxResult.success("创建补单成功");
 		}catch(Exception e){
