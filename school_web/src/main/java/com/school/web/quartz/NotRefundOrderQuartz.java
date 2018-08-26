@@ -16,6 +16,7 @@ import com.school.biz.extension.wxpay.sdk.WXPay;
 import com.school.biz.extension.wxpay.sdk.WXPayConfigImpl;
 import com.school.biz.extension.wxpay.sdk.WXPayConstants.SignType;
 import com.school.biz.extension.wxpay.sdk.WXPayUtil;
+import com.school.biz.service.express.ExpressService;
 import com.school.biz.service.order.RefundOrderInfoService;
 import com.school.biz.util.DateUtil;
 
@@ -30,6 +31,8 @@ public class NotRefundOrderQuartz {
 
 	@Autowired
 	private RefundOrderInfoService refundOrderInfoService;
+	@Autowired
+	private ExpressService expressService;
 	
     public void execute() throws Exception {
         log.info("==========NotRefundOrderQuartz：未决退款查询==========");
@@ -63,6 +66,7 @@ public class NotRefundOrderQuartz {
                             log.info("退款查询====》退款订单号：" + refundOrderInfo.getRefundOrderNo() + "查询成功，状态为：" + getMapLike("refund_status", result));
                             // 将订单置为成功
                             refundOrderInfoService.refundOrderUpdateToSuccess(refundOrderInfo);
+                            expressService.updateExpressByRefund(refundOrderInfo);
                             dealNum++;
                         } else if ("REFUNDCLOSE".equals(getMapLike("refund_status", result))) {
                             // 如果退款已经失败，则将退款订单置为失败

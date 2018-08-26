@@ -15,9 +15,4 @@ public interface WxPayService {
 	 */
 	String wxPayNotify(String notifyXml) throws Exception;
 	
-	/**
-	 * 微信退款通知
-	 */
-	String wxRefundNotify(String notifyXml) throws Exception;
-	
 }

@@ -72,7 +72,6 @@ public class NotPayOrderQuartz {
                             // 将订单置为成功
                             orderInfoService.orderUpdateToSuccess(orderInfo);
                             // 更新快件状态
-                            Integer expressType = orderInfo.getExpressType();
                             expressService.updateExpressByPay(orderInfo);
                             dealNum++;
                         } else if ("CLOSED".equals(result.get("trade_state")) || "PAYERROR".equals(
