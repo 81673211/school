@@ -12,9 +12,10 @@
         <result column="modifier" property="modifier" jdbcType="VARCHAR"/>
         <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP"/>
         <result column="is_deleted" property="isDeleted" jdbcType="BIT"/>
+        <result column="is_cooperate" property="isCooperate" jdbcType="BIT"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, name, code, phone, addr, creator, created_time, modifier, modified_time, is_deleted
+    id, name, code, phone, addr, creator, created_time, modifier, modified_time, is_deleted,is_cooperate
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
@@ -30,11 +31,11 @@
     insert into express_company (id, name, code, 
       phone, addr, creator, 
       created_time, modifier, modified_time, 
-      is_deleted)
+      is_deleted,is_cooperate)
     values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
       #{phone,jdbcType=VARCHAR}, #{addr,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{createdTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
-      #{isDeleted,jdbcType=BIT})
+      #{isDeleted,jdbcType=BIT},#{isCooperate,jdbcType=BIT})
   </insert>
     <insert id="insertSelective" parameterType="com.school.biz.domain.entity.express.ExpressCompany">
         insert into express_company
@@ -69,6 +70,9 @@
             <if test="isDeleted != null">
                 is_deleted,
             </if>
+            <if test="isCooperate != null">
+                is_cooperate,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -100,6 +104,9 @@
             </if>
             <if test="isDeleted != null">
                 #{isDeleted,jdbcType=BIT},
+            </if>
+            <if test="isCooperate != null">
+                #{isCooperate,jdbcType=BIT},
             </if>
         </trim>
     </insert>
@@ -133,6 +140,9 @@
             <if test="isDeleted != null">
                 is_deleted = #{isDeleted,jdbcType=BIT},
             </if>
+            <if test="isCooperate != null">
+                is_cooperate = #{isCooperate,jdbcType=BIT},
+            </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
@@ -146,7 +156,8 @@
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       modifier = #{modifier,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
-      is_deleted = #{isDeleted,jdbcType=BIT}
+      is_deleted = #{isDeleted,jdbcType=BIT},
+      is_cooperate = #{isCooperate,jdbcType=BIT}
     where id = #{id,jdbcType=BIGINT}
   </update>
 
@@ -177,12 +188,17 @@
             </if>
         </where>
     </select>
-    
+
     <select id="findAll" resultType="com.school.biz.domain.entity.express.ExpressCompany">
     	select * from express_company ec
     </select>
-    
-    <select id="findByCode" parameterType="java.lang.String" resultType="com.school.biz.domain.entity.express.ExpressCompany">
+
+    <select id="findAllCooperate" resultType="com.school.biz.domain.entity.express.ExpressCompany">
+        select * from express_company ec where ec.is_cooperate = 1
+    </select>
+
+    <select id="findByCode" parameterType="java.lang.String"
+            resultType="com.school.biz.domain.entity.express.ExpressCompany">
     	select * from express_company ec
     	where ec.code = #{code,jdbcType=VARCHAR}
     </select>

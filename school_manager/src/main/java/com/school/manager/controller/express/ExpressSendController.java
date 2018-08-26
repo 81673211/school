@@ -98,7 +98,7 @@ public class ExpressSendController extends BaseEasyWebController {
 		mav.addObject("expressSend", JSON.toJSON(expressSend));
 		mav.addObject("expressSendStatusMap",JSON.toJSON(SendExpressStatusEnum.getAllStatusEnum()));
 		// 查询所有快递公司
-		List<ExpressCompany> expressCompanyList = expressCompanyService.findAll();
+		List<ExpressCompany> expressCompanyList = expressCompanyService.findAllCooperate();
 		mav.addObject("expressCompanyList",JSON.toJSON(expressCompanyList));
 		return mav;
 	}

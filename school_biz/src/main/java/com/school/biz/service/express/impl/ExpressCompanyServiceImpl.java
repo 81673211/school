@@ -50,6 +50,11 @@ public class ExpressCompanyServiceImpl extends BaseServiceImpl<ExpressCompany, E
     }
 
     @Override
+    public List<ExpressCompany> findAllCooperate() {
+        return companyMapper.findAllCooperate();
+    }
+
+    @Override
     public ExpressCompany findByCode(String code) {
         return companyMapper.findByCode(code);
     }

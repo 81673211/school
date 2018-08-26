@@ -105,7 +105,7 @@ public class ExpressReceiveController extends BaseEasyWebController {
         mav.addObject("expressReceive", JSON.toJSON(expressReceive));
         mav.addObject("expressReceiveStatusMap", JSON.toJSON(ReceiveExpressStatusEnum.getAllStatusEnum()));
         // 查询所有快递公司
-        List<ExpressCompany> expressCompanyList = expressCompanyService.findAll();
+        List<ExpressCompany> expressCompanyList = expressCompanyService.findAllCooperate();
         mav.addObject("expressCompanyList", JSON.toJSON(expressCompanyList));
         return mav;
     }

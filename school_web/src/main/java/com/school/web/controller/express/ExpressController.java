@@ -345,7 +345,7 @@ public class ExpressController extends BaseEasyWebController {
     @RequestMapping(value = "/company", method = RequestMethod.GET)
     public Response selectList() {
         DataResponse<List> response = new DataResponse<>();
-        response.writeSuccess("查询列表成功", expressCompanyService.findAll());
+        response.writeSuccess("查询列表成功", expressCompanyService.findAllCooperate());
         return response;
     }
 
@@ -360,7 +360,7 @@ public class ExpressController extends BaseEasyWebController {
         ModelAndView modelAndView = new ModelAndView();
         try {
             List<Region> regionList = regionService.selectRegionList(null);
-            List<ExpressCompany> companyList = expressCompanyService.findAll();
+            List<ExpressCompany> companyList = expressCompanyService.findAllCooperate();
             Customer customer = customerService.getByOpenId(openId);
             modelAndView.addObject("openId", openId);
             modelAndView.addObject("idCard", StringUtils.isNotBlank(customer.getIdNumber()));
