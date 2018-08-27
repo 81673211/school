@@ -75,6 +75,7 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
                     log.error(msg);
                     throw new RuntimeException(msg);
                 } else {
+                    expressReceive.setId(receive.getId());
                     expressReceiveMapper.updateByPrimaryKeySelective(expressReceive);
                 }
             } else {
