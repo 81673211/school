@@ -24,6 +24,9 @@
                                 <span>${item.code}</span>
                                 <span>
                                     <c:choose>
+                                        <c:when test="${item.expressStatus == 0}">
+                                            <label class="label label-sm gray outline rounded">代理点已签收</label>
+                                        </c:when>
                                         <c:when test="${item.expressStatus == 1}">
                                             <label class="label label-sm gray outline rounded">等待自提</label>
                                         </c:when>

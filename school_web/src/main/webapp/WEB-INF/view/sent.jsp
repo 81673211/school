@@ -56,6 +56,25 @@
                                 <small class="muted">${item.receiverName} ${item.receiverPhone}</small>
                             </div>
                         </div>
+                        <div>
+                            <c:choose>
+                                <c:when test="${item.expressStatus == 3}">
+                                    <small class="muted">您还需要支付差价(￥<fmt:formatNumber
+                                            value="${item.agio}" pattern="0.00"/>)
+                                    </small>
+                                </c:when>
+                                <c:otherwise>
+                                    <span><br/></span>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
+                    </div>
+                    <div class="pull-right">
+                        <c:if test="${item.expressStatus == 3}">
+                            <div>
+                                <button type="button" class="btn btn-sm info outline rounded" style="margin-bottom: 5px" onclick="launchPay(${item.id})">支付差价</button>
+                            </div>
+                        </c:if>
                     </div>
                 </a>
             </c:forEach>
@@ -70,5 +89,26 @@
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/lib/jquery/jquery.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/js/zui.min.js"></script>
+<script>
+  function launchPay(expressId) {
+    if (confirm("确认支付?")) {
+      $.post("/order/1/create",
+        {
+          "expressId": expressId,
+          "openId": '${openId}'
+        },
+        function (result) {
+          if (result.status != 200) {
+            alert(result.msg);
+            return;
+          } else {
+            var orderNo = result.msg;
+            window.location.href = "http://www.glove1573.cn/wxpay/pay?orderNo=" + orderNo;
+          }
+        }
+      );
+    }
+  }
+</script>
 </body>
 </html>

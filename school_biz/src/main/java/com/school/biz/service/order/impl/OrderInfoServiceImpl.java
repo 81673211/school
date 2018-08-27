@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.school.biz.constant.ConfigProperties;
@@ -85,7 +86,8 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
 
     @Override
     public String createReceiveOrder(Long expressId) {
-        OrderInfo orderInfo = findByExpressReceiveId(expressId);
+        List<OrderInfo> orderInfos = findByExpressReceiveId(expressId);
+        OrderInfo orderInfo = CollectionUtils.isEmpty(orderInfos) ? null : orderInfos.get(0);
         if (orderInfo == null || canRecreate(orderInfo)) {
             ExpressReceive expressReceive = expressReceiveMapper.selectByPrimaryKey(expressId);
             orderInfo = initOrderInfo(expressReceive);
@@ -105,22 +107,22 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
         if (OrderStatusEnum.SUCCESS.getCode().equals(status)) {
             log.error("重复支付，orderNo:{}", orderInfo.getOrderNo());
             throw new RuntimeException("快递已成功支付过，请勿重复支付.");
-        }else{
+        } else {
             return true;
         }
     }
 
     @Override
-    public OrderInfo findByExpressReceiveId(Long expressId) {
+    public List<OrderInfo> findByExpressReceiveId(Long expressId) {
         return findByExpressIdAndType(expressId, ExpressTypeEnum.RECEIVE.getFlag());
     }
 
     @Override
-    public OrderInfo findByExpressSendId(Long expressId) {
+    public List<OrderInfo> findByExpressSendId(Long expressId) {
         return findByExpressIdAndType(expressId, ExpressTypeEnum.SEND.getFlag());
     }
 
-    private OrderInfo findByExpressIdAndType(Long expressId, int expressType) {
+    private List<OrderInfo> findByExpressIdAndType(Long expressId, int expressType) {
         return orderInfoMapper.findByExpressIdAndType(expressId, expressType);
     }
 
