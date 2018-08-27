@@ -83,17 +83,14 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
         if (checkExpressAlreadyPay(orderInfos)) {
             return null;
         }
-        OrderInfo orderInfo = CollectionUtils.isEmpty(orderInfos) ? null : orderInfos.get(0);
-        if (orderInfo == null) {
-            ExpressReceive expressReceive = expressReceiveMapper.selectByPrimaryKey(expressId);
-            orderInfo = initOrderInfo(expressReceive);
-            int result = orderInfoMapper.insertSelective(orderInfo);
-            if (result <= 0) {
-                String message =
-                        "create receive order error,when insert table 'order_info' the number of affected rows is 0";
-                log.error(message);
-                throw new RuntimeException(message);
-            }
+        ExpressReceive expressReceive = expressReceiveMapper.selectByPrimaryKey(expressId);
+        OrderInfo orderInfo = initOrderInfo(expressReceive);
+        int result = orderInfoMapper.insertSelective(orderInfo);
+        if (result <= 0) {
+            String message =
+                    "create receive order error,when insert table 'order_info' the number of affected rows is 0";
+            log.error(message);
+            throw new RuntimeException(message);
         }
         return orderInfo.getOrderNo();
     }
