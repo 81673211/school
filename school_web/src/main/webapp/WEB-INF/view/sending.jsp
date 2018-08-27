@@ -23,7 +23,7 @@
             <div class="flex-inline">
                 <div class="select" style="width: 30%;margin-right: 5px">
                     <select id="province" name="province" onchange="change(this,'city');">
-                        <option value="">请选择省</option>
+                        <option value="">[请选择省]</option>
                         <c:if test="${regionList != null and regionList.size() > 0}">
                             <c:forEach items="${regionList}" varStatus="var" var="item">
                                 <option value="${item.id}">${item.areaName}</option>
@@ -33,12 +33,12 @@
                 </div>
                 <div class="select" style="width: 33%;margin-right: 5px">
                     <select id="city" name="city" onchange="change(this,'area');">
-                        <option value="">请选择市</option>
+                        <option value="">[请选择市]</option>
                     </select>
                 </div>
                 <div class="select" style="width: 30%">
                     <select id="area" name="area">
-                        <option value="">请选择区/县</option>
+                        <option value="">[请选择区/县]</option>
                     </select>
                 </div>
             </div>
@@ -68,14 +68,14 @@
             <div class="select">
                 <select id="expressWay" name="expressWay" onchange="calcServiceAmt();">
                     <option value="">请选择寄件方式</option>
-                    <option value="0">自发</option>
-                    <option value="1">配送</option>
+                    <option value="0">自送到点</option>
+                    <option value="1">上门取件</option>
                 </select>
             </div>
         </div>
 
         <div class="control">
-            <label for="expressWay">选择寄件方式 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>
+            <label for="expressWay">选择快件类型<i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>
             <div class="select">
                 <select id="expressType" name="expressType" onchange="calcAmount();">
                     <option value="">请选择快件类型</option>
