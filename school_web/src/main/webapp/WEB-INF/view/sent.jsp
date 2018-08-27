@@ -72,7 +72,7 @@
                     <div class="pull-right">
                         <c:if test="${item.expressStatus == 3}">
                             <div>
-                                <button type="button" class="btn btn-sm info outline rounded" style="margin-bottom: 5px" onclick="launchPay('${item.agioOrderNo}')">支付差价</button>
+                                <button type="button" class="btn btn-sm info outline rounded" style="margin-bottom: 5px" onclick="launchPay('${item.id}')">支付差价</button>
                             </div>
                         </c:if>
                     </div>
@@ -90,10 +90,24 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/lib/jquery/jquery.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/js/zui.min.js"></script>
 <script>
-  function launchPay(orderNo) {
+  function launchPay(expressId) {
     if (confirm("确认支付?")) {
-      alert(orderNo);
-      window.location.href = "http://www.glove1573.cn/wxpay/pay?orderNo=" + orderNo;
+      $.post("/order/0/create",
+        {
+          "expressId": expressId,
+          "openId": '${openId}'
+        },
+        function (result) {
+          if (result.status != 200) {
+            alert(result.msg);
+            return;
+          } else {
+            var orderNo = result.msg;
+            alert(orderNo);
+            window.location.href = "http://www.glove1573.cn/wxpay/pay?orderNo=" + orderNo;
+          }
+        }
+      );
     }
   }
 </script>

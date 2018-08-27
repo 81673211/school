@@ -29,6 +29,5 @@ public class SendExpressListResponseVo {
     private String receiverDistrict;
     private BigDecimal transportPrice;
     private BigDecimal serviceAmt;
-    private BigDecimal agio;
-    private String agioOrderNo;
+    private BigDecimal reOrderAmt;
 }

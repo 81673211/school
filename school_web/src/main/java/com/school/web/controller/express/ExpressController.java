@@ -328,16 +328,6 @@ public class ExpressController extends BaseEasyWebController {
                 for (ExpressSend expressSend : list) {
                     SendExpressListResponseVo vo = new SendExpressListResponseVo();
                     BeanUtils.copyProperties(expressSend, vo);
-                    if (SendExpressStatusEnum.SUPPLEMENT.getFlag() == expressSend.getExpressStatus()) {
-                        List<OrderInfo> orderInfos = orderInfoService.findByExpressSendId(expressSend.getId());
-                        for (OrderInfo orderInfo : orderInfos) {
-                            if (orderInfo.getOrderNo().startsWith(Constants.ORDER_NO_TYPE_REORDER) &&
-                                    OrderStatusEnum.UNPAY.getCode().equals(orderInfo.getStatus())) {
-                                vo.setAgio(orderInfo.getAmount());
-                                vo.setAgioOrderNo(orderInfo.getOrderNo());
-                            }
-                        }
-                    }
 //                    vo.setTransportPrice(
 //                            expressSendService.getSendTransportPrice(expressSend));
 //                    vo.setServiceAmt(expressSend.getServiceAmt());
