@@ -80,8 +80,11 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
     @Override
     public String createReceiveOrder(Long expressId) {
         List<OrderInfo> orderInfos = findByExpressReceiveId(expressId);
+        if (checkExpressAlreadyPay(orderInfos)) {
+            return null;
+        }
         OrderInfo orderInfo = CollectionUtils.isEmpty(orderInfos) ? null : orderInfos.get(0);
-        if (orderInfo == null || canRecreate(orderInfos)) {
+        if (orderInfo == null) {
             ExpressReceive expressReceive = expressReceiveMapper.selectByPrimaryKey(expressId);
             orderInfo = initOrderInfo(expressReceive);
             int result = orderInfoMapper.insertSelective(orderInfo);
@@ -95,15 +98,15 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
         return orderInfo.getOrderNo();
     }
 
-    private boolean canRecreate(List<OrderInfo> orderInfos) {
+    private boolean checkExpressAlreadyPay(List<OrderInfo> orderInfos) {
         for (OrderInfo orderInfo : orderInfos) {
             int status = orderInfo.getStatus();
             if (OrderStatusEnum.SUCCESS.getCode().equals(status)) {
                 log.error("快递已成功支付过，请勿重复支付.，orderNo:{}", orderInfo.getOrderNo());
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     @Override
