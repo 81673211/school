@@ -22,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -68,7 +69,7 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
             Map<String, Object> codeMap = new HashMap<>(1);
             codeMap.put("code", expressReceive.getCode());
             List list = expressReceiveMapper.selectByParams(codeMap);
-            if (list.size() > 0) {
+            if (!CollectionUtils.isEmpty(list)) {
                 ExpressReceive receive = (ExpressReceive) list.get(0);
                 if (!receive.getExpressStatus().equals(ReceiveExpressStatusEnum.WAIT_INTO_BOX.getFlag())) {
                     String msg = "edit receive express error,because the express status already pass,code:" + expressReceive.getCode();
