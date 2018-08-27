@@ -38,11 +38,11 @@
                             <li><a href="${ctx}/managers/user/logout.htm">退出系统</a></li>
                         </ul>
                     </li>
-                    <li id="Hui-msg"> 
-                    	<a href="#" title="消息">
-                    		<span class="badge badge-danger">1</span><i class="Hui-iconfont" style="font-size:18px">&#xe68a;</i>
-                    	</a>
-                    </li>
+<!--                     <li id="Hui-msg">  -->
+<!--                     	<a href="#" title="消息"> -->
+<!--                     		<span class="badge badge-danger">1</span><i class="Hui-iconfont" style="font-size:18px">&#xe68a;</i> -->
+<!--                     	</a> -->
+<!--                     </li> -->
                 </ul>
             </nav>
         </div>
