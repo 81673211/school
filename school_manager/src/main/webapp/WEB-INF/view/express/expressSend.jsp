@@ -65,9 +65,10 @@
                         <th width="50">收件人电话</th>
                         <th width="80">收件人地址</th>
                         <th width="50">快递公司</th>
-                        <th width="20">已支付</th>
                         <th width="20">服务费</th>
+                        <th width="20">已支付</th>
                         <th width="20">已退款</th>
+                        <th width="20">已补单</th>
                         <th width="50">状态</th>
                         <th width="50">操作</th>
                     </tr>
@@ -85,13 +86,14 @@
                         <td>{{el.totalAmt}}</td>
                         <td>{{el.serviceAmt}}</td>
                         <td>{{el.totalRefundAmt}}</td>
+                        <td>{{el.totalReOrderAmt}}</td>
                         <td>{{@expressSendStatusMap[el.expressStatus]}}</td>
                         <td class="but_xq">
                             <btn:hasUrlPerm link="${refundUrl}">
-	                           	<a :if="!el.code" class="ml-5 btn btn-primary-outline size-S radius" :click="@methods.reOrder(el.id,@methods.reOrderUrl)">补单</a>
+	                           	<a :if="el.reOrderNum == 0 && !el.code " class="ml-5 btn btn-primary-outline size-S radius" :click="@methods.reOrder(el.id,@methods.reOrderUrl)">补单</a>
 	                        </btn:hasUrlPerm>
                             <btn:hasUrlPerm link="${refundUrl}">
-	                           	<a :if="!el.code" class="ml-5 btn btn-primary-outline size-S radius" :click="@methods.refund(el.id,@methods.refundUrl)">退款</a>
+	                           	<a :if="el.refundNum == 0 && !el.code" class="ml-5 btn btn-primary-outline size-S radius" :click="@methods.refund(el.id,@methods.refundUrl)">退款</a>
 	                        </btn:hasUrlPerm>
                         	<btn:hasUrlPerm link="${detailUrl}">
 	                           	<a class="ml-5 btn btn-primary-outline size-S radius" :click="@methods.detail(el.id,@methods.detailUrl)">详情</a>
