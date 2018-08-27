@@ -89,7 +89,7 @@ public class AdminUserController extends BaseEasyWebController {
 		ModelAndView mav= new ModelAndView();
 		mav.setViewName("permission/adminUserEdit");
 		AdminUser adminUser = adminUserService.get(id);
-		mav.addObject("adminUser", JSON.toJSON(adminUser));
+		mav.addObject("user", JSON.toJSON(adminUser));
 		mav.addObject("adminUserStatusMap",StatusManage.adminUserStatusMap);
 		mav.addObject("roles",JSON.toJSON(roleService.getAll()));
 		return mav;
