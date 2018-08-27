@@ -1,5 +1,7 @@
 package com.school.biz.domain.entity.express;
 
+import java.math.BigDecimal;
+
 import com.alibaba.fastjson.annotation.JSONField;
 
 /**
@@ -24,6 +26,7 @@ public class ExpressSend extends Express{
     private String receiverDistrict;
     @JSONField(serialize = false)
     private String idCard;
+    private BigDecimal reOrderAmt;
 
 
     public String getIdCard() {
@@ -130,4 +133,12 @@ public class ExpressSend extends Express{
     public void setReceiverDistrict(String receiverDistrict) {
         this.receiverDistrict = receiverDistrict;
     }
+
+	public BigDecimal getReOrderAmt() {
+		return reOrderAmt;
+	}
+
+	public void setReOrderAmt(BigDecimal reOrderAmt) {
+		this.reOrderAmt = reOrderAmt;
+	}
 }

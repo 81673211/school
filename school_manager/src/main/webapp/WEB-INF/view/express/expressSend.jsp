@@ -83,8 +83,8 @@
                         <td>{{el.receiverPhone}}</td>
                         <td>{{el.receiverAddr}}</td>
                         <td>{{el.companyName}}</td>
-                        <td>{{el.totalAmt}}</td>
                         <td>{{el.serviceAmt}}</td>
+                        <td>{{el.totalAmt}}</td>
                         <td>{{el.totalRefundAmt}}</td>
                         <td>{{el.totalReOrderAmt}}</td>
                         <td>{{@expressSendStatusMap[el.expressStatus]}}</td>
