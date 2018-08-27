@@ -1,5 +1,6 @@
 package com.school.web.controller.express;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,16 +20,19 @@ import com.school.biz.domain.entity.customer.Customer;
 import com.school.biz.domain.entity.express.ExpressCompany;
 import com.school.biz.domain.entity.express.ExpressReceive;
 import com.school.biz.domain.entity.express.ExpressSend;
+import com.school.biz.domain.entity.order.OrderInfo;
 import com.school.biz.domain.entity.region.Region;
 import com.school.biz.enumeration.DistributionTypeEnum;
 import com.school.biz.enumeration.ExpressTypeEnum;
 import com.school.biz.enumeration.ReceiveExpressStatusEnum;
+import com.school.biz.enumeration.SendExpressStatusEnum;
 import com.school.biz.enumeration.WechatTemplateEnum;
 import com.school.biz.service.calc.CalcCostService;
 import com.school.biz.service.customer.CustomerService;
 import com.school.biz.service.express.ExpressCompanyService;
 import com.school.biz.service.express.ExpressReceiveService;
 import com.school.biz.service.express.ExpressSendService;
+import com.school.biz.service.order.OrderInfoService;
 import com.school.biz.service.region.RegionService;
 import com.school.biz.service.wechat.TemplateService;
 import com.school.web.controller.base.BaseEasyWebController;
@@ -69,6 +73,8 @@ public class ExpressController extends BaseEasyWebController {
     private TemplateService templateService;
     @Autowired
     private CalcCostService calcCostService;
+    @Autowired
+    private OrderInfoService orderInfoService;
 
     /**
      * 寄件
@@ -331,6 +337,11 @@ public class ExpressController extends BaseEasyWebController {
                 for (ExpressSend expressSend : list) {
                     SendExpressListResponseVo vo = new SendExpressListResponseVo();
                     BeanUtils.copyProperties(expressSend, vo);
+                    if (SendExpressStatusEnum.SUPPLEMENT.getFlag() == expressSend.getExpressStatus()) {
+                        List<OrderInfo> orderInfos = orderInfoService.findByExpressSendId(expressSend.getId());
+
+                        vo.setAgio(BigDecimal.ONE);
+                    }
 //                    vo.setTransportPrice(
 //                            expressSendService.getSendTransportPrice(expressSend));
 //                    vo.setServiceAmt(expressSend.getServiceAmt());

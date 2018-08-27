@@ -14,14 +14,17 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 
 import com.school.biz.exception.UtilException;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Http请求工具类
  * 
  */
+
+@Slf4j
 public class HttpUtil {
 
 	/** 未知的标识 */
@@ -31,8 +34,6 @@ public class HttpUtil {
 
 	private static Map<String, String> cookies = new HashMap<String, String>();
 	
-	private static Logger log = Logger.getLogger(HttpUtil.class);
-
 	/**
 	 * 编码字符为 application/x-www-form-urlencoded
 	 * 

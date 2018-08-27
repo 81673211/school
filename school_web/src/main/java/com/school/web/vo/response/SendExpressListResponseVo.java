@@ -21,7 +21,7 @@ public class SendExpressListResponseVo {
     private Integer expressStatus;
     private String receiverPhone;    //收件人电话
     private String receiverName;//	收件人名字
-    private String receiverAddr;//	收件人地址
+    private String receiverAddr;//  收件人地址
     private Date endTime;
     private Date createdTime;
     private String receiverProvince;
@@ -29,4 +29,5 @@ public class SendExpressListResponseVo {
     private String receiverDistrict;
     private BigDecimal transportPrice;
     private BigDecimal serviceAmt;
+    private BigDecimal agio;
 }

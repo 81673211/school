@@ -220,9 +220,9 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
     public BigDecimal getOrderPrice(Long expressId, ExpressTypeEnum expressType) {
         OrderInfo orderInfo;
         if (ExpressTypeEnum.SEND.getFlag() == expressType.getFlag()) {
-            orderInfo = orderInfoService.findByExpressSendId(expressId);
+            orderInfo = orderInfoService.findByExpressSendId(expressId).get(0);
         } else {
-            orderInfo = orderInfoService.findByExpressReceiveId(expressId);
+            orderInfo = orderInfoService.findByExpressReceiveId(expressId).get(0);
         }
         return orderInfo.getAmount();
     }
