@@ -41,7 +41,29 @@ public class ExpressSendVo {
     @JSONField(serialize = false)
     private String idCard;
     
+    /**
+     * 已支付订单总金额
+     */
     private BigDecimal totalAmt;
     
+    /**
+     * 已退款总金额
+     */
     private BigDecimal totalRefundAmt;
+    
+    /**
+     * 补单总金额
+     */
+    private BigDecimal totalReOrderAmt;
+    
+    /**
+     * 退款笔数
+     */
+    private Integer refundNum;
+    
+    /**
+     * 补单笔数
+     */
+    private Integer reOrderNum;
+    
 }
