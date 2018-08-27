@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.school.biz.constant.Constants;
 import com.school.biz.domain.entity.customer.Customer;
 import com.school.biz.domain.entity.express.ExpressCompany;
 import com.school.biz.domain.entity.express.ExpressReceive;
@@ -24,6 +25,7 @@ import com.school.biz.domain.entity.order.OrderInfo;
 import com.school.biz.domain.entity.region.Region;
 import com.school.biz.enumeration.DistributionTypeEnum;
 import com.school.biz.enumeration.ExpressTypeEnum;
+import com.school.biz.enumeration.OrderStatusEnum;
 import com.school.biz.enumeration.ReceiveExpressStatusEnum;
 import com.school.biz.enumeration.SendExpressStatusEnum;
 import com.school.biz.enumeration.WechatTemplateEnum;
@@ -339,8 +341,13 @@ public class ExpressController extends BaseEasyWebController {
                     BeanUtils.copyProperties(expressSend, vo);
                     if (SendExpressStatusEnum.SUPPLEMENT.getFlag() == expressSend.getExpressStatus()) {
                         List<OrderInfo> orderInfos = orderInfoService.findByExpressSendId(expressSend.getId());
-
-                        vo.setAgio(BigDecimal.ONE);
+                        for (OrderInfo orderInfo : orderInfos) {
+                            if (orderInfo.getOrderNo().startsWith(Constants.ORDER_NO_TYPE_REORDER) &&
+                                OrderStatusEnum.UNPAY.getCode().equals(orderInfo.getStatus())) {
+                                vo.setAgio(orderInfo.getAmount());
+                                vo.setAgioOrderNo(orderInfo.getOrderNo());
+                            }
+                        }
                     }
 //                    vo.setTransportPrice(
 //                            expressSendService.getSendTransportPrice(expressSend));
