@@ -72,7 +72,7 @@
                     <div class="pull-right">
                         <c:if test="${item.expressStatus == 3}">
                             <div>
-                                <button type="button" class="btn btn-sm info outline rounded" style="margin-bottom: 5px" onclick="launchPay(${item.agioOrderNo})">支付差价</button>
+                                <button type="button" class="btn btn-sm info outline rounded" style="margin-bottom: 5px" onclick="launchPay('${item.agioOrderNo}')">支付差价</button>
                             </div>
                         </c:if>
                     </div>
