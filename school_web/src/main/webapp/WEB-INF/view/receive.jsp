@@ -116,10 +116,7 @@
     function receiveWay(id, way) {
         if (confirm("确认自提?")) {
             $.post("/express/1/modify", {"openId": '${openId}', "id": id, "expressWay": way}, function (result) {
-                if (result.status == 200) {
-                    window.location.reload();
-                } else {
-                }
+                window.location.reload();
             });
         }
     }
