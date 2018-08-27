@@ -90,7 +90,7 @@
                         <td>{{@expressSendStatusMap[el.expressStatus]}}</td>
                         <td class="but_xq">
                             <btn:hasUrlPerm link="${refundUrl}">
-	                           	<a :if="el.reOrderNum == 0 && !el.code " class="ml-5 btn btn-primary-outline size-S radius" :click="@methods.reOrder(el.id,@methods.reOrderUrl)">补单</a>
+	                           	<a :if="el.reOrderAmt == 0 && !el.code " class="ml-5 btn btn-primary-outline size-S radius" :click="@methods.reOrder(el.id,@methods.reOrderUrl)">补单</a>
 	                        </btn:hasUrlPerm>
                             <btn:hasUrlPerm link="${refundUrl}">
 	                           	<a :if="el.refundNum == 0 && !el.code" class="ml-5 btn btn-primary-outline size-S radius" :click="@methods.refund(el.id,@methods.refundUrl)">退款</a>

@@ -109,7 +109,8 @@ public class AdminUserController extends BaseEasyWebController {
 			// 不能失效自己和admin账户
 			AdminUser user = SessionUtils.getSessionUser(request);
 			AdminUser originUser = adminUserService.get(adminUser.getId());
-			if(adminUser.getStatus().equals(StatusManage.ADMIN_USER_STATUS_OFF)){
+			// 修改时
+			if(adminUser.getId() != null && adminUser.getStatus().equals(StatusManage.ADMIN_USER_STATUS_OFF)){
 				if(adminUser.getId().equals(user.getId())){
 					return AjaxResult.fail("不能将自己失效");
 				}
@@ -119,7 +120,7 @@ public class AdminUserController extends BaseEasyWebController {
 			}
 			
 			// 不能修改admin账户的角色
-			if(!adminUser.getRoleId().equals(originUser.getRoleId()) && Constants.ADMIN_LOGIN_NAME.equals(originUser.getLoginName())){
+			if(adminUser.getId() != null &&!adminUser.getRoleId().equals(originUser.getRoleId()) && Constants.ADMIN_LOGIN_NAME.equals(originUser.getLoginName())){
 				return AjaxResult.fail("不能修改admin账户的角色");
 			}
 			
