@@ -99,8 +99,8 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
         for (OrderInfo orderInfo : orderInfos) {
             int status = orderInfo.getStatus();
             if (OrderStatusEnum.SUCCESS.getCode().equals(status)) {
-                log.error("重复支付，orderNo:{}", orderInfo.getOrderNo());
-                throw new RuntimeException("快递已成功支付过，请勿重复支付.");
+                log.error("快递已成功支付过，请勿重复支付.，orderNo:{}", orderInfo.getOrderNo());
+                return false;
             }
         }
         return true;
