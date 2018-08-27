@@ -60,7 +60,7 @@
                             <c:choose>
                                 <c:when test="${item.expressStatus == 3}">
                                     <small class="muted">您还需要支付差价(￥<fmt:formatNumber
-                                            value="${item.agio}" pattern="0.00"/>)
+                                            value="${item.reOrderAmt}" pattern="0.00"/>)
                                     </small>
                                 </c:when>
                                 <c:otherwise>
