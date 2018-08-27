@@ -24,6 +24,7 @@
         <result column="end_time" property="endTime" jdbcType="TIMESTAMP"/>
         <result column="express_type" property="expressType" jdbcType="INTEGER"/>
         <result column="service_amt" property="serviceAmt" jdbcType="DECIMAL" />
+        <result column="re_order_amt" property="reOrderAmt" jdbcType="DECIMAL" />
     </resultMap>
     <sql id="Base_Column_List">
         id,
@@ -47,7 +48,8 @@
         customer_id,
         end_time,
         express_type,
-        service_amt
+        service_amt,
+        re_order_amt
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
@@ -120,6 +122,9 @@
             <if test="serviceAmt != null">
                 service_amt,
             </if>
+            <if test="reOrderAmt != null">
+                re_order_amt,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="code != null">
@@ -175,6 +180,9 @@
             </if>
             <if test="serviceAmt != null">
                 #{serviceAmt,jdbcType=DECIMAL},
+            </if>
+            <if test="reOrderAmt != null">
+                #{reOrderAmt,jdbcType=DECIMAL},
             </if>
         </trim>
     </insert>
@@ -237,6 +245,9 @@
             </if>
             <if test="serviceAmt != null">
                 service_amt = #{serviceAmt,jdbcType=DECIMAL},
+            </if>
+            <if test="reOrderAmt != null">
+                re_order_amt = #{reOrderAmt,jdbcType=DECIMAL},
             </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
