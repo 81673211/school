@@ -296,6 +296,9 @@
         <if test="phone != null and phone != '' ">
             and t.receiver_phone=#{phone,jdbcType=VARCHAR}
         </if>
+        <if test="code != null and code != '' ">
+            and t.code=#{code,jdbcType=VARCHAR}
+        </if>
         <if test="status != null">
             and t.express_status in
             <foreach collection="status" index="index" item="item" open="(" separator="," close=")">

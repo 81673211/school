@@ -65,14 +65,28 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
     @Override
     public void createReceiveExpress(ExpressReceive expressReceive) {
         try {
-            boxExpressCompany(expressReceive);
-            boxCustomer(expressReceive);
-            Long count = expressReceiveMapper.insertSelective(expressReceive);
-            if (!(count > 0L)) {
-                String message =
-                        "create receive express error,when insert table 'express_receive' the number of affected rows is 0";
-                log.error(message);
-                throw new ExpressException(message);
+            Map<String, Object> codeMap = new HashMap<>(1);
+            codeMap.put("code", expressReceive.getCode());
+            List list = expressReceiveMapper.selectByParams(codeMap);
+            if (list.size() > 0) {
+                ExpressReceive receive = (ExpressReceive) list.get(0);
+                if (!receive.getExpressStatus().equals(ReceiveExpressStatusEnum.WAIT_INTO_BOX.getFlag())) {
+                    String msg = "edit receive express error,because the express status already pass,code:" + expressReceive.getCode();
+                    log.error(msg);
+                    throw new RuntimeException(msg);
+                } else {
+                    expressReceiveMapper.updateByPrimaryKeySelective(expressReceive);
+                }
+            } else {
+                boxExpressCompany(expressReceive);
+                boxCustomer(expressReceive);
+                Long count = expressReceiveMapper.insertSelective(expressReceive);
+                if (!(count > 0L)) {
+                    String message =
+                            "create receive express error,when insert table 'express_receive' the number of affected rows is 0";
+                    log.error(message);
+                    throw new ExpressException(message);
+                }
             }
         } catch (Exception e) {
             String message = "throw exception when create receive express";
