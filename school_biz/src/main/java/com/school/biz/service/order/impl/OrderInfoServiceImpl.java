@@ -340,28 +340,14 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
      */
     @Override
     public void reOrder(HttpServletRequest request, Long expressSendId, BigDecimal reOrderAmt) throws Exception {
-        ExpressSend expressSend = expressSendMapper.selectByPrimaryKey(expressSendId);
-        if (expressSend == null) {
-            throw new Exception("订单号不存在");
-        }
-        OrderInfo reOrder = initReOrderInfo(expressSend, reOrderAmt);
-        orderInfoMapper.insertSelective(reOrder);
-        // 更改快递状态为等待补单支付
-        expressSendService.updateSendExpressStatus(expressSend.getId(), SendExpressStatusEnum.SUPPLEMENT.getFlag());
-    }
-
-    private OrderInfo initReOrderInfo(ExpressSend expressSend, BigDecimal reOrderAmt) {
-        OrderInfo orderInfo = new OrderInfo();
-        orderInfo.setTradeSummary("补单费用");
-        orderInfo.setExpressType(ExpressTypeEnum.SEND.getFlag());// 补单都是寄件
-        orderInfo.setExpressId(expressSend.getId());
-        orderInfo.setExpressCode(expressSend.getCode());
-        orderInfo.setAmount(reOrderAmt);
-        orderInfo.setCustomerId(expressSend.getCustomerId());
-        orderInfo.setStatus(OrderStatusEnum.UNPAY.getCode());
-        orderInfo.setOrderNo(IdWorkerUtil.generateOrderNo(Constants.ORDER_NO_TYPE_REORDER));
-        orderInfo.setNotifyUrl(ConfigProperties.WXPAY_NOTIFY_URL);
-        return orderInfo;
+    	ExpressSend expressSend = expressSendMapper.selectByPrimaryKey(expressSendId);
+		if(expressSend == null){
+			throw new Exception("订单号不存在");
+		}
+		// 更改快递状态为等待补单支付
+		expressSend.setReOrderAmt(reOrderAmt);
+		expressSend.setExpressStatus(SendExpressStatusEnum.SUPPLEMENT.getFlag());
+		expressSendService.saveOrUpdate(expressSend);
     }
 
     /**

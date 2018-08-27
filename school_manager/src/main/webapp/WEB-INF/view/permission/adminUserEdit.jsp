@@ -23,20 +23,20 @@
              <div class="row cl mb-15">
                 <label class="form-label col-xs-2 col-sm-3 text-r">登陆账号：</label>
                 <div class="formControls col-xs-10 col-sm-9">
-                	<input id="id" type="hidden" name="id" value="${adminUser.id}">
-                    <input id="loginName" class="input-text" <c:if test="${adminUser.id != null}">disabled="disabled"</c:if> <c:if test="${adminUser.id == null}">name="loginName"</c:if> autocomplete="off" placeholder="" value="${adminUser.loginName}" type="text">
+                	<input id="id" type="hidden" name="id" value="${user.id}">
+                    <input id="loginName" class="input-text" <c:if test="${user.id != null}">disabled="disabled"</c:if> <c:if test="${user.id == null}">name="loginName"</c:if> autocomplete="off" placeholder="" value="${user.loginName}" type="text">
                 </div>
             </div>
              <div class="row cl mb-15">
                 <label class="form-label col-xs-2 col-sm-3 text-r">用户名称：</label>
                 <div class="formControls col-xs-10 col-sm-9">
-                    <input class="input-text" autocomplete="off" placeholder="" name="adminName" value="${adminUser.adminName}" type="text">
+                    <input class="input-text" autocomplete="off" placeholder="" name="adminName" value="${user.adminName}" type="text">
                 </div>
             </div>
              <div class="row cl mb-15">
                 <label class="form-label col-xs-2 col-sm-3 text-r">手机号：</label>
                 <div class="formControls col-xs-10 col-sm-9">
-                    <input class="input-text" autocomplete="off" placeholder="" name="adminPhone" value="${adminUser.adminPhone}" type="text">
+                    <input class="input-text" autocomplete="off" placeholder="" name="adminPhone" value="${user.adminPhone}" type="text">
                 </div>
             </div>
              <div class="row cl mb-15">
@@ -44,7 +44,7 @@
                 <div class="formControls col-xs-10 col-sm-9">
                     <select class="input-text" name="roleId">
                 		<c:forEach items="${roles}" var="role">
-	                		<option value="${role.id}" <c:if test="${role.id == adminUser.roleId}">selected="selected"</c:if>>${role.roleName}</option>
+	                		<option value="${role.id}" <c:if test="${role.id == user.roleId}">selected="selected"</c:if>>${role.roleName}</option>
                 		</c:forEach>
                 	</select>
                 </div>
@@ -54,7 +54,7 @@
                 <div class="formControls col-xs-10 col-sm-9">
                 	<select class="input-text" name="status">
                 		<c:forEach items="${adminUserStatusMap}" var="status">
-	                		<option value="${status.key}" <c:if test="${status.key == adminUser.status}">selected="selected"</c:if>>${status.value}</option>
+	                		<option value="${status.key}" <c:if test="${status.key == user.status}">selected="selected"</c:if>>${status.value}</option>
                 		</c:forEach>
                 	</select>
                 </div>
