@@ -54,7 +54,7 @@
 		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="NotRefundOrderJob" />
 		<!-- 每2分钟查询一次 -->
-		<property name="cronExpression" value="0 0/2 * * * ?" />
+		<property name="cronExpression" value="0 0/1 * * * ?" />
 	</bean>
 	<bean id="NotRefundOrderJob"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">

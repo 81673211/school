@@ -22,7 +22,7 @@ public interface RefundOrderInfoMapper extends BaseDao {
 
 	List<RefundOrderInfo> getNotRefundOrder();
 
-	List<RefundOrderInfo> findSuccessRefundOrdersByExpressNo(String expressCode);
+	List<RefundOrderInfo> findSuccessRefundOrdersByExpressId(Long expressId);
 
 	List<OrderInfo> queryPage(Map<String, Object> paramMap);
 
