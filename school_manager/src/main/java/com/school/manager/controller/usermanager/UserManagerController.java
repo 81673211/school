@@ -285,7 +285,7 @@ public class UserManagerController extends BaseWebController{
 //	
 	
 	@ResponseBody
-	@RequestMapping(value="doUpdateUserPwd.do",method = RequestMethod.POST)
+	@RequestMapping(value="doUpdateUserPwd",method = RequestMethod.POST)
 	public Object doUpdateUserPwd(String oldPassword,
 			String newPassword,HttpServletRequest request) {
 		try {

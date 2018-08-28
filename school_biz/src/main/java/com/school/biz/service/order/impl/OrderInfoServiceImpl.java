@@ -78,6 +78,15 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
     }
 
     @Override
+    public String createReSendOrder(ExpressSend expressSend) {
+        List<OrderInfo> orderInfos = findByExpressSendId(expressSend.getId());
+        if (checkReOrderExpressAlreadyPay(orderInfos)) {
+            return null;
+        }
+        return createSendOrder(expressSend);
+    }
+
+    @Override
     public String createReceiveOrder(Long expressId) {
         List<OrderInfo> orderInfos = findByExpressReceiveId(expressId);
         if (checkExpressAlreadyPay(orderInfos)) {
@@ -100,6 +109,18 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
             int status = orderInfo.getStatus();
             if (OrderStatusEnum.SUCCESS.getCode().equals(status)) {
                 log.error("快递已成功支付过，请勿重复支付.，orderNo:{}", orderInfo.getOrderNo());
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean checkReOrderExpressAlreadyPay(List<OrderInfo> orderInfos) {
+        for (OrderInfo orderInfo : orderInfos) {
+            int status = orderInfo.getStatus();
+            if (OrderStatusEnum.SUCCESS.getCode().equals(status) &&
+                    orderInfo.getOrderNo().startsWith(Constants.ORDER_NO_TYPE_REORDER)) {
+                log.error("快递已成功支付补单，请勿重复支付.，orderNo:{}", orderInfo.getOrderNo());
                 return true;
             }
         }

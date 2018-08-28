@@ -40,16 +40,37 @@ public class OrderController extends BaseEasyWebController {
      * @return
      */
     @RequestMapping(value = "/0/create", method = RequestMethod.POST)
-    public DataResponse<String> createSendOrder(@Validated OrderCreateVo vo, BindingResult bindingResult) {
-        DataResponse response = new DataResponse();
+    public Response createSendOrder(@Validated OrderCreateVo vo, BindingResult bindingResult) {
+        Response response = new Response();
         checkValid(bindingResult, response);
         if (response.getStatus() != HTTP_SUCCESS) {
             return response;
         }
         try {
             ExpressSend sendExpress = expressSendService.getSendExpress(vo.getExpressId());
-            String orderNo = orderInfoService.createSendOrder(sendExpress);
-            return response.writeSuccess("创建寄件快件成功", orderNo);
+            return response.writeSuccess(orderInfoService.createSendOrder(sendExpress));
+        } catch (Exception e) {
+            return response.writeFailure("创建订单失败");
+        }
+    }
+
+    /**
+     * 创建寄件订单
+     *
+     * @param vo
+     * @param bindingResult
+     * @return
+     */
+    @RequestMapping(value = "/0/reOrder/create", method = RequestMethod.POST)
+    public Response createSendReOrder(@Validated OrderCreateVo vo, BindingResult bindingResult) {
+        Response response = new Response();
+        checkValid(bindingResult, response);
+        if (response.getStatus() != HTTP_SUCCESS) {
+            return response;
+        }
+        try {
+            ExpressSend sendExpress = expressSendService.getSendExpress(vo.getExpressId());
+            return response.writeSuccess(orderInfoService.createReSendOrder(sendExpress));
         } catch (Exception e) {
             return response.writeFailure("创建订单失败");
         }

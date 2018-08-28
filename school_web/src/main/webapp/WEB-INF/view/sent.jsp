@@ -92,7 +92,7 @@
 <script>
   function launchPay(expressId) {
     if (confirm("确认支付?")) {
-      $.post("/order/0/create",
+      $.post("/order/0/reOrder/create",
         {
           "expressId": expressId,
           "openId": '${openId}'
