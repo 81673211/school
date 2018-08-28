@@ -78,6 +78,19 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
     }
 
     @Override
+    public String createSendReOrder(ExpressSend expressSend) {
+        OrderInfo orderInfo = initReOrderInfo(expressSend);
+        if (!(orderInfoMapper.insertSelective(orderInfo) > 0)) {
+            String message =
+                    "create send order error,when insert table 'order_info' the number of affected rows is 0";
+            log.error(message);
+            throw new RuntimeException(message);
+        } else {
+            return orderInfo.getOrderNo();
+        }
+    }
+
+    @Override
     public String createReceiveOrder(Long expressId) {
         List<OrderInfo> orderInfos = findByExpressReceiveId(expressId);
         if (checkExpressAlreadyPay(orderInfos)) {
@@ -100,18 +113,6 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
             int status = orderInfo.getStatus();
             if (OrderStatusEnum.SUCCESS.getCode().equals(status)) {
                 log.error("快递已成功支付过，请勿重复支付.，orderNo:{}", orderInfo.getOrderNo());
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean checkReOrderExpressAlreadyPay(List<OrderInfo> orderInfos) {
-        for (OrderInfo orderInfo : orderInfos) {
-            int status = orderInfo.getStatus();
-            if (OrderStatusEnum.SUCCESS.getCode().equals(status) &&
-                    orderInfo.getOrderNo().startsWith(Constants.ORDER_NO_TYPE_REORDER)) {
-                log.error("快递已成功支付补单，请勿重复支付.，orderNo:{}", orderInfo.getOrderNo());
                 return true;
             }
         }
@@ -161,6 +162,26 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
         orderInfo.setCustomerId(express.getCustomerId());
         orderInfo.setStatus(OrderStatusEnum.UNPAY.getCode());
         orderInfo.setOrderNo(IdWorkerUtil.generateOrderNo(Constants.ORDER_NO_TYPE_ORDER));
+        orderInfo.setNotifyUrl(ConfigProperties.WXPAY_NOTIFY_URL);
+        return orderInfo;
+    }
+
+    /**
+     * 初始化订单对象
+     *
+     * @param expressSend
+     * @return
+     */
+    private OrderInfo initReOrderInfo(ExpressSend expressSend) {
+        OrderInfo orderInfo = new OrderInfo();
+        orderInfo.setExpressType(ExpressTypeEnum.SEND.getFlag());
+        orderInfo.setAmount(expressSend.getReOrderAmt());
+        orderInfo.setTradeSummary("寄件快递费补差");
+        orderInfo.setExpressId(expressSend.getId());
+        orderInfo.setExpressCode(expressSend.getCode());
+        orderInfo.setCustomerId(expressSend.getCustomerId());
+        orderInfo.setStatus(OrderStatusEnum.UNPAY.getCode());
+        orderInfo.setOrderNo(IdWorkerUtil.generateOrderNo(Constants.ORDER_NO_TYPE_REORDER));
         orderInfo.setNotifyUrl(ConfigProperties.WXPAY_NOTIFY_URL);
         return orderInfo;
     }

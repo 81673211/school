@@ -68,7 +68,7 @@ public class OrderController extends BaseEasyWebController {
         }
         try {
             ExpressSend sendExpress = expressSendService.getSendExpress(vo.getExpressId());
-            return response.writeSuccess(orderInfoService.createSendOrder(sendExpress));
+            return response.writeSuccess(orderInfoService.createSendReOrder(sendExpress));
         } catch (Exception e) {
             return response.writeFailure("创建订单失败");
         }

@@ -16,6 +16,8 @@ public interface OrderInfoService extends BaseService<OrderInfo, OrderInfoMapper
 
     String createSendOrder(ExpressSend expressSend);
 
+    String createSendReOrder(ExpressSend expressSend);
+
     String createReceiveOrder(Long expressId);
 
     List<OrderInfo> findByExpressReceiveId(Long expressId);
