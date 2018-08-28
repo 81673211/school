@@ -88,7 +88,9 @@ public class ExpressServiceImpl implements ExpressService {
             return;
         }
         //是否全额退款
-        if (orderInfoService.isRefundAll(sendExpress)) {
+        boolean flag = orderInfoService.isRefundAll(sendExpress);
+        log.info("是否退全款：" + flag);
+        if (flag) {
             expressSendService.updateSendExpressStatus(sendExpress.getId(), SendExpressStatusEnum.CANCEL.getFlag());
         }
     }

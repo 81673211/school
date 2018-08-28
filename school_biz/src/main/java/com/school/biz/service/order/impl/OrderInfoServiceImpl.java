@@ -389,7 +389,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
     @Override
     public boolean isRefundAll(ExpressSend expressSend) {
         boolean flag = true;
-
+        log.info("=======检测是否退全款========");
         // 取出订单服务费
         BigDecimal serviceAmt = expressSend.getServiceAmt();
 
@@ -401,7 +401,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
         }
 
         // 查询退款总金额
-        List<RefundOrderInfo> refundOrderInfos = refundOrderInfoMapper.findSuccessRefundOrdersByExpressNo(expressSend.getCode());
+        List<RefundOrderInfo> refundOrderInfos = refundOrderInfoMapper.findSuccessRefundOrdersByExpressId(expressSend.getId());
         BigDecimal refundTotalAmt = new BigDecimal("0");
         for (RefundOrderInfo refundOrderInfo : refundOrderInfos) {
             refundTotalAmt = refundTotalAmt.add(refundOrderInfo.getAmount());
@@ -411,7 +411,6 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
         if (orderTotalAmt.subtract(serviceAmt).compareTo(refundTotalAmt) == 1) {
             flag = false;
         }
-
         return flag;
 
     }

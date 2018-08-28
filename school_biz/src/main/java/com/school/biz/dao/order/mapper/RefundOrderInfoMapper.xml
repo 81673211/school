@@ -214,9 +214,9 @@
   	select * from refund_order_info r where r.status = 0
   </select>
   
-  <select id="findSuccessRefundOrdersByExpressNo" parameterType="java.lang.String">
+  <select id="findSuccessRefundOrdersByExpressId" parameterType="java.lang.Long" resultType="com.school.biz.domain.entity.order.RefundOrderInfo">
   	select * from refund_order_info roi
-  	where roi.express_code = #{expressCode} and roi.status = 1
+  	where roi.express_id = #{expressId} and roi.status = 1
   </select>
   
   <select id="queryPage" resultType="com.school.biz.domain.entity.order.RefundOrderInfo" parameterType="map">
