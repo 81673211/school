@@ -5,8 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <title>个人信息</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <link href="/css/mzui.min.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <link href="/css/mzui.min.css" rel="stylesheet"/>
     <style>
         .profile-haeder {
             position: relative;
@@ -22,7 +22,7 @@
     </style>
 </head>
 <body>
-<input type="hidden" value="${customer.openId}" id="openId" />
+<input type="hidden" value="${customer.openId}" id="openId"/>
 
 
 <div class="profile-haeder shadow">
@@ -83,98 +83,102 @@
 <!-- ZUI 标准版压缩后的 JavaScript 文件 -->
 <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/js/zui.min.js"></script>
 <script>
-  $(document).ready(function () {
-    if ($("#phone").val() != '') {
-      $("#verify_code").hide();
-      $("#phone").attr("readonly", "readonly");
-    }
-    $("#feedback-suc").hide();
-    $("#feedback-err").hide();
-  });
-  $('.getCode').click(function () {
-    if ($(this).html() == '获取验证码') {
-      var phone = $("#phone").val();
-      if (phone == null || phone == '') {
-        $("#feedback-err").html("手机号不能为空");
-        $("#feedback-err").show();
-        $("#feedback-err").fadeOut(5000);
-        return false;
-      }
-      if (!phone.match(/^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/)) {
-        $("#feedback-err").html("手机号格式错误");
-        $("#feedback-err").show();
-        $("#feedback-err").fadeOut(5000);
-        return false;
-      }
-      $.post("/customer/verifyCode", {"phone": phone, "openId": $("#openId").val()}, function (result) {
-        if (result == "1") {
-          var i = 60;
-          var codeNum;
-          setInterval(function () {
-            i--;
-            codeNum = i + "秒";
-            $('.getCode').html(codeNum);
-            if (i < 1) {
-              i = 60;
-              $('.getCode').html('获取验证码');
-            }
-          }, 1000);
+    $(document).ready(function () {
+        if ($("#phone").val() != '') {
+            $("#verify_code").hide();
+            $("#phone").attr("readonly", "readonly");
         }
-      });
-    }
-  });
-  $("#reset").click(function () {
-    $("#feedback-suc").hide();
-    $("#feedback-err").hide();
-    $("#name").val('');
-    $("#email").val('');
-    $("#addr").val('');
-    if ($("#phone").attr("readonly") != 'readonly') {
-      $("#phone").val('');
-      $("#code").val('');
-    }
-  });
-  $("#confirm").click(function () {
-    $("#feedback-suc").hide();
-    $("#feedback-err").hide();
-    var openId = $("#openId").val();
-    var name = $("#name").val();
-    var email = $("#email").val();
-    var addr = $("#addr").val();
-    var phone = '';
-    var code = '';
-    if ($("#phone").attr("readonly") != 'readonly') {
-      phone = $("#phone").val();
-      code = $("#code").val();
-    }
-    var data = {openId: openId};
-    if (name != '') {
-      data.name = name;
-    }
-    if (email != '') {
-      data.email = email;
-    }
-    if (addr != '') {
-      data.addr = addr;
-    }
-    if (phone != '') {
-      data.phone = phone;
-    }
-    if (code != '') {
-      data.code = code;
-    }
-    $.post("/customer/profile", data, function (result) {
-      if (result != "success") {
-        $("#feedback-err").html(result);
-        $("#feedback-err").show();
-        $("#feedback-err").fadeOut(5000);
-      } else {
-        $("#feedback-suc").show();
-        $("#feedback-suc").fadeOut(3000);
-        setTimeout(function(){location.reload();}, 3000)
-      }
+        $("#feedback-suc").hide();
+        $("#feedback-err").hide();
     });
-  });
+    $('.getCode').click(function () {
+        if ($(this).html() == '获取验证码') {
+            var phone = $("#phone").val();
+            if (phone == null || phone == '') {
+                $("#feedback-err").html("手机号不能为空");
+                $("#feedback-err").show();
+                $("#feedback-err").fadeOut(5000);
+                return false;
+            }
+            if (!phone.match(/^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/)) {
+                $("#feedback-err").html("手机号格式错误");
+                $("#feedback-err").show();
+                $("#feedback-err").fadeOut(5000);
+                return false;
+            }
+            $.post("/customer/verifyCode", {"phone": phone, "openId": $("#openId").val()}, function (result) {
+                if (result == "1") {
+                    var i = 60;
+                    var codeNum;
+                    setInterval(function () {
+                        i--;
+                        codeNum = i + "秒";
+                        $('.getCode').html(codeNum);
+                        if (i < 1) {
+                            i = 60;
+                            $('.getCode').html('获取验证码');
+                        }
+                    }, 1000);
+                }
+            });
+        }
+    });
+    $("#reset").click(function () {
+        $("#feedback-suc").hide();
+        $("#feedback-err").hide();
+        $("#name").val('');
+        $("#email").val('');
+        $("#addr").val('');
+        if ($("#phone").attr("readonly") != 'readonly') {
+            $("#phone").val('');
+            $("#code").val('');
+        }
+    });
+    $("#confirm").click(function () {
+        $("#feedback-suc").hide();
+        $("#feedback-err").hide();
+        var openId = $("#openId").val();
+        var name = $("#name").val();
+        var email = $("#email").val();
+        var addr = $("#addr").val();
+        var phone = '';
+        var code = '';
+        if ($("#phone").attr("readonly") != 'readonly') {
+            phone = $("#phone").val();
+            code = $("#code").val();
+        }
+        var data = {openId: openId};
+        if (name != '') {
+            data.name = name;
+        }
+        if (email != '') {
+            data.email = email;
+        }
+        if (addr != '') {
+            data.addr = addr;
+        }
+        if (phone != '') {
+            data.phone = phone;
+        }
+        if (code != '') {
+            data.code = code;
+        }
+        $.post("/customer/profile", data, function (result) {
+            if (result != "success") {
+                $("#feedback-err").html(result);
+                $("#feedback-err").show();
+                $("#feedback-err").fadeOut(5000);
+            } else {
+                $("#feedback-suc").show();
+                $("#feedback-suc").fadeOut(3000);
+                setTimeout(function () {
+                    location.reload();
+                }, 3000)
+            }
+        });
+    });
 </script>
 </body>
+
+<jsp:include page="limit.jsp"/>
 </html>

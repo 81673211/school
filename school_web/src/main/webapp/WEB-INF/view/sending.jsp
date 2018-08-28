@@ -5,8 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <title>我要寄件</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <link href="/css/mzui.min.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <link href="/css/mzui.min.css" rel="stylesheet"/>
 </head>
 <body>
 <input type="hidden" value="${openId}" id="openId">
@@ -44,11 +44,13 @@
             </div>
         </div>
         <div class="control">
-            <label for="receiverAddr">收件人详细地址 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>
+            <label for="receiverAddr">收件人详细地址 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i>
+            </label>
             <input id="receiverAddr" type="text" class="input">
         </div>
         <div class="control">
-            <label for="receiverPhone">收件人手机号 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>
+            <label for="receiverPhone">收件人手机号 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i>
+            </label>
             <input id="receiverPhone" type="text" class="input">
         </div>
 
@@ -274,5 +276,8 @@
     });
 
 </script>
+
 </body>
+
+<jsp:include page="limit.jsp"></jsp:include>
 </html>

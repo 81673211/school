@@ -46,4 +46,7 @@
 <script src="/js/mzui.min.js" />
 
 </body>
+
+
+<jsp:include page="limit.jsp"/>
 </html>
