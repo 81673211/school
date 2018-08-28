@@ -78,15 +78,6 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
     }
 
     @Override
-    public String createReSendOrder(ExpressSend expressSend) {
-        List<OrderInfo> orderInfos = findByExpressSendId(expressSend.getId());
-        if (checkReOrderExpressAlreadyPay(orderInfos)) {
-            return null;
-        }
-        return createSendOrder(expressSend);
-    }
-
-    @Override
     public String createReceiveOrder(Long expressId) {
         List<OrderInfo> orderInfos = findByExpressReceiveId(expressId);
         if (checkExpressAlreadyPay(orderInfos)) {

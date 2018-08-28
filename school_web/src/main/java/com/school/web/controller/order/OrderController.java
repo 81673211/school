@@ -8,12 +8,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.school.biz.domain.entity.express.ExpressSend;
-import com.school.biz.enumeration.DistributionTypeEnum;
 import com.school.biz.service.express.ExpressSendService;
 import com.school.biz.service.order.OrderInfoService;
 import com.school.web.controller.base.BaseEasyWebController;
 import com.school.web.vo.request.OrderCreateVo;
-import com.school.web.vo.response.DataResponse;
 import com.school.web.vo.response.Response;
 
 import lombok.extern.slf4j.Slf4j;
@@ -70,7 +68,7 @@ public class OrderController extends BaseEasyWebController {
         }
         try {
             ExpressSend sendExpress = expressSendService.getSendExpress(vo.getExpressId());
-            return response.writeSuccess(orderInfoService.createReSendOrder(sendExpress));
+            return response.writeSuccess(orderInfoService.createSendOrder(sendExpress));
         } catch (Exception e) {
             return response.writeFailure("创建订单失败");
         }
