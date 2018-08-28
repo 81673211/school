@@ -40,7 +40,6 @@ public class MenuManager {
         if (ConfigProperties.REFRESH_MENU) {
             menuService.create(getMenu());
         }
-        log.info("menu:{}", JSON.toJSONString(menuService.get()));
     }
 
     private Menu getMenu() {
