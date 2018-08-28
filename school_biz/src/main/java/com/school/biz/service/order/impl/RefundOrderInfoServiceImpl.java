@@ -19,7 +19,7 @@ import com.school.biz.service.order.RefundOrderInfoService;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 @Slf4j
 public class RefundOrderInfoServiceImpl extends BaseServiceImpl<RefundOrderInfo, RefundOrderInfoMapper> implements RefundOrderInfoService {
 	

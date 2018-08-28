@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.school.biz.dao.resource.ResourceInfoMapper;
 import com.school.biz.domain.entity.resource.ResourceInfo;
@@ -13,6 +14,7 @@ import com.school.biz.service.base.impl.BaseServiceImpl;
 import com.school.biz.service.resource.ResourceInfoService;
 
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class ResourceInfoServiceImpl extends BaseServiceImpl<ResourceInfo, ResourceInfoMapper> implements ResourceInfoService {
 
 	@Autowired

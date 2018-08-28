@@ -5,6 +5,7 @@ import com.school.biz.enumeration.DistributionTypeEnum;
 import com.school.biz.service.calc.CalcCostService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 
@@ -13,6 +14,7 @@ import java.math.BigDecimal;
  */
 @Service
 @Slf4j
+@Transactional(rollbackFor = Exception.class)
 public class CalcCostServiceImpl implements CalcCostService {
 
     @Override
