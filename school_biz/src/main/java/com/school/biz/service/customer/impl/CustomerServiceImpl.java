@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
  * <br><b>Date:</b> 12/06/2018 15:50
  */
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 @Slf4j
 public class CustomerServiceImpl extends BaseServiceImpl<Customer, CustomerMapper> implements CustomerService {
 

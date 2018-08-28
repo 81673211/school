@@ -19,7 +19,7 @@ import com.school.biz.service.help.SuggestionService;
  * <br><b>Date:</b> 2018/8/20 16:48
  */
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class SuggestionServiceImpl extends BaseServiceImpl<Suggestion, SuggestionMapper>
         implements SuggestionService {
 

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.school.biz.dao.express.ExpressCompanyMapper;
 import com.school.biz.domain.entity.express.ExpressCompany;
@@ -17,6 +18,7 @@ import com.school.biz.service.express.ExpressCompanyService;
  * @author jame
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class ExpressCompanyServiceImpl extends BaseServiceImpl<ExpressCompany, ExpressCompanyMapper>
         implements ExpressCompanyService {
 

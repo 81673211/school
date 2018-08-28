@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.school.biz.dao.security.RoleMapper;
 import com.school.biz.domain.entity.security.Role;
@@ -20,6 +21,7 @@ import com.school.biz.service.security.RoleService;
  * @description   
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class RoleServiceImpl extends BaseServiceImpl<Role, RoleMapper> implements RoleService {
 	@Autowired
 	private RoleMapper roleMapper;

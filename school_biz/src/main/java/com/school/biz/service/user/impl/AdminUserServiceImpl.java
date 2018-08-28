@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.school.biz.util.DigestUtil;
 import com.school.biz.util.MD5Util;
@@ -16,6 +17,7 @@ import com.school.biz.service.base.impl.BaseServiceImpl;
 import com.school.biz.service.user.AdminUserService;
 
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class AdminUserServiceImpl extends BaseServiceImpl<AdminUser, AdminUserMapper> implements AdminUserService {
 
 	@Autowired
