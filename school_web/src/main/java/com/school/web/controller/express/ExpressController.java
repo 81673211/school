@@ -1,13 +1,30 @@
 package com.school.web.controller.express;
 
-import com.school.biz.constant.Constants;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+
 import com.school.biz.domain.entity.customer.Customer;
 import com.school.biz.domain.entity.express.ExpressCompany;
 import com.school.biz.domain.entity.express.ExpressReceive;
 import com.school.biz.domain.entity.express.ExpressSend;
-import com.school.biz.domain.entity.order.OrderInfo;
 import com.school.biz.domain.entity.region.Region;
-import com.school.biz.enumeration.*;
+import com.school.biz.enumeration.DistributionTypeEnum;
+import com.school.biz.enumeration.ExpressTypeEnum;
+import com.school.biz.enumeration.ReceiveExpressStatusEnum;
+import com.school.biz.enumeration.ReceiveExpressTypeEnum;
+import com.school.biz.enumeration.WechatTemplateEnum;
 import com.school.biz.service.calc.CalcCostService;
 import com.school.biz.service.customer.CustomerService;
 import com.school.biz.service.express.ExpressCompanyService;
@@ -25,21 +42,8 @@ import com.school.web.vo.response.DataResponse;
 import com.school.web.vo.response.ReceiveExpressListResponseVo;
 import com.school.web.vo.response.Response;
 import com.school.web.vo.response.SendExpressListResponseVo;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.CollectionUtils;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author jame
@@ -274,31 +278,27 @@ public class ExpressController extends BaseEasyWebController {
         ModelAndView mav = new ModelAndView();
         Customer customer = customerService.getByOpenId(openId);
         String phone = customer.getPhone();
-        if (StringUtils.isBlank(phone)) {
-            mav.setViewName("redirect:/customer/profile?openId=" + openId);
+        String[] split = status.split(",");
+        Integer[] statuses = new Integer[split.length];
+        for (int i = 0; i < split.length; i++) {
+            statuses[i] = Integer.parseInt(split[i]);
+        }
+        List<ExpressReceive> receiveList = expressReceiveService.selectExpressList(statuses, phone);
+        List<ReceiveExpressListResponseVo> receiveExpressListResponseVos = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(receiveList)) {
+            for (ExpressReceive expressReceive : receiveList) {
+                ReceiveExpressListResponseVo vo = new ReceiveExpressListResponseVo();
+                BeanUtils.copyProperties(expressReceive, vo);
+                vo.setDistributionCost(calcCostService.calcReceiveDistributionCost(DistributionTypeEnum.DISTRIBUTION.getFlag()));
+                receiveExpressListResponseVos.add(vo);
+            }
+        }
+        mav.addObject("list", receiveExpressListResponseVos);
+        mav.addObject("openId", openId);
+        if (split.length == 1 && ReceiveExpressStatusEnum.FINISHED.getFlag() == Integer.parseInt(split[0])) {
+            mav.setViewName("received");
         } else {
-            String[] split = status.split(",");
-            Integer[] statuses = new Integer[split.length];
-            for (int i = 0; i < split.length; i++) {
-                statuses[i] = Integer.parseInt(split[i]);
-            }
-            List<ExpressReceive> receiveList = expressReceiveService.selectExpressList(statuses, phone);
-            List<ReceiveExpressListResponseVo> receiveExpressListResponseVos = new ArrayList<>();
-            if (!CollectionUtils.isEmpty(receiveList)) {
-                for (ExpressReceive expressReceive : receiveList) {
-                    ReceiveExpressListResponseVo vo = new ReceiveExpressListResponseVo();
-                    BeanUtils.copyProperties(expressReceive, vo);
-                    vo.setDistributionCost(calcCostService.calcReceiveDistributionCost(DistributionTypeEnum.DISTRIBUTION.getFlag()));
-                    receiveExpressListResponseVos.add(vo);
-                }
-            }
-            mav.addObject("list", receiveExpressListResponseVos);
-            mav.addObject("openId", openId);
-            if (split.length == 1 && ReceiveExpressStatusEnum.FINISHED.getFlag() == Integer.parseInt(split[0])) {
-                mav.setViewName("received");
-            } else {
-                mav.setViewName("receive");
-            }
+            mav.setViewName("receive");
         }
         return mav;
     }
