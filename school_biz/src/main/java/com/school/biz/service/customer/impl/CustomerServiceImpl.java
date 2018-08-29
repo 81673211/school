@@ -84,21 +84,29 @@ public class CustomerServiceImpl extends BaseServiceImpl<Customer, CustomerMappe
     }
 
     @Override
-    public void sendVerifyCode(String phone) {
+    public void sendVerifyCode(String phone, String openId) {
         if (StringUtils.isBlank(phone)) {
             throw new RuntimeException("手机号不能为空");
         }
-        String cacheKey = RedisKeyNS.CACHE_CUSTOMER_PROFILE_VERIFY_CODE + phone;
-        String verifyCode = redisTemplate.opsForValue().get(cacheKey);
-        if (verifyCode != null) {
-            log.info("verify_code:{}, phone:{}", verifyCode, phone);
-            redisTemplate.opsForValue().set(cacheKey, verifyCode, EXPIRE_TIME, TimeUnit.MINUTES);
-            smsService.sendVerifyCode(phone, verifyCode);
+        String repeatSendKey = RedisKeyNS.CACHE_CUSTOMER_PROFILE_VERIFY_CODE_REPEAT + openId;
+        String repeatSendValue = redisTemplate.opsForValue().get(repeatSendKey);
+        if ("send_yet".equals(repeatSendValue)) {
+            log.info("一分钟内不能重复发短信");
+            return;
         } else {
-            verifyCode = VerifyCodeUtil.obtain();
-            log.info("verify_code:{}, phone:{}", verifyCode, phone);
-            redisTemplate.opsForValue().set(cacheKey, verifyCode, EXPIRE_TIME, TimeUnit.MINUTES);
-            smsService.sendVerifyCode(phone, verifyCode);
+            redisTemplate.opsForValue().set(repeatSendKey, "send_yet", 59, TimeUnit.SECONDS);
+            String cacheKey = RedisKeyNS.CACHE_CUSTOMER_PROFILE_VERIFY_CODE + phone;
+            String verifyCode = redisTemplate.opsForValue().get(cacheKey);
+            if (verifyCode != null) {
+                log.info("verify_code:{}, phone:{}", verifyCode, phone);
+                redisTemplate.opsForValue().set(cacheKey, verifyCode, EXPIRE_TIME, TimeUnit.MINUTES);
+                smsService.sendVerifyCode(phone, verifyCode);
+            } else {
+                verifyCode = VerifyCodeUtil.obtain();
+                log.info("verify_code:{}, phone:{}", verifyCode, phone);
+                redisTemplate.opsForValue().set(cacheKey, verifyCode, EXPIRE_TIME, TimeUnit.MINUTES);
+                smsService.sendVerifyCode(phone, verifyCode);
+            }
         }
     }
 

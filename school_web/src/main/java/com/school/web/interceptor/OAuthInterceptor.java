@@ -58,7 +58,9 @@ public class OAuthInterceptor implements HandlerInterceptor {
 
         Customer customer = customerService.getByOpenId(openId);
         String phone = customer.getPhone();
-        if (StringUtils.isBlank(phone) && !"/customer/profile".equals(requestURI)) {
+        if (StringUtils.isBlank(phone) &&
+            !"/customer/profile".equals(requestURI) &&
+            !"/customer/verifyCode".equals(requestURI)) {
             response.sendRedirect("/customer/profile?openId=" + openId);
         }
         return true;

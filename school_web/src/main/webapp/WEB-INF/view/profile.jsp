@@ -98,7 +98,7 @@
                 return false;
             }
             $.post("/customer/verifyCode", {"phone": phone, "openId": $("#openId").val()}, function (result) {
-                if (result == "1") {
+              if (result == "1") {
                     var i = 60;
                     var codeNum;
                     setInterval(function () {
@@ -154,7 +154,7 @@
             if (result != "success") {
               alert(result);
             } else {
-              alert("修改成功");
+              alert("注册成功");
               location.reload();
             }
         });
