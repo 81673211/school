@@ -30,24 +30,14 @@
 <!-- ZUI 标准版压缩后的 JavaScript 文件 -->
 <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/js/zui.min.js"></script>
 <script>
-  $(document).ready(function () {
-    $("#feedback-suc").hide();
-    $("#feedback-err").hide();
-  });
   $("#reset").click(function () {
-    $("#feedback-suc").hide();
-    $("#feedback-err").hide();
     $("#content").val('');
   });
   $("#confirm").click(function () {
-    $("#feedback-suc").hide();
-    $("#feedback-err").hide();
     var openId = $("#openId").val();
     var content = $("#content").val();
     if (content == '') {
-      $("#feedback-err").html("请填写意见或建议");
-      $("#feedback-err").show();
-      $("#feedback-err").fadeOut(3000);
+      alert("请填写意见或建议");
       return;
     }
     var data = {openId: openId, content: content};
