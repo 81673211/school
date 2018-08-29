@@ -66,7 +66,7 @@
                             <c:when test="${item.expressStatus == 0}">
                                 <div>
                                     <button type="button" class="btn btn-sm info outline rounded"
-                                            style="margin-bottom: 5px" onclick="launchPay(${item.id})">配送
+                                            style="width:60px;margin-bottom: 5px" onclick="launchPay(${item.id})">配送
                                     </button>
                                 </div>
                                 <div>
