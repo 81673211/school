@@ -16,4 +16,6 @@ public interface RegionService {
      * @return
      */
     List<Region> selectRegionList(Long parentId);
+
+    List<Region> findAll();
 }

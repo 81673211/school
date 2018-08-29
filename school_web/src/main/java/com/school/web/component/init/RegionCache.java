@@ -1,11 +1,14 @@
 package com.school.web.component.init;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -24,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
  * <br><b>Date:</b> 2018/8/29 20:31
  */
 @Component
+@Lazy(value = false)
 @Slf4j
 public class RegionCache {
 
@@ -35,13 +39,20 @@ public class RegionCache {
     @PostConstruct
     public void init() {
         redisTemplate.delete(RedisKeyNS.CACHE_SEND_EXPRESS_FEE);
-        List<Region> regions = regionService.selectRegionList(0L);
+        List<Region> regions = regionService.findAll();
         boolean empty = CollectionUtils.isEmpty(regions);
         log.info("cache all send_express_fees, region size:{}", empty ? 0 : regions.size());
         if (!empty) {
+            Map<String, BigDecimal> feeMap = new HashMap<>();
             for (Region region : regions) {
-//                redisTemplate.opsForHash().putAll();
+                BigDecimal sfFee = region.getSfFirFee();
+                if (sfFee != null) {
+                    feeMap.put(region.getId() + ":sf", sfFee);
+                    feeMap.put(region.getId() + ":other", region.getOtherFirFee());
+                }
             }
+            redisTemplate.opsForHash().putAll(RedisKeyNS.CACHE_SEND_EXPRESS_FEE, feeMap);
+            log.info("初始化运费缓存成功");
         }
     }
 }

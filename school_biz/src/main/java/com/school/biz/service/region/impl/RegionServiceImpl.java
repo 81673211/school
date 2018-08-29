@@ -28,4 +28,9 @@ public class RegionServiceImpl implements RegionService {
         param.put("parentId", parentId);
         return regionMapper.selectByParams(param);
     }
+
+    @Override
+    public List<Region> findAll() {
+        return regionMapper.findAll();
+    }
 }
