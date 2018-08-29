@@ -155,6 +155,7 @@
               alert(result);
             } else {
               alert("修改成功");
+              location.reload();
             }
         });
     });
