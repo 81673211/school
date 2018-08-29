@@ -91,11 +91,12 @@ public class CustomerServiceImpl extends BaseServiceImpl<Customer, CustomerMappe
         String cacheKey = RedisKeyNS.CACHE_CUSTOMER_PROFILE_VERIFY_CODE + phone;
         String verifyCode = redisTemplate.opsForValue().get(cacheKey);
         if (verifyCode != null) {
+            log.info("verify_code:{}, phone:{}", verifyCode, phone);
             redisTemplate.opsForValue().set(cacheKey, verifyCode, EXPIRE_TIME, TimeUnit.MINUTES);
             smsService.sendVerifyCode(phone, verifyCode);
         } else {
             verifyCode = VerifyCodeUtil.obtain();
-            log.info("verify_code:{}", verifyCode);
+            log.info("verify_code:{}, phone:{}", verifyCode, phone);
             redisTemplate.opsForValue().set(cacheKey, verifyCode, EXPIRE_TIME, TimeUnit.MINUTES);
             smsService.sendVerifyCode(phone, verifyCode);
         }
