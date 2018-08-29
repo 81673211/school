@@ -70,7 +70,7 @@
                                     </button>
                                 </div>
                                 <div>
-                                    <button type="button" class="btn btn-sm primary outline rounded"
+                                    <button type="button" class="btn btn-sm warning outline rounded"
                                             onclick="receiveWay(${item.id},0)">自提
                                     </button>
                                 </div>
