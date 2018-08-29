@@ -85,22 +85,16 @@
             $("#verify_code").hide();
             $("#phone").attr("readonly", "readonly");
         }
-        $("#feedback-suc").hide();
-        $("#feedback-err").hide();
     });
     $('.getCode').click(function () {
         if ($(this).html() == '获取验证码') {
             var phone = $("#phone").val();
             if (phone == null || phone == '') {
-                $("#feedback-err").html("手机号不能为空");
-                $("#feedback-err").show();
-                $("#feedback-err").fadeOut(5000);
+                alert("手机号不能为空");
                 return false;
             }
             if (!phone.match(/^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/)) {
-                $("#feedback-err").html("手机号格式错误");
-                $("#feedback-err").show();
-                $("#feedback-err").fadeOut(5000);
+                alert("手机号格式错误");
                 return false;
             }
             $.post("/customer/verifyCode", {"phone": phone, "openId": $("#openId").val()}, function (result) {
@@ -121,8 +115,6 @@
         }
     });
     $("#reset").click(function () {
-        $("#feedback-suc").hide();
-        $("#feedback-err").hide();
         $("#name").val('');
         $("#email").val('');
         $("#addr").val('');
@@ -132,8 +124,6 @@
         }
     });
     $("#confirm").click(function () {
-        $("#feedback-suc").hide();
-        $("#feedback-err").hide();
         var openId = $("#openId").val();
         var name = $("#name").val();
         var email = $("#email").val();
