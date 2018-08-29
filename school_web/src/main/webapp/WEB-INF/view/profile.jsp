@@ -165,15 +165,17 @@
         }
         $.post("/customer/profile", data, function (result) {
             if (result != "success") {
-                $("#feedback-err").html(result);
-                $("#feedback-err").show();
-                $("#feedback-err").fadeOut(5000);
+                // $("#feedback-err").html(result);
+                // $("#feedback-err").show();
+                // $("#feedback-err").fadeOut(5000);
+                alert(result);
             } else {
-                $("#feedback-suc").show();
-                $("#feedback-suc").fadeOut(3000);
-                setTimeout(function () {
-                    location.reload();
-                }, 3000)
+                // $("#feedback-suc").show();
+                // $("#feedback-suc").fadeOut(3000);
+                // setTimeout(function () {
+                //     location.reload();
+                // }, 3000)
+              alert("修改成功");
             }
         });
     });
