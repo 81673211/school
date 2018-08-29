@@ -43,6 +43,9 @@
                                         <c:when test="${item.expressStatus == 5}">
                                             <label class="label label-sm primary outline rounded">已寄出</label>
                                         </c:when>
+                                        <c:when test="${item.expressStatus == 6}">
+                                            <label class="label label-sm primary outline rounded">已取消</label>
+                                        </c:when>
                                     </c:choose>
                                 </span>
                             </div>
