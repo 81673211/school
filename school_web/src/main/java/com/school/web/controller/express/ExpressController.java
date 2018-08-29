@@ -418,6 +418,7 @@ public class ExpressController extends BaseEasyWebController {
             expressReceive.setCustomerId(customer.getId());
             expressReceive.setExpressWay(DistributionTypeEnum.DISTRIBUTION.getFlag());
             expressReceive.setExpressType(ReceiveExpressTypeEnum.HELP_RECEIVE.getFlag());
+            expressReceive.setReceiverAddr(expressVo.getHelpReceiveAddr());
             String orderNo = expressReceiveService.createHelpReceiveExpress(expressReceive);
             return response.writeSuccess("处理帮我收件成功", orderNo);
         } catch (Exception e) {
