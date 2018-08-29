@@ -25,19 +25,19 @@
                             <span>
                                     <c:choose>
                                         <c:when test="${item.expressStatus == 0}">
-                                            <label class="label label-sm dark outline rounded">代理点已签收</label>
+                                            <label class="label label-sm primary outline rounded">代理点已签收</label>
                                         </c:when>
                                         <c:when test="${item.expressStatus == 1}">
-                                            <label class="label label-sm dark outline rounded">等待自提</label>
+                                            <label class="label label-sm primary outline rounded">等待自提</label>
                                         </c:when>
                                         <c:when test="${item.expressStatus == 2}">
-                                            <label class="label label-sm dark outline rounded">等待入柜</label>
+                                            <label class="label label-sm primary outline rounded">等待入柜</label>
                                         </c:when>
                                         <c:when test="${item.expressStatus == 3}">
-                                            <label class="label label-sm dark outline rounded">快件已入柜</label>
+                                            <label class="label label-sm primary outline rounded">快件已入柜</label>
                                         </c:when>
                                         <c:otherwise>
-                                            <label class="label label-sm dark outline rounded">快件入柜超时</label>
+                                            <label class="label label-sm primary outline rounded">快件入柜超时</label>
                                         </c:otherwise>
                                     </c:choose>
                                 </span>
