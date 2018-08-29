@@ -103,7 +103,6 @@
             return;
           } else {
             var orderNo = result.msg;
-            alert(orderNo);
             window.location.href = "http://www.glove1573.cn/wxpay/pay?orderNo=" + orderNo;
           }
         }
