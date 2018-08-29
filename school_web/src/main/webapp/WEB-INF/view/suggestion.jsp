@@ -25,10 +25,6 @@
     </div>
 </div>
 
-<div class="alert success text-center" id="feedback-suc">提交成功</div>
-<div class="alert warning text-center" id="feedback-err"></div>
-</div>
-
 <!-- ZUI Javascript 依赖 jQuery -->
 <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/lib/jquery/jquery.js"></script>
 <!-- ZUI 标准版压缩后的 JavaScript 文件 -->
@@ -57,15 +53,9 @@
     var data = {openId: openId, content: content};
     $.post("/help/suggestion/push", data, function (result) {
       if (result.status != 200) {
-        $("#feedback-err").html(result.msg);
-        $("#feedback-err").show();
-        $("#feedback-err").fadeOut(3000);
+        alert(result.msg);
       } else {
-        $("#feedback-suc").show();
-        $("#feedback-suc").fadeOut(3000);
-        setTimeout(function () {
-          location.reload();
-        }, 3000);
+        alert("提交成功");
       }
     });
   });

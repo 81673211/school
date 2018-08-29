@@ -75,9 +75,6 @@
     </form>
 </section>
 
-<div class="alert success text-center" style="position: absolute;z-index: 999999" id="feedback-suc">修改成功</div>
-<div class="alert warning text-center" style="position: absolute;z-index: 999999" id="feedback-err"></div>
-
 <!-- ZUI Javascript 依赖 jQuery -->
 <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/lib/jquery/jquery.js"></script>
 <!-- ZUI 标准版压缩后的 JavaScript 文件 -->
@@ -165,16 +162,8 @@
         }
         $.post("/customer/profile", data, function (result) {
             if (result != "success") {
-                // $("#feedback-err").html(result);
-                // $("#feedback-err").show();
-                // $("#feedback-err").fadeOut(5000);
                 alert(result);
             } else {
-                // $("#feedback-suc").show();
-                // $("#feedback-suc").fadeOut(3000);
-                // setTimeout(function () {
-                //     location.reload();
-                // }, 3000)
               alert("修改成功");
             }
         });
