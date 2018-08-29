@@ -21,7 +21,7 @@
                     </jsp:include>
                     <div class="content">
                         <div>
-                            <div class="title inline">
+                            <div class="title inline-block">
                                 <span>${item.code}</span>
                                 <span>
                                     <c:choose>
@@ -72,7 +72,7 @@
                     <div class="pull-right">
                         <c:if test="${item.expressStatus == 3}">
                             <div>
-                                <button type="button" class="btn btn-sm info outline rounded" style="margin-bottom: 5px" onclick="launchPay('${item.id}')">支付差价</button>
+                                <button type="button" class="btn btn-sm info outline rounded" style="margin-bottom: 5px;width: 60px" onclick="launchPay('${item.id}')">支付差价</button>
                             </div>
                         </c:if>
                     </div>

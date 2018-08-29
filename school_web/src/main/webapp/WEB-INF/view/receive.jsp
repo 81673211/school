@@ -19,10 +19,10 @@
                         <jsp:param name="companyId" value="${item.companyId}"/>
                     </jsp:include>
                     <div class="content">
-                        <div>
-                            <div class="title inline">
-                                <span>${item.code}</span>
-                                <span>
+
+                        <div class="title inline">
+                            <span>${item.code}</span>
+                            <span>
                                     <c:choose>
                                         <c:when test="${item.expressStatus == 0}">
                                             <label class="label label-sm dark outline rounded">代理点已签收</label>
@@ -41,24 +41,21 @@
                                         </c:otherwise>
                                     </c:choose>
                                 </span>
-                            </div>
-                            <div>
-                                <small class="muted"><fmt:formatDate value="${item.createdTime}"
-                                                                     pattern="yyyy-MM-dd HH:mm"/></small>
-                            </div>
-                            <div>
-                                <c:choose>
-                                    <c:when test="${item.expressStatus == 0 || item.expressStatus == 1}">
-                                        <small class="muted">如选择配送，需要支付(￥<fmt:formatNumber
-                                                value="${item.distributionCost}" pattern="0.00"/>)
-                                        </small>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <span><br/></span>
-                                    </c:otherwise>
-                                </c:choose>
-                            </div>
-
+                        </div>
+                        <div>
+                            <small class="muted"><fmt:formatDate value="${item.createdTime}" pattern="yyyy-MM-dd HH:mm"/></small>
+                        </div>
+                        <div>
+                            <c:choose>
+                                <c:when test="${item.expressStatus == 0 || item.expressStatus == 1}">
+                                    <small class="muted">如选择配送，需要支付(￥<fmt:formatNumber
+                                            value="${item.distributionCost}" pattern="0.00"/>)
+                                    </small>
+                                </c:when>
+                                <c:otherwise>
+                                    <span><br/></span>
+                                </c:otherwise>
+                            </c:choose>
                         </div>
                     </div>
                     <div class="pull-right">
@@ -66,18 +63,18 @@
                             <c:when test="${item.expressStatus == 0}">
                                 <div>
                                     <button type="button" class="btn btn-sm info outline rounded"
-                                            style="width:60px;margin-bottom: 5px" onclick="launchPay(${item.id})">配送
+                                            style="margin-bottom: 5px;width: 60px" onclick="launchPay(${item.id})">配送
                                     </button>
                                 </div>
                                 <div>
-                                    <button type="button" class="btn btn-sm warning outline rounded"
+                                    <button type="button" class="btn btn-sm warning outline rounded" style="width: 60px"
                                             onclick="receiveWay(${item.id},0)">自提
                                     </button>
                                 </div>
                             </c:when>
                             <c:when test="${item.expressStatus == 1}">
                                 <div>
-                                    <button type="button" class="btn btn-sm info outline rounded"
+                                    <button type="button" class="btn btn-sm info outline rounded" style="width: 60px"
                                             onclick="launchPay(${item.id})">配送
                                     </button>
                                 </div>
