@@ -46,6 +46,7 @@
         alert(result.msg);
       } else {
         alert("提交成功");
+        location.reload();
       }
     });
   });

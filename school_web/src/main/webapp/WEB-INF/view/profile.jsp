@@ -152,7 +152,7 @@
         }
         $.post("/customer/profile", data, function (result) {
             if (result != "success") {
-                alert(result);
+              alert(result);
             } else {
               alert("修改成功");
             }
