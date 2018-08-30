@@ -62,7 +62,7 @@ public class TemplateServiceImpl implements TemplateService {
         if (WechatTemplateEnum.RECEIVE_EXPRESS_ARRIVAL.getType().equals(templateType)) {
             templateData = new ReceiveExpressArrivalTemplateData.Builder()
                     .buildKeyword2(express.getCompanyName())
-                    .buildRemark("快递单号：${code} \r请到待收快件页面选择自提或配送，如有疑问请致电：66776677"
+                    .buildRemark("快递单号：${code} \r请到待收快件页面选择配送或自提"
                                          .replace("${code}", express.getCode())).build();
             template = new Template.Builder()
                     .buildId(templateId)
@@ -80,7 +80,7 @@ public class TemplateServiceImpl implements TemplateService {
             send(template);
         } else if (WechatTemplateEnum.RECEIVE_EXPRESS_FINISH.getType().equals(templateType)) {
             templateData = new ReceiveExpressFinishTemplateData.Builder()
-                    .buildKeyword1("铜锣湾")
+                    .buildKeyword1("四川大学锦江学院学生公寓14栋背面，学生公寓15栋东侧")
                     .buildKeyword2(express.getCode())
                     .build();
             template = new Template.Builder()
