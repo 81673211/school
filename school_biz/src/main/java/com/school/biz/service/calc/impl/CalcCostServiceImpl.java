@@ -20,7 +20,7 @@ public class CalcCostServiceImpl implements CalcCostService {
     @Override
     public BigDecimal calcReceiveDistributionCost(Integer expressWay) {
         if (expressWay.equals(DistributionTypeEnum.DISTRIBUTION.getFlag())) {
-            return BigDecimal.valueOf(0.2);
+            return BigDecimal.valueOf(1);
         } else {
             return BigDecimal.ZERO;
         }
@@ -29,7 +29,7 @@ public class CalcCostServiceImpl implements CalcCostService {
     @Override
     public BigDecimal calcSendDistributionCost(Integer expressWay) {
         if (expressWay.equals(DistributionTypeEnum.DISTRIBUTION.getFlag())) {
-            return BigDecimal.valueOf(0.1);
+            return BigDecimal.valueOf(1.5);
         } else {
             return BigDecimal.ZERO;
         }
@@ -38,5 +38,10 @@ public class CalcCostServiceImpl implements CalcCostService {
     @Override
     public BigDecimal calcSendTransportCost(ExpressSend expressSend) {
         return BigDecimal.valueOf(0.01);
+    }
+
+    @Override
+    public BigDecimal calcHelpReceiveDistributionCost() {
+        return BigDecimal.valueOf(1.5);
     }
 }

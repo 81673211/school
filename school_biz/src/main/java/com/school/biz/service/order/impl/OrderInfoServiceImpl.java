@@ -30,7 +30,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
@@ -150,7 +149,11 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
         } else if (express instanceof ExpressReceive) {
             ExpressReceive expressReceive = (ExpressReceive) express;
             orderInfo.setExpressType(ExpressTypeEnum.RECEIVE.getFlag());
-            orderInfo.setAmount(calcCostService.calcReceiveDistributionCost(DistributionTypeEnum.DISTRIBUTION.getFlag()));
+            if (express.getExpressType().equals(ReceiveExpressTypeEnum.HELP_RECEIVE.getFlag())) {
+                orderInfo.setAmount(calcCostService.calcHelpReceiveDistributionCost());
+            } else {
+                orderInfo.setAmount(calcCostService.calcReceiveDistributionCost(DistributionTypeEnum.DISTRIBUTION.getFlag()));
+            }
             orderInfo.setTradeSummary("收件服务费");
         } else {
             String errorMsg = "error express type.";
@@ -373,14 +376,14 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
      */
     @Override
     public void reOrder(HttpServletRequest request, Long expressSendId, BigDecimal reOrderAmt) throws Exception {
-    	ExpressSend expressSend = expressSendMapper.selectByPrimaryKey(expressSendId);
-		if(expressSend == null){
-			throw new Exception("订单号不存在");
-		}
-		// 更改快递状态为等待补单支付
-		expressSend.setReOrderAmt(reOrderAmt);
-		expressSend.setExpressStatus(SendExpressStatusEnum.SUPPLEMENT.getFlag());
-		expressSendService.saveOrUpdate(expressSend);
+        ExpressSend expressSend = expressSendMapper.selectByPrimaryKey(expressSendId);
+        if (expressSend == null) {
+            throw new Exception("订单号不存在");
+        }
+        // 更改快递状态为等待补单支付
+        expressSend.setReOrderAmt(reOrderAmt);
+        expressSend.setExpressStatus(SendExpressStatusEnum.SUPPLEMENT.getFlag());
+        expressSendService.saveOrUpdate(expressSend);
     }
 
     /**

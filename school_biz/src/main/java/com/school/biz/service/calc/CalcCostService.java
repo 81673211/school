@@ -20,6 +20,13 @@ public interface CalcCostService {
     BigDecimal calcReceiveDistributionCost(Integer expressWay);
 
     /**
+     * 计算帮我收件类型的配送费用
+     *
+     * @return
+     */
+    BigDecimal calcHelpReceiveDistributionCost();
+
+    /**
      * 计算寄件类型的配送费用
      *
      * @param expressWay
