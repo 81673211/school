@@ -30,6 +30,15 @@
 <!-- ZUI 标准版压缩后的 JavaScript 文件 -->
 <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/js/zui.min.js"></script>
 <script>
+
+  window.alert = function(name){
+    var iframe = document.createElement("IFRAME");
+    iframe.style.display="none";
+    iframe.setAttribute("src", 'data:text/plain,');
+    document.documentElement.appendChild(iframe);
+    window.frames[0].window.alert(name);
+    iframe.parentNode.removeChild(iframe);
+  };
   $("#reset").click(function () {
     $("#content").val('');
   });

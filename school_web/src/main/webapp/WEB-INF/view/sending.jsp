@@ -109,6 +109,16 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/js/zui.min.js"></script>
 
 <script>
+
+  window.alert = function(name){
+    var iframe = document.createElement("IFRAME");
+    iframe.style.display="none";
+    iframe.setAttribute("src", 'data:text/plain,');
+    document.documentElement.appendChild(iframe);
+    window.frames[0].window.alert(name);
+    iframe.parentNode.removeChild(iframe);
+  };
+
     function change(e, id) {
         if (id == 'city') {
             $("#area").html("<option value=''>[请选择区/县]</option>");
