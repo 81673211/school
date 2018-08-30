@@ -38,7 +38,7 @@
                     </select>
                 </div>
                 <div class="select" style="width: 30%">
-                    <select id="area" name="area">
+                    <select id="area" name="area" onchange="calcAmount();">
                         <option value="">[请选择区/县]</option>
                     </select>
                 </div>
@@ -80,7 +80,7 @@
         <div class="control">
             <label for="expressWay">选择快件类型<i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>
             <div class="select">
-                <select id="expressType" name="expressType" onchange="calcAmount();">
+                <select id="expressType" name="expressType">
                     <option value="">请选择快件类型</option>
                     <option value="0">其他</option>
                     <option value="1">文件</option>
@@ -155,10 +155,6 @@
 
     function calcAmount() {
         var openId = $("#openId").val();
-        var expressWay = $("#expressWay").val();
-        var data = {openId: openId};
-        var receiverAddr = $("#receiverAddr").val();
-        var companyId = $("#company").val();
         var receiverProvinceId = $("#province").val();
         var receiverCityId = $("#city").val();
         var receiverDistrictId = $("#area").val();
@@ -174,21 +170,6 @@
         }
         if (receiverDistrictId != '') {
             data.receiverDistrictId = receiverDistrictId;
-        } else {
-            return false;
-        }
-        if (receiverAddr != '') {
-            data.receiverAddr = receiverAddr;
-        } else {
-            return false;
-        }
-        if (companyId != '') {
-            data.companyId = companyId;
-        } else {
-            return false;
-        }
-        if (expressWay != '') {
-            data.expressWay = expressWay;
         } else {
             return false;
         }
