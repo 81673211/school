@@ -99,7 +99,7 @@
 
         <div class="control text-center">
             <span id="confirm">
-                <button type="button" class="btn primary">提交</button>
+                <button type="button" class="btn primary" disabled="disabled">提交</button>
             </span>
         </div>
     </form>
