@@ -93,7 +93,7 @@
         </div>
 
         <div class="text-right" style="margin-top: 20px; margin-bottom: 20px">
-            ￥预收费:<span class="price" id="price">0.00</span>&nbsp;&nbsp;&nbsp;￥服务费:<span class="price" id="serviceAmt">0.00</span>元
+            ￥首重预收运费:<span class="price" id="price">0.00</span>&nbsp;&nbsp;&nbsp;￥服务费:<span class="price" id="serviceAmt">0.00</span>元
         </div>
 
         <div class="control text-center">
