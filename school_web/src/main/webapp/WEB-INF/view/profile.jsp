@@ -20,6 +20,12 @@
             padding: 1.5rem
         }
     </style>
+
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/lib/jquery/jquery.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/js/zui.min.js"></script>
+    <script src="../../js/limit.js"></script>
+
 </head>
 <body>
 <input type="hidden" value="${customer.openId}" id="openId"/>
@@ -171,5 +177,4 @@
 </script>
 </body>
 
-<jsp:include page="limit.jsp"/>
 </html>

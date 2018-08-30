@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +8,12 @@
     <title>我要寄件</title>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <link href="/css/mzui.min.css" rel="stylesheet"/>
+
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/lib/jquery/jquery.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/js/zui.min.js"></script>
+    <script src="../../js/limit.js"></script>
+
 </head>
 <body>
 <input type="hidden" value="${openId}" id="openId">
@@ -56,14 +63,14 @@
         </div>
 
         <%--<div class="control">--%>
-            <%--<label for="company">选择快递公司 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>--%>
-            <%--<div class="select">--%>
-                <%--<select id="company" name="company">--%>
-                    <%--<option value="">请选择快递公司</option>--%>
-                    <%--<option value="2">顺丰</option>--%>
-                    <%--<option value="1">其它</option>--%>
-                <%--</select>--%>
-            <%--</div>--%>
+        <%--<label for="company">选择快递公司 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>--%>
+        <%--<div class="select">--%>
+        <%--<select id="company" name="company">--%>
+        <%--<option value="">请选择快递公司</option>--%>
+        <%--<option value="2">顺丰</option>--%>
+        <%--<option value="1">其它</option>--%>
+        <%--</select>--%>
+        <%--</div>--%>
         <%--</div>--%>
 
         <div class="control">
@@ -94,7 +101,8 @@
         </div>
 
         <div class="text-right" style="margin-top: 20px; margin-bottom: 20px">
-            ￥首重预收运费:<span class="price" id="price">0.00</span>&nbsp;&nbsp;&nbsp;￥服务费:<span class="price" id="serviceAmt">0.00</span>元
+            ￥首重预收运费:<span class="price" id="price">0.00</span>&nbsp;&nbsp;&nbsp;￥服务费:<span class="price"
+                                                                                           id="serviceAmt">0.00</span>元
         </div>
 
         <div class="control text-center">
@@ -105,19 +113,16 @@
     </form>
 </section>
 
-<script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/lib/jquery/jquery.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/js/zui.min.js"></script>
-
 <script>
 
-  window.alert = function(name){
-    var iframe = document.createElement("IFRAME");
-    iframe.style.display="none";
-    iframe.setAttribute("src", 'data:text/plain,');
-    document.documentElement.appendChild(iframe);
-    window.frames[0].window.alert(name);
-    iframe.parentNode.removeChild(iframe);
-  };
+    window.alert = function (name) {
+        var iframe = document.createElement("IFRAME");
+        iframe.style.display = "none";
+        iframe.setAttribute("src", 'data:text/plain,');
+        document.documentElement.appendChild(iframe);
+        window.frames[0].window.alert(name);
+        iframe.parentNode.removeChild(iframe);
+    };
 
     function change(e, id) {
         if (id == 'city') {
@@ -276,6 +281,4 @@
 </script>
 
 </body>
-
-<jsp:include page="limit.jsp"></jsp:include>
 </html>

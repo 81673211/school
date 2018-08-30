@@ -7,6 +7,12 @@
     <title>意见及建议</title>
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <link href="/css/mzui.min.css" rel="stylesheet" />
+
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/lib/jquery/jquery.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/js/zui.min.js"></script>
+    <script src="../../js/limit.js"></script>
+
 </head>
 <body>
 <input type="hidden" value="${openId}" id="openId" />
@@ -62,6 +68,4 @@
 </script>
 </body>
 
-
-<jsp:include page="limit.jsp"/>
 </html>
