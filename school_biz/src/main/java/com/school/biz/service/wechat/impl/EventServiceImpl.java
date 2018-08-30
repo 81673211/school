@@ -52,7 +52,7 @@ public class EventServiceImpl implements EventService {
                 Item item = new Item();
                 item.setTitle("使用须知");
                 item.setDescription("手把手告诉您怎么使用一二三速递的贴心服务");
-                item.setPicUrl("http://www.glove1573.cn/img/note.jpeg");
+                item.setPicUrl("http://www.glove1573.cn/img/note_head.jpeg");
                 item.setUrl("http://www.glove1573.cn/note.html");
                 items.add(item);
                 newsMessage.setArticles(items);
