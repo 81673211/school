@@ -163,7 +163,6 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
     @Override
     public void updateReceiveExpress(Long id, Integer status, Integer expressWay) {
         ExpressReceive expressReceive = new ExpressReceive();
-        ;
         expressReceive.setId(id);
         expressReceive.setExpressStatus(status);
         expressReceive.setExpressWay(expressWay);
