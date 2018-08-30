@@ -278,6 +278,11 @@ public class ExpressController extends BaseEasyWebController {
         ModelAndView mav = new ModelAndView();
         Customer customer = customerService.getByOpenId(openId);
         String phone = customer.getPhone();
+        if (StringUtils.isBlank(phone)) {
+            mav.setViewName("redirect:/customer/profile?openId=" + openId);
+            return mav;
+        }
+
         String[] split = status.split(",");
         Integer[] statuses = new Integer[split.length];
         for (int i = 0; i < split.length; i++) {
@@ -314,6 +319,13 @@ public class ExpressController extends BaseEasyWebController {
                                           @RequestParam(value = "openId") String openId) {
         ModelAndView modelAndView = new ModelAndView();
         try {
+            Customer customer = customerService.getByOpenId(openId);
+            String phone = customer.getPhone();
+            if (StringUtils.isBlank(phone)) {
+                modelAndView.setViewName("redirect:/customer/profile?openId=" + openId);
+                return modelAndView;
+            }
+
             Integer[] statuses = null;
             if (StringUtils.isNotBlank(status)) {
                 String[] split = status.split(",");
@@ -363,7 +375,14 @@ public class ExpressController extends BaseEasyWebController {
     @RequestMapping(value = "/sending", method = RequestMethod.GET)
     public ModelAndView sending(@RequestParam(value = "openId") String openId) {
         ModelAndView modelAndView = new ModelAndView();
+
         try {
+            Customer customer = customerService.getByOpenId(openId);
+            String phone = customer.getPhone();
+            if (StringUtils.isBlank(phone)) {
+                modelAndView.setViewName("redirect:/customer/profile?openId=" + openId);
+                return modelAndView;
+            }
             List<Region> regionList = regionService.selectRegionList(null);
             modelAndView.addObject("openId", openId);
             modelAndView.addObject("regionList", regionList);
@@ -385,6 +404,12 @@ public class ExpressController extends BaseEasyWebController {
     public ModelAndView helpReceiveExpress(@RequestParam(value = "openId") String openId) {
         ModelAndView modelAndView = new ModelAndView();
         try {
+            Customer customer = customerService.getByOpenId(openId);
+            String phone = customer.getPhone();
+            if (StringUtils.isBlank(phone)) {
+                modelAndView.setViewName("redirect:/customer/profile?openId=" + openId);
+                return modelAndView;
+            }
             List<ExpressCompany> companyList = expressCompanyService.findAll();
             modelAndView.addObject("openId", openId);
             modelAndView.addObject("companyList", companyList);

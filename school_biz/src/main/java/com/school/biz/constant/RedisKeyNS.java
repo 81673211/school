@@ -22,4 +22,6 @@ public final class RedisKeyNS {
     public static final String CACHE_NAMESPACE_SUGGESTION = "redis:suggestion:";
 
     public static final String CACHE_SEND_EXPRESS_FEE = "redis:send_express_fee";
+
+    public static final String CACHE_REGION_CHILDREN = "redis:region:children:";
 }

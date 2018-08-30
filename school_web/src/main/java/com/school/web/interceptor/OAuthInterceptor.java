@@ -12,7 +12,6 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.school.biz.domain.entity.customer.Customer;
 import com.school.biz.service.customer.CustomerService;
 import com.school.biz.service.wechat.OauthService;
 
@@ -55,14 +54,6 @@ public class OAuthInterceptor implements HandlerInterceptor {
             return false;
         }
         handleAuthResult(oauthService.check(openId), request, response);
-
-        Customer customer = customerService.getByOpenId(openId);
-        String phone = customer.getPhone();
-        if (StringUtils.isBlank(phone) &&
-            !"/customer/profile".equals(requestURI) &&
-            !"/customer/verifyCode".equals(requestURI)) {
-            response.sendRedirect("/customer/profile?openId=" + openId);
-        }
         return true;
     }
 
