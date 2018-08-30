@@ -3,7 +3,6 @@
  */
 
 $(document).ready(function () {
-    alert(1);
     var ua = navigator.userAgent.toLowerCase();
     var isWeixin = ua.indexOf('micromessenger') != -1;
     var isWP = ua.indexOf('Windows Phone') != -1;
