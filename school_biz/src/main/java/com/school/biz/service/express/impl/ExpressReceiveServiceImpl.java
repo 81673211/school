@@ -13,6 +13,7 @@ import com.school.biz.domain.entity.region.Region;
 import com.school.biz.enumeration.DistributionTypeEnum;
 import com.school.biz.enumeration.ExpressTypeEnum;
 import com.school.biz.enumeration.ReceiveExpressStatusEnum;
+import com.school.biz.enumeration.ReceiveExpressTypeEnum;
 import com.school.biz.exception.ExpressException;
 import com.school.biz.service.base.impl.BaseServiceImpl;
 import com.school.biz.service.calc.CalcCostService;
@@ -162,10 +163,15 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
     @Override
     public void updateReceiveExpress(Long id, Integer status, Integer expressWay) {
         ExpressReceive expressReceive = new ExpressReceive();
+        ;
         expressReceive.setId(id);
         expressReceive.setExpressStatus(status);
         expressReceive.setExpressWay(expressWay);
-        expressReceive.setServiceAmt(calcCostService.calcReceiveDistributionCost(expressWay));
+        if (expressReceiveMapper.selectByPrimaryKey(id).getExpressType().equals(ReceiveExpressTypeEnum.HELP_RECEIVE.getFlag())) {
+            expressReceive.setServiceAmt(calcCostService.calcHelpReceiveDistributionCost());
+        } else {
+            expressReceive.setServiceAmt(calcCostService.calcReceiveDistributionCost(expressWay));
+        }
         int count = expressReceiveMapper.updateByPrimaryKeySelective(expressReceive);
         if (count <= 0) {
             String msg =
