@@ -171,6 +171,7 @@
         if (receiverDistrictId != '') {
             data.receiverDistrictId = receiverDistrictId;
         } else {
+            $("#price").html("0.00");
             return false;
         }
         $.get("/calc/0", data, function (result) {
