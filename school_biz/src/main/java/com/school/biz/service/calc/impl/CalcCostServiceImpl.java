@@ -37,7 +37,7 @@ public class CalcCostServiceImpl implements CalcCostService {
 
     @Override
     public BigDecimal calcSendTransportCost(ExpressSend expressSend) {
-        return BigDecimal.valueOf(10.0);
+        return BigDecimal.valueOf(12.0);
     }
 
     @Override

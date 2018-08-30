@@ -10,6 +10,7 @@
 </head>
 <body>
 <input type="hidden" value="${openId}" id="openId">
+<input type="hidden" value="1" id="company">
 
 
 <section class="section">
@@ -54,16 +55,16 @@
             <input id="receiverPhone" type="text" class="input">
         </div>
 
-        <div class="control">
-            <label for="company">选择快递公司 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>
-            <div class="select">
-                <select id="company" name="company">
-                    <option value="">请选择快递公司</option>
-                    <option value="2">顺丰</option>
-                    <option value="1">其它</option>
-                </select>
-            </div>
-        </div>
+        <%--<div class="control">--%>
+            <%--<label for="company">选择快递公司 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>--%>
+            <%--<div class="select">--%>
+                <%--<select id="company" name="company">--%>
+                    <%--<option value="">请选择快递公司</option>--%>
+                    <%--<option value="2">顺丰</option>--%>
+                    <%--<option value="1">其它</option>--%>
+                <%--</select>--%>
+            <%--</div>--%>
+        <%--</div>--%>
 
         <div class="control">
             <label for="expressWay">选择寄件方式 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>
