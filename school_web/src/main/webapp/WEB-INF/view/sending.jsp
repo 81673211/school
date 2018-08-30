@@ -127,6 +127,7 @@
         $.get("/region/list", {"parentId": e.value}, function (result) {
             if (id == 'city') {
                 html += "<option value=''>[请选择市]</option>";
+                $("#price").html("0.00");
             } else {
                 html += "<option value=''>[请选择区/县]</option>";
             }
@@ -155,9 +156,11 @@
 
     function calcAmount() {
         var openId = $("#openId").val();
+        var data = {openId: openId};
         var receiverProvinceId = $("#province").val();
         var receiverCityId = $("#city").val();
         var receiverDistrictId = $("#area").val();
+//        var companyId = $("#company").val();
         if (receiverProvinceId != '') {
             data.receiverProvinceId = receiverProvinceId;
         } else {
@@ -174,6 +177,9 @@
             $("#price").html("0.00");
             return false;
         }
+//        if (companyId != '') {
+//            data.companyId = companyId;
+//        }
         $.get("/calc/0", data, function (result) {
             if (result.status != 200) {
                 alert(result.msg);
