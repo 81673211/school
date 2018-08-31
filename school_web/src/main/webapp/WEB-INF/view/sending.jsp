@@ -134,6 +134,7 @@
                 $("#price").html("0.00");
             } else {
                 html += "<option value=''>[请选择区/县]</option>";
+                $("#price").html("0.00");
             }
             $.each(result.data, function (index, item) {
                 html += "<option value='" + item.id + "'>" + item.areaName + "</option>";
