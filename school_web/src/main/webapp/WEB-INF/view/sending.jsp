@@ -17,7 +17,6 @@
 </head>
 <body>
 <input type="hidden" value="${openId}" id="openId">
-<input type="hidden" value="1" id="company">
 
 
 <section class="section">
@@ -62,16 +61,16 @@
             <input id="receiverPhone" type="text" class="input">
         </div>
 
-        <%--<div class="control">--%>
-        <%--<label for="company">选择快递公司 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>--%>
-        <%--<div class="select">--%>
-        <%--<select id="company" name="company">--%>
-        <%--<option value="">请选择快递公司</option>--%>
-        <%--<option value="2">顺丰</option>--%>
-        <%--<option value="1">其它</option>--%>
-        <%--</select>--%>
-        <%--</div>--%>
-        <%--</div>--%>
+        <div class="control">
+            <label for="company">选择快递公司 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>
+            <div class="select">
+                <select id="company" name="company" onchange="calcAmount();">
+                    <option value="">请选择快递公司</option>
+                    <option value="2">顺丰</option>
+                    <option value="1">其它</option>
+                </select>
+            </div>
+        </div>
 
         <div class="control">
             <label for="expressWay">选择寄件方式 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>
@@ -165,7 +164,7 @@
         var receiverProvinceId = $("#province").val();
         var receiverCityId = $("#city").val();
         var receiverDistrictId = $("#area").val();
-//        var companyId = $("#company").val();
+       var companyId = $("#company").val();
         if (receiverProvinceId != '') {
             data.receiverProvinceId = receiverProvinceId;
         } else {
@@ -182,9 +181,11 @@
             $("#price").html("0.00");
             return false;
         }
-//        if (companyId != '') {
-//            data.companyId = companyId;
-//        }
+       if (companyId != '') {
+           data.companyId = companyId;
+       } else {
+          return false;
+       }
         $.get("/calc/0", data, function (result) {
             if (result.status != 200) {
                 alert(result.msg);

@@ -383,7 +383,7 @@ public class ExpressController extends BaseEasyWebController {
                 modelAndView.setViewName("redirect:/customer/profile?openId=" + openId);
                 return modelAndView;
             }
-            List<Region> regionList = regionService.selectRegionList(null);
+            List<Region> regionList = regionService.selectRegionList(0L);
             modelAndView.addObject("openId", openId);
             modelAndView.addObject("regionList", regionList);
             modelAndView.setViewName("sending");

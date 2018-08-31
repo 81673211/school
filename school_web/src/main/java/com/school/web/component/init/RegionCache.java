@@ -1,8 +1,6 @@
 package com.school.web.component.init;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +14,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import com.alibaba.fastjson.JSON;
 import com.school.biz.constant.RedisKeyNS;
 import com.school.biz.domain.entity.region.Region;
 import com.school.biz.service.region.RegionService;
@@ -31,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
  * <br><b>Date:</b> 2018/8/29 20:31
  */
 @Component
-@Lazy(value = true)
+@Lazy(value = false)
 @Slf4j
 public class RegionCache {
 
@@ -44,66 +41,16 @@ public class RegionCache {
     public void init() {
         List<Region> regions = regionService.findAll();
         long start = System.currentTimeMillis();
-        cacheRegion(regions);
-        log.info("region cost:{}", System.currentTimeMillis() - start);
+        flushRegion();
         cacheFee(regions);
+        log.info("region cost:{}", System.currentTimeMillis() - start);
     }
 
-    private void cacheRegion(List<Region> regions) {
+
+    private void flushRegion() {
         Set<String> keys = redisTemplate.keys(RedisKeyNS.CACHE_REGION_CHILDREN + "*");
         if (!CollectionUtils.isEmpty(keys)) {
             redisTemplate.delete(keys);
-        }
-
-
-        List<Region> tempRegions = new ArrayList<>(regions);
-        //缓存省
-        List<String> provinces = new ArrayList<>();
-        List<Long> provinceIds = new ArrayList<>();
-
-        for (int i = tempRegions.size() - 1; i >= 0; i--) {
-            Region region = tempRegions.get(i);
-            if (region.getParentId() == 0) {
-                provinces.add(JSON.toJSONString(region));
-                provinceIds.add(region.getId());
-                tempRegions.remove(i);
-            }
-        }
-        String regionProvinceKey = RedisKeyNS.CACHE_REGION_CHILDREN + "0";
-        redisTemplate.opsForList().rightPushAll(regionProvinceKey, provinces.toArray(new String[] {}));
-
-        //缓存市
-        List<String> cities = new ArrayList<>();
-        List<Long> cityIds = new ArrayList<>();
-
-        for (Long provinceId : provinceIds) {
-            for (int i = tempRegions.size() - 1; i >= 0; i--) {
-                Region region = tempRegions.get(i);
-                if (region.getParentId().equals(provinceId)) {
-                    cities.add(JSON.toJSONString(region));
-                    cityIds.add(region.getId());
-                    tempRegions.remove(i);
-                }
-            }
-            String regionCityKey = RedisKeyNS.CACHE_REGION_CHILDREN + provinceId;
-            redisTemplate.opsForList().rightPushAll(regionCityKey, cities.toArray(new String[] {}));
-            cities = new ArrayList<>();
-        }
-
-        //缓存区县
-        List<String> districts = new ArrayList<>();
-
-        for (Long cityId : cityIds) {
-            for (int i = tempRegions.size() - 1; i >= 0 ; i--) {
-                Region region = tempRegions.get(i);
-                if (region.getParentId().equals(cityId)) {
-                    districts.add(JSON.toJSONString(region));
-                    tempRegions.remove(i);
-                }
-            }
-            String regionDistrictKey = RedisKeyNS.CACHE_REGION_CHILDREN + cityId;
-            redisTemplate.opsForList().rightPushAll(regionDistrictKey, districts.toArray(new String[] {}));
-            districts = new ArrayList<>();
         }
     }
 
