@@ -11,5 +11,6 @@
     <c:when test="${param.companyId == 8}"><div class="avatar red-pale circle">百</div></c:when>
     <c:when test="${param.companyId == 9}"><div class="avatar blue circle">天</div></c:when>
     <c:when test="${param.companyId == 10}"><div class="avatar green circle">邮</div></c:when>
+    <c:when test="${param.companyId == 11}"><div class="avatar red circle">京</div></c:when>
     <c:otherwise><div class="avatar warning circle">?</div></c:otherwise>
 </c:choose>
