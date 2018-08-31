@@ -14,14 +14,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
 import com.school.biz.constant.ConstantUrl;
-import com.school.biz.domain.bo.wechat.template.ReceiveExpressArrivalTemplateData;
-import com.school.biz.domain.bo.wechat.template.Template;
-import com.school.biz.domain.bo.wechat.template.TemplateData;
 import com.school.biz.domain.entity.customer.Customer;
 import com.school.biz.domain.entity.express.ExpressCompany;
 import com.school.biz.domain.entity.express.ExpressReceive;
 import com.school.biz.enumeration.ExpressTypeEnum;
 import com.school.biz.enumeration.ReceiveExpressStatusEnum;
+import com.school.biz.enumeration.ReceiveExpressTypeEnum;
 import com.school.biz.enumeration.WechatTemplateEnum;
 import com.school.biz.exception.FuBusinessException;
 import com.school.biz.service.customer.CustomerService;
@@ -66,6 +64,7 @@ public class ExpressReceiveController extends BaseEasyWebController {
             List<ExpressReceive> list = expressReceiveService.queryPage(searchParams);
             mav.addObject("listData", JSON.toJSON(list));
             mav.addObject("expressReceiveStatusMap", JSON.toJSON(ReceiveExpressStatusEnum.getAllStatusEnum()));
+            mav.addObject("expressTypeMap", JSON.toJSON(ReceiveExpressTypeEnum.getAllTypeEnum()));
             mav.addObject(PAGE_PARAM_PAGECOUNT, pageInfo.getTotalPage());
             mav.addObject(PAGE_PARAM_TOTALCOUNT, pageInfo.getTotalRecord());
 

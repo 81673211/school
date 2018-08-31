@@ -11,6 +11,7 @@
           $id:'expressReceiveManage',
           data:${listData},
           expressReceiveStatusMap:${expressReceiveStatusMap},
+          expressTypeMap:${expressTypeMap},
           inputStatus:"${searchParams.status}",
           inputText:"${searchParams.keyword}",
           methods:{
@@ -57,9 +58,7 @@
                     <tr class="text-c">
                         <th width="25">编号</th>
                         <th width="100">快递单号</th>
-                        <th width="50">寄件人姓名</th>
-                        <th width="50">寄件人电话</th>
-                        <th width="100">寄件人地址</th>
+                        <th width="50">类型</th>
                         <th width="50">收件人姓名</th>
                         <th width="50">收件人电话</th>
                         <th width="100">收件人地址</th>
@@ -72,9 +71,7 @@
                     <tr class="text-c" :for="index,el in @data">
                         <td>{{index+1}}</td>
                         <td>{{el.code}}</td>
-                        <td>{{el.senderName}}</td>
-                        <td>{{el.senderPhone}}</td>
-                        <td>{{el.senderAddr}}</td>
+                        <td>{{@expressTypeMap[el.expressType]}}</td>
                         <td>{{el.receiverName}}</td>
                         <td>{{el.receiverPhone}}</td>
                         <td>{{el.receiverAddr}}</td>

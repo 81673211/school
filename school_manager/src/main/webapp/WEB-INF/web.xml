@@ -15,7 +15,7 @@
 	</context-param>
 	<context-param>
 		<param-name>spring.profiles.default</param-name>
-		<param-value>development</param-value>
+		<param-value>production</param-value>
 	</context-param>
 	
 	<!--Spring项目的入口，容器加载时，自动装配ApplicationContext的配置信息  -->
