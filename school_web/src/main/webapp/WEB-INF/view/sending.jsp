@@ -105,8 +105,8 @@
         </div>
 
         <div class="control text-center">
-            <span id="confirm">
-                <button type="button" class="btn primary" disabled="disabled">提交</button>
+            <span>
+                <button id="confirm" type="button" class="btn primary" disabled="disabled">提交</button>
             </span>
         </div>
     </form>
@@ -165,7 +165,7 @@
         var receiverProvinceId = $("#province").val();
         var receiverCityId = $("#city").val();
         var receiverDistrictId = $("#area").val();
-       var companyId = $("#company").val();
+        var companyId = $("#company").val();
         if (receiverProvinceId != '') {
             data.receiverProvinceId = receiverProvinceId;
         } else {
@@ -182,12 +182,12 @@
             $("#price").html("0.00");
             return false;
         }
-       if (companyId != '') {
-           data.companyId = companyId;
-       } else {
-         $("#price").html("0.00");
-          return false;
-       }
+        if (companyId != '') {
+            data.companyId = companyId;
+        } else {
+            $("#price").html("0.00");
+            return false;
+        }
         $.get("/calc/0", data, function (result) {
             if (result.status != 200) {
                 alert(result.msg);
