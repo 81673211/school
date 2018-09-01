@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -60,5 +61,20 @@ public class RegionServiceImpl implements RegionService {
     @Override
     public List<Region> findAll() {
         return regionMapper.findAll();
+    }
+
+    @Override
+    public Region get(Long id) {
+        Region result;
+        String cacheKey = RedisKeyNS.CACHE_REGION_ID + id;
+        String cacheVal = redisTemplate.opsForValue().get(cacheKey);
+        if (StringUtils.isBlank(cacheVal)) {
+            Region region = (Region) regionMapper.selectByPrimaryKey(id);
+            redisTemplate.opsForValue().set(cacheKey, JSON.toJSONString(region));
+            result = region;
+        } else {
+            result = JSON.parseObject(cacheVal, Region.class);
+        }
+        return result;
     }
 }

@@ -18,4 +18,6 @@ public interface RegionService {
     List<Region> selectRegionList(Long parentId);
 
     List<Region> findAll();
+
+    Region get(Long id);
 }
