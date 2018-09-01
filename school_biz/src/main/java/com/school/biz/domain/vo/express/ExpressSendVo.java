@@ -66,4 +66,7 @@ public class ExpressSendVo {
      */
     private Integer reOrderNum;
     
+    private String receiverProvinceName;
+    private String receiverCityName;
+    private String receiverDistrictName;
 }

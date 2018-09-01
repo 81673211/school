@@ -59,17 +59,20 @@
                     <tr class="text-c">
                         <th width="25">编号</th>
                         <th width="50">快递单号</th>
-                        <th width="50">寄件人姓名</th>
-                        <th width="50">寄件人电话</th>
-                        <th width="50">收件人姓名</th>
-                        <th width="50">收件人电话</th>
-                        <th width="80">收件人地址</th>
-                        <th width="50">快递公司</th>
+                        <th width="30">寄件人姓名</th>
+                        <th width="40">寄件人电话</th>
+                        <th width="30">收件人姓名</th>
+                        <th width="40">收件人电话</th>
+                        <th width="30">收件人省</th>
+                        <th width="30">收件人市</th>
+                        <th width="50">收件人区</th>
+                        <th width="50">收件人地址</th>
+                        <th width="30">快递公司</th>
                         <th width="20">服务费</th>
                         <th width="20">已支付</th>
                         <th width="20">已退款</th>
                         <th width="20">已补单</th>
-                        <th width="50">状态</th>
+                        <th width="30">状态</th>
                         <th width="50">操作</th>
                     </tr>
                 </thead>
@@ -81,6 +84,9 @@
                         <td>{{el.senderPhone}}</td>
                         <td>{{el.receiverName}}</td>
                         <td>{{el.receiverPhone}}</td>
+                        <td>{{el.receiverProvinceName}}</td>
+                        <td>{{el.receiverCityName}}</td>
+                        <td>{{el.receiverDistrictName}}</td>
                         <td>{{el.receiverAddr}}</td>
                         <td>{{el.companyName}}</td>
                         <td>{{el.serviceAmt}}</td>
