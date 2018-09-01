@@ -123,7 +123,7 @@
 
     <select id="queryPage" resultType="com.school.biz.domain.entity.customer.Customer" parameterType="map">
         select c.* from customer c
-        where c.phone is not null
+        where 1 = 1
         <if test="status != null and status != '' ">
             and c.status = #{status}
         </if>
