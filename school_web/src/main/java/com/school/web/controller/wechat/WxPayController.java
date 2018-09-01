@@ -42,7 +42,7 @@ public class WxPayController {
 			mv.addObject("resultMap",resultMap);
 			return mv;
 		} catch (Exception e) {
-			log.error("订单号:{}, 支付失败，原因:", orderNo, e.getMessage());
+			log.error("订单号:{}, 支付失败，原因:{}", orderNo, e.getMessage());
 			throw new RuntimeException(e.getMessage());
 		}
 	}
