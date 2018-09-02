@@ -140,16 +140,18 @@ public class TemplateServiceImpl implements TemplateService {
                     .build();
             template = new Template.Builder()
                     .buildId(templateId)
-                    .buildToUser(openId)
+                    .buildToUser("oSAxK1BqVfUy1gFW_1HtISgQ4VhY")
                     .buildTemplateData(templateData).build();
             send(template);
         } else if (WechatTemplateEnum.RECEIVE_EXPRESS_ARRIVAL_ALERT.getType().equals(templateType)) {
             ExpressReceive expressReceive = (ExpressReceive) express;
+            String helpReceiveCode = expressReceive.getHelpReceiveCode();
+            String realCode = helpReceiveCode == null ? "无" : helpReceiveCode;
             String remark = "快递单号：" + expressReceive.getCode() + ", " +
                             "收件人姓名：" + expressReceive.getReceiverName() + " " +
                             "收件人电话：" + expressReceive.getReceiverPhone() + " " +
                             "快递公司：" + expressReceive.getCompanyName() + " " +
-                            "取件码：" + expressReceive.getHelpReceiveCode() + " " +
+                            "取件码：" + realCode + " " +
                             "取件地址：" + expressReceive.getHelpReceiveAddr();
             templateData = new ReceiveExpressArrivalAlertTemplateData.Builder()
                     .buildKeyword1(expressReceive.getReceiverName())
@@ -157,7 +159,7 @@ public class TemplateServiceImpl implements TemplateService {
                     .build();
             template = new Template.Builder()
                     .buildId(templateId)
-                    .buildToUser(openId)
+                    .buildToUser("oSAxK1BqVfUy1gFW_1HtISgQ4VhY")
                     .buildTemplateData(templateData).build();
             send(template);
         }
