@@ -273,7 +273,8 @@
 
     <!-- 管理台列表查询 -->
     <select id="queryForManagerPage" resultType="com.school.biz.domain.vo.express.ExpressSendVo" parameterType="map">
-        select es.*,IFNULL((select SUM(o1.amount) from order_info o1 where o1.express_id = es.id and o1.status = 1),0)
+        select es.*,IFNULL((select SUM(o1.amount) from order_info o1 where o1.express_id = es.id and o1.status = 1 and
+        express_type=0),0)
         totalAmt,
         IFNULL((select SUM(o2.amount) from refund_order_info o2 where o2.express_id = es.id and o2.status = 1),0)
         totalRefundAmt,
