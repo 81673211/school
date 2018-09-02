@@ -166,9 +166,10 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
         expressReceive.setId(expressId);
         expressReceive.setExpressWay(DistributionTypeEnum.DISTRIBUTION.getFlag());
         //帮我收件
-        if (expressReceiveMapper.selectByPrimaryKey(expressId).getExpressType().equals(ReceiveExpressTypeEnum.HELP_RECEIVE.getFlag())) {
+        ExpressReceive receive = expressReceiveMapper.selectByPrimaryKey(expressId);
+        if (receive.getExpressType().equals(ReceiveExpressTypeEnum.HELP_RECEIVE.getFlag())) {
             expressReceive.setExpressStatus(ReceiveExpressStatusEnum.WAIT_PICKUP.getFlag());
-            expressReceive.setServiceAmt(calcCostService.calcHelpReceiveDistributionCost(expressReceive.getHelpDistributionType(), expressReceive.getExpressWeight()));
+            expressReceive.setServiceAmt(calcCostService.calcHelpReceiveDistributionCost(receive.getHelpDistributionType(), receive.getExpressWeight()));
         } else {
             //快递点收件
             expressReceive.setExpressStatus(ReceiveExpressStatusEnum.WAIT_INTO_BOX.getFlag());
