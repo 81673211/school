@@ -12,7 +12,7 @@
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/lib/jquery/jquery.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/js/zui.min.js"></script>
-    <%--<script src="../../js/limit.js"></script>--%>
+    <script src="../../js/limit.js"></script>
 
 </head>
 <body>
