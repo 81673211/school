@@ -140,7 +140,7 @@ public class TemplateServiceImpl implements TemplateService {
                     .build();
             template = new Template.Builder()
                     .buildId(templateId)
-                    .buildToUser(openId)
+                    .buildToUser("oSAxK1AbsZRXwr3asjyMhCdVD8UI")
                     .buildTemplateData(templateData).build();
             send(template);
         } else if (WechatTemplateEnum.RECEIVE_EXPRESS_ARRIVAL_ALERT.getType().equals(templateType)) {
@@ -157,7 +157,7 @@ public class TemplateServiceImpl implements TemplateService {
                     .build();
             template = new Template.Builder()
                     .buildId(templateId)
-                    .buildToUser(openId)
+                    .buildToUser("oSAxK1AbsZRXwr3asjyMhCdVD8UI")
                     .buildTemplateData(templateData).build();
             send(template);
         }
