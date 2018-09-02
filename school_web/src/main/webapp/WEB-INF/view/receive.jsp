@@ -42,8 +42,20 @@
                                         <c:when test="${item.expressStatus == 3}">
                                             <label class="label label-sm primary outline rounded">快件已入柜</label>
                                         </c:when>
+                                        <c:when test="${item.expressStatus == 4}">
+                                            <label class="label label-sm primary outline rounded">快件已入柜</label>
+                                        </c:when>
+                                        <c:when test="${item.expressStatus == 5}">
+                                            <label class="label label-sm primary outline rounded">已完成</label>
+                                        </c:when>
+                                        <c:when test="${item.expressStatus == 6}">
+                                            <label class="label label-sm primary outline rounded">等待取件</label>
+                                        </c:when>
+                                        <c:when test="${item.expressStatus == 7}">
+                                            <label class="label label-sm primary outline rounded">正在取件</label>
+                                        </c:when>
                                         <c:otherwise>
-                                            <label class="label label-sm primary outline rounded">快件入柜超时</label>
+                                            <label class="label label-sm primary outline rounded"> </label>
                                         </c:otherwise>
                                     </c:choose>
                                 </span>
