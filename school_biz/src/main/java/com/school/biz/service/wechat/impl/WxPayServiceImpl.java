@@ -1,33 +1,37 @@
 package com.school.biz.service.wechat.impl;
 
+import java.math.BigDecimal;
+import java.net.InetAddress;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.alibaba.fastjson.JSON;
+import com.aliyuncs.utils.XmlUtils;
 import com.school.biz.constant.ConfigProperties;
 import com.school.biz.dao.customer.CustomerMapper;
 import com.school.biz.dao.order.OrderInfoMapper;
 import com.school.biz.domain.entity.customer.Customer;
 import com.school.biz.domain.entity.order.OrderInfo;
-import com.school.biz.enumeration.*;
+import com.school.biz.enumeration.OrderStatusEnum;
 import com.school.biz.extension.wxpay.sdk.WXPay;
 import com.school.biz.extension.wxpay.sdk.WXPayConfigImpl;
 import com.school.biz.extension.wxpay.sdk.WXPayConstants;
 import com.school.biz.extension.wxpay.sdk.WXPayConstants.SignType;
 import com.school.biz.extension.wxpay.sdk.WXPayUtil;
-import com.school.biz.service.express.ExpressReceiveService;
 import com.school.biz.service.express.ExpressSendService;
 import com.school.biz.service.express.ExpressService;
 import com.school.biz.service.order.OrderInfoService;
 import com.school.biz.service.wechat.WxPayService;
 import com.school.biz.util.AmountUtils;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.school.biz.util.XMLParserUtil;
 
-import java.math.BigDecimal;
-import java.net.InetAddress;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -137,68 +141,38 @@ public class WxPayServiceImpl implements WxPayService {
             log.error("xml为空!");
             return null;
         }
-
-        String appid = getXmlPara(notifyXml, "appid");
-        String bank_type = getXmlPara(notifyXml, "bank_type");
-        String cash_fee = getXmlPara(notifyXml, "cash_fee");
-        String fee_type = getXmlPara(notifyXml, "fee_type");
-        String is_subscribe = getXmlPara(notifyXml, "is_subscribe");
-        String mch_id = getXmlPara(notifyXml, "mch_id");
-        String nonce_str = getXmlPara(notifyXml, "nonce_str");
-        String openid = getXmlPara(notifyXml, "openid");
-        String out_trade_no = getXmlPara(notifyXml, "out_trade_no");
-        String result_code = getXmlPara(notifyXml, "result_code");
-        String return_code = getXmlPara(notifyXml, "return_code");
-        String sign = getXmlPara(notifyXml, "sign");
-        String time_end = getXmlPara(notifyXml, "time_end");
-        String total_fee = getXmlPara(notifyXml, "total_fee");
-        String trade_type = getXmlPara(notifyXml, "trade_type");
-        String transaction_id = getXmlPara(notifyXml, "transaction_id");
-
-        //根据返回xml计算本地签名
-        TreeMap<String, String> treeMap = new TreeMap<String, String>();
-        treeMap.put("appid", appid);
-        treeMap.put("bank_type", bank_type);
-        treeMap.put("cash_fee", cash_fee);
-        treeMap.put("fee_type", fee_type);
-        treeMap.put("is_subscribe", is_subscribe);
-        treeMap.put("mch_id", mch_id);
-        treeMap.put("nonce_str", nonce_str);
-        treeMap.put("openid", openid);
-        treeMap.put("out_trade_no", out_trade_no);
-        treeMap.put("result_code", result_code);
-        treeMap.put("return_code", return_code);
-        treeMap.put("time_end", time_end);
-        treeMap.put("total_fee", total_fee);
-        treeMap.put("trade_type", trade_type);
-        treeMap.put("transaction_id", transaction_id);
-
+        TreeMap<String, String> treeMap = getSignMap(notifyXml);
+    	
         String localSign = WXPayUtil.generateSignature(treeMap, ConfigProperties.WXPAY_KEY,
                 SignType.HMACSHA256);
-
+        
+        String sign = treeMap.get("sign");
+        String outTradeNo = treeMap.get("out_trade_no");
+        String totalFee = treeMap.get("total_fee");
+        
         log.info("本地签名是：" + localSign);
-        log.debug("本地签名是：" + localSign);
-        log.debug("微信支付签名是：" + sign);
+        log.info("微信支付签名是：" + sign);
+        
 
         //本地计算签名与微信返回签名不同||返回结果为不成功
-        if (!sign.equals(localSign) || !"SUCCESS".equals(result_code) || !"SUCCESS".equals(return_code)) {
+        if (!sign.equals(localSign) || !"SUCCESS".equals(treeMap.get("result_code")) || !"SUCCESS".equals(treeMap.get("return_code"))) {
             resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>"
                     + "<return_msg><![CDATA[FAIL]]></return_msg>" + "</xml> ";
             log.error("验证签名失败或返回错误:" + resXml);
         } else {
             log.info("支付成功");
-            log.debug("公众号支付成功，out_trade_no(订单号)为：" + out_trade_no);
+            log.debug("公众号支付成功，out_trade_no(订单号)为：" + outTradeNo);
             resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>"
                     + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
 
             // 校验金额是否正确
-            OrderInfo orderInfo = orderInfoMapper.findByOrderNo(out_trade_no);
+            OrderInfo orderInfo = orderInfoMapper.findByOrderNo(outTradeNo);
 
             if (orderInfo == null) {
-                throw new Exception("订单不存在，订单号为：" + out_trade_no);
+                throw new Exception("订单不存在，订单号为：" + outTradeNo);
             }
 
-            BigDecimal amtFromWx = new BigDecimal(total_fee);
+            BigDecimal amtFromWx = new BigDecimal(totalFee);
             BigDecimal amtFromSys = new BigDecimal(AmountUtils.changeY2F(orderInfo.getAmount().toString()));
 
             if (!amtFromWx.equals(amtFromSys)) {
@@ -231,4 +205,31 @@ public class WxPayServiceImpl implements WxPayService {
                 "");
     }
 
+    public static TreeMap<String, String> getSignMap(String xmlStr) throws Exception{
+    	TreeMap<String, String> treeMap = new TreeMap<String,String>();
+    	TreeMap<String, String> resultMap = new TreeMap<String,String>();
+    	XMLParserUtil.parse(xmlStr, resultMap);
+		for (Map.Entry<String, String> entry : resultMap.entrySet()) {
+			if(StringUtils.isNotBlank(entry.getValue())){
+				treeMap.put(entry.getKey().replace("/xml/", ""), entry.getValue());
+			}
+		}
+		return treeMap;
+    }
+    
+    public static void main(String[] args) throws Exception {
+    	String notifyXml = "<xml><appid><![CDATA[wxedd1d1443b14145c]]></appid><bank_type><![CDATA[CFT]]></bank_type><cash_fee><![CDATA[1188]]></cash_fee><coupon_count><![CDATA[1]]></coupon_count><coupon_fee>12</coupon_fee><coupon_fee_0><![CDATA[12]]></coupon_fee_0><coupon_id_0><![CDATA[2000000044096177209]]></coupon_id_0><fee_type><![CDATA[CNY]]></fee_type><is_subscribe><![CDATA[Y]]></is_subscribe><mch_id><![CDATA[1507516221]]></mch_id><nonce_str><![CDATA[6ec5e8d30c00467bbe80680bd1bf5dae]]></nonce_str><openid><![CDATA[oSAxK1JDCNsyNoiJeGQ4fXxotDNw]]></openid><out_trade_no><![CDATA[101036137521689395200]]></out_trade_no><result_code><![CDATA[SUCCESS]]></result_code><return_code><![CDATA[SUCCESS]]></return_code><sign><![CDATA[8BFD369458EB8E1F2F001BC8A27E79EC1C9D5F6A29F02CD5871E8AEBE64DD937]]></sign><time_end><![CDATA[20180902142340]]></time_end><total_fee>1200</total_fee><trade_type><![CDATA[JSAPI]]></trade_type><transaction_id><![CDATA[4200000175201809026980070556]]></transaction_id></xml>";
+    	
+    	TreeMap<String, String> treeMap = getSignMap(notifyXml);
+    	
+		String localSign = WXPayUtil.generateSignature(treeMap, ConfigProperties.WXPAY_KEY,
+              SignType.HMACSHA256);
+    	System.out.println(localSign);
+		
+        System.out.println(treeMap.get("sign"));
+        System.out.println(treeMap.get("out_trade_no"));
+        System.out.println(treeMap.get("total_fee"));
+        System.out.println(treeMap.get("result_code"));
+	}
+    
 }
