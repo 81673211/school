@@ -44,11 +44,11 @@
 <section class="section">
     <form class="box" onsubmit="return false;">
         <div class="control">
-            <label for="name">用户名</label>
-            <input id="name" type="text" class="input" placeholder="用户名" value="${customer.name}">
+            <label for="name">姓名 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>
+            <input id="name" type="text" class="input" placeholder="姓名" value="${customer.name}">
         </div>
         <div class="control">
-            <label for="phone">手机号</label>
+            <label for="phone">手机号 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>
             <input id="phone" type="text" class="input" placeholder="手机号(必填)" value="${customer.phone}">
         </div>
         <div id="verify_code">
@@ -67,7 +67,7 @@
                    value="${customer.email}">
         </div>
         <div class="control">
-            <label for="addr">寝室地址</label>
+            <label for="addr">寝室地址 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>
             <input id="addr" type="text" class="input" placeholder="寝室详细地址，方便小哥上门取件" value="${customer.addr}">
         </div>
         <div class="control text-center" style="margin-top: 20px">
@@ -152,12 +152,18 @@
         var data = {openId: openId};
         if (name != '') {
             data.name = name;
+        } else {
+            alert('姓名不能为空');
+            return false;
         }
         if (email != '') {
             data.email = email;
         }
         if (addr != '') {
             data.addr = addr;
+        } else {
+          alert('寝室地址不能为空');
+          return false;
         }
         if (phone != '') {
             data.phone = phone;

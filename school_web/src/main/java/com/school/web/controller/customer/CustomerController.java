@@ -46,6 +46,9 @@ public class CustomerController extends BaseEasyWebController {
             if (StringUtils.isBlank(request.getOpenId())) {
                 throw new RuntimeException("openId丢失");
             }
+            if (StringUtils.isBlank(request.getName())) {
+                throw new RuntimeException("姓名不能为空");
+            }
             if (StringUtils.isBlank(request.getAddr())) {
                 throw new RuntimeException("地址不能为空");
             }
