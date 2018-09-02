@@ -83,6 +83,13 @@
             </div>
         </div>
 
+        <div class="control" style="display: none;">
+            <label for="expressWeight">物品重量 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i>
+            </label>
+            <input id="expressWeight" type="text" class="input" style="width: 50%" value="1"
+                   onkeypress="if((event.keyCode<48 || event.keyCode>57) && event.keyCode!=46 || /\.\d\d{0}$/.test(value))event.returnValue=false">(KG)
+        </div>
+
         <div class="control">
             <label for="expressWay">选择快件类型<i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>
             <div class="select">
@@ -145,8 +152,12 @@
 
     function calcServiceAmt() {
         var expressWay = $("#expressWay").val();
+        var data = {openId: openId};
         if (expressWay == 1) {
-            $.get("/calc/0/serviceAmt", {}, function (result) {
+            $("#expressWeight").attr("style", "display:inline;");
+            var expressWeight = $("#expressWeight").val();
+            data.expressWeight = expressWeight;
+            $.get("/calc/0/serviceAmt", data, function (result) {
                 if (result.status != 200) {
                     alert(result.msg);
                 } else {
@@ -211,6 +222,7 @@
         var receiverDistrictId = $("#area").val();
         var expressWay = $("#expressWay").val();
         var expressType = $("#expressType").val();
+        var expressWeight = $("#expressWeight").val();
         if (openId == '') {
             alert("参数错误");
             return false;
@@ -261,6 +273,14 @@
         }
         if (expressWay != '') {
             data.expressWay = expressWay;
+            if (expressWay == 1) {
+                if (expressWeight != '') {
+                    data.expressWeight = expressWeight;
+                } else {
+                    alert("请输入物品重量（KG）");
+                    return false;
+                }
+            }
         } else {
             alert("请选择寄件方式");
             return false;

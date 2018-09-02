@@ -49,7 +49,8 @@
                                 </span>
                         </div>
                         <div>
-                            <small class="muted"><fmt:formatDate value="${item.createdTime}" pattern="yyyy-MM-dd HH:mm"/></small>
+                            <small class="muted"><fmt:formatDate value="${item.createdTime}"
+                                                                 pattern="yyyy-MM-dd HH:mm"/></small>
                         </div>
                         <div>
                             <c:choose>
@@ -69,9 +70,18 @@
                             <c:when test="${item.expressStatus == 0}">
                                 <div>
                                     <button type="button" class="btn btn-sm info outline rounded"
-                                            style="margin-bottom: 5px;width: 60px" onclick="launchPay(${item.id})">配送
+                                            style="margin-bottom: 5px;width: 60px"
+                                            onclick="launchPay(${item.id},'box')">配送入柜
                                     </button>
                                 </div>
+                                <c:if test="${item.expressType == 1}">
+                                    <div>
+                                        <button type="button" class="btn btn-sm info outline rounded"
+                                                style="margin-bottom: 5px;width: 60px"
+                                                onclick="launchPay(${item.id},'door')">送货上门
+                                        </button>
+                                    </div>
+                                </c:if>
                                 <div>
                                     <button type="button" class="btn btn-sm warning outline rounded" style="width: 60px"
                                             onclick="receiveWay(${item.id},0)">自提
@@ -81,9 +91,17 @@
                             <c:when test="${item.expressStatus == 1}">
                                 <div>
                                     <button type="button" class="btn btn-sm info outline rounded" style="width: 60px"
-                                            onclick="launchPay(${item.id})">配送
+                                            onclick="launchPay(${item.id},'box')">>配送入柜
                                     </button>
                                 </div>
+                                <c:if test="${item.expressType == 1}">
+                                    <div>
+                                        <button type="button" class="btn btn-sm info outline rounded"
+                                                style="width: 60px"
+                                                onclick="launchPay(${item.id},'door')">>送货上门
+                                        </button>
+                                    </div>
+                                </c:if>
                             </c:when>
                         </c:choose>
 
@@ -105,14 +123,14 @@
 
 
 <script>
-  window.alert = function(name){
-    var iframe = document.createElement("IFRAME");
-    iframe.style.display="none";
-    iframe.setAttribute("src", 'data:text/plain,');
-    document.documentElement.appendChild(iframe);
-    window.frames[0].window.alert(name);
-    iframe.parentNode.removeChild(iframe);
-  };
+    window.alert = function (name) {
+        var iframe = document.createElement("IFRAME");
+        iframe.style.display = "none";
+        iframe.setAttribute("src", 'data:text/plain,');
+        document.documentElement.appendChild(iframe);
+        window.frames[0].window.alert(name);
+        iframe.parentNode.removeChild(iframe);
+    };
 
     function receiveDetail(id) {
         var html = "";
@@ -132,12 +150,13 @@
         }
     }
 
-    function launchPay(expressId) {
+    function launchPay(expressId, type) {
         if (confirm("确认配送?")) {
             $.post("/order/1/create",
                     {
                         "expressId": expressId,
-                        "openId": '${openId}'
+                        "openId": '${openId}',
+                        "type": type
                     },
                     function (result) {
                         if (result.status != 200) {

@@ -56,7 +56,7 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
     public String createHelpReceiveExpress(ExpressReceive expressReceive) {
         try {
             createReceiveExpress(expressReceive);
-            return orderInfoService.createReceiveOrder(expressReceive.getId());
+            return orderInfoService.createReceiveOrder(expressReceive.getId(), expressReceive.getHelpDistributionType());
         } catch (Exception e) {
             String message = "throw exception when create help receive express";
             log.error(message, e);
@@ -115,14 +115,14 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
         } else {
             expressReceive.setExpressStatus(ReceiveExpressStatusEnum.WAIT_SELF.getFlag());
         }
-        //0自提；1入柜，null表示还未选择过
-        Integer expressWay = expressReceiveMapper.selectByPrimaryKey(expressReceive.getId())
-                .getExpressWay();
-        if ((expressWay == null || expressWay != DistributionTypeEnum.DISTRIBUTION.getFlag())
-                && expressReceive.getExpressWay() == 1) {
-            //修改后选择入柜方式才生成订单
-            orderInfoService.createReceiveOrder(expressReceive.getId());
-        }
+//        //0自提；1入柜，null表示还未选择过
+//        Integer expressWay = expressReceiveMapper.selectByPrimaryKey(expressReceive.getId())
+//                .getExpressWay();
+//        if ((expressWay == null || expressWay != DistributionTypeEnum.DISTRIBUTION.getFlag())
+//                && expressReceive.getExpressWay() == 1) {
+//            //修改后选择入柜方式才生成订单
+//            orderInfoService.createReceiveOrder(expressReceive.getId());
+//        }
         if (!(expressReceiveMapper.updateByPrimaryKeySelective(expressReceive) > 0)) {
             String message =
                     "modify receive express error,when update table 'express_receive' the number of affected rows is 0";
@@ -161,15 +161,18 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
     }
 
     @Override
-    public void updateReceiveExpress(Long id, Integer status, Integer expressWay) {
+    public void updateReceiveExpress(Long expressId) {
         ExpressReceive expressReceive = new ExpressReceive();
-        expressReceive.setId(id);
-        expressReceive.setExpressStatus(status);
-        expressReceive.setExpressWay(expressWay);
-        if (expressReceiveMapper.selectByPrimaryKey(id).getExpressType().equals(ReceiveExpressTypeEnum.HELP_RECEIVE.getFlag())) {
-            expressReceive.setServiceAmt(calcCostService.calcHelpReceiveDistributionCost());
+        expressReceive.setId(expressId);
+        expressReceive.setExpressWay(DistributionTypeEnum.DISTRIBUTION.getFlag());
+        //帮我收件
+        if (expressReceiveMapper.selectByPrimaryKey(expressId).getExpressType().equals(ReceiveExpressTypeEnum.HELP_RECEIVE.getFlag())) {
+            expressReceive.setExpressStatus(ReceiveExpressStatusEnum.WAIT_PICKUP.getFlag());
+            expressReceive.setServiceAmt(calcCostService.calcHelpReceiveDistributionCost(expressReceive.getHelpDistributionType(), expressReceive.getExpressWeight()));
         } else {
-            expressReceive.setServiceAmt(calcCostService.calcReceiveDistributionCost(expressWay));
+            //快递点收件
+            expressReceive.setExpressStatus(ReceiveExpressStatusEnum.WAIT_INTO_BOX.getFlag());
+            expressReceive.setServiceAmt(calcCostService.calcReceiveDistributionCost(DistributionTypeEnum.DISTRIBUTION.getFlag()));
         }
         int count = expressReceiveMapper.updateByPrimaryKeySelective(expressReceive);
         if (count <= 0) {

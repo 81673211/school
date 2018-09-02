@@ -65,12 +65,8 @@ public class ExpressServiceImpl implements ExpressService {
                     log.error("updateExpressByPay error,no know expressStatus:" + sendExpress.getExpressStatus());
                 }
             } else if (expressType == ExpressTypeEnum.RECEIVE.getFlag()) {
-                //收件只有选择配送的时候才有支付，所以直接修改为等待入柜
-                expressReceiveService.updateReceiveExpress(orderInfo.getExpressId(),
-                        ReceiveExpressStatusEnum.WAIT_INTO_BOX
-                                .getFlag(),
-                        DistributionTypeEnum.DISTRIBUTION
-                                .getFlag());
+                //收件只有选择配送的时候才有支付
+                expressReceiveService.updateReceiveExpress(orderInfo.getExpressId());
             } else {
                 log.error("not support express type:" + expressId);
             }

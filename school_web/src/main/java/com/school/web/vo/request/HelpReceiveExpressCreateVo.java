@@ -4,6 +4,7 @@ import lombok.Data;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 /**
  * @author jame
@@ -25,4 +26,7 @@ public class HelpReceiveExpressCreateVo {
     private String code;
     //取件码，可不填
     private String helpReceiveCode;
+    private BigDecimal expressWeight;
+    @NotNull(message = "配送方式不为空")
+    private String helpDistributionType;
 }

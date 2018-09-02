@@ -1,7 +1,14 @@
 package com.school.web.controller.calc;
 
-import java.math.BigDecimal;
-
+import com.school.biz.domain.entity.express.ExpressSend;
+import com.school.biz.enumeration.DistributionTypeEnum;
+import com.school.biz.service.calc.CalcCostService;
+import com.school.web.controller.base.BaseEasyWebController;
+import com.school.web.vo.request.CalcSendServiceAmtVo;
+import com.school.web.vo.request.SendExpressCalcVo;
+import com.school.web.vo.response.DataResponse;
+import com.school.web.vo.response.Response;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -10,15 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.school.biz.domain.entity.express.ExpressSend;
-import com.school.biz.enumeration.DistributionTypeEnum;
-import com.school.biz.service.calc.CalcCostService;
-import com.school.web.controller.base.BaseEasyWebController;
-import com.school.web.vo.request.SendExpressCalcVo;
-import com.school.web.vo.response.DataResponse;
-import com.school.web.vo.response.Response;
-
-import lombok.extern.slf4j.Slf4j;
+import javax.validation.constraints.Min;
+import java.math.BigDecimal;
 
 /**
  * @author jame
@@ -52,9 +52,14 @@ public class CalcController extends BaseEasyWebController {
 
 
     @RequestMapping(value = "/0/serviceAmt", method = RequestMethod.GET)
-    public Response getSendServiceAmt() {
+    public Response getSendServiceAmt(@Validated CalcSendServiceAmtVo calcSendServiceAmtVo, BindingResult bindingResult) {
         DataResponse<BigDecimal> response = new DataResponse<>();
-        return response.writeSuccess("获取寄件服务费成功", calcCostService.calcSendDistributionCost(DistributionTypeEnum.DISTRIBUTION.getFlag()));
+        checkValid(bindingResult, response);
+        if (response.getStatus() != HTTP_SUCCESS) {
+            return response;
+        }
+        return response.writeSuccess("获取寄件服务费成功",
+                calcCostService.calcSendDistributionCost(DistributionTypeEnum.DISTRIBUTION.getFlag(), calcSendServiceAmtVo.getExpressWeight()));
     }
 
 }

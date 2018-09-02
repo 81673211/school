@@ -23,8 +23,9 @@
         <result column="customer_id" property="customerId" jdbcType="BIGINT"/>
         <result column="end_time" property="endTime" jdbcType="TIMESTAMP"/>
         <result column="express_type" property="expressType" jdbcType="INTEGER"/>
-        <result column="service_amt" property="serviceAmt" jdbcType="DECIMAL" />
-        <result column="re_order_amt" property="reOrderAmt" jdbcType="DECIMAL" />
+        <result column="service_amt" property="serviceAmt" jdbcType="DECIMAL"/>
+        <result column="re_order_amt" property="reOrderAmt" jdbcType="DECIMAL"/>
+        <result column="express_weight" property="expressWeight" jdbcType="DECIMAL"/>
     </resultMap>
     <sql id="Base_Column_List">
         id,
@@ -49,7 +50,8 @@
         end_time,
         express_type,
         service_amt,
-        re_order_amt
+        re_order_amt,
+        express_weight
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
@@ -125,6 +127,9 @@
             <if test="reOrderAmt != null">
                 re_order_amt,
             </if>
+            <if test="expressWeight != null">
+                express_weight,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="code != null">
@@ -183,6 +188,9 @@
             </if>
             <if test="reOrderAmt != null">
                 #{reOrderAmt,jdbcType=DECIMAL},
+            </if>
+            <if test="expressWeight != null">
+                #{expressWeight,jdbcType=DECIMAL},
             </if>
         </trim>
     </insert>
@@ -249,6 +257,9 @@
             <if test="reOrderAmt != null">
                 re_order_amt = #{reOrderAmt,jdbcType=DECIMAL},
             </if>
+            <if test="expressWeight != null">
+                express_weight = #{expressWeight,jdbcType=DECIMAL},
+            </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
@@ -262,18 +273,21 @@
 
     <!-- 管理台列表查询 -->
     <select id="queryForManagerPage" resultType="com.school.biz.domain.vo.express.ExpressSendVo" parameterType="map">
-        select es.*,IFNULL((select SUM(o1.amount) from order_info o1 where o1.express_id = es.id and o1.status = 1),0) totalAmt,
-		IFNULL((select SUM(o2.amount) from refund_order_info o2 where o2.express_id = es.id and o2.status = 1),0) totalRefundAmt,
-		IFNULL((select SUM(o3.amount) from order_info o3 where o3.express_id = es.id and o3.status = 1 and o3.order_no like '16%'),0) totalReOrderAmt,
-		(select count(1) from refund_order_info o4 where o4.express_id = es.id) refundNum,
-		(select count(1) from order_info o5 where o5.express_id = es.id and o5.order_no like '16%') reOrderNum,
-		rp.area_name receiver_province_name,
-		rc.area_name receiver_city_name,
-		rd.area_name receiver_district_name
-		from express_send es
-		inner join regional_division_dict rp on rp.id = es.receiver_province_id
-		inner join regional_division_dict rc on rc.id = es.receiver_city_id
-		inner join regional_division_dict rd on rd.id = es.receiver_district_id
+        select es.*,IFNULL((select SUM(o1.amount) from order_info o1 where o1.express_id = es.id and o1.status = 1),0)
+        totalAmt,
+        IFNULL((select SUM(o2.amount) from refund_order_info o2 where o2.express_id = es.id and o2.status = 1),0)
+        totalRefundAmt,
+        IFNULL((select SUM(o3.amount) from order_info o3 where o3.express_id = es.id and o3.status = 1 and o3.order_no
+        like '16%'),0) totalReOrderAmt,
+        (select count(1) from refund_order_info o4 where o4.express_id = es.id) refundNum,
+        (select count(1) from order_info o5 where o5.express_id = es.id and o5.order_no like '16%') reOrderNum,
+        rp.area_name receiver_province_name,
+        rc.area_name receiver_city_name,
+        rd.area_name receiver_district_name
+        from express_send es
+        inner join regional_division_dict rp on rp.id = es.receiver_province_id
+        inner join regional_division_dict rc on rc.id = es.receiver_city_id
+        inner join regional_division_dict rd on rd.id = es.receiver_district_id
         <where>
             <if test="keyword != null and keyword != '' ">
                 and (es.code like concat('%',#{keyword},'%')
@@ -305,7 +319,8 @@
         order by t.id desc
     </select>
 
-    <select id="findByExpressSendNo" parameterType="java.lang.String" resultType="com.school.biz.domain.entity.express.ExpressSend">
+    <select id="findByExpressSendNo" parameterType="java.lang.String"
+            resultType="com.school.biz.domain.entity.express.ExpressSend">
     	select * from express_send es
     	where es.code = #{expressSendNo,jdbcType=VARCHAR}
     </select>

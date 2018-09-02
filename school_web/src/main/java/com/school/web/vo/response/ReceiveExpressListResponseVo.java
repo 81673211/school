@@ -22,6 +22,7 @@ public class ReceiveExpressListResponseVo {
     private String senderCity;
     private String senderDistrict;
     private BigDecimal distributionCost;
+    private Integer expressType;
 
     public Long getId() {
         return id;
@@ -141,5 +142,13 @@ public class ReceiveExpressListResponseVo {
 
     public void setDistributionCost(BigDecimal distributionCost) {
         this.distributionCost = distributionCost;
+    }
+
+    public Integer getExpressType() {
+        return expressType;
+    }
+
+    public void setExpressType(Integer expressType) {
+        this.expressType = expressType;
     }
 }

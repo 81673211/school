@@ -13,7 +13,9 @@ public enum ReceiveExpressStatusEnum {
     WAIT_INTO_BOX(2, "等待入柜"),
     ALREADY_INTO_BOX(3, "快件已入柜"),
     TIMEOUT_INTO_BOX(4, "快件入柜超时"),
-    FINISHED(5, "已完成");
+    FINISHED(5, "已完成"),
+    WAIT_PICKUP(6, "等待取件"),
+    PICKUP_ING(7, "正在取件");
     private int flag;
     private String message;
 
@@ -21,23 +23,23 @@ public enum ReceiveExpressStatusEnum {
         this.flag = flag;
         this.message = message;
     }
-    
-    public static ReceiveExpressStatusEnum parseObj(Integer code){
-    	for (ReceiveExpressStatusEnum o : ReceiveExpressStatusEnum.values()) {
-    		if(o.flag == code){
-    			return o;
-    		}
-		}
-    	return null;
+
+    public static ReceiveExpressStatusEnum parseObj(Integer code) {
+        for (ReceiveExpressStatusEnum o : ReceiveExpressStatusEnum.values()) {
+            if (o.flag == code) {
+                return o;
+            }
+        }
+        return null;
     }
-    
-    public static Map<Object, String> getAllStatusEnum(){
-    	Map<Object, String> resultMap = new HashMap<Object,String>();
-    	ReceiveExpressStatusEnum[] receiveExpressStatusEnums = ReceiveExpressStatusEnum.values();
-    	for (ReceiveExpressStatusEnum receiveExpressStatusEnum : receiveExpressStatusEnums) {
-			resultMap.put(receiveExpressStatusEnum.flag, receiveExpressStatusEnum.message);
-		}
-    	return resultMap;
+
+    public static Map<Object, String> getAllStatusEnum() {
+        Map<Object, String> resultMap = new HashMap<Object, String>();
+        ReceiveExpressStatusEnum[] receiveExpressStatusEnums = ReceiveExpressStatusEnum.values();
+        for (ReceiveExpressStatusEnum receiveExpressStatusEnum : receiveExpressStatusEnums) {
+            resultMap.put(receiveExpressStatusEnum.flag, receiveExpressStatusEnum.message);
+        }
+        return resultMap;
     }
 
     public int getFlag() {

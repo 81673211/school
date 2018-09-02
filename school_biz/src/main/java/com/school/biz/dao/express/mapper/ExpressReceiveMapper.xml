@@ -26,6 +26,8 @@
         <result column="express_type" property="expressType" jdbcType="INTEGER"/>
         <result column="help_receive_code" property="helpReceiveCode" jdbcType="VARCHAR"/>
         <result column="help_receive_addr" property="helpReceiveAddr" jdbcType="VARCHAR"/>
+        <result column="express_weight" property="expressWeight" jdbcType="DECIMAL"/>
+        <result column="help_distribution_type" property="helpDistributionType" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
         id,
@@ -51,7 +53,9 @@
         service_amt,
         express_type,
         help_receive_code,
-        help_receive_addr
+        help_receive_addr,
+        express_weight,
+        help_distribution_type
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
@@ -130,6 +134,12 @@
             <if test="helpReceiveAddr != null">
                 help_receive_addr,
             </if>
+            <if test="expressWeight != null">
+                express_weight,
+            </if>
+            <if test="helpDistributionType != null">
+                help_distribution_type,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="code != null">
@@ -191,6 +201,12 @@
             </if>
             <if test="helpReceiveAddr != null">
                 #{helpReceiveAddr,jdbcType=VARCHAR},
+            </if>
+            <if test="expressWeight != null">
+                #{expressWeight,jdbcType=DECIMAL},
+            </if>
+            <if test="helpDistributionType != null">
+                #{helpDistributionType,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -259,6 +275,12 @@
             </if>
             <if test="helpReceiveAddr != null">
                 help_receive_addr = #{helpReceiveAddr,jdbcType=VARCHAR},
+            </if>
+            <if test="expressWeight != null">
+                express_weight = #{expressWeight,jdbcType=DECIMAL},
+            </if>
+            <if test="helpDistributionType != null">
+                help_distribution_type = #{helpDistributionType,jdbcType=VARCHAR},
             </if>
         </set>
         where id = #{id,jdbcType=BIGINT}

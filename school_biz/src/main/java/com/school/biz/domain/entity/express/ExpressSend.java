@@ -26,6 +26,7 @@ public class ExpressSend extends Express{
     private String receiverDistrict;
     @JSONField(serialize = false)
     private String idCard;
+    @JSONField(serialize = false)
     private BigDecimal reOrderAmt;
 
 
@@ -141,4 +142,5 @@ public class ExpressSend extends Express{
 	public void setReOrderAmt(BigDecimal reOrderAmt) {
 		this.reOrderAmt = reOrderAmt;
 	}
+
 }

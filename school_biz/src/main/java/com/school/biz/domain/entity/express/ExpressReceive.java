@@ -33,6 +33,7 @@ public class ExpressReceive extends Express{
     private String senderCity;
     @JSONField(serialize = false)
     private String senderDistrict;
+    private String helpDistributionType;
 
     public Date getIntoBoxTime() {
         return intoBoxTime;

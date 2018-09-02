@@ -1,15 +1,5 @@
 package com.school.biz.service.express.impl;
 
-import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.school.biz.dao.customer.CustomerMapper;
 import com.school.biz.dao.express.ExpressCompanyMapper;
 import com.school.biz.dao.express.ExpressSendMapper;
@@ -24,8 +14,16 @@ import com.school.biz.service.base.impl.BaseServiceImpl;
 import com.school.biz.service.calc.CalcCostService;
 import com.school.biz.service.express.ExpressSendService;
 import com.school.biz.service.order.OrderInfoService;
-
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author jame
@@ -51,7 +49,7 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
 
     @Override
     public String createSendExpress(ExpressSend expressSend) {
-        expressSend.setServiceAmt(calcCostService.calcSendDistributionCost(expressSend.getExpressWay()));
+        expressSend.setServiceAmt(calcCostService.calcSendDistributionCost(expressSend.getExpressWay(), expressSend.getExpressWeight()));
         boxExpressCompany(expressSend);
         Long count = expressSendMapper.insertSelective(expressSend);
         if (!(count > 0L)) {

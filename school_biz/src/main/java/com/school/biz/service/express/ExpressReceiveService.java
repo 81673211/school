@@ -42,7 +42,12 @@ public interface ExpressReceiveService extends BaseService<ExpressReceive, Expre
      */
     void updateReceiveExpressStatus(Long id, Integer status);
 
-    void updateReceiveExpress(Long id, Integer status, Integer expressWay);
+    /**
+     * 收件支付-成功之后修改金额以及状态
+     *
+     * @param expressId
+     */
+    void updateReceiveExpress(Long expressId);
 
     /**
      * <b>Description:通过手机号绑定用户ID.</b><br>

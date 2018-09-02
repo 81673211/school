@@ -4,6 +4,7 @@ import lombok.Data;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 /**
  * @author jame
@@ -33,4 +34,5 @@ public class SendExpressCreateVo {
     private Integer expressType;
 
     private String idCard;
+    private BigDecimal expressWeight;
 }

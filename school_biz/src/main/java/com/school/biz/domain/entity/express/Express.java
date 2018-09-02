@@ -23,4 +23,5 @@ public class Express {
     private Date endTime;
     private BigDecimal serviceAmt;
     private Integer expressType;
+    private BigDecimal expressWeight;
 }

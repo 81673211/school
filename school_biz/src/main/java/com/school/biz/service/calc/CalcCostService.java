@@ -24,7 +24,7 @@ public interface CalcCostService {
      *
      * @return
      */
-    BigDecimal calcHelpReceiveDistributionCost();
+    BigDecimal calcHelpReceiveDistributionCost(String type,BigDecimal expressWeight);
 
     /**
      * 计算寄件类型的配送费用
@@ -32,7 +32,7 @@ public interface CalcCostService {
      * @param expressWay
      * @return
      */
-    BigDecimal calcSendDistributionCost(Integer expressWay);
+    BigDecimal calcSendDistributionCost(Integer expressWay, BigDecimal expressWeight);
 
     /**
      * 计算寄件的运送费

@@ -65,7 +65,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
 
     @Override
     public String createSendOrder(ExpressSend expressSend) {
-        OrderInfo orderInfo = initOrderInfo(expressSend);
+        OrderInfo orderInfo = initOrderInfo(expressSend, null);
         if (!(orderInfoMapper.insertSelective(orderInfo) > 0)) {
             String message =
                     "create send order error,when insert table 'order_info' the number of affected rows is 0";
@@ -90,13 +90,13 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
     }
 
     @Override
-    public String createReceiveOrder(Long expressId) {
+    public String createReceiveOrder(Long expressId, String type) {
         List<OrderInfo> orderInfos = findByExpressReceiveId(expressId);
         if (checkExpressAlreadyPay(orderInfos)) {
             return null;
         }
         ExpressReceive expressReceive = expressReceiveMapper.selectByPrimaryKey(expressId);
-        OrderInfo orderInfo = initOrderInfo(expressReceive);
+        OrderInfo orderInfo = initOrderInfo(expressReceive, type);
         int result = orderInfoMapper.insertSelective(orderInfo);
         if (result <= 0) {
             String message =
@@ -136,27 +136,28 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
      * 初始化订单对象
      *
      * @param express
+     * @param receiveCostType 收件的付费类型，box=入柜；door=送货上门
      * @return
      */
-    private OrderInfo initOrderInfo(Express express) {
+    private OrderInfo initOrderInfo(Express express, String receiveCostType) {
         OrderInfo orderInfo = new OrderInfo();
         if (express instanceof ExpressSend) {
             ExpressSend expressSend = (ExpressSend) express;
             orderInfo.setExpressType(ExpressTypeEnum.SEND.getFlag());
             orderInfo.setAmount(calcCostService.calcSendTransportCost(expressSend).add(
-                    calcCostService.calcSendDistributionCost(expressSend.getExpressWay())));
+                    calcCostService.calcSendDistributionCost(expressSend.getExpressWay(), expressSend.getExpressWeight())));
             orderInfo.setTradeSummary("寄件快递费");
         } else if (express instanceof ExpressReceive) {
             ExpressReceive expressReceive = (ExpressReceive) express;
             orderInfo.setExpressType(ExpressTypeEnum.RECEIVE.getFlag());
             if (express.getExpressType().equals(ReceiveExpressTypeEnum.HELP_RECEIVE.getFlag())) {
-                orderInfo.setAmount(calcCostService.calcHelpReceiveDistributionCost());
+                orderInfo.setAmount(calcCostService.calcHelpReceiveDistributionCost(receiveCostType, expressReceive.getExpressWeight()));
             } else {
                 orderInfo.setAmount(calcCostService.calcReceiveDistributionCost(DistributionTypeEnum.DISTRIBUTION.getFlag()));
             }
             orderInfo.setTradeSummary("收件服务费");
         } else {
-            String errorMsg = "error express type.";
+            String errorMsg = "error express helpDistributionType.";
             log.error(errorMsg);
             throw new RuntimeException(errorMsg);
         }

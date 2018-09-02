@@ -1,30 +1,11 @@
 package com.school.web.controller.express;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.CollectionUtils;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.school.biz.domain.entity.customer.Customer;
 import com.school.biz.domain.entity.express.ExpressCompany;
 import com.school.biz.domain.entity.express.ExpressReceive;
 import com.school.biz.domain.entity.express.ExpressSend;
 import com.school.biz.domain.entity.region.Region;
-import com.school.biz.enumeration.DistributionTypeEnum;
-import com.school.biz.enumeration.ExpressTypeEnum;
-import com.school.biz.enumeration.ReceiveExpressStatusEnum;
-import com.school.biz.enumeration.ReceiveExpressTypeEnum;
-import com.school.biz.enumeration.WechatTemplateEnum;
+import com.school.biz.enumeration.*;
 import com.school.biz.service.calc.CalcCostService;
 import com.school.biz.service.customer.CustomerService;
 import com.school.biz.service.express.ExpressCompanyService;
@@ -42,8 +23,21 @@ import com.school.web.vo.response.DataResponse;
 import com.school.web.vo.response.ReceiveExpressListResponseVo;
 import com.school.web.vo.response.Response;
 import com.school.web.vo.response.SendExpressListResponseVo;
-
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author jame
@@ -444,6 +438,7 @@ public class ExpressController extends BaseEasyWebController {
             expressReceive.setExpressWay(DistributionTypeEnum.DISTRIBUTION.getFlag());
             expressReceive.setExpressType(ReceiveExpressTypeEnum.HELP_RECEIVE.getFlag());
             expressReceive.setReceiverAddr(expressVo.getHelpReceiveAddr());
+            expressReceive.setHelpDistributionType(expressVo.getHelpDistributionType());
             String orderNo = expressReceiveService.createHelpReceiveExpress(expressReceive);
             return response.writeSuccess("处理帮我收件成功", orderNo);
         } catch (Exception e) {

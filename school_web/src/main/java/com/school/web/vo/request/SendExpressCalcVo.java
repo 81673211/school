@@ -1,10 +1,11 @@
 package com.school.web.vo.request;
 
-import javax.validation.constraints.NotNull;
-
+import lombok.Data;
 import org.springframework.validation.annotation.Validated;
 
-import lombok.Data;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 /**
  * @author jame
@@ -21,4 +22,6 @@ public class SendExpressCalcVo {
     @NotNull(message = "收件人区县不为空")
     private Long receiverDistrictId;        //收件人区县ID
     private Long companyId;    //快递公司
+    @Min(value = 1, message = "填写的重量最小为1KG")
+    private BigDecimal expressWeight;
 }

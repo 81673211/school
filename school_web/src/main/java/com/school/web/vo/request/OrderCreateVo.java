@@ -1,10 +1,9 @@
 package com.school.web.vo.request;
 
-import javax.validation.constraints.NotNull;
-
+import lombok.Data;
 import org.springframework.validation.annotation.Validated;
 
-import lombok.Data;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author jame
@@ -16,4 +15,7 @@ public class OrderCreateVo {
     private Long expressId;
     @NotNull(message = "openId不能为空")
     private String openId;
+    @NotNull
+    private String type;
+
 }
