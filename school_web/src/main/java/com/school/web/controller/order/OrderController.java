@@ -5,6 +5,7 @@ import com.school.biz.service.express.ExpressSendService;
 import com.school.biz.service.order.OrderInfoService;
 import com.school.web.controller.base.BaseEasyWebController;
 import com.school.web.vo.request.OrderCreateVo;
+import com.school.web.vo.request.ReOrderCreateVo;
 import com.school.web.vo.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +59,7 @@ public class OrderController extends BaseEasyWebController {
      * @return
      */
     @RequestMapping(value = "/0/reOrder/create", method = RequestMethod.POST)
-    public Response createSendReOrder(@Validated OrderCreateVo vo, BindingResult bindingResult) {
+    public Response createSendReOrder(@Validated ReOrderCreateVo vo, BindingResult bindingResult) {
         Response response = new Response();
         checkValid(bindingResult, response);
         if (response.getStatus() != HTTP_SUCCESS) {
