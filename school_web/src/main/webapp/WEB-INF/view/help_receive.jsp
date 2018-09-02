@@ -73,7 +73,8 @@
         <div class="control" hidden="hidden" id="expressWeightDiv">
             <label for="expressWeight">物品重量(KG) <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i>
             </label>
-            <input id="expressWeight" type="text" class="input" value="1" onblur="calcServiceAmt();">
+            <input id="expressWeight" type="text" class="input" value="1" onblur="calcServiceAmt();"
+                   onkeyup="this.value=this.value.replace(/[^\d\.]/g, '')">
         </div>
 
         <div class="control text-center">
@@ -90,7 +91,7 @@
         var helpDistributionType = $("#helpDistributionType").val();
         if (helpDistributionType == "door") {
             $("#expressWeightDiv").show();
-        }else{
+        } else {
             $("#expressWeightDiv").hide();
         }
     }
