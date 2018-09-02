@@ -10,7 +10,7 @@
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/lib/jquery/jquery.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/js/zui.min.js"></script>
-    <script src="../../js/limit.js"></script>
+    <%--<script src="../../js/limit.js"></script>--%>
 
 </head>
 <body>
@@ -70,11 +70,10 @@
             </div>
         </div>
 
-        <div class="control">
-            <label for="expressWeight">物品重量 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i>
+        <div class="control" hidden="hidden" id="expressWeightDiv">
+            <label for="expressWeight">物品重量(KG) <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i>
             </label>
-            <input id="expressWeight" type="text" class="input" style="width: 50%" value="1"
-                   onkeypress="if((event.keyCode<48 || event.keyCode>57) && event.keyCode!=46 || /\.\d\d{0}$/.test(value))event.returnValue=false">(KG)
+            <input id="expressWeight" type="text" class="input" value="1" onblur="calcServiceAmt();">
         </div>
 
         <div class="control text-center">
@@ -86,6 +85,15 @@
 </section>
 
 <script>
+
+    function calcServiceAmt() {
+        var helpDistributionType = $("#helpDistributionType").val();
+        if (helpDistributionType == "door") {
+            $("#expressWeightDiv").show();
+        }else{
+            $("#expressWeightDiv").hide();
+        }
+    }
 
     window.alert = function (name) {
         var iframe = document.createElement("IFRAME");

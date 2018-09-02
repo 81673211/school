@@ -83,14 +83,14 @@
             </div>
         </div>
 
-        <div class="control" id="expressWeightDivId">
-            <label for="expressWeight">物品重量 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i></label>
-            <input id="expressWeight" type="text" class="input" style="width: 50%" value="1"
-                   onkeypress="if((event.keyCode<48 || event.keyCode>57) && event.keyCode!=46 || /\.\d\d{0}$/.test(value))event.returnValue=false">(KG)
+        <div class="control" hidden="hidden" id="expressWeightDiv">
+            <label for="expressWeight">物品重量(KG) <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i>
+            </label>
+            <input id="expressWeight" type="text" class="input"  value="1" onblur="calcServiceAmt();">
         </div>
 
         <div class="control">
-            <label for="expressWay">选择快件类型<i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>
+            <label for="expressType">选择快件类型<i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>
             <div class="select">
                 <select id="expressType" name="expressType">
                     <option value="">请选择快件类型</option>
@@ -118,6 +118,8 @@
     </form>
 </section>
 
+<script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/lib/jquery/jquery.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/js/zui.min.js"></script>
 <script>
 
     window.alert = function (name) {
@@ -150,11 +152,12 @@
     }
 
     function calcServiceAmt() {
+        var openId = $("#openId").val();
+        var expressWeight = $("#expressWeight").val();
         var expressWay = $("#expressWay").val();
-        var data = {openId: $("#openId").val()};
+        var data = {openId: openId};
         if (expressWay == 1) {
-            $("#expressWeightDivId").show();
-            var expressWeight = $("#expressWeight").val();
+            $("#expressWeightDiv").show();
             data.expressWeight = expressWeight;
             $.get("/calc/0/serviceAmt", data, function (result) {
                 if (result.status != 200) {
@@ -164,6 +167,7 @@
                 }
             });
         } else {
+            $("#expressWeightDiv").hide();
             $("#serviceAmt").html("0.00");
         }
     }
