@@ -1,13 +1,18 @@
 package com.school.biz.service.express.impl;
 
+import com.school.biz.domain.entity.customer.Customer;
+import com.school.biz.domain.entity.express.ExpressReceive;
 import com.school.biz.domain.entity.express.ExpressSend;
 import com.school.biz.domain.entity.order.OrderInfo;
 import com.school.biz.domain.entity.order.RefundOrderInfo;
 import com.school.biz.enumeration.*;
+import com.school.biz.service.customer.CustomerService;
 import com.school.biz.service.express.ExpressReceiveService;
 import com.school.biz.service.express.ExpressSendService;
 import com.school.biz.service.express.ExpressService;
 import com.school.biz.service.order.OrderInfoService;
+import com.school.biz.service.wechat.TemplateService;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +36,10 @@ public class ExpressServiceImpl implements ExpressService {
     private ExpressReceiveService expressReceiveService;
     @Autowired
     private OrderInfoService orderInfoService;
+    @Autowired
+    private TemplateService templateService;
+    @Autowired
+    private CustomerService customerService;
 
     @Override
     public void updateExpressByPay(OrderInfo orderInfo) throws RuntimeException {
@@ -54,6 +63,11 @@ public class ExpressServiceImpl implements ExpressService {
                 if (sendExpress.getExpressStatus().equals(SendExpressStatusEnum.CREATE.getFlag()) && sendExpress.getExpressWay().equals(DistributionTypeEnum.DISTRIBUTION.getFlag())) {
                     //改为等待上门取件 && 寄件方式为 自发
                     expressSendService.updateSendExpressStatus(expressId, SendExpressStatusEnum.WAIT_SMQJ.getFlag());
+                    Customer customer = customerService.get(sendExpress.getCustomerId());
+                    if (customer != null) {
+                        templateService.send(WechatTemplateEnum.SEND_EXPRESS_ARRIVAL_ALERT.getType(),
+                                             customer.getOpenId(), sendExpress, ExpressTypeEnum.SEND.getFlag());
+                    }
                 } else if (sendExpress.getExpressStatus().equals(SendExpressStatusEnum.CREATE.getFlag()) && sendExpress.getExpressWay().equals(DistributionTypeEnum.SELF.getFlag())) {
 //                    expressSendService.updateSendExpressStatus(expressId, SendExpressStatusEnum.PROXY_RECIEVED.getFlag());
                 }
@@ -67,6 +81,15 @@ public class ExpressServiceImpl implements ExpressService {
             } else if (expressType == ExpressTypeEnum.RECEIVE.getFlag()) {
                 //收件只有选择配送的时候才有支付
                 expressReceiveService.updateReceiveExpress(orderInfo.getExpressId());
+
+                ExpressReceive receiveExpress = expressReceiveService.getReceiveExpress(orderInfo.getExpressId());
+                if (receiveExpress != null && ReceiveExpressTypeEnum.HELP_RECEIVE.getFlag() == receiveExpress.getExpressType()) {
+                    Customer customer = customerService.get(receiveExpress.getCustomerId());
+                    if (customer != null) {
+                        templateService.send(WechatTemplateEnum.RECEIVE_EXPRESS_ARRIVAL_ALERT.getType(),
+                                             customer.getOpenId(), receiveExpress, ExpressTypeEnum.RECEIVE.getFlag());
+                    }
+                }
             } else {
                 log.error("not support express type:" + expressId);
             }
