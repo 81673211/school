@@ -58,11 +58,13 @@
                     <tr class="text-c">
                         <th width="25">编号</th>
                         <th width="100">快递单号</th>
-                        <th width="50">类型</th>
                         <th width="50">收件人姓名</th>
                         <th width="50">收件人电话</th>
                         <th width="100">收件人地址</th>
                         <th width="50">快递公司</th>
+                        <th width="50">类型</th>
+                        <th width="50">取件码</th>
+                        <th width="50">取件地址</th>
                         <th width="50">状态</th>
                         <th width="50">操作</th>
                     </tr>
@@ -71,11 +73,13 @@
                     <tr class="text-c" :for="index,el in @data">
                         <td>{{index+1}}</td>
                         <td>{{el.code}}</td>
-                        <td>{{@expressTypeMap[el.expressType]}}</td>
                         <td>{{el.receiverName}}</td>
                         <td>{{el.receiverPhone}}</td>
                         <td>{{el.receiverAddr}}</td>
                         <td>{{el.companyName}}</td>
+                        <td>{{@expressTypeMap[el.expressType]}}</td>
+                        <td>{{el.helpReceiveCode}}</td>
+                        <td>{{el.helpReceiveAddr}}</td>
                         <td>{{@expressReceiveStatusMap[el.expressStatus]}}</td>
                         <td class="but_xq">
                         	<btn:hasUrlPerm link="${detailUrl}">
