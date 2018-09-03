@@ -90,7 +90,6 @@ public class WechatController {
         }
         if (StringUtils.isBlank(customer.getAvatar())) {
             UserWechat userWechat = oauthService.getDetail(openId, oAuthToken.getAccessToken());
-            customer.setNickname(userWechat.getNickname());
             customer.setAvatar(userWechat.getAvatar());
             customer.setSex(String.valueOf(userWechat.getSex()));
             customerService.update(customer);
