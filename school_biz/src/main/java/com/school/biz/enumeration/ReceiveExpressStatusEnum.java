@@ -15,7 +15,8 @@ public enum ReceiveExpressStatusEnum {
     TIMEOUT_INTO_BOX(4, "快件入柜超时"),
     FINISHED(5, "已完成"),
     WAIT_PICKUP(6, "等待取件"),
-    PICKUP_ING(7, "正在取件");
+    PICKUP_ING(7, "正在取件"),
+    INEFFECTIVE(8, "未生效");
     private int flag;
     private String message;
 
