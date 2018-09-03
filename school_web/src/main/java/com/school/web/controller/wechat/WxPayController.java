@@ -34,6 +34,7 @@ public class WxPayController {
 			if (StringUtils.isBlank(orderNo)) {
 				throw new RuntimeException("订单号异常");
 			}
+			log.info("WxPayController wxpay统一下单，orderNo=" + orderNo);
 			TreeMap<String, String> resultMap = wxPayService.doUnifiedOrder(orderNo);
 			// 避免关键字package，将package换成pkg
 			resultMap.put("pkg", resultMap.get("package"));
