@@ -49,6 +49,7 @@
                         <th width="100">创建时间</th>
                         <th width="100">修改时间</th>
                         <th width="100">住址</th>
+                        <th width="50">是否关注</th>
                         <th width="50">操作</th>
                     </tr>
                 </thead>
@@ -63,6 +64,7 @@
                         <td>{{el.createdTime|date('yyyy-MM-dd HH:mm:ss')}}</td>
                         <td>{{el.modifiedTime|date('yyyy-MM-dd HH:mm:ss')}}</td>
                         <td>{{el.addr}}</td>
+                        <td><div :if="el.subscribed">是</div><div :if="!el.subscribed">否</div></td>
                         <td class="but_xq">
                         	<btn:hasUrlPerm link="${detailUrl}">
 	                           	<a class="btn btn-primary-outline size-S radius" :click="@methods.detail(el.id,@methods.detailUrl)">详情</a>

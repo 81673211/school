@@ -18,6 +18,8 @@ import com.school.biz.domain.entity.customer.Customer;
 import com.school.biz.domain.entity.express.ExpressCompany;
 import com.school.biz.domain.entity.express.ExpressReceive;
 import com.school.biz.enumeration.ExpressTypeEnum;
+import com.school.biz.enumeration.ExpressWayEnum;
+import com.school.biz.enumeration.HelpDistributionTypeEnum;
 import com.school.biz.enumeration.ReceiveExpressStatusEnum;
 import com.school.biz.enumeration.ReceiveExpressTypeEnum;
 import com.school.biz.enumeration.WechatTemplateEnum;
@@ -65,6 +67,8 @@ public class ExpressReceiveController extends BaseEasyWebController {
             mav.addObject("listData", JSON.toJSON(list));
             mav.addObject("expressReceiveStatusMap", JSON.toJSON(ReceiveExpressStatusEnum.getAllStatusEnum()));
             mav.addObject("expressTypeMap", JSON.toJSON(ReceiveExpressTypeEnum.getAllTypeEnum()));
+            mav.addObject("helpDistributionTypeMap", JSON.toJSON(HelpDistributionTypeEnum.getAllTypeEnum()));
+            mav.addObject("expressWayMap", JSON.toJSON(ExpressWayEnum.getAllTypeEnum()));
             mav.addObject(PAGE_PARAM_PAGECOUNT, pageInfo.getTotalPage());
             mav.addObject(PAGE_PARAM_TOTALCOUNT, pageInfo.getTotalRecord());
 
