@@ -10,12 +10,12 @@
 	<!--初始化系统环境：development;test;production-->
 	<context-param>
 		<param-name>spring.profiles.active</param-name>
-		<param-value>production</param-value>
+		<param-value>test</param-value>
 		<!--<param-value>development</param-value>-->
 	</context-param>
 	<context-param>
 		<param-name>spring.profiles.default</param-name>
-		<param-value>production</param-value>
+		<param-value>test</param-value>
 	</context-param>
 	
 	<!--Spring项目的入口，容器加载时，自动装配ApplicationContext的配置信息  -->
