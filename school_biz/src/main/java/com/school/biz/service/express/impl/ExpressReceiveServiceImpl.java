@@ -72,7 +72,7 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
             List list = expressReceiveMapper.selectByParams(codeMap);
             if (!CollectionUtils.isEmpty(list)) {
                 ExpressReceive receive = (ExpressReceive) list.get(0);
-                if (receive.getExpressStatus() > (ReceiveExpressStatusEnum.WAIT_INTO_BOX.getFlag())) {
+                if (receive.getExpressStatus() != (ReceiveExpressStatusEnum.INEFFECTIVE.getFlag())) {
                     String msg = "edit receive express error,because the express status already pass,code:" + expressReceive.getCode();
                     log.error(msg);
                     throw new RuntimeException(msg);
