@@ -8,11 +8,12 @@
         <result column="action" property="action" jdbcType="VARCHAR"/>
         <result column="pre_status" property="preStatus" jdbcType="VARCHAR"/>
         <result column="post_status" property="postStatus" jdbcType="VARCHAR"/>
-        <result column="operator" property="operator" jdbcType="VARCHAR"/>
+        <result column="operator_id" property="operatorId" jdbcType="BIGINT"/>
+        <result column="operator_name" property="operatorName" jdbcType="VARCHAR"/>
         <result column="operate_time" property="operateTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, express_id, express_type, action, pre_status, post_status, operator, operate_time
+    id, express_id, express_type, action, pre_status, post_status, operator_id, operator_name, operate_time
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
@@ -42,11 +43,11 @@
             <if test="postStatus != null and postStatus != ''">
                 post_status,
             </if>
-            <if test="operator != null and operator != ''">
-                operator,
+            <if test="operatorId != null">
+                operator_id,
             </if>
-            <if test="operateTime != null">
-              operate_time,
+            <if test="operatorName != null and operatorName != ''">
+                operator_name,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -71,9 +72,6 @@
             <if test="operator != null and operator != ''">
                 #{operator,jdbcType=VARCHAR},
             </if>
-            <if test="operateTime != null">
-                #{operateTime,jdbcType=TIMESTAMP},
-            </if>
         </trim>
     </insert>
 
@@ -83,12 +81,10 @@
       from express_log el
         <where>
             <if test="keyword != null and keyword != '' ">
-                and (el.name like concat('%',#{keyword},'%')
-                or ec.code like concat('%',#{keyword},'%')
-                or ec.phone like concat('%',#{keyword},'%'))
+
             </if>
         </where>
-        ORDER BY ec.id desc
+        ORDER BY el.operate_time desc
     </select>
 
 </mapper>

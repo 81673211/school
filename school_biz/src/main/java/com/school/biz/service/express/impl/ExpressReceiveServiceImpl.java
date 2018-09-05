@@ -1,5 +1,8 @@
 package com.school.biz.service.express.impl;
 
+import com.school.biz.component.ExpressLogOperatorHelper;
+import com.school.biz.enumeration.ExpressLogActionEnum;
+import com.school.biz.util.ExpressLogWrapper;
 import com.school.biz.dao.customer.CustomerMapper;
 import com.school.biz.dao.express.ExpressCompanyMapper;
 import com.school.biz.dao.express.ExpressReceiveMapper;
@@ -18,6 +21,7 @@ import com.school.biz.exception.ExpressException;
 import com.school.biz.service.base.impl.BaseServiceImpl;
 import com.school.biz.service.calc.CalcCostService;
 import com.school.biz.service.express.ExpressReceiveService;
+import com.school.biz.service.log.ExpressLogService;
 import com.school.biz.service.order.OrderInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +55,10 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
     private OrderInfoService orderInfoService;
     @Autowired
     private CalcCostService calcCostService;
+    @Autowired
+    private ExpressLogService expressLogService;
+    @Autowired
+    private ExpressLogOperatorHelper expressLogOperatorHelper;
 
     @Override
     public String createHelpReceiveExpress(ExpressReceive expressReceive) {
@@ -90,6 +98,15 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
                     log.error(message);
                     throw new ExpressException(message);
                 }
+//                Long customerId = expressReceive.getCustomerId();
+//                ReceiveExpressStatusEnum receiveExpressStatusEnum = ReceiveExpressStatusEnum.parseObj(expressReceive.getExpressStatus());
+//                if (receiveExpressStatusEnum != null) {
+//                    expressLogService.create(ExpressLogWrapper.wrap(expressReceive.getId(), expressReceive.getExpressType(),
+//                                                                    ExpressLogActionEnum.CREATE_HELP_RECEIVE_EXPRESS.getMsg(),
+//                                                                    null, receiveExpressStatusEnum.getMessage(),
+//                                                                    null, customerId,
+//                                                                    expressLogOperatorHelper.getCustomerOperatorName(customerId)));
+//                }
             }
         } catch (Exception e) {
             String message = "throw exception when create receive express";

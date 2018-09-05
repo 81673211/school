@@ -26,7 +26,11 @@ public class ExpressLog {
 
     private String postStatus;
 
-    private String operator;
+    private String remark;
+
+    private Long operatorId;
+
+    private String operatorName;
 
     private Date operateTime;
 }
