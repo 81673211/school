@@ -103,7 +103,9 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
             Map<String, Object> map = new HashMap<>();
             map.put("phone", expressReceive.getReceiverPhone());
             List<Customer> list = customerMapper.selectByParams(map);
-            expressReceive.setCustomerId(list.get(0).getId());
+            Customer customer = list.get(0);
+            expressReceive.setCustomerId(customer.getId());
+            expressReceive.setReceiverAddr(customer.getAddr());
         }
     }
 
