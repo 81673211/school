@@ -43,7 +43,7 @@
              </span>
             </div>
             <div class="tran-serch f-l ml-50">
-                <input type="text" name="keywordSearch" id="" placeholder="快递单号" style="width:200px" class="input-text" :duplex="@inputText">
+                <input type="text" name="keywordSearch" id="" placeholder="快递单号/柜子编号" style="width:200px" class="input-text" :duplex="@inputText">
                 <button name="" id="" class="btn btn-primary radius" type="button" :click="@methods.query"><i class="Hui-iconfont"></i> 搜索</button>
             </div>
             <div class="f-r">
