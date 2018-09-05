@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.school.biz.dao.box.ExpressBoxInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.school.biz.domain.entity.box.ExpressBoxInfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="express_code" property="expressCode" jdbcType="VARCHAR" />
+    <result column="box_group" property="boxGroup" jdbcType="VARCHAR" />
+    <result column="box_no" property="boxNo" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="oper_id" property="operId" jdbcType="BIGINT" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, express_code, box_group, box_no, status, oper_id, created_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from express_box_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from express_box_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.school.biz.domain.entity.box.ExpressBoxInfo" >
+    insert into express_box_info (id, express_code, box_group, 
+      box_no, status, oper_id, 
+      created_time)
+    values (#{id,jdbcType=BIGINT}, #{expressCode,jdbcType=VARCHAR}, #{boxGroup,jdbcType=VARCHAR}, 
+      #{boxNo,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{operId,jdbcType=BIGINT}, 
+      #{createdTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.school.biz.domain.entity.box.ExpressBoxInfo" >
+    insert into express_box_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="expressCode != null" >
+        express_code,
+      </if>
+      <if test="boxGroup != null" >
+        box_group,
+      </if>
+      <if test="boxNo != null" >
+        box_no,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="operId != null" >
+        oper_id,
+      </if>
+      <if test="createdTime != null" >
+        created_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="expressCode != null" >
+        #{expressCode,jdbcType=VARCHAR},
+      </if>
+      <if test="boxGroup != null" >
+        #{boxGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="boxNo != null" >
+        #{boxNo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="operId != null" >
+        #{operId,jdbcType=BIGINT},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.school.biz.domain.entity.box.ExpressBoxInfo" >
+    update express_box_info
+    <set >
+      <if test="expressCode != null" >
+        express_code = #{expressCode,jdbcType=VARCHAR},
+      </if>
+      <if test="boxGroup != null" >
+        box_group = #{boxGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="boxNo != null" >
+        box_no = #{boxNo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="operId != null" >
+        oper_id = #{operId,jdbcType=BIGINT},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.school.biz.domain.entity.box.ExpressBoxInfo" >
+    update express_box_info
+    set express_code = #{expressCode,jdbcType=VARCHAR},
+      box_group = #{boxGroup,jdbcType=VARCHAR},
+      box_no = #{boxNo,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      oper_id = #{operId,jdbcType=BIGINT},
+      created_time = #{createdTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="queryPage" resultType="com.school.biz.domain.vo.box.ExpressBoxInfoVo" parameterType="map">
+    select ebi.*,au.admin_name oper_name from express_box_info ebi
+	inner join admin_user au on ebi.oper_id = au.id
+    <where>
+      <if test="status != null and status != '' ">
+        and ebi.status = #{status}
+      </if>
+      <if test="keyword != null and keyword != '' ">
+        and (ebi.express_code like concat('%',#{keyword},'%')
+        	 or ebi.box_no like concat('%',#{keyword},'%'))
+      </if>
+    </where>
+    ORDER BY ebi.created_time desc
+  </select>
+</mapper>

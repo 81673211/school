@@ -17,6 +17,14 @@ insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_re
 insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_remark) values (36, '补单', '/express/expressSend/reOrder.do', (select ri.id from resource_info ri where ri.res_url='/express/expressSend/list.do'),(select mi.id from menu_info mi where mi.resource_name = '寄件列表'),NULL);
 insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_remark) values (37, '退款', '/express/expressSend/refund.do', (select ri.id from resource_info ri where ri.res_url='/express/expressSend/list.do'),(select mi.id from menu_info mi where mi.resource_name = '寄件列表'),NULL);
 
+/** 快递柜取件信息 */
+insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_remark) values (61, '柜子取件列表', '/expressBoxInfo/list.do', 0,(select mi.id from menu_info mi where mi.resource_name = '柜子取件列表'),NULL);
+
+insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_remark) values (62, '柜子取件详情', '/expressBoxInfo/detail.do', (select ri.id from resource_info ri where ri.res_url='/expressBoxInfo/list.do'),(select mi.id from menu_info mi where mi.resource_name = '柜子取件列表'),NULL);
+insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_remark) values (63, '柜子取件编辑', '/expressBoxInfo/edit.do', (select ri.id from resource_info ri where ri.res_url='/expressBoxInfo/list.do'),(select mi.id from menu_info mi where mi.resource_name = '柜子取件列表'),NULL);
+insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_remark) values (64, '柜子取件保存', '/expressBoxInfo/save.do', (select ri.id from resource_info ri where ri.res_url='/expressBoxInfo/list.do'),(select mi.id from menu_info mi where mi.resource_name = '柜子取件列表'),NULL);
+insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_remark) values (65, '柜子取件删除', '/expressBoxInfo/del.do', (select ri.id from resource_info ri where ri.res_url='/expressBoxInfo/list.do'),(select mi.id from menu_info mi where mi.resource_name = '柜子取件列表'),NULL);
+
 
 /** 2.订单管理 */
 /** 支付订单列表 */
