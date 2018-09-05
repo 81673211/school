@@ -442,6 +442,7 @@ public class ExpressController extends BaseEasyWebController {
             String orderNo = expressReceiveService.createHelpReceiveExpress(expressReceive);
             return response.writeSuccess("处理帮我收件成功", orderNo);
         } catch (Exception e) {
+            log.error("处理帮我收件失败,{}", e.getMessage());
             return response.writeFailure("处理帮我收件失败");
         }
     }
