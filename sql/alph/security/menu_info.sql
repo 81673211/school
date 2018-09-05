@@ -3,6 +3,7 @@
 	
 	insert into menu_info (id, pid, resource_url, resource_name, mindex, level, remark) values (2, (select mi.id from menu_info mi where mi.resource_name = '快递管理'), NULL,'收件列表', 1, 2, NULL);
 	insert into menu_info (id, pid, resource_url, resource_name, mindex, level, remark) values (3, (select mi.id from menu_info mi where mi.resource_name = '快递管理'), NULL,'寄件列表', 2, 2, NULL);
+	insert into menu_info (id, pid, resource_url, resource_name, mindex, level, remark) values (4, (select mi.id from menu_info mi where mi.resource_name = '快递管理'), NULL,'柜子取件列表', 3, 2, NULL);
 	
 	/** 2.订单管理 */
 	insert into menu_info (id, pid, resource_url, resource_name, mindex, level, remark) values (10, 0, NULL,'订单管理', 2, 1, 'review-icon yg-icon');
