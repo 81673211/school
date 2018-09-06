@@ -435,6 +435,7 @@ public class ExpressController extends BaseEasyWebController {
             BeanUtils.copyProperties(expressVo, expressReceive);
             Customer customer = customerService.getByOpenId(expressVo.getOpenId());
             expressReceive.setCustomerId(customer.getId());
+            expressReceive.setReceiverAddr(customer.getAddr());
             expressReceive.setExpressWay(DistributionTypeEnum.DISTRIBUTION.getFlag());
             expressReceive.setExpressType(ReceiveExpressTypeEnum.HELP_RECEIVE.getFlag());
             expressReceive.setHelpDistributionType(expressVo.getHelpDistributionType());
