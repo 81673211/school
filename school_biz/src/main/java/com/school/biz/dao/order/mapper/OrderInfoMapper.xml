@@ -234,7 +234,11 @@
 
   <select id="findSuccessOrdersByExpressIdAndExpressType" parameterType="map" resultType="com.school.biz.domain.entity.order.OrderInfo">
   	select * from order_info oi
+<<<<<<< HEAD
 	where oi.express_id = #{expressId} and oi.express_type=#{expressType} and oi.status = 1
+=======
+	where oi.express_id = #{expressId} and oi.status = 1 and oi.express_type = 0
+>>>>>>> branch 'calc_cost' of https://github.com/81673211/school.git
 	order by oi.amount desc
   </select>
 

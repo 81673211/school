@@ -85,6 +85,7 @@ public class ExpressController extends BaseEasyWebController {
         expressSend.setCustomerId(customer.getId());
         expressSend.setSenderPhone(customer.getPhone());
         expressSend.setSenderName(customer.getName());
+        expressSend.setExpressStatus(SendExpressStatusEnum.CREATE.getFlag());
         String orderNo = expressSendService.createSendExpress(expressSend);
         return response.writeSuccess("创建寄件快件成功", orderNo);
     }
@@ -435,6 +436,7 @@ public class ExpressController extends BaseEasyWebController {
             BeanUtils.copyProperties(expressVo, expressReceive);
             Customer customer = customerService.getByOpenId(expressVo.getOpenId());
             expressReceive.setCustomerId(customer.getId());
+            expressReceive.setReceiverAddr(customer.getAddr());
             expressReceive.setExpressWay(DistributionTypeEnum.DISTRIBUTION.getFlag());
             expressReceive.setExpressType(ReceiveExpressTypeEnum.HELP_RECEIVE.getFlag());
             expressReceive.setHelpDistributionType(expressVo.getHelpDistributionType());
@@ -442,6 +444,7 @@ public class ExpressController extends BaseEasyWebController {
             String orderNo = expressReceiveService.createHelpReceiveExpress(expressReceive);
             return response.writeSuccess("处理帮我收件成功", orderNo);
         } catch (Exception e) {
+            log.error("处理帮我收件失败,{}", e.getMessage());
             return response.writeFailure("处理帮我收件失败");
         }
     }

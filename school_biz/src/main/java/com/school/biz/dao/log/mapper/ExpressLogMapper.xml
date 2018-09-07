@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.school.biz.dao.log.ExpressLogMapper">
+    <resultMap id="BaseResultMap" type="com.school.biz.domain.entity.log.ExpressLog">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="code" property="code" jdbcType="VARCHAR"/>
+        <result column="express_id" property="expressId" jdbcType="BIGINT"/>
+        <result column="express_type" property="expressType" jdbcType="INTEGER"/>
+        <result column="action" property="action" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="operator_id" property="operatorId" jdbcType="BIGINT"/>
+        <result column="operator_name" property="operatorName" jdbcType="VARCHAR"/>
+        <result column="operate_time" property="operateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, code, express_id, express_type, action, status, remark, operator_id, operator_name, operate_time
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from express_log
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insertSelective" parameterType="com.school.biz.domain.entity.log.ExpressLog">
+        insert into express_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="code != null and code != ''">
+                code,
+            </if>
+            <if test="expressId != null">
+                express_id,
+            </if>
+            <if test="expressType != null">
+                express_type,
+            </if>
+            <if test="action != null and action != ''">
+                action,
+            </if>
+            <if test="status != null and status != ''">
+                status,
+            </if>
+            <if test="remark != null and remark != ''">
+                remark,
+            </if>
+            <if test="operatorId != null">
+                operator_id,
+            </if>
+            <if test="operatorName != null and operatorName != ''">
+                operator_name,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="code != null and code != ''">
+                #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="expressId != null">
+                #{expressId,jdbcType=BIGINT},
+            </if>
+            <if test="expressType != null">
+                #{expressType,jdbcType=BIGINT},
+            </if>
+            <if test="action != null and action != ''">
+                #{action,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null and status != ''">
+                #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null and remark != ''">
+                #{remark, jdbcType=VARCHAR},
+            </if>
+            <if test="operatorId != null">
+                #{operatorId,jdbcType=BIGINT},
+            </if>
+            <if test="operatorName != null and operatorName != ''">
+                #{operatorName,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="queryPage" resultType="com.school.biz.domain.entity.log.ExpressLog" parameterType="map">
+        select
+      <include refid="Base_Column_List"/>
+      from express_log el
+        <where>
+            <if test="keyword != null and keyword != '' ">
+
+            </if>
+        </where>
+        ORDER BY el.operate_time desc
+    </select>
+
+</mapper>

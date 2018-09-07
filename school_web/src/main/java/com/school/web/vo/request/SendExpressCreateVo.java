@@ -17,7 +17,7 @@ public class SendExpressCreateVo {
     @NotNull(message = "收件人名字不为空")
     private String receiverName;//	收件人名字
     @NotNull(message = "收件人地址不为空")
-    private String receiverAddr;//	收件人地址
+    private String receiverAddr;// 收件人地址
     @NotNull(message = "收件人省份不为空")
     private Long receiverProvinceId;    //收件人省份ID
     @NotNull(message = "收件人城市不为空")

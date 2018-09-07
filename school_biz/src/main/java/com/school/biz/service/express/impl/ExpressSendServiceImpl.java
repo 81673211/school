@@ -8,11 +8,14 @@ import com.school.biz.domain.entity.customer.Customer;
 import com.school.biz.domain.entity.express.ExpressCompany;
 import com.school.biz.domain.entity.express.ExpressSend;
 import com.school.biz.domain.entity.region.Region;
+import com.school.biz.domain.entity.user.AdminUser;
 import com.school.biz.domain.vo.express.ExpressSendVo;
+import com.school.biz.enumeration.ExpressLogActionEnum;
 import com.school.biz.exception.ExpressException;
 import com.school.biz.service.base.impl.BaseServiceImpl;
 import com.school.biz.service.calc.CalcCostService;
 import com.school.biz.service.express.ExpressSendService;
+import com.school.biz.service.log.ExpressLogService;
 import com.school.biz.service.order.OrderInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -46,6 +49,8 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
     private OrderInfoService orderInfoService;
     @Autowired
     private CalcCostService calcCostService;
+    @Autowired
+    private ExpressLogService expressLogService;
 
     @Override
     public String createSendExpress(ExpressSend expressSend) {
@@ -57,7 +62,7 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
             log.error(message);
             throw new RuntimeException(message);
         }
-        updateCustomer(expressSend);
+        expressLogService.log(expressSend, ExpressLogActionEnum.SEND_EXPRESS_CREATE);
         return orderInfoService.createSendOrder(expressSend);
     }
 
@@ -116,8 +121,7 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
 
     @Override
     public void updateSendExpressStatus(Long id, Integer status) {
-        ExpressSend expressSend = new ExpressSend();
-        expressSend.setId(id);
+        ExpressSend expressSend = getSendExpress(id);
         expressSend.setExpressStatus(status);
         int count = expressSendMapper.updateByPrimaryKeySelective(expressSend);
         if (!(count > 0)) {
@@ -125,6 +129,7 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
             log.error(msg);
             throw new RuntimeException(msg);
         }
+        expressLogService.log(expressSend, ExpressLogActionEnum.SEND_EXPRESS_UPDATE);
     }
 
 
@@ -177,11 +182,13 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
     }
 
     @Override
-    public void saveOrUpdate(ExpressSend expressSend) {
+    public void saveOrUpdate(ExpressSend expressSend, AdminUser adminUser) {
         if (expressSend.getId() == null) {
             this.save(expressSend);
+            expressLogService.log(expressSend, ExpressLogActionEnum.SEND_EXPRESS_CREATE, adminUser);
         } else {
             this.update(expressSend);
+            expressLogService.log(expressSend, ExpressLogActionEnum.SEND_EXPRESS_UPDATE, adminUser);
         }
     }
 

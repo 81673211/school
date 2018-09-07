@@ -2,6 +2,7 @@ package com.school.biz.service.express;
 
 import com.school.biz.dao.express.ExpressReceiveMapper;
 import com.school.biz.domain.entity.express.ExpressReceive;
+import com.school.biz.domain.entity.user.AdminUser;
 import com.school.biz.enumeration.ExpressTypeEnum;
 import com.school.biz.exception.ExpressException;
 import com.school.biz.service.base.BaseService;
@@ -89,7 +90,7 @@ public interface ExpressReceiveService extends BaseService<ExpressReceive, Expre
     //-------- from manager --------
     List<ExpressReceive> queryPage(Map<String, Object> paramMap);
 
-    void saveOrUpdate(ExpressReceive expressReceive);
+    void saveOrUpdate(ExpressReceive expressReceive, AdminUser adminUser);
 
     /**
      * 创建帮我取件流程
