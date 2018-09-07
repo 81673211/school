@@ -273,15 +273,14 @@
 
     <!-- 管理台列表查询 -->
     <select id="queryForManagerPage" resultType="com.school.biz.domain.vo.express.ExpressSendVo" parameterType="map">
-        select es.*,IFNULL((select SUM(o1.amount) from order_info o1 where o1.express_id = es.id and o1.status = 1 and
-        express_type=0),0)
+        select es.*,IFNULL((select SUM(o1.amount) from order_info o1 where o1.express_id = es.id and o1.express_type = 0 and o1.status = 1),0)
         totalAmt,
-        IFNULL((select SUM(o2.amount) from refund_order_info o2 where o2.express_id = es.id and o2.status = 1),0)
+        IFNULL((select SUM(o2.amount) from refund_order_info o2 where o2.express_id = es.id and o2.express_type = 0 and o2.status = 1),0)
         totalRefundAmt,
-        IFNULL((select SUM(o3.amount) from order_info o3 where o3.express_id = es.id and o3.status = 1 and o3.order_no
+        IFNULL((select SUM(o3.amount) from order_info o3 where o3.express_id = es.id and o3.express_type = 0 and o3.status = 1 and o3.order_no
         like '16%'),0) totalReOrderAmt,
-        (select count(1) from refund_order_info o4 where o4.express_id = es.id) refundNum,
-        (select count(1) from order_info o5 where o5.express_id = es.id and o5.order_no like '16%') reOrderNum,
+        (select count(1) from refund_order_info o4 where o4.express_id = es.id and o4.express_type = 0) refundNum,
+        (select count(1) from order_info o5 where o5.express_id = es.id and o5.express_type = 0 and o5.order_no like '16%') reOrderNum,
         rp.area_name receiver_province_name,
         rc.area_name receiver_city_name,
         rd.area_name receiver_district_name

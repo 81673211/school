@@ -33,7 +33,7 @@ public interface OrderInfoMapper extends BaseDao {
 	/**
 	 * 根据快递id查询其所有支付成功订单（按支付金额降序）
 	 */
-	List<OrderInfo> findSuccessOrdersByExpressId(Long expressId);
+	List<OrderInfo> findSuccessOrdersByExpressIdAndExpressType(Map map);
 
     BigDecimal findAllPriceByExpress(@Param("expressId") Long expressId);
 

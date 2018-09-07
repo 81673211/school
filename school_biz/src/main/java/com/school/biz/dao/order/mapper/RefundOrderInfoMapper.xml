@@ -214,9 +214,9 @@
   	select * from refund_order_info r where r.status = 0
   </select>
   
-  <select id="findSuccessRefundOrdersByExpressId" parameterType="java.lang.Long" resultType="com.school.biz.domain.entity.order.RefundOrderInfo">
+  <select id="findSuccessRefundOrdersByExpressIdAndExpressType" parameterType="java.lang.Long" resultType="com.school.biz.domain.entity.order.RefundOrderInfo">
   	select * from refund_order_info roi
-  	where roi.express_id = #{expressId} and roi.status = 1
+  	where roi.express_id = #{expressId} and roi.express_type = #{expressType} and roi.status = 1
   </select>
   
   <select id="queryPage" resultType="com.school.biz.domain.entity.order.RefundOrderInfo" parameterType="map">
@@ -234,6 +234,6 @@
   </select>
   
   <update id="fillExpressNo" parameterType="map">
-    	update refund_order_info set express_code = #{expressNo} where express_id = #{expressId}
+    	update refund_order_info set express_code = #{expressNo} where express_id = #{expressId} and express_type = #{expressType}
     </update>
 </mapper>

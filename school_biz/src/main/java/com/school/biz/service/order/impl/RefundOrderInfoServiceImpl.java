@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.school.biz.dao.order.RefundOrderInfoMapper;
 import com.school.biz.domain.entity.order.OrderInfo;
 import com.school.biz.domain.entity.order.RefundOrderInfo;
+import com.school.biz.enumeration.ExpressTypeEnum;
 import com.school.biz.enumeration.RefundOrderStatusEnum;
 import com.school.biz.service.base.impl.BaseServiceImpl;
 import com.school.biz.service.order.RefundOrderInfoService;
@@ -71,6 +72,7 @@ public class RefundOrderInfoServiceImpl extends BaseServiceImpl<RefundOrderInfo,
 		Map<String, Object> map = new HashMap<String,Object>();
 		map.put("expressId", expressId);
 		map.put("expressNo", expressNo);
+		map.put("expressType", ExpressTypeEnum.SEND.getFlag());
 		refundOrderInfoMapper.fillExpressNo(map);
 	}
 

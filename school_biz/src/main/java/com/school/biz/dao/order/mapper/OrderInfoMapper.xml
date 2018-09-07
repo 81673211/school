@@ -232,9 +232,9 @@
 	where o.status = 3 and o.created_time &lt;= #{tenMinutesAgo,jdbcType=VARCHAR}
   </select>
 
-  <select id="findSuccessOrdersByExpressId" parameterType="java.lang.Long" resultType="com.school.biz.domain.entity.order.OrderInfo">
+  <select id="findSuccessOrdersByExpressIdAndExpressType" parameterType="map" resultType="com.school.biz.domain.entity.order.OrderInfo">
   	select * from order_info oi
-	where oi.express_id = #{expressId} and oi.status = 1
+	where oi.express_id = #{expressId} and oi.express_type=#{expressType} and oi.status = 1
 	order by oi.amount desc
   </select>
 
@@ -243,6 +243,6 @@
     </select>
     
     <update id="fillExpressNo" parameterType="map">
-    	update order_info set express_code = #{expressNo} where express_id = #{expressId}
+    	update order_info set express_code = #{expressNo} where express_id = #{expressId} and express_type = #{expressType}
     </update>
 </mapper>

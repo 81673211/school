@@ -1,5 +1,17 @@
 package com.school.biz.service.order.impl;
 
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.alibaba.fastjson.JSON;
 import com.school.biz.constant.ConfigProperties;
 import com.school.biz.constant.Constants;
@@ -12,7 +24,12 @@ import com.school.biz.domain.entity.express.ExpressReceive;
 import com.school.biz.domain.entity.express.ExpressSend;
 import com.school.biz.domain.entity.order.OrderInfo;
 import com.school.biz.domain.entity.order.RefundOrderInfo;
-import com.school.biz.enumeration.*;
+import com.school.biz.enumeration.DistributionTypeEnum;
+import com.school.biz.enumeration.ExpressTypeEnum;
+import com.school.biz.enumeration.OrderStatusEnum;
+import com.school.biz.enumeration.ReceiveExpressTypeEnum;
+import com.school.biz.enumeration.RefundOrderStatusEnum;
+import com.school.biz.enumeration.SendExpressStatusEnum;
 import com.school.biz.extension.wxpay.sdk.WXPay;
 import com.school.biz.extension.wxpay.sdk.WXPayConfigImpl;
 import com.school.biz.extension.wxpay.sdk.WXPayConstants.SignType;
@@ -26,17 +43,8 @@ import com.school.biz.util.AmountUtils;
 import com.school.biz.util.DateUtil;
 import com.school.biz.util.IdWorkerUtil;
 import com.school.biz.util.SessionUtils;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -262,7 +270,10 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
         ExpressSend expressSend = expressSendMapper.selectByPrimaryKey(expressSendId);
 
         // 根据快递号查询其所有支付成功订单（按支付金额降序）
-        List<OrderInfo> orderInfos = orderInfoMapper.findSuccessOrdersByExpressId(expressSend.getId());
+        Map<String, Object> map = new HashMap<String,Object>();
+        map.put("expressId", expressSend.getId());
+        map.put("expressType", ExpressTypeEnum.SEND.getFlag());
+        List<OrderInfo> orderInfos = orderInfoMapper.findSuccessOrdersByExpressIdAndExpressType(map);
 
         if (orderInfos == null || orderInfos.size() < 1) {
             throw new Exception("该快递没有成功交易记录");
@@ -398,14 +409,20 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
         BigDecimal serviceAmt = expressSend.getServiceAmt();
 
         // 查询寄件总金额
-        List<OrderInfo> orderInfos = orderInfoMapper.findSuccessOrdersByExpressId(expressSend.getId());
+        Map<String, Object> map = new HashMap<String,Object>();
+        map.put("expressId", expressSend.getId());
+        map.put("expressType", ExpressTypeEnum.SEND.getFlag());
+        List<OrderInfo> orderInfos = orderInfoMapper.findSuccessOrdersByExpressIdAndExpressType(map);
         BigDecimal orderTotalAmt = new BigDecimal("0");
         for (OrderInfo orderInfo : orderInfos) {
             orderTotalAmt = orderTotalAmt.add(orderInfo.getAmount());
         }
 
         // 查询退款总金额
-        List<RefundOrderInfo> refundOrderInfos = refundOrderInfoMapper.findSuccessRefundOrdersByExpressId(expressSend.getId());
+        Map<String, Object> map2 = new HashMap<String,Object>();
+        map2.put("expressId", expressSend.getId());
+        map2.put("expressType", ExpressTypeEnum.SEND.getFlag());
+        List<RefundOrderInfo> refundOrderInfos = refundOrderInfoMapper.findSuccessRefundOrdersByExpressIdAndExpressType(map2);
         BigDecimal refundTotalAmt = new BigDecimal("0");
         for (RefundOrderInfo refundOrderInfo : refundOrderInfos) {
             refundTotalAmt = refundTotalAmt.add(refundOrderInfo.getAmount());
@@ -429,6 +446,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("expressId", expressId);
         map.put("expressNo", expressNo);
+        map.put("expressType", ExpressTypeEnum.SEND.getFlag());
         orderInfoMapper.fillExpressNo(map);
     }
 }
