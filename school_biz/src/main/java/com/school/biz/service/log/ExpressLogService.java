@@ -1,6 +1,8 @@
 package com.school.biz.service.log;
 
-import com.school.biz.domain.entity.log.ExpressLog;
+import com.school.biz.domain.entity.express.Express;
+import com.school.biz.domain.entity.user.AdminUser;
+import com.school.biz.enumeration.ExpressLogActionEnum;
 
 /**
  *
@@ -11,5 +13,7 @@ import com.school.biz.domain.entity.log.ExpressLog;
  */
 public interface ExpressLogService {
 
-    void create(ExpressLog expressLog);
+    void log(Express express, ExpressLogActionEnum actionEnum);
+
+    void log(Express express, ExpressLogActionEnum actionEnum, AdminUser adminUser);
 }

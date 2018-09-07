@@ -16,15 +16,15 @@ public class ExpressLog {
 
     private Long id;
 
+    private String code;
+
     private Long expressId;
 
     private int expressType;
 
     private String action;
 
-    private String preStatus;
-
-    private String postStatus;
+    private String status;
 
     private String remark;
 

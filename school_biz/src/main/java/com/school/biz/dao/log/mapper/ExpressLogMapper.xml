@@ -3,17 +3,18 @@
 <mapper namespace="com.school.biz.dao.log.ExpressLogMapper">
     <resultMap id="BaseResultMap" type="com.school.biz.domain.entity.log.ExpressLog">
         <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="code" property="code" jdbcType="VARCHAR"/>
         <result column="express_id" property="expressId" jdbcType="BIGINT"/>
         <result column="express_type" property="expressType" jdbcType="INTEGER"/>
         <result column="action" property="action" jdbcType="VARCHAR"/>
-        <result column="pre_status" property="preStatus" jdbcType="VARCHAR"/>
-        <result column="post_status" property="postStatus" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
         <result column="operator_id" property="operatorId" jdbcType="BIGINT"/>
         <result column="operator_name" property="operatorName" jdbcType="VARCHAR"/>
         <result column="operate_time" property="operateTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, express_id, express_type, action, pre_status, post_status, operator_id, operator_name, operate_time
+    id, code, express_id, express_type, action, status, remark, operator_id, operator_name, operate_time
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
@@ -28,6 +29,9 @@
             <if test="id != null">
                 id,
             </if>
+            <if test="code != null and code != ''">
+                code,
+            </if>
             <if test="expressId != null">
                 express_id,
             </if>
@@ -37,11 +41,11 @@
             <if test="action != null and action != ''">
                 action,
             </if>
-            <if test="preStatus != null and preStatus != ''">
-                pre_status,
+            <if test="status != null and status != ''">
+                status,
             </if>
-            <if test="postStatus != null and postStatus != ''">
-                post_status,
+            <if test="remark != null and remark != ''">
+                remark,
             </if>
             <if test="operatorId != null">
                 operator_id,
@@ -54,6 +58,9 @@
             <if test="id != null">
                 #{id,jdbcType=BIGINT},
             </if>
+            <if test="code != null">
+                #{code,jdbcType=VARCHAR},
+            </if>
             <if test="expressId != null">
                 #{expressId,jdbcType=BIGINT},
             </if>
@@ -63,14 +70,17 @@
             <if test="action != null and action != ''">
                 #{action,jdbcType=VARCHAR},
             </if>
-            <if test="preStatus != null and preStatus != ''">
-                #{preStatus,jdbcType=VARCHAR},
+            <if test="status != null and status != ''">
+                #{status,jdbcType=VARCHAR},
             </if>
-            <if test="postStatus != null and postStatus != ''">
-                #{postStatus,jdbcType=VARCHAR},
+            <if test="remark != null and remark != ''">
+                #{remark, jdbcType=VARCHAR},
             </if>
-            <if test="operator != null and operator != ''">
-                #{operator,jdbcType=VARCHAR},
+            <if test="operatorId != null">
+                #{operatorId,jdbcType=BIGINT},
+            </if>
+            <if test="operatorName != null and operatorName != ''">
+                #{operatorName,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>

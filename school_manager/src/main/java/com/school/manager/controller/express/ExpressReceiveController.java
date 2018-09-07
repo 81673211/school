@@ -17,6 +17,7 @@ import com.school.biz.constant.ConstantUrl;
 import com.school.biz.domain.entity.customer.Customer;
 import com.school.biz.domain.entity.express.ExpressCompany;
 import com.school.biz.domain.entity.express.ExpressReceive;
+import com.school.biz.enumeration.ExpressLogActionEnum;
 import com.school.biz.enumeration.ExpressTypeEnum;
 import com.school.biz.enumeration.ExpressWayEnum;
 import com.school.biz.enumeration.HelpDistributionTypeEnum;
@@ -27,9 +28,11 @@ import com.school.biz.exception.FuBusinessException;
 import com.school.biz.service.customer.CustomerService;
 import com.school.biz.service.express.ExpressCompanyService;
 import com.school.biz.service.express.ExpressReceiveService;
+import com.school.biz.service.log.ExpressLogService;
 import com.school.biz.service.wechat.TemplateService;
 import com.school.biz.util.pager.PageInfo;
 import com.school.manager.controller.base.BaseEasyWebController;
+import com.school.manager.util.SessionUtils;
 import com.school.manager.vo.AjaxResult;
 
 import lombok.extern.slf4j.Slf4j;
@@ -47,6 +50,9 @@ public class ExpressReceiveController extends BaseEasyWebController {
 
     @Autowired
     private CustomerService customerService;
+
+    @Autowired
+    private ExpressLogService expressLogService;
 
     @Autowired
     private TemplateService templateService;
@@ -127,14 +133,14 @@ public class ExpressReceiveController extends BaseEasyWebController {
             if (customer != null) {
                 expressReceive.setCustomerId(customer.getId());
                 // 如果未填写收件人姓名、地址，则自动补全
-                if (StringUtils.isBlank(expressReceive.getReceiverName())){
+                if (StringUtils.isBlank(expressReceive.getReceiverName())) {
                     expressReceive.setReceiverName(customer.getName());
                 }
-                if (StringUtils.isBlank(expressReceive.getReceiverAddr())){
+                if (StringUtils.isBlank(expressReceive.getReceiverAddr())) {
                     expressReceive.setReceiverAddr(customer.getAddr());
                 }
             }
-            expressReceiveService.saveOrUpdate(expressReceive);
+            expressReceiveService.saveOrUpdate(expressReceive, SessionUtils.getSessionUser(request));
             if (customer != null && StringUtils.isNotBlank(customer.getOpenId())) {
                 Integer status = expressReceive.getExpressStatus();
                 if (ReceiveExpressStatusEnum.PROXY_RECIEVED.getFlag() == status) {
@@ -159,8 +165,10 @@ public class ExpressReceiveController extends BaseEasyWebController {
      */
     @ResponseBody
     @RequestMapping("/del.do")
-    public AjaxResult del(Long id) {
+    public AjaxResult del(Long id, HttpServletRequest request) {
         try {
+            expressLogService.log(expressReceiveService.getReceiveExpress(id), ExpressLogActionEnum.RECEIVE_EXPRESS_DEL,
+                                  SessionUtils.getSessionUser(request));
             expressReceiveService.deleteById(id);
             return AjaxResult.success("删除成功");
         } catch (Exception e) {

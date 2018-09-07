@@ -14,7 +14,12 @@ import lombok.Getter;
 @Getter
 public enum ExpressLogActionEnum {
 
-    CREATE_HELP_RECEIVE_EXPRESS("创建帮我取件");
+    RECEIVE_EXPRESS_CREATE("创建收件"),
+    RECEIVE_EXPRESS_UPDATE("更新收件"),
+    RECEIVE_EXPRESS_DEL("删除收件"),
+    SEND_EXPRESS_CREATE("创建寄件"),
+    SEND_EXPRESS_UPDATE("更新寄件"),
+    SEND_EXPRESS_DEL("删除寄件");
 
     private String msg;
 }

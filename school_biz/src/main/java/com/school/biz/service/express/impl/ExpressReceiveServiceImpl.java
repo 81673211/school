@@ -1,8 +1,7 @@
 package com.school.biz.service.express.impl;
 
-import com.school.biz.component.ExpressLogOperatorHelper;
+import com.school.biz.domain.entity.user.AdminUser;
 import com.school.biz.enumeration.ExpressLogActionEnum;
-import com.school.biz.util.ExpressLogWrapper;
 import com.school.biz.dao.customer.CustomerMapper;
 import com.school.biz.dao.express.ExpressCompanyMapper;
 import com.school.biz.dao.express.ExpressReceiveMapper;
@@ -57,8 +56,6 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
     private CalcCostService calcCostService;
     @Autowired
     private ExpressLogService expressLogService;
-    @Autowired
-    private ExpressLogOperatorHelper expressLogOperatorHelper;
 
     @Override
     public String createHelpReceiveExpress(ExpressReceive expressReceive) {
@@ -87,6 +84,7 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
                 } else {
                     expressReceive.setId(receive.getId());
                     expressReceiveMapper.updateByPrimaryKeySelective(expressReceive);
+                    expressLogService.log(expressReceive, ExpressLogActionEnum.RECEIVE_EXPRESS_UPDATE);
                 }
             } else {
                 boxExpressCompany(expressReceive);
@@ -98,15 +96,7 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
                     log.error(message);
                     throw new ExpressException(message);
                 }
-//                Long customerId = expressReceive.getCustomerId();
-//                ReceiveExpressStatusEnum receiveExpressStatusEnum = ReceiveExpressStatusEnum.parseObj(expressReceive.getExpressStatus());
-//                if (receiveExpressStatusEnum != null) {
-//                    expressLogService.create(ExpressLogWrapper.wrap(expressReceive.getId(), expressReceive.getExpressType(),
-//                                                                    ExpressLogActionEnum.CREATE_HELP_RECEIVE_EXPRESS.getMsg(),
-//                                                                    null, receiveExpressStatusEnum.getMessage(),
-//                                                                    null, customerId,
-//                                                                    expressLogOperatorHelper.getCustomerOperatorName(customerId)));
-//                }
+                expressLogService.log(expressReceive, ExpressLogActionEnum.RECEIVE_EXPRESS_CREATE);
             }
         } catch (Exception e) {
             String message = "throw exception when create receive express";
@@ -195,6 +185,7 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
             expressReceive.setServiceAmt(calcCostService.calcReceiveDistributionCost(DistributionTypeEnum.DISTRIBUTION.getFlag()));
         }
         int count = expressReceiveMapper.updateByPrimaryKeySelective(expressReceive);
+        expressLogService.log(expressReceive, ExpressLogActionEnum.RECEIVE_EXPRESS_UPDATE);
         if (count <= 0) {
             String msg =
                     "update receive express status failed,when update table 'express_receive' the number of affected rows is 0";
@@ -277,11 +268,13 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
     }
 
     @Override
-    public void saveOrUpdate(ExpressReceive expressReceive) {
+    public void saveOrUpdate(ExpressReceive expressReceive, AdminUser adminUser) {
         if (expressReceive.getId() == null) {
             this.save(expressReceive);
+            expressLogService.log(expressReceive, ExpressLogActionEnum.RECEIVE_EXPRESS_CREATE, adminUser);
         } else {
             this.update(expressReceive);
+            expressLogService.log(get(expressReceive.getId()), ExpressLogActionEnum.RECEIVE_EXPRESS_UPDATE, adminUser);
         }
     }
 }

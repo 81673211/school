@@ -1,6 +1,10 @@
 package com.school.biz.util;
 
+import com.school.biz.domain.entity.express.Express;
+import com.school.biz.domain.entity.express.ExpressReceive;
+import com.school.biz.domain.entity.express.ExpressSend;
 import com.school.biz.domain.entity.log.ExpressLog;
+import com.school.biz.enumeration.ExpressTypeEnum;
 
 /**
  *
@@ -13,17 +17,24 @@ public final class ExpressLogWrapper {
 
     private ExpressLogWrapper() {}
 
-    public static ExpressLog wrap(Long expressId, int expressType, String action, String preStatus, String postStatus,
-                           String remark, Long operatorId, String operatorName) {
+    public static ExpressLog wrap(Express express, String action, String status, String remark, Long operatorId, String operatorName) {
         ExpressLog log = new ExpressLog();
-        log.setExpressId(expressId);
-        log.setExpressType(expressType);
+        log.setExpressId(express.getId());
+        log.setExpressType(getType(express));
+        log.setCode(express.getCode());
+        log.setStatus(status);
         log.setAction(action);
-        log.setPreStatus(preStatus);
-        log.setPostStatus(postStatus);
         log.setRemark(remark);
         log.setOperatorId(operatorId);
         log.setOperatorName(operatorName);
         return log;
+    }
+
+    private static int getType(Express express) {
+        if (express instanceof ExpressSend) {
+            return ExpressTypeEnum.SEND.getFlag();
+        } else {
+            return ExpressTypeEnum.RECEIVE.getFlag();
+        }
     }
 }

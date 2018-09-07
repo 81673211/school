@@ -45,7 +45,7 @@
 <!-- 			<img src="../../static/image/kouhao.png" > -->
 		</div>
     </div>
-	<div class="footerLogoin">©2018 成都xx信息技术有限公司</div>
+	<div class="footerLogoin">©2018 V</div>
 </body>
 
 </html>

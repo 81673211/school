@@ -384,7 +384,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
         // 更改快递状态为等待补单支付
         expressSend.setReOrderAmt(reOrderAmt);
         expressSend.setExpressStatus(SendExpressStatusEnum.SUPPLEMENT.getFlag());
-        expressSendService.saveOrUpdate(expressSend);
+        expressSendService.saveOrUpdate(expressSend, SessionUtils.getSessionUser(request));
     }
 
     /**
