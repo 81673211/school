@@ -58,7 +58,7 @@
             <if test="id != null">
                 #{id,jdbcType=BIGINT},
             </if>
-            <if test="code != null">
+            <if test="code != null and code != ''">
                 #{code,jdbcType=VARCHAR},
             </if>
             <if test="expressId != null">
