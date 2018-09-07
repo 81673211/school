@@ -234,7 +234,7 @@
 
   <select id="findSuccessOrdersByExpressId" parameterType="java.lang.Long" resultType="com.school.biz.domain.entity.order.OrderInfo">
   	select * from order_info oi
-	where oi.express_id = #{expressId} and oi.status = 1
+	where oi.express_id = #{expressId} and oi.status = 1 and oi.express_type = 0
 	order by oi.amount desc
   </select>
 
