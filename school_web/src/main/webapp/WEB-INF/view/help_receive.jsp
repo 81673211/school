@@ -10,7 +10,7 @@
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/lib/jquery/jquery.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/js/zui.min.js"></script>
-    <script src="../../js/limit.js"></script>
+    <%--<script src="../../js/limit.js"></script>--%>
 
 </head>
 <body>
@@ -49,20 +49,10 @@
             </div>
         </div>
         <div class="control">
-            <label for="helpReceiveAddr">取件地址 <i class="icon icon-asterisk"
-                                                 style="font-size: 5px;color:red"></i> </label>
-            <input id="helpReceiveAddr" type="text" class="input">
-        </div>
-        <div class="control">
-            <label for="helpReceiveCode">取件码</label>
-            <input id="helpReceiveCode" type="text" class="input">
-        </div>
-
-        <div class="control">
-            <label for="helpDistributionType">选择配送方式 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i>
+            <label for="distributionType">选择配送方式 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i>
             </label>
             <div class="select">
-                <select id="helpDistributionType" name="expressWay">
+                <select id="distributionType" onchange="calcServiceAmt();">
                     <option value="">请选择配送方式</option>
                     <option value="box">配送入柜</option>
                     <option value="door">送货上门</option>
@@ -73,8 +63,22 @@
         <div class="control" id="expressWeightDiv">
             <label for="expressWeight">物品重量(KG) <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i>
             </label>
-            <input id="expressWeight" type="text" class="input" value="1"
+            <input id="expressWeight" type="text" class="input" value="1" onblur="calcServiceAmt();"
                    onkeyup="this.value=this.value.replace(/[^\d\.]/g, '')">
+        </div>
+
+        <div class="control">
+            <label for="helpReceiveAddr">取件地址 <i class="icon icon-asterisk"
+                                                 style="font-size: 5px;color:red"></i> </label>
+            <input id="helpReceiveAddr" type="text" class="input">
+        </div>
+        <div class="control">
+            <label for="helpReceiveCode">取件码</label>
+            <input id="helpReceiveCode" type="text" class="input">
+        </div>
+
+        <div class="text-right" style="margin-top: 20px; margin-bottom: 20px">
+            ￥服务费:<span class="price" id="serviceAmt">0.00</span>元
         </div>
 
         <div class="control text-center">
@@ -88,11 +92,22 @@
 <script>
 
     function calcServiceAmt() {
-        var helpDistributionType = $("#helpDistributionType").val();
-        if (helpDistributionType == "door") {
-            $("#expressWeightDiv").show();
+        var openId = $("#openId").val();
+        var expressWeight = $("#expressWeight").val();
+        var distributionType = $("#distributionType").val();
+        var data = {openId: openId};
+        data.expressWeight = expressWeight;
+        data.distributionType = distributionType;
+        if (distributionType != '' && expressWeight > 0) {
+            $.get("/calc/1/help/serviceAmt", data, function (result) {
+                if (result.status != 200) {
+                    alert(result.msg);
+                } else {
+                    $("#serviceAmt").html(result.data);
+                }
+            });
         } else {
-            $("#expressWeightDiv").hide();
+            $("#serviceAmt").html("0.00");
         }
     }
 
@@ -114,7 +129,7 @@
         var helpReceiveAddr = $("#helpReceiveAddr").val();
         var helpReceiveCode = $("#helpReceiveCode").val();
         var expressWeight = $("#expressWeight").val();
-        var helpDistributionType = $("#helpDistributionType").val();
+        var distributionType = $("#distributionType").val();
 
         if (openId == '') {
             alert("参数错误");
@@ -152,8 +167,8 @@
             alert("请输入详细取件地址");
             return false;
         }
-        if (helpDistributionType != '') {
-            data.helpDistributionType = helpDistributionType;
+        if (distributionType != '') {
+            data.distributionType = distributionType;
         } else {
             alert("请选择配送方式");
             return false;

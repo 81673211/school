@@ -28,5 +28,5 @@ public class HelpReceiveExpressCreateVo {
     private String helpReceiveCode;
     private BigDecimal expressWeight;
     @NotNull(message = "配送方式不为空")
-    private String helpDistributionType;
+    private String distributionType;
 }

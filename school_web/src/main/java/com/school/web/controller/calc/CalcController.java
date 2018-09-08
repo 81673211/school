@@ -4,6 +4,7 @@ import com.school.biz.domain.entity.express.ExpressSend;
 import com.school.biz.enumeration.DistributionTypeEnum;
 import com.school.biz.service.calc.CalcCostService;
 import com.school.web.controller.base.BaseEasyWebController;
+import com.school.web.vo.request.CalcHelpReceiveServiceAmtVo;
 import com.school.web.vo.request.CalcSendServiceAmtVo;
 import com.school.web.vo.request.SendExpressCalcVo;
 import com.school.web.vo.response.DataResponse;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.constraints.Min;
 import java.math.BigDecimal;
 
 /**
@@ -62,4 +62,15 @@ public class CalcController extends BaseEasyWebController {
                 calcCostService.calcSendDistributionCost(DistributionTypeEnum.DISTRIBUTION.getFlag(), calcSendServiceAmtVo.getExpressWeight()));
     }
 
+
+    @RequestMapping(value = "/1/help/serviceAmt", method = RequestMethod.GET)
+    public Response getHelpReceiveServiceAmt(@Validated CalcHelpReceiveServiceAmtVo serviceAmtVo, BindingResult bindingResult) {
+        DataResponse<BigDecimal> response = new DataResponse<>();
+        checkValid(bindingResult, response);
+        if (response.getStatus() != HTTP_SUCCESS) {
+            return response;
+        }
+        return response.writeSuccess("获取寄件服务费成功",
+                calcCostService.calcHelpReceiveDistributionCost(serviceAmtVo.getDistributionType(), serviceAmtVo.getExpressWeight()));
+    }
 }
