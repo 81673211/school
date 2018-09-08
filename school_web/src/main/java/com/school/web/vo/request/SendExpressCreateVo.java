@@ -35,4 +35,5 @@ public class SendExpressCreateVo {
 
     private String idCard;
     private BigDecimal expressWeight;
+    private String remark;
 }

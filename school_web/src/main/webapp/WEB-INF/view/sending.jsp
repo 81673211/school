@@ -12,7 +12,7 @@
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/lib/jquery/jquery.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/js/zui.min.js"></script>
-    <script src="../../js/limit.js"></script>
+    <%--<script src="../../js/limit.js"></script>--%>
 
 </head>
 <body>
@@ -104,6 +104,13 @@
                     <option value="6">医药类产品</option>
                 </select>
             </div>
+        </div>
+
+
+        <div class="control">
+            <label for="remark">备注</label>
+            <textarea style="width: 100%;" cols="10" id="remark" placeholder="有什么想对我们备注的就写在这里吧！比如：预约上门取件时间等。限200字！"
+                      maxlength="200"></textarea>
         </div>
 
         <div class="text-right" style="margin-top: 20px; margin-bottom: 20px">
@@ -227,6 +234,7 @@
         var expressWay = $("#expressWay").val();
         var expressType = $("#expressType").val();
         var expressWeight = $("#expressWeight").val();
+        var remark = $("#remark").val();
         if (openId == '') {
             alert("参数错误");
             return false;
@@ -295,6 +303,7 @@
             alert("请选择寄件类型");
             return false;
         }
+        data.remark = remark;
         $.post("/express/0/create", data, function (result) {
             if (result.status != 200) {
                 alert(result.msg);
