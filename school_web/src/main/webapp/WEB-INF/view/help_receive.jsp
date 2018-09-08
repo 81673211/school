@@ -10,7 +10,7 @@
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/lib/jquery/jquery.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/js/zui.min.js"></script>
-    <%--<script src="../../js/limit.js"></script>--%>
+    <script src="../../js/limit.js"></script>
 
 </head>
 <body>
@@ -77,6 +77,12 @@
             <input id="helpReceiveCode" type="text" class="input">
         </div>
 
+        <div class="control">
+            <label for="remark">备注</label>
+            <textarea style="width: 100%;" cols="10" id="remark" placeholder="有什么想对我们备注的就写在这里吧！比如：预约配送时间等。限200字！"
+                      maxlength="200"></textarea>
+        </div>
+
         <div class="text-right" style="margin-top: 20px; margin-bottom: 20px">
             ￥服务费:<span class="price" id="serviceAmt">0.00</span>元
         </div>
@@ -130,6 +136,7 @@
         var helpReceiveCode = $("#helpReceiveCode").val();
         var expressWeight = $("#expressWeight").val();
         var distributionType = $("#distributionType").val();
+        var remark = $("#remark").val();
 
         if (openId == '') {
             alert("参数错误");
@@ -182,6 +189,7 @@
             alert("请输入物品重量");
             return false;
         }
+        data.remark = remark;
         $.post("/express/1/help/create", data, function (result) {
             if (result.status != 200) {
                 alert(result.msg);

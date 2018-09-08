@@ -24,4 +24,5 @@ public class Express {
     private BigDecimal serviceAmt;
     private Integer expressType;
     private BigDecimal expressWeight;
+    private String remark;
 }

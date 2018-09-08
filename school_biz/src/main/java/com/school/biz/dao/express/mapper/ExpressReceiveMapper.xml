@@ -28,6 +28,7 @@
         <result column="help_receive_addr" property="helpReceiveAddr" jdbcType="VARCHAR"/>
         <result column="express_weight" property="expressWeight" jdbcType="DECIMAL"/>
         <result column="help_distribution_type" property="helpDistributionType" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
         id,
@@ -55,7 +56,8 @@
         help_receive_code,
         help_receive_addr,
         express_weight,
-        help_distribution_type
+        help_distribution_type,
+        remark
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
@@ -140,6 +142,9 @@
             <if test="helpDistributionType != null">
                 help_distribution_type,
             </if>
+            <if test="remark != null">
+                remark,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="code != null">
@@ -207,6 +212,9 @@
             </if>
             <if test="helpDistributionType != null">
                 #{helpDistributionType,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -281,6 +289,9 @@
             </if>
             <if test="helpDistributionType != null">
                 help_distribution_type = #{helpDistributionType,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
             </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
