@@ -2,6 +2,9 @@ package com.school.biz.service.express;
 
 import com.school.biz.domain.entity.order.OrderInfo;
 import com.school.biz.domain.entity.order.RefundOrderInfo;
+import com.school.biz.domain.vo.PushMessageVo;
+
+import java.util.List;
 
 /**
  * @author jame
@@ -24,4 +27,11 @@ public interface ExpressService {
      * @param refundOrderInfo
      */
     void updateExpressByRefund(RefundOrderInfo refundOrderInfo) throws RuntimeException;
+
+    /**
+     * 获取需要推送消息的数据
+     *
+     * @return
+     */
+    List<PushMessageVo> findPushMessageData();
 }

@@ -1,30 +1,26 @@
 package com.school.biz.service.express.impl;
 
-import java.util.Objects;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.school.biz.domain.entity.customer.Customer;
 import com.school.biz.domain.entity.express.ExpressReceive;
 import com.school.biz.domain.entity.express.ExpressSend;
 import com.school.biz.domain.entity.order.OrderInfo;
 import com.school.biz.domain.entity.order.RefundOrderInfo;
-import com.school.biz.enumeration.DistributionTypeEnum;
-import com.school.biz.enumeration.ExpressTypeEnum;
-import com.school.biz.enumeration.OrderStatusEnum;
-import com.school.biz.enumeration.ReceiveExpressTypeEnum;
-import com.school.biz.enumeration.SendExpressStatusEnum;
-import com.school.biz.enumeration.WechatTemplateEnum;
+import com.school.biz.domain.vo.PushMessageVo;
+import com.school.biz.enumeration.*;
 import com.school.biz.service.customer.CustomerService;
 import com.school.biz.service.express.ExpressReceiveService;
 import com.school.biz.service.express.ExpressSendService;
 import com.school.biz.service.express.ExpressService;
 import com.school.biz.service.order.OrderInfoService;
 import com.school.biz.service.wechat.TemplateService;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @author jame
@@ -100,7 +96,7 @@ public class ExpressServiceImpl implements ExpressService {
         Customer customer = customerService.get(sendExpress.getCustomerId());
         if (customer != null) {
             templateService.send(WechatTemplateEnum.SEND_EXPRESS_ARRIVAL_ALERT.getType(),
-                                 customer.getOpenId(), sendExpress, ExpressTypeEnum.SEND.getFlag());
+                    customer.getOpenId(), sendExpress, ExpressTypeEnum.SEND.getFlag());
         }
     }
 
@@ -110,7 +106,7 @@ public class ExpressServiceImpl implements ExpressService {
             Customer customer = customerService.get(receiveExpress.getCustomerId());
             if (customer != null) {
                 templateService.send(WechatTemplateEnum.RECEIVE_EXPRESS_ARRIVAL_ALERT.getType(),
-                                     customer.getOpenId(), receiveExpress, ExpressTypeEnum.RECEIVE.getFlag());
+                        customer.getOpenId(), receiveExpress, ExpressTypeEnum.RECEIVE.getFlag());
             }
         }
     }
@@ -128,5 +124,17 @@ public class ExpressServiceImpl implements ExpressService {
         if (flag) {
             expressSendService.updateSendExpressStatus(sendExpress.getId(), SendExpressStatusEnum.CANCEL.getFlag());
         }
+    }
+
+    @Override
+    public List<PushMessageVo> findPushMessageData() {
+        List<PushMessageVo> list = new ArrayList<>();
+        List<PushMessageVo> list1 = expressSendService.findPushMessageByExpressStatus(SendExpressStatusEnum.INEFFECTIVE);
+        List<PushMessageVo> list2 = expressSendService.findPushMessageByExpressStatus(SendExpressStatusEnum.SUPPLEMENT);
+        List<PushMessageVo> list3 = expressReceiveService.findPushOpenMessageByExpressStatus(ReceiveExpressStatusEnum.INEFFECTIVE);
+        list.addAll(list1);
+        list.addAll(list2);
+        list.addAll(list3);
+        return list;
     }
 }

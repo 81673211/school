@@ -7,7 +7,9 @@ import java.util.Map;
 import com.school.biz.dao.express.ExpressSendMapper;
 import com.school.biz.domain.entity.express.ExpressSend;
 import com.school.biz.domain.entity.user.AdminUser;
+import com.school.biz.domain.vo.PushMessageVo;
 import com.school.biz.domain.vo.express.ExpressSendVo;
+import com.school.biz.enumeration.SendExpressStatusEnum;
 import com.school.biz.exception.ExpressException;
 import com.school.biz.service.base.BaseService;
 
@@ -76,4 +78,11 @@ public interface ExpressSendService extends BaseService<ExpressSend, ExpressSend
 
     void saveOrUpdate(ExpressSend expressSend, AdminUser adminUser);
 
+    /**
+     * 通过快件状态获取需要推送的消息
+     *
+     * @param statusEnum
+     * @return
+     */
+    List<PushMessageVo> findPushMessageByExpressStatus(SendExpressStatusEnum statusEnum);
 }

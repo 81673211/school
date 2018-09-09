@@ -347,4 +347,8 @@
         SET customer_id = #{customerId, jdbcType=BIGINT}
         where receiver_phone = #{phone,jdbcType=VARCHAR} AND customer_id is null
     </update>
+
+    <select id="findPushOpenIdByExpressStatus" parameterType="java.lang.Integer" resultType="java.lang.String">
+        select c.open_id from express_receive t inner join customer c on c.id=t.customer_id where 1=1 and t.express_status=#{status,jdbcType=INTEGER}
+    </select>
 </mapper>

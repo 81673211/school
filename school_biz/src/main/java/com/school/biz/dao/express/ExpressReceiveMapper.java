@@ -2,11 +2,10 @@ package com.school.biz.dao.express;
 
 import com.school.biz.dao.base.BaseDao;
 import com.school.biz.domain.entity.express.ExpressReceive;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
-
-import org.apache.ibatis.annotations.Param;
 
 /**
  * @author jame
@@ -27,11 +26,12 @@ public interface ExpressReceiveMapper extends BaseDao {
     int bindCustomerByPhone(@Param("phone") String phone, @Param("customerId") Long customerId);
 
     List<ExpressReceive> queryPage(Map<String, Object> paramMap);
-    
+
     /**
      * 管理台列表
      */
     List<ExpressReceive> queryForManagerPage(Map<String, Object> paramMap);
 
 
+    List<String> findPushOpenIdByExpressStatus(@Param("status") Integer status);
 }

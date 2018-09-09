@@ -1,11 +1,12 @@
 package com.school.biz.dao.express;
 
-import java.util.List;
-import java.util.Map;
-
 import com.school.biz.dao.base.BaseDao;
 import com.school.biz.domain.entity.express.ExpressSend;
 import com.school.biz.domain.vo.express.ExpressSendVo;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author jame
@@ -24,7 +25,7 @@ public interface ExpressSendMapper extends BaseDao {
     int updateByPrimaryKey(ExpressSend record);
 
     List<ExpressSend> queryPage(Map<String, Object> paramMap);
-    
+
     /**
      * 管理台列表查询
      */
@@ -33,5 +34,7 @@ public interface ExpressSendMapper extends BaseDao {
     /**
      * 通过寄件单号查询寄件
      */
-	ExpressSend findByExpressSendNo(String expressSendNo);
+    ExpressSend findByExpressSendNo(String expressSendNo);
+
+    List<String> findPushOpenIdByExpressStatus(@Param("status") Integer status);
 }
