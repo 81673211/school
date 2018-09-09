@@ -69,6 +69,12 @@
                     </div>
                 </div>
                 <div class="row cl">
+                    <div class="col-xs-4 text-r">备注：</div>
+                    <div class="col-xs-8">
+                        <p>{{@data.remark}}</p>
+                    </div>
+                </div>
+                <div class="row cl">
                     <div class="col-xs-4 text-r">状态：</div>
                     <div class="col-xs-8">
                         <p>{{@expressSendStatusMap[@data.expressStatus]}}</p>

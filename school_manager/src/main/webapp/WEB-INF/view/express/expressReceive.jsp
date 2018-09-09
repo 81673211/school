@@ -69,7 +69,7 @@
                         <th width="50">取件地址</th>
                         <th width="50">配送方式</th>
                         <th width="50">创建时间</th>
-                        <th width="50">备注</th>
+<!--                         <th width="50">备注</th> -->
                         <th width="30">状态</th>
                         <th width="50">操作</th>
                     </tr>
@@ -87,7 +87,7 @@
                         <td>{{el.helpReceiveAddr}}</td>
                         <td><div :if="el.expressType==0">{{@expressWayMap[el.expressWay]}}</div><div :if="el.expressType==1">{{@helpDistributionTypeMap[el.helpDistributionType]}}</div></td>
                         <td>{{el.createdTime|date('yyyy-MM-dd HH:mm:ss')}}</td>
-                        <td>{{el.remark}}</td>
+<!--                         <td>{{el.remark}}</td> -->
                         <td>{{@expressReceiveStatusMap[el.expressStatus]}}</td>
                         <td class="but_xq">
                         	<btn:hasUrlPerm link="${detailUrl}">
