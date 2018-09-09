@@ -71,6 +71,7 @@
 		<property name="jobDetail" ref="NotExpressJob" />
 		<!-- 每2分钟查询一次 -->
 		<property name="cronExpression" value="0 0/1 * * * ?" />
+<!-- 		<property name="cronExpression" value="0 0 9 * * ?" /> -->
 	</bean>
 	<bean id="NotExpressJob"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
