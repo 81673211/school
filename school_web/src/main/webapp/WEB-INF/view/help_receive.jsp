@@ -79,7 +79,7 @@
 
         <div class="control">
             <label for="remark">备注</label>
-            <textarea style="width: 100%;" cols="10" id="remark" placeholder="有什么想对我们备注的就写在这里吧！比如：预约配送时间等。限200字！"
+            <textarea style="width: 100%;" class="textarea" cols="10" id="remark" placeholder="有什么想对我们备注的就写在这里吧！比如：预约配送时间等。限200字！"
                       maxlength="200"></textarea>
         </div>
 
@@ -196,9 +196,9 @@
             } else {
                 if (result.data != null) {
                     var orderNo = result.data;
-                    window.location.href = "http://www.glove1573.cn/wxpay/pay?orderNo=" + orderNo;
+                    // window.location.href = "http://www.glove1573.cn/wxpay/pay?orderNo=" + orderNo;
                 } else {
-                    window.location.href = "http://www.glove1573.cn/express/1/list?status=0,1,2,3,4";
+                    // window.location.href = "http://www.glove1573.cn/express/1/list?status=0,1,2,3,4";
                 }
             }
         });

@@ -11,9 +11,11 @@
 				<!-- 1.未决流水查询：处于支付处理中的订单，下单10分钟后。（每5分钟执行一次） -->
 				<ref bean="NotPayOrderTrigger"/>
 				<!-- 2.未决流水超时：将下单超过2小时依旧处于未支付的订单置为超时（每个小时执行一次） -->
-				<ref bean="NotPayOrderExpireTigger"/>
+				<ref bean="NotPayOrderExpireTrigger"/>
 				<!-- 3.未决退款查询：每2分钟查询一次 -->
-				<ref bean="NotRefundOrderTigger" />
+				<ref bean="NotRefundOrderTrigger" />
+				<!-- 4.未支付快递消息推送：快递创建后，10分钟内还未支付成功则推送消息给用户 -->
+				<ref bean="NotExpressTrigger" />
 			</list>
 		</property>
 		<property name="configLocation"
@@ -36,7 +38,7 @@
 	</bean>
 	
 	<!-- 未决流水超时 -->
-	<bean id="NotPayOrderExpireTigger"
+	<bean id="NotPayOrderExpireTrigger"
 		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="NotPayOrderExpireJob" />
 		<!-- 每天23:30运行一次 -->
@@ -50,7 +52,7 @@
 	</bean>
 	
 	<!-- 未决退款查询 -->
-	<bean id="NotRefundOrderTigger"
+	<bean id="NotRefundOrderTrigger"
 		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="NotRefundOrderJob" />
 		<!-- 每2分钟查询一次 -->
@@ -59,6 +61,20 @@
 	<bean id="NotRefundOrderJob"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="NotRefundOrderQuartz" />
+		<property name="targetMethod" value="execute" />
+		<property name="concurrent" value="false"/><!--配置为false不允许任务并发执行--> 
+	</bean>
+	
+	<!-- 未决快递消息推送 -->
+	<bean id="NotExpressTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="NotExpressJob" />
+		<!-- 每2分钟查询一次 -->
+		<property name="cronExpression" value="0 0/1 * * * ?" />
+	</bean>
+	<bean id="NotExpressJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="NotExpressQuartz" />
 		<property name="targetMethod" value="execute" />
 		<property name="concurrent" value="false"/><!--配置为false不允许任务并发执行--> 
 	</bean>

@@ -18,8 +18,8 @@ public enum PushMessageEnum {
     SEND_INEFFECTIVE(1, "发起寄件未支付"),
     SEND_SUPPLEMENT(2, "寄件补单未支付"),
     RECEIVE_INEFFECTIVE(3, "收件未支付"),
-    RECEIVE_SUPPLEMENT(4, "收件补单未支付"),
-    ;
+    RECEIVE_SUPPLEMENT(4, "收件补单未支付");
+
     private Integer code;
 
     private String message;

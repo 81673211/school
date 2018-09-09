@@ -73,7 +73,7 @@
                         <th width="20">已退款</th>
                         <th width="20">已补单</th>
                         <th width="60">创建时间</th>
-<!--                         <th width="60">备注</th> -->
+                        <th width="60">备注</th>
                         <th width="30">状态</th>
                         <th width="50">操作</th>
                     </tr>
@@ -96,7 +96,7 @@
                         <td>{{el.totalRefundAmt}}</td>
                         <td>{{el.totalReOrderAmt}}</td>
                         <td>{{el.createdTime|date('yyyy-MM-dd HH:mm:ss')}}</td>
-<!--                         <td>{{el.remark}}</td> -->
+                        <td>{{el.remark}}</td>
                         <td>{{@expressSendStatusMap[el.expressStatus]}}</td>
                         <td class="but_xq">
                             <btn:hasUrlPerm link="${refundUrl}">

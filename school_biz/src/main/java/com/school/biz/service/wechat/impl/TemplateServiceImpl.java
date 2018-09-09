@@ -15,10 +15,12 @@ import com.school.biz.domain.bo.wechat.template.ReceiveExpressFinishTemplateData
 import com.school.biz.domain.bo.wechat.template.SendExpressArrivalAlertTemplateData;
 import com.school.biz.domain.bo.wechat.template.Template;
 import com.school.biz.domain.bo.wechat.template.TemplateData;
+import com.school.biz.domain.bo.wechat.template.UnpayAlertTemplateData;
 import com.school.biz.domain.entity.express.Express;
 import com.school.biz.domain.entity.express.ExpressReceive;
 import com.school.biz.domain.entity.express.ExpressSend;
 import com.school.biz.domain.entity.region.Region;
+import com.school.biz.enumeration.PushMessageEnum;
 import com.school.biz.enumeration.SendExpressStatusEnum;
 import com.school.biz.enumeration.WechatTemplateEnum;
 import com.school.biz.service.region.RegionService;
@@ -59,6 +61,18 @@ public class TemplateServiceImpl implements TemplateService {
             log.error(e.getMessage());
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void send(PushMessageEnum pushMessageEnum, String createTime, String openId) {
+        String templateId = "zTYIZ1C21Li3htdTgYjGR31wP5scX5O6MTPC0YrU8qE";
+        TemplateData templateData = new UnpayAlertTemplateData.Builder().buildKeyword1(createTime).build();
+        Template template = new Template.Builder()
+                .buildId(templateId)
+                .buildToUser(openId)
+                .buildTemplateData(templateData)
+                .build();
+        send(template);
     }
 
     @Override
