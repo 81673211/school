@@ -23,5 +23,5 @@ public interface TemplateService {
 
     void send(String templateType, String openId, Express express, int expressType);
 
-    void send(PushMessageEnum pushMessageEnum, String openId);
+    void send(PushMessageEnum pushMessageEnum, String createTime, String openId);
 }
