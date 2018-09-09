@@ -111,4 +111,15 @@ public class ConstantUrl {
 	// 资源删除
 	public static final String RESOURCE_INFO_DEL_URL = "/permission/resourceInfo/del.do";
 	
+	/** 系统管理 */
+	/**
+	 * 日志列表
+	 */
+	// 日志详情
+	public static final String EXPRESS_LOG_DETAIL_URL = "/expressLog/detail.do";
+	/**
+	 * 意见列表
+	 */
+	// 意见详情
+	public static final String SUGGESTION_DETAIL_URL = "/suggestion/detail.do";
 }

@@ -1,5 +1,7 @@
 package com.school.biz.service.log.impl;
 
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import com.school.biz.domain.entity.express.Express;
 import com.school.biz.domain.entity.express.ExpressReceive;
 import com.school.biz.domain.entity.express.ExpressSend;
 import com.school.biz.domain.entity.log.ExpressLog;
+import com.school.biz.domain.entity.order.OrderInfo;
 import com.school.biz.domain.entity.user.AdminUser;
 import com.school.biz.enumeration.ExpressLogActionEnum;
 import com.school.biz.enumeration.ReceiveExpressStatusEnum;
@@ -35,7 +38,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ExpressLogServiceImpl extends BaseServiceImpl<ExpressLog, ExpressLogMapper>
         implements ExpressLogService {
-
+	
+	@Autowired
+	private ExpressLogMapper expressLogMapper;
+	
     @Autowired
     private ExpressLogOperatorHelper expressLogOperatorHelper;
 
@@ -108,5 +114,10 @@ public class ExpressLogServiceImpl extends BaseServiceImpl<ExpressLog, ExpressLo
                 log.error("记录操作日志：前台保存失败，{}", e.getMessage());
             }
         });
+    }
+    
+    @Override
+    public List<ExpressLog> queryPage(Map<String, Object> paramMap) {
+        return expressLogMapper.queryPage(paramMap);
     }
 }
