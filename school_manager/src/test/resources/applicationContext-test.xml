@@ -20,8 +20,8 @@
 		<!-- 目前暂不需要 dubbo.properties-->
 		<property name="locations">
 			<list>
-				<value>classpath*:config/redis.properties</value>
-				<value>classpath*:config/jdbc.development.properties</value> 
+				<value>classpath*:test/redis.properties</value>
+				<value>classpath*:test/jdbc.properties</value> 
 			</list>
 		</property>
 	</bean>
@@ -54,7 +54,7 @@
 		    <!-- 开启Druid的监控统计功能 -->
 		    <property name="filters" value="stat,config" />
 		    <!-- 开启数据库密码解密-->
-		    <property name="connectionProperties" value="config.decrypt=${jdbc.decrypt};config.decrypt.key=${jdbc.publickey}" />  
+<!-- 		    <property name="connectionProperties" value="config.decrypt=${jdbc.decrypt};config.decrypt.key=${jdbc.publickey}" />   -->
 			
 			
 	</bean>
@@ -83,16 +83,16 @@
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="mysqlDataSource" />
 		<!-- 自动扫描entity目录, 省掉Configuration.xml里的手工配置 -->
-		<property name="typeAliasesPackage" value="com.school.entity" />
+		<property name="typeAliasesPackage" value="com.school.biz.domain.entity" />
 		<property name="configLocation" value="classpath:mybatis/mybatis-config.xml" />
 		<!-- 显式指定Mapper文件位置 -->
-		<property name="mapperLocations" value="classpath*:com/school/dao/**/*Mapper.xml" />
+		<property name="mapperLocations" value="classpath*:com/school/biz/dao/**/**/*Mapper.xml" />
 	</bean>
 
 	<!-- 扫描basePackage下所有以@MyBatisRepository标识的 接口 -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
-		<property name="basePackage" value="com.school.dao" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+		<property name="basePackage" value="com.school.biz.dao" />
 	</bean>
 
 	<!-- MyBatis sessionTemplate注册 -->
