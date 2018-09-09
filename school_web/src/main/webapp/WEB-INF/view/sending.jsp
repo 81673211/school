@@ -12,7 +12,7 @@
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/lib/jquery/jquery.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/zui/1.8.1/js/zui.min.js"></script>
-    <%--<script src="../../js/limit.js"></script>--%>
+    <script src="../../js/limit.js"></script>
 
 </head>
 <body>
@@ -109,7 +109,7 @@
 
         <div class="control">
             <label for="remark">备注</label>
-            <textarea style="width: 100%;" cols="10" id="remark" placeholder="有什么想对我们备注的就写在这里吧！比如：预约上门取件时间等。限200字！"
+            <textarea style="width: 100%;" cols="10" class="textarea" id="remark" placeholder="有什么想对我们备注的就写在这里吧！比如：预约上门取件时间等。限200字！"
                       maxlength="200"></textarea>
         </div>
 
