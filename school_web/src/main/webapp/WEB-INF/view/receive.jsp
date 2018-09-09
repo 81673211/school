@@ -54,6 +54,9 @@
                                         <c:when test="${item.expressStatus == 7}">
                                             <label class="label label-sm primary outline rounded">正在取件</label>
                                         </c:when>
+                                        <c:when test="${item.expressStatus == 8}">
+                                            <label class="label label-sm primary outline rounded">未生效</label>
+                                        </c:when>
                                         <c:otherwise>
                                             <label class="label label-sm primary outline rounded"> </label>
                                         </c:otherwise>
@@ -103,17 +106,24 @@
                             <c:when test="${item.expressStatus == 1}">
                                 <div>
                                     <button type="button" class="btn btn-sm info outline rounded" style="width: 60px"
-                                            onclick="launchPay(${item.id},'box')">>配送入柜
+                                            onclick="launchPay(${item.id},'box')">配送入柜
                                     </button>
                                 </div>
                                 <c:if test="${item.expressType == 1}">
                                     <div>
                                         <button type="button" class="btn btn-sm info outline rounded"
                                                 style="width: 60px"
-                                                onclick="launchPay(${item.id},'door')">>送货上门
+                                                onclick="launchPay(${item.id},'door')">送货上门
                                         </button>
                                     </div>
                                 </c:if>
+                            </c:when>
+                            <c:when test="${item.expressStatus == 8}">
+                                <div>
+                                    <button type="button" class="btn btn-sm info outline rounded" style="width: 60px"
+                                            onclick="launchPay(${item.id},'${item.helpDistributionType}')">支付
+                                    </button>
+                                </div>
                             </c:when>
                         </c:choose>
 
