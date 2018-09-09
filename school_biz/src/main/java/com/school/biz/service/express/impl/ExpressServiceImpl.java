@@ -138,14 +138,16 @@ public class ExpressServiceImpl implements ExpressService {
         list.addAll(list2);
         list.addAll(list3);
         //检查该消息是否推送过
+        List<PushMessageVo> removeList = new ArrayList<>();
         for (PushMessageVo vo : list) {
             Set<PushMessageVo> set = Constants.pushMessageRecordSet;
             if (!set.contains(vo)) {
                 set.add(vo);
             } else {
-                list.remove(vo);
+                removeList.add(vo);
             }
         }
+        list.removeAll(removeList);
         return list;
     }
 }
