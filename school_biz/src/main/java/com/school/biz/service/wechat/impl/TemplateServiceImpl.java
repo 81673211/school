@@ -19,6 +19,7 @@ import com.school.biz.domain.entity.express.Express;
 import com.school.biz.domain.entity.express.ExpressReceive;
 import com.school.biz.domain.entity.express.ExpressSend;
 import com.school.biz.domain.entity.region.Region;
+import com.school.biz.enumeration.PushMessageEnum;
 import com.school.biz.enumeration.SendExpressStatusEnum;
 import com.school.biz.enumeration.WechatTemplateEnum;
 import com.school.biz.service.region.RegionService;
@@ -59,6 +60,11 @@ public class TemplateServiceImpl implements TemplateService {
             log.error(e.getMessage());
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void send(PushMessageEnum pushMessageEnum, String openId) {
+
     }
 
     @Override
