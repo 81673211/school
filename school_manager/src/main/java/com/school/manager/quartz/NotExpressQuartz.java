@@ -17,6 +17,7 @@ import com.school.biz.extension.wxpay.sdk.WXPayConstants.SignType;
 import com.school.biz.extension.wxpay.sdk.WXPayUtil;
 import com.school.biz.service.express.ExpressService;
 import com.school.biz.service.order.OrderInfoService;
+import com.school.biz.service.wechat.TemplateService;
 import com.school.biz.util.DateUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -30,11 +31,23 @@ public class NotExpressQuartz {
 
 	@Autowired
 	private ExpressService expressService;
+	
+	@Autowired
+	private TemplateService templateService;
 
     public void execute() throws Exception {
         log.info("==========NotExpressQuartz：未支付快递消息推送==========");
         
         List<PushMessageVo> pushMessageVos = expressService.findPushMessageData();
+        int dealNum = 0;
+        if(pushMessageVos != null && !pushMessageVos.isEmpty()){
+        	for (PushMessageVo pushMessageVo : pushMessageVos) {
+				templateService.send(pushMessageVo.getDesc(), pushMessageVo.getOpenId());
+				log.info("向用户openid:" + pushMessageVo.getOpenId() + "发送消息，模板为：" + pushMessageVo.getOpenId());
+				dealNum++;
+			}
+        }
+        log.info("未决快递消息推送处理结果:" + "共向用户发送" + dealNum + "条消息。");
     }
 
 }
