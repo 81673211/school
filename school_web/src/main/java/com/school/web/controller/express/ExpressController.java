@@ -62,8 +62,6 @@ public class ExpressController extends BaseEasyWebController {
     private TemplateService templateService;
     @Autowired
     private CalcCostService calcCostService;
-    @Autowired
-    private OrderInfoService orderInfoService;
 
     /**
      * 寄件
@@ -85,7 +83,7 @@ public class ExpressController extends BaseEasyWebController {
         expressSend.setCustomerId(customer.getId());
         expressSend.setSenderPhone(customer.getPhone());
         expressSend.setSenderName(customer.getName());
-        expressSend.setExpressStatus(SendExpressStatusEnum.CREATE.getFlag());
+        expressSend.setExpressStatus(SendExpressStatusEnum.INEFFECTIVE.getFlag());
         String orderNo = expressSendService.createSendExpress(expressSend);
         return response.writeSuccess("创建寄件快件成功", orderNo);
     }

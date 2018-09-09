@@ -14,7 +14,8 @@ public enum SendExpressStatusEnum {
     SUPPLEMENT(3, "补单待支付"),
     WAIT_SEND(4, "准备寄出"),
     BE_SEND(5, "已寄出"),
-    CANCEL(6, "已取消");
+    CANCEL(6, "已取消"),
+    INEFFECTIVE(7, "未生效");
 
 
     private int flag;

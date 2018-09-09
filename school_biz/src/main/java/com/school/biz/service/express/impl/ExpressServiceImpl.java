@@ -66,12 +66,15 @@ public class ExpressServiceImpl implements ExpressService {
                     return;
                 }
                 //当前寄件状态为 已发起寄件 && 寄件方式为 配送
-                if (sendExpress.getExpressStatus().equals(SendExpressStatusEnum.CREATE.getFlag()) && sendExpress.getExpressWay().equals(DistributionTypeEnum.DISTRIBUTION.getFlag())) {
-                    //改为等待上门取件 && 寄件方式为 自发
+                if (sendExpress.getExpressStatus().equals(SendExpressStatusEnum.INEFFECTIVE.getFlag()) && sendExpress.getExpressWay().equals(DistributionTypeEnum.DISTRIBUTION.getFlag())) {
+                    //改为等待上门取件
                     expressSendService.updateSendExpressStatus(expressId, SendExpressStatusEnum.WAIT_SMQJ.getFlag());
                     alertAdmin(sendExpress);
-                } else if (sendExpress.getExpressStatus().equals(SendExpressStatusEnum.CREATE.getFlag()) && sendExpress.getExpressWay().equals(DistributionTypeEnum.SELF.getFlag())) {
-//                    expressSendService.updateSendExpressStatus(expressId, SendExpressStatusEnum.PROXY_RECIEVED.getFlag());
+                }
+                //当前寄件状态为 已发起寄件 && 寄件方式为 自发
+                else if (sendExpress.getExpressStatus().equals(SendExpressStatusEnum.INEFFECTIVE.getFlag()) && sendExpress.getExpressWay().equals(DistributionTypeEnum.SELF.getFlag())) {
+                    //改为已发起寄件
+                    expressSendService.updateSendExpressStatus(expressId, SendExpressStatusEnum.CREATE.getFlag());
                 }
                 //当前寄件状态为 补单待支付
                 else if (sendExpress.getExpressStatus().equals(SendExpressStatusEnum.SUPPLEMENT.getFlag())) {
