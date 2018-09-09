@@ -3,7 +3,9 @@ package com.school.biz.service.express;
 import com.school.biz.dao.express.ExpressReceiveMapper;
 import com.school.biz.domain.entity.express.ExpressReceive;
 import com.school.biz.domain.entity.user.AdminUser;
+import com.school.biz.domain.vo.PushMessageVo;
 import com.school.biz.enumeration.ExpressTypeEnum;
+import com.school.biz.enumeration.ReceiveExpressStatusEnum;
 import com.school.biz.exception.ExpressException;
 import com.school.biz.service.base.BaseService;
 
@@ -98,4 +100,12 @@ public interface ExpressReceiveService extends BaseService<ExpressReceive, Expre
      * @param expressReceive
      */
     String createHelpReceiveExpress(ExpressReceive expressReceive);
+
+    /**
+     * 通过快件状态获取需要推送的消息
+     *
+     * @param statusEnum
+     * @return
+     */
+    List<PushMessageVo> findPushOpenMessageByExpressStatus(ReceiveExpressStatusEnum statusEnum);
 }
