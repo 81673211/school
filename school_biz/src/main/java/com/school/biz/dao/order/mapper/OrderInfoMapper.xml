@@ -234,7 +234,7 @@
 
   <select id="findSuccessOrdersByExpressIdAndExpressType" parameterType="map" resultType="com.school.biz.domain.entity.order.OrderInfo">
   	select * from order_info oi
-	where oi.express_id = #{expressId} and oi.status = 1 and oi.express_type = 0
+	where oi.express_id = #{expressId} and oi.express_type=#{expressType} and oi.status = 1
 	order by oi.amount desc
   </select>
 

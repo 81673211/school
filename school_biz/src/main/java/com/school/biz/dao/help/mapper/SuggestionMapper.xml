@@ -40,9 +40,12 @@
 
 
   <select id="queryPage" resultType="com.school.biz.domain.entity.help.Suggestion" parameterType="map">
-        select
-        <include refid="Base_Column_List"/>
-        from suggestion
-        ORDER BY created_time desc
+        select s.* from suggestion s
+	    <where>
+	      <if test="keyword != null and keyword != '' ">
+	        and s.content like concat('%',#{keyword},'%')
+	      </if>
+	    </where>
+	    ORDER BY s.created_time desc
     </select>
 </mapper>

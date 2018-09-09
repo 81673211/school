@@ -3,6 +3,7 @@ package com.school.biz.service.help.impl;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,9 @@ import com.school.biz.service.help.SuggestionService;
 public class SuggestionServiceImpl extends BaseServiceImpl<Suggestion, SuggestionMapper>
         implements SuggestionService {
 
+	@Autowired
+	private SuggestionMapper suggestionMapper;
+	
     @Override
     public void create(Suggestion suggestion) {
         save(suggestion);
@@ -30,6 +34,6 @@ public class SuggestionServiceImpl extends BaseServiceImpl<Suggestion, Suggestio
 
     @Override
     public List<Suggestion> queryPage(Map<String, Object> paramMap) {
-        return queryPage(paramMap);
+        return suggestionMapper.queryPage(paramMap);
     }
 }

@@ -77,3 +77,13 @@ insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_re
 insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_remark) values (463, '权限保存', '/permission/resourceInfo/save.do', (select ri.id from resource_info ri where ri.res_url='/permission/resourceInfo/list.do'),(select mi.id from menu_info mi where mi.resource_name = '权限列表'),NULL);
 insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_remark) values (464, '权限删除', '/permission/resourceInfo/del.do', (select ri.id from resource_info ri where ri.res_url='/permission/resourceInfo/list.do'),(select mi.id from menu_info mi where mi.resource_name = '权限列表'),NULL);
 
+/** 9.系统管理 */
+/** 日志列表 */
+insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_remark) values (500, '日志列表', '/expressLog/list.do', 0,(select mi.id from menu_info mi where mi.resource_name = '日志列表'),NULL);
+
+insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_remark) values (501, '日志详情', '/expressLog/detail.do', (select ri.id from resource_info ri where ri.res_url='/expressLog/list.do'),(select mi.id from menu_info mi where mi.resource_name = '日志列表'),NULL);
+
+/** 意见列表 */
+insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_remark) values (520, '意见列表', '/suggestion/list.do', 0,(select mi.id from menu_info mi where mi.resource_name = '意见列表'),NULL);
+
+insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_remark) values (521, '意见详情', '/suggestion/detail.do', (select ri.id from resource_info ri where ri.res_url='/suggestion/list.do'),(select mi.id from menu_info mi where mi.resource_name = '意见列表'),NULL);
