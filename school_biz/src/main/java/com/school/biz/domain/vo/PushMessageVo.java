@@ -1,5 +1,6 @@
 package com.school.biz.domain.vo;
 
+import com.school.biz.enumeration.PushMessageEnum;
 import lombok.Data;
 
 /**
@@ -10,5 +11,5 @@ import lombok.Data;
 @Data
 public class PushMessageVo {
     private String openId;
-    private String message;
+    private PushMessageEnum desc;
 }

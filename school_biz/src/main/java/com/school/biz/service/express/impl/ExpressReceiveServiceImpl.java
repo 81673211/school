@@ -283,7 +283,7 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
                 for (String openId : openIds) {
                     PushMessageVo vo = new PushMessageVo();
                     vo.setOpenId(openId);
-                    vo.setMessage("收件未支付");
+                    vo.setDesc(PushMessageEnum.RECEIVE_INEFFECTIVE);
                     result.add(vo);
                 }
             } else {
