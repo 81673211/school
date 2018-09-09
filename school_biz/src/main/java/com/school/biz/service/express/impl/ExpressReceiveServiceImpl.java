@@ -279,10 +279,11 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
         List<PushMessageVo> result = new ArrayList<>();
         try {
             if (statusEnum.equals(ReceiveExpressStatusEnum.INEFFECTIVE)) {
-                List<String> openIds = expressReceiveMapper.findPushOpenIdByExpressStatus(statusEnum.getFlag());
-                for (String openId : openIds) {
+                List<Map> mapList = expressReceiveMapper.findPushOpenIdByExpressStatus(statusEnum.getFlag());
+                for (Map map : mapList) {
                     PushMessageVo vo = new PushMessageVo();
-                    vo.setOpenId(openId);
+                    vo.setOpenId(map.get("open_id").toString());
+                    vo.setCreateTime(map.get("created_time").toString());
                     vo.setDesc(PushMessageEnum.RECEIVE_INEFFECTIVE);
                     result.add(vo);
                 }
@@ -293,5 +294,10 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
             log.error("findPushOpenMessageByExpressStatus error", e);
         }
         return result;
+    }
+
+    @Override
+    public void updateIneffectiveToCancel() {
+        expressReceiveMapper.updateIneffectiveToCancel(SendExpressStatusEnum.CANCEL.getFlag(), 2);
     }
 }

@@ -108,4 +108,6 @@ public interface ExpressReceiveService extends BaseService<ExpressReceive, Expre
      * @return
      */
     List<PushMessageVo> findPushOpenMessageByExpressStatus(ReceiveExpressStatusEnum statusEnum);
+
+    void updateIneffectiveToCancel();
 }
