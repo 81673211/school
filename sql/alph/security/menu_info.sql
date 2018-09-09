@@ -25,3 +25,8 @@
 	insert into menu_info (id, pid, resource_url, resource_name, mindex, level, remark) values (72, (select mi.id from menu_info mi where mi.resource_name = '权限管理'), NULL,'角色列表', 2, 2, NULL);
 	insert into menu_info (id, pid, resource_url, resource_name, mindex, level, remark) values (73, (select mi.id from menu_info mi where mi.resource_name = '权限管理'), NULL,'权限列表', 3, 2, NULL);
 	
+	/** 6.系统管理 */
+	insert into menu_info (id, pid, resource_url, resource_name, mindex, level, remark) values (100, 0, NULL,'系统管理', 9, 1, 'review-icon yg-icon');
+	
+	insert into menu_info (id, pid, resource_url, resource_name, mindex, level, remark) values (101, (select mi.id from menu_info mi where mi.resource_name = '系统管理'), NULL,'日志列表', 1, 2, NULL);
+	insert into menu_info (id, pid, resource_url, resource_name, mindex, level, remark) values (102, (select mi.id from menu_info mi where mi.resource_name = '系统管理'), NULL,'意见列表', 2, 2, NULL);
