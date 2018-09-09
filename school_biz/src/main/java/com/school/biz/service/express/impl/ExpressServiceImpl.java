@@ -1,5 +1,6 @@
 package com.school.biz.service.express.impl;
 
+import com.school.biz.constant.Constants;
 import com.school.biz.domain.entity.customer.Customer;
 import com.school.biz.domain.entity.express.ExpressReceive;
 import com.school.biz.domain.entity.express.ExpressSend;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * @author jame
@@ -135,6 +137,17 @@ public class ExpressServiceImpl implements ExpressService {
         list.addAll(list1);
         list.addAll(list2);
         list.addAll(list3);
+        //检查该消息是否推送过
+        List<PushMessageVo> removeList = new ArrayList<>();
+        for (PushMessageVo vo : list) {
+            Set<PushMessageVo> set = Constants.pushMessageRecordSet;
+            if (!set.contains(vo)) {
+                set.add(vo);
+            } else {
+                removeList.add(vo);
+            }
+        }
+        list.removeAll(removeList);
         return list;
     }
 }

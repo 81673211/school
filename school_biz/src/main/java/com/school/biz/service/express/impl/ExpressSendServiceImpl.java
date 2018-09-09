@@ -12,6 +12,7 @@ import com.school.biz.domain.entity.user.AdminUser;
 import com.school.biz.domain.vo.PushMessageVo;
 import com.school.biz.domain.vo.express.ExpressSendVo;
 import com.school.biz.enumeration.ExpressLogActionEnum;
+import com.school.biz.enumeration.PushMessageEnum;
 import com.school.biz.enumeration.SendExpressStatusEnum;
 import com.school.biz.exception.ExpressException;
 import com.school.biz.service.base.impl.BaseServiceImpl;
@@ -204,7 +205,7 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
                 for (String openId : openIds) {
                     PushMessageVo vo = new PushMessageVo();
                     vo.setOpenId(openId);
-                    vo.setMessage("发起寄件未支付");
+                    vo.setDesc(PushMessageEnum.SEND_INEFFECTIVE);
                     result.add(vo);
                 }
             } else if (statusEnum.equals(SendExpressStatusEnum.SUPPLEMENT)) {
@@ -212,7 +213,7 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
                 for (String openId : openIds) {
                     PushMessageVo vo = new PushMessageVo();
                     vo.setOpenId(openId);
-                    vo.setMessage("寄件补单未支付");
+                    vo.setDesc(PushMessageEnum.SEND_SUPPLEMENT);
                     result.add(vo);
                 }
             } else {
