@@ -201,18 +201,20 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
         List<PushMessageVo> result = new ArrayList<>();
         try {
             if (statusEnum.equals(SendExpressStatusEnum.INEFFECTIVE)) {
-                List<String> openIds = expressSendMapper.findPushOpenIdByExpressStatus(statusEnum.getFlag());
-                for (String openId : openIds) {
+                List<Map> mapList = expressSendMapper.findPushOpenIdByExpressStatus(statusEnum.getFlag());
+                for (Map map : mapList) {
                     PushMessageVo vo = new PushMessageVo();
-                    vo.setOpenId(openId);
+                    vo.setOpenId(map.get("open_id").toString());
+                    vo.setCreateTime(map.get("created_time").toString());
                     vo.setDesc(PushMessageEnum.SEND_INEFFECTIVE);
                     result.add(vo);
                 }
             } else if (statusEnum.equals(SendExpressStatusEnum.SUPPLEMENT)) {
-                List<String> openIds = expressSendMapper.findPushOpenIdByExpressStatus(statusEnum.getFlag());
-                for (String openId : openIds) {
+                List<Map> mapList = expressSendMapper.findPushOpenIdByExpressStatus(statusEnum.getFlag());
+                for (Map map : mapList) {
                     PushMessageVo vo = new PushMessageVo();
-                    vo.setOpenId(openId);
+                    vo.setOpenId(map.get("open_id").toString());
+                    vo.setCreateTime(map.get("created_time").toString());
                     vo.setDesc(PushMessageEnum.SEND_SUPPLEMENT);
                     result.add(vo);
                 }
@@ -223,5 +225,10 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
             log.error("findPushMessageByExpressStatus error", e);
         }
         return result;
+    }
+
+    @Override
+    public void updateIneffectiveToCancel() {
+        expressSendMapper.updateIneffectiveToCancel(SendExpressStatusEnum.CANCEL.getFlag(), 2);
     }
 }

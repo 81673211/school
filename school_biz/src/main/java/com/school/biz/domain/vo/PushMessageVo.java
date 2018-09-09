@@ -12,4 +12,5 @@ import lombok.Data;
 public class PushMessageVo {
     private String openId;
     private PushMessageEnum desc;
+    private String createTime;
 }

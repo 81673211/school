@@ -1,6 +1,7 @@
 package com.school.biz.service.express.impl;
 
-import com.school.biz.constant.Constants;
+import com.alibaba.fastjson.JSON;
+import com.school.biz.constant.RedisKeyNS;
 import com.school.biz.domain.entity.customer.Customer;
 import com.school.biz.domain.entity.express.ExpressReceive;
 import com.school.biz.domain.entity.express.ExpressSend;
@@ -16,13 +17,14 @@ import com.school.biz.service.order.OrderInfoService;
 import com.school.biz.service.wechat.TemplateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * @author jame
@@ -44,6 +46,8 @@ public class ExpressServiceImpl implements ExpressService {
     private TemplateService templateService;
     @Autowired
     private CustomerService customerService;
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     @Override
     public void updateExpressByPay(OrderInfo orderInfo) throws RuntimeException {
@@ -139,15 +143,30 @@ public class ExpressServiceImpl implements ExpressService {
         list.addAll(list3);
         //检查该消息是否推送过
         List<PushMessageVo> removeList = new ArrayList<>();
+        ValueOperations<String, String> opsForValue = redisTemplate.opsForValue();
+        getRemoveList(list1, removeList, opsForValue, RedisKeyNS.PUSH_MESSAGE_SEND_INEFFECTIVE);
+        getRemoveList(list2, removeList, opsForValue, RedisKeyNS.PUSH_MESSAGE_SEND_SUPPLEMENT);
+        getRemoveList(list3, removeList, opsForValue, RedisKeyNS.PUSH_MESSAGE_RECEIVE_INEFFECTIVE);
+        list.removeAll(removeList);
+        return list;
+    }
+
+    @Override
+    public void cleanPushMessageAndCancelExpress() {
+        try {
+            redisTemplate.delete("redis:push_message:*");
+            expressSendService.updateIneffectiveToCancel();
+            expressReceiveService.updateIneffectiveToCancel();
+        } catch (Exception e) {
+            log.error("cleanPushMessageAndCancelExpress error", e);
+        }
+    }
+
+    private void getRemoveList(List<PushMessageVo> list, List<PushMessageVo> removeList, ValueOperations<String, String> opsForValue, String keyPrefix) {
         for (PushMessageVo vo : list) {
-            Set<PushMessageVo> set = Constants.pushMessageRecordSet;
-            if (!set.contains(vo)) {
-                set.add(vo);
-            } else {
+            if (!opsForValue.setIfAbsent(keyPrefix + vo.getOpenId(), JSON.toJSONString(vo))) {
                 removeList.add(vo);
             }
         }
-        list.removeAll(removeList);
-        return list;
     }
 }

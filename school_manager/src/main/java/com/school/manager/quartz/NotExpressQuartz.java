@@ -43,7 +43,7 @@ public class NotExpressQuartz {
         int dealNum = 0;
         if(pushMessageVos != null && !pushMessageVos.isEmpty()){
         	for (PushMessageVo pushMessageVo : pushMessageVos) {
-				templateService.send(pushMessageVo.getDesc(),DateUtil.now(), pushMessageVo.getOpenId());
+				templateService.send(pushMessageVo.getDesc(),pushMessageVo.getCreateTime(), pushMessageVo.getOpenId());
 				log.info("向用户openid:" + pushMessageVo.getOpenId() + "发送消息，模板为：" + pushMessageVo.getOpenId());
 				dealNum++;
 			}

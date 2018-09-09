@@ -33,5 +33,7 @@ public interface ExpressReceiveMapper extends BaseDao {
     List<ExpressReceive> queryForManagerPage(Map<String, Object> paramMap);
 
 
-    List<String> findPushOpenIdByExpressStatus(@Param("status") Integer status);
+    List<Map> findPushOpenIdByExpressStatus(@Param("status") Integer status);
+
+    void updateIneffectiveToCancel(@Param("cancel") Integer cancel, @Param("diff") Integer diff);
 }

@@ -1,15 +1,16 @@
 package com.school.biz.constant;
 
 /**
+ * <b>Description:.</b><br>
  *
- * <b>Description:.</b><br> 
  * @author <b>sil.zhou</b>
- * <br><b>ClassName:</b> 
- * <br><b>Date:</b> 26/07/2018 15:05
+ *         <br><b>ClassName:</b>
+ *         <br><b>Date:</b> 26/07/2018 15:05
  */
 public final class RedisKeyNS {
 
-    private RedisKeyNS() {}
+    private RedisKeyNS() {
+    }
 
     public static final String CACHE_CUSTOMER_PROFILE_VERIFY_CODE = "redis:customer:profile:verify:code:";
 
@@ -26,4 +27,10 @@ public final class RedisKeyNS {
     public static final String CACHE_REGION_CHILDREN = "redis:region:children:";
 
     public static final String CACHE_REGION_ID = "redis:region:id:";
+
+    public static final String PUSH_MESSAGE_SEND_INEFFECTIVE = "redis:push_message:send_ineffective:";
+
+    public static final String PUSH_MESSAGE_SEND_SUPPLEMENT = "redis:push_message:send_supplement:";
+
+    public static final String PUSH_MESSAGE_RECEIVE_INEFFECTIVE = "redis:push_message:receive_ineffective:";
 }

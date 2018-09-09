@@ -100,5 +100,4 @@ public final class Constants {
 
     public static final String EASY_PAGE = "page";
 
-    public static Set<PushMessageVo> pushMessageRecordSet = new HashSet<>();
 }
