@@ -9,8 +9,11 @@ import com.school.biz.domain.entity.express.ExpressCompany;
 import com.school.biz.domain.entity.express.ExpressSend;
 import com.school.biz.domain.entity.region.Region;
 import com.school.biz.domain.entity.user.AdminUser;
+import com.school.biz.domain.vo.PushMessageVo;
 import com.school.biz.domain.vo.express.ExpressSendVo;
 import com.school.biz.enumeration.ExpressLogActionEnum;
+import com.school.biz.enumeration.PushMessageEnum;
+import com.school.biz.enumeration.SendExpressStatusEnum;
 import com.school.biz.exception.ExpressException;
 import com.school.biz.service.base.impl.BaseServiceImpl;
 import com.school.biz.service.calc.CalcCostService;
@@ -24,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -192,4 +196,32 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
         }
     }
 
+    @Override
+    public List<PushMessageVo> findPushMessageByExpressStatus(SendExpressStatusEnum statusEnum) {
+        List<PushMessageVo> result = new ArrayList<>();
+        try {
+            if (statusEnum.equals(SendExpressStatusEnum.INEFFECTIVE)) {
+                List<String> openIds = expressSendMapper.findPushOpenIdByExpressStatus(statusEnum.getFlag());
+                for (String openId : openIds) {
+                    PushMessageVo vo = new PushMessageVo();
+                    vo.setOpenId(openId);
+                    vo.setDesc(PushMessageEnum.SEND_INEFFECTIVE);
+                    result.add(vo);
+                }
+            } else if (statusEnum.equals(SendExpressStatusEnum.SUPPLEMENT)) {
+                List<String> openIds = expressSendMapper.findPushOpenIdByExpressStatus(statusEnum.getFlag());
+                for (String openId : openIds) {
+                    PushMessageVo vo = new PushMessageVo();
+                    vo.setOpenId(openId);
+                    vo.setDesc(PushMessageEnum.SEND_SUPPLEMENT);
+                    result.add(vo);
+                }
+            } else {
+                log.error("findPushMessageByExpressStatus wrong status:" + statusEnum.getFlag());
+            }
+        } catch (Exception e) {
+            log.error("findPushMessageByExpressStatus error", e);
+        }
+        return result;
+    }
 }

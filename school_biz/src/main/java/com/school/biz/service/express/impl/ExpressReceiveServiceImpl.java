@@ -1,7 +1,5 @@
 package com.school.biz.service.express.impl;
 
-import com.school.biz.domain.entity.user.AdminUser;
-import com.school.biz.enumeration.ExpressLogActionEnum;
 import com.school.biz.dao.customer.CustomerMapper;
 import com.school.biz.dao.express.ExpressCompanyMapper;
 import com.school.biz.dao.express.ExpressReceiveMapper;
@@ -12,10 +10,9 @@ import com.school.biz.domain.entity.express.ExpressCompany;
 import com.school.biz.domain.entity.express.ExpressReceive;
 import com.school.biz.domain.entity.order.OrderInfo;
 import com.school.biz.domain.entity.region.Region;
-import com.school.biz.enumeration.DistributionTypeEnum;
-import com.school.biz.enumeration.ExpressTypeEnum;
-import com.school.biz.enumeration.ReceiveExpressStatusEnum;
-import com.school.biz.enumeration.ReceiveExpressTypeEnum;
+import com.school.biz.domain.entity.user.AdminUser;
+import com.school.biz.domain.vo.PushMessageVo;
+import com.school.biz.enumeration.*;
 import com.school.biz.exception.ExpressException;
 import com.school.biz.service.base.impl.BaseServiceImpl;
 import com.school.biz.service.calc.CalcCostService;
@@ -29,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -274,5 +272,26 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
             this.update(expressReceive);
             expressLogService.log(get(expressReceive.getId()), ExpressLogActionEnum.RECEIVE_EXPRESS_UPDATE, adminUser);
         }
+    }
+
+    @Override
+    public List<PushMessageVo> findPushOpenMessageByExpressStatus(ReceiveExpressStatusEnum statusEnum) {
+        List<PushMessageVo> result = new ArrayList<>();
+        try {
+            if (statusEnum.equals(ReceiveExpressStatusEnum.INEFFECTIVE)) {
+                List<String> openIds = expressReceiveMapper.findPushOpenIdByExpressStatus(statusEnum.getFlag());
+                for (String openId : openIds) {
+                    PushMessageVo vo = new PushMessageVo();
+                    vo.setOpenId(openId);
+                    vo.setDesc(PushMessageEnum.RECEIVE_INEFFECTIVE);
+                    result.add(vo);
+                }
+            } else {
+                log.error("findPushOpenMessageByExpressStatus wrong status:" + statusEnum.getFlag());
+            }
+        } catch (Exception e) {
+            log.error("findPushOpenMessageByExpressStatus error", e);
+        }
+        return result;
     }
 }

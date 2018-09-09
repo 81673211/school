@@ -1,11 +1,16 @@
 package com.school.biz.constant;
 
+import com.school.biz.domain.vo.PushMessageVo;
+
+import java.util.HashSet;
+import java.util.Set;
+
 /**
+ * <b>Description:.</b><br>
  *
- * <b>Description:.</b><br> 
  * @author <b>sil.zhou</b>
- * <br><b>ClassName:</b> 
- * <br><b>Date:</b> 07/08/2018 21:17
+ *         <br><b>ClassName:</b>
+ *         <br><b>Date:</b> 07/08/2018 21:17
  */
 public final class Constants {
 
@@ -43,12 +48,12 @@ public final class Constants {
      * 订单号类型：手工上账订单号
      */
     public static final String ORDER_NO_TYPE_MANUAL_IN = "15";
-    
+
     /**
      * 订单号类型：补单订单号
      */
     public static final String ORDER_NO_TYPE_REORDER = "16";
-    
+
     /**
      * 订单号类型：退款订单号
      */
@@ -58,14 +63,22 @@ public final class Constants {
     public static final String SCOPE_SNSAPI_USERINFO = "snsapi_userinfo";
 
 
-    /** 用户左侧菜单 */
+    /**
+     * 用户左侧菜单
+     */
     public final static String USER_SESSION_MENUS = "myLeftMenus";
-    /** 用户拥有资源 */
+    /**
+     * 用户拥有资源
+     */
     public final static String USER_SESSION_RESOURCES = "myResources";
-    /** 用户session过期时间配置,单位：分钟 */
+    /**
+     * 用户session过期时间配置,单位：分钟
+     */
     public final static int USER_SESSION_TIMEOUT = Integer.parseInt("30");
 
-    /** 登录会话相关 */
+    /**
+     * 登录会话相关
+     */
     public static final String ATTRIBUTE_ADMIN_USER = "adminUser";
 
     public static final String ATTRIBUTE_ADMIN_USER_MENU = "userMenu";
@@ -87,4 +100,5 @@ public final class Constants {
 
     public static final String EASY_PAGE = "page";
 
+    public static Set<PushMessageVo> pushMessageRecordSet = new HashSet<>();
 }

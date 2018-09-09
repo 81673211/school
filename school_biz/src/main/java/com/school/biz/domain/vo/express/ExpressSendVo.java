@@ -69,4 +69,6 @@ public class ExpressSendVo {
     private String receiverProvinceName;
     private String receiverCityName;
     private String receiverDistrictName;
+    
+    private String remark;
 }
