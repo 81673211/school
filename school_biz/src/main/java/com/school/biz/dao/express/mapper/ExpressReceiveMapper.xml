@@ -329,6 +329,9 @@
         <if test="phone != null and phone != '' ">
             and t.receiver_phone=#{phone,jdbcType=VARCHAR}
         </if>
+        <if test="customerId != null ">
+            and t.customer_id=#{customerId,jdbcType=BIGINT}
+        </if>
         <if test="code != null and code != '' ">
             and t.code=#{code,jdbcType=VARCHAR}
         </if>

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
  * 未支付快递消息推送：快递创建后，10分钟内还未支付成功则推送消息给用户
  */
 @Slf4j
-@Service(value = "NotExpressQuartz")
+@Service(value = "ClearPushMessageQuartz")
 public class ClearPushMessageQuartz {
 
     @Autowired

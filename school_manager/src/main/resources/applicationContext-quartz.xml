@@ -86,8 +86,8 @@
 		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="ClearPushMessageJob" />
 		<!-- 每天9点执行一次 -->
-		<!--<property name="cronExpression" value="0 0/1 * * * ?" />-->
-		 		<property name="cronExpression" value="0 0 9 * * ?" />
+		<property name="cronExpression" value="0 0/1 * * * ?" />
+		 		<!--<property name="cronExpression" value="0 0 9 * * ?" />-->
 	</bean>
 	<bean id="ClearPushMessageJob"
 		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
