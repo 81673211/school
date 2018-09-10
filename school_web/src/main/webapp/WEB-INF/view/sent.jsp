@@ -50,6 +50,9 @@
                                         <c:when test="${item.expressStatus == 6}">
                                             <label class="label label-sm primary outline rounded">已取消</label>
                                         </c:when>
+                                        <c:when test="${item.expressStatus == 7}">
+                                            <label class="label label-sm primary outline rounded">未生效</label>
+                                        </c:when>
                                     </c:choose>
                                 </span>
                             </div>
@@ -77,11 +80,18 @@
                         </div>
                     </div>
                     <div class="pull-right">
-                        <c:if test="${item.expressStatus == 3}">
-                            <div>
-                                <button type="button" class="btn btn-sm info outline rounded" style="margin-bottom: 5px;width: 70px" onclick="launchPay('${item.id}')">支付差价</button>
-                            </div>
-                        </c:if>
+                        <c:choose>
+                            <c:when test="${item.expressStatus == 3}">
+                                <div>
+                                    <button type="button" class="btn btn-sm info outline rounded" style="margin-bottom: 5px;width: 70px" onclick="launchRePay('${item.id}')">支付差价</button>
+                                </div>
+                            </c:when>
+                            <c:when test="${item.expressStatus == 7}">
+                                <div>
+                                    <button type="button" class="btn btn-sm info outline rounded" style="margin-bottom: 5px;width: 70px" onclick="launchPay('${item.id}')">支付</button>
+                                </div>
+                            </c:when>
+                        </c:choose>
                     </div>
                 </a>
             </c:forEach>
@@ -107,11 +117,32 @@
     iframe.parentNode.removeChild(iframe);
   };
 
-  function launchPay(expressId) {
+  function launchRePay(expressId) {
     if (confirm("确认支付?")) {
       $.post("/order/0/reOrder/create",
         {
           "expressId": expressId,
+          "openId": '${openId}'
+        },
+        function (result) {
+          if (result.status != 200) {
+            alert(result.msg);
+            return;
+          } else {
+            var orderNo = result.msg;
+            window.location.href = "http://www.glove1573.cn/wxpay/pay?orderNo=" + orderNo;
+          }
+        }
+      );
+    }
+  }
+
+  function launchPay(expressId) {
+    if (confirm("确认支付?")) {
+      $.post("/order/0//create",
+        {
+          "expressId": expressId,
+          "type":"1",
           "openId": '${openId}'
         },
         function (result) {
