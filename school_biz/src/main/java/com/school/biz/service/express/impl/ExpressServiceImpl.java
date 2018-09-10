@@ -155,7 +155,7 @@ public class ExpressServiceImpl implements ExpressService {
     public Integer cleanPushMessageAndCancelExpress() {
         Integer count = 0;
         try {
-            redisTemplate.delete("redis:push_message:*");
+            redisTemplate.delete(redisTemplate.keys("redis:push_message:*"));
             count += expressSendService.updateIneffectiveToCancel();
             count += expressReceiveService.updateIneffectiveToCancel();
         } catch (Exception e) {

@@ -16,6 +16,8 @@
 				<ref bean="NotRefundOrderTrigger" />
 				<!-- 4.未支付快递消息推送：快递创建后，10分钟内还未支付成功则推送消息给用户 -->
 				<ref bean="NotExpressTrigger" />
+
+				<ref bean="ClearPushMessageTrigger" />
 			</list>
 		</property>
 		<property name="configLocation"
@@ -69,9 +71,8 @@
 	<bean id="NotExpressTrigger"
 		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="NotExpressJob" />
-		<!-- 每2分钟查询一次 -->
-		<property name="cronExpression" value="0 0/1 * * * ?" />
-<!-- 		<property name="cronExpression" value="0 0 9 * * ?" /> -->
+		<!-- 每10分钟查询一次 -->
+		<property name="cronExpression" value="0 0/10 * * * ?" />
 	</bean>
 	<bean id="NotExpressJob"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
@@ -86,8 +87,7 @@
 		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="ClearPushMessageJob" />
 		<!-- 每天9点执行一次 -->
-		<property name="cronExpression" value="0 0/1 * * * ?" />
-		 		<!--<property name="cronExpression" value="0 0 9 * * ?" />-->
+		<property name="cronExpression" value="0 0 9 * * ?" />
 	</bean>
 	<bean id="ClearPushMessageJob"
 		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
