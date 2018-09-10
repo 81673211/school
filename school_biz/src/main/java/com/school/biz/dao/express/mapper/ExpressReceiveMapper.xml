@@ -354,6 +354,7 @@
     </select>
 
     <update id="updateIneffectiveToCancel">
-         update express_receive t set t.express_status=#{cancel,jdbcType=INTEGER} where DATEDIFF(now(),t.created_time)>#{diff,jdbcType=INTEGER}
+         update express_receive t set t.express_status=#{cancel,jdbcType=INTEGER}
+         where DATEDIFF(now(),t.created_time)>#{diff,jdbcType=INTEGER} and t.express_status=#{ineffective,jdbcType=INTEGER}
     </update>
 </mapper>

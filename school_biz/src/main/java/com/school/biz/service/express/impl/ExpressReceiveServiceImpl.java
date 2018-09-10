@@ -298,6 +298,6 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
 
     @Override
     public void updateIneffectiveToCancel() {
-        expressReceiveMapper.updateIneffectiveToCancel(SendExpressStatusEnum.CANCEL.getFlag(), 2);
+        expressReceiveMapper.updateIneffectiveToCancel(SendExpressStatusEnum.CANCEL.getFlag(), SendExpressStatusEnum.INEFFECTIVE.getFlag(), 2);
     }
 }

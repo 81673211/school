@@ -229,6 +229,6 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
 
     @Override
     public void updateIneffectiveToCancel() {
-        expressSendMapper.updateIneffectiveToCancel(SendExpressStatusEnum.CANCEL.getFlag(), 2);
+        expressSendMapper.updateIneffectiveToCancel(SendExpressStatusEnum.CANCEL.getFlag(), SendExpressStatusEnum.INEFFECTIVE.getFlag(), 2);
     }
 }
