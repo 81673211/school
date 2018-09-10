@@ -79,6 +79,22 @@
 		<property name="targetMethod" value="execute" />
 		<property name="concurrent" value="false"/><!--配置为false不允许任务并发执行--> 
 	</bean>
+
+
+	<!-- 未决快递消息推送 -->
+	<bean id="ClearPushMessageTrigger"
+		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="ClearPushMessageJob" />
+		<!-- 每天9点执行一次 -->
+		<!--<property name="cronExpression" value="0 0/1 * * * ?" />-->
+		 		<property name="cronExpression" value="0 0 9 * * ?" />
+	</bean>
+	<bean id="ClearPushMessageJob"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="ClearPushMessageQuartz" />
+		<property name="targetMethod" value="execute" />
+		<property name="concurrent" value="false"/><!--配置为false不允许任务并发执行-->
+	</bean>
 </beans>
 
 

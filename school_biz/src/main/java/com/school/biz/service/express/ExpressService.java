@@ -38,5 +38,5 @@ public interface ExpressService {
     /**
      * 清空redis推送key以及将长时间待支付的订单状态改为已取消
      */
-    void cleanPushMessageAndCancelExpress();
+    Integer cleanPushMessageAndCancelExpress();
 }
