@@ -350,7 +350,7 @@
 
     <select id="findPushOpenIdByExpressStatus" parameterType="java.lang.Integer" resultType="map">
         select c.open_id,t.created_time from express_receive t inner join customer c on c.id=t.customer_id
-        where 1=1 and t.express_status=#{status,jdbcType=INTEGER} and t.is_deleted=0
+        where 1=1 and t.express_status=#{status,jdbcType=INTEGER} and t.is_deleted=0 and TIMESTAMPDIFF(MINUTE,t.created_time,now())>10
     </select>
 
     <update id="updateIneffectiveToCancel">
