@@ -20,7 +20,7 @@
 <section class="section">
     <form class="box" onsubmit="return false;">
         <div class="control">
-            <label for="code">快递单号 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>
+            <label for="code">快递单号/取件码 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>
             <input id="code" type="text" class="input">
         </div>
         <div class="control">
@@ -40,9 +40,7 @@
                 <select id="company" name="company">
                     <c:if test="${companyList != null and companyList.size() > 0}">
                         <c:forEach items="${companyList}" varStatus="var" var="item">
-                            <c:if test="${item.id != 1}">
-                                <option value="${item.id}">${item.name}</option>
-                            </c:if>
+                            <option value="${item.id}">${item.name}</option>
                         </c:forEach>
                     </c:if>
                 </select>
@@ -71,10 +69,6 @@
             <label for="helpReceiveAddr">取件地址 <i class="icon icon-asterisk"
                                                  style="font-size: 5px;color:red"></i> </label>
             <input id="helpReceiveAddr" type="text" class="input">
-        </div>
-        <div class="control">
-            <label for="helpReceiveCode">取件码</label>
-            <input id="helpReceiveCode" type="text" class="input">
         </div>
 
         <div class="control">
@@ -133,7 +127,6 @@
         var receiverPhone = $("#receiverPhone").val();
         var companyId = $("#company").val();
         var helpReceiveAddr = $("#helpReceiveAddr").val();
-        var helpReceiveCode = $("#helpReceiveCode").val();
         var expressWeight = $("#expressWeight").val();
         var distributionType = $("#distributionType").val();
         var remark = $("#remark").val();
@@ -179,9 +172,6 @@
         } else {
             alert("请选择配送方式");
             return false;
-        }
-        if (helpReceiveCode != '') {
-            data.helpReceiveCode = helpReceiveCode;
         }
         if (expressWeight != '') {
             data.expressWeight = expressWeight;
