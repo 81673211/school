@@ -20,7 +20,7 @@
 <section class="section">
     <form class="box" onsubmit="return false;">
         <div class="control">
-            <label for="code">快递单号/取件码 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>
+            <label for="code">快递单号或取件码 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>
             <input id="code" type="text" class="input">
         </div>
         <div class="control">
@@ -40,7 +40,10 @@
                 <select id="company" name="company">
                     <c:if test="${companyList != null and companyList.size() > 0}">
                         <c:forEach items="${companyList}" varStatus="var" var="item">
-                            <option value="${item.id}">${item.name}</option>
+                            <c:if test="${item.id != 1}">
+                                <option value="${item.id}">${item.name}</option>
+                            </c:if>
+                            <option value="1">其它</option>
                         </c:forEach>
                     </c:if>
                 </select>
