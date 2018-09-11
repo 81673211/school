@@ -20,7 +20,7 @@
 <section class="section">
     <form class="box" onsubmit="return false;">
         <div class="control">
-            <label for="code">快递单号 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>
+            <label for="code">快递单号或取件码 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>
             <input id="code" type="text" class="input">
         </div>
         <div class="control">
@@ -44,6 +44,7 @@
                                 <option value="${item.id}">${item.name}</option>
                             </c:if>
                         </c:forEach>
+                        <option value="1">其它</option>
                     </c:if>
                 </select>
             </div>
@@ -71,10 +72,6 @@
             <label for="helpReceiveAddr">取件地址 <i class="icon icon-asterisk"
                                                  style="font-size: 5px;color:red"></i> </label>
             <input id="helpReceiveAddr" type="text" class="input">
-        </div>
-        <div class="control">
-            <label for="helpReceiveCode">取件码</label>
-            <input id="helpReceiveCode" type="text" class="input">
         </div>
 
         <div class="control">
@@ -133,7 +130,6 @@
         var receiverPhone = $("#receiverPhone").val();
         var companyId = $("#company").val();
         var helpReceiveAddr = $("#helpReceiveAddr").val();
-        var helpReceiveCode = $("#helpReceiveCode").val();
         var expressWeight = $("#expressWeight").val();
         var distributionType = $("#distributionType").val();
         var remark = $("#remark").val();
@@ -179,9 +175,6 @@
         } else {
             alert("请选择配送方式");
             return false;
-        }
-        if (helpReceiveCode != '') {
-            data.helpReceiveCode = helpReceiveCode;
         }
         if (expressWeight != '') {
             data.expressWeight = expressWeight;
