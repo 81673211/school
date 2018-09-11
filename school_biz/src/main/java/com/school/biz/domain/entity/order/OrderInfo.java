@@ -24,6 +24,7 @@ public class OrderInfo {
 
     private String tradeSummary;
 
+    /**商户参数*/
     private String merchParam;
 
     private Integer status;
