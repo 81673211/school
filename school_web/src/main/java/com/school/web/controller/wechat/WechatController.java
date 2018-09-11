@@ -54,6 +54,7 @@ public class WechatController {
             log.error("微信事件通知request转map异常,{}", e.getMessage());
             throw new RuntimeException(e);
         }
+        log.info("requestParamMap:{}", paramMap.toString());
         String result = eventService.process(paramMap);
         log.info("result:{}", result);
         PrintWriter out = response.getWriter();

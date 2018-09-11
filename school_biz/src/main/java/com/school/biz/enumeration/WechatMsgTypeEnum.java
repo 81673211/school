@@ -15,8 +15,11 @@ import lombok.Getter;
 public enum WechatMsgTypeEnum {
 
     TEXT("text", "文本"),
+    IMAGE("image", "图片"),
+    VOICE("voice", "语音"),
     EVENT("event", "事件"),
-    NEWS("news", "新闻");
+    NEWS("news", "新闻"),
+    VIDEO("video", "视频");
 
     private String code;
 
