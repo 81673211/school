@@ -65,11 +65,11 @@ public interface ExpressReceiveService extends BaseService<ExpressReceive, Expre
      * 默认条件isDelete=0
      *
      * @param status
-     * @param phone
+     * @param customerId
      * @return
      * @throws ExpressException
      */
-    List<ExpressReceive> selectExpressList(Integer[] status, String phone);
+    List<ExpressReceive> selectExpressList(Integer[] status, Long customerId);
 
 
     /**
@@ -109,5 +109,5 @@ public interface ExpressReceiveService extends BaseService<ExpressReceive, Expre
      */
     List<PushMessageVo> findPushOpenMessageByExpressStatus(ReceiveExpressStatusEnum statusEnum);
 
-    void updateIneffectiveToCancel();
+    Integer updateIneffectiveToCancel();
 }

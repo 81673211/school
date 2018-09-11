@@ -75,12 +75,14 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
             List list = expressReceiveMapper.selectByParams(codeMap);
             if (!CollectionUtils.isEmpty(list)) {
                 ExpressReceive receive = (ExpressReceive) list.get(0);
-                if (receive.getExpressStatus() != (ReceiveExpressStatusEnum.INEFFECTIVE.getFlag())) {
+                if (receive.getExpressStatus() != (ReceiveExpressStatusEnum.INEFFECTIVE.getFlag()) ||
+                        receive.getExpressStatus() != (ReceiveExpressStatusEnum.CANCEL.getFlag())) {
                     String msg = "edit receive express error,because the express status already pass,code:" + expressReceive.getCode();
                     log.error(msg);
                     throw new RuntimeException(msg);
                 } else {
                     expressReceive.setId(receive.getId());
+                    expressReceive.setExpressStatus(ReceiveExpressStatusEnum.INEFFECTIVE.getFlag());
                     expressReceiveMapper.updateByPrimaryKeySelective(expressReceive);
                     expressLogService.log(expressReceive, ExpressLogActionEnum.RECEIVE_EXPRESS_UPDATE);
                 }
@@ -196,10 +198,10 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
     }
 
     @Override
-    public List<ExpressReceive> selectExpressList(Integer[] status, String phone) {
+    public List<ExpressReceive> selectExpressList(Integer[] status, Long customerId) {
         Map<String, Object> param = new HashMap<>();
         param.put("status", status);
-        param.put("phone", phone);
+        param.put("customerId", customerId);
         List<ExpressReceive> receiveList = expressReceiveMapper.selectByParams(param);
         if (!receiveList.isEmpty()) {
             for (ExpressReceive expressReceive : receiveList) {
@@ -297,7 +299,7 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
     }
 
     @Override
-    public void updateIneffectiveToCancel() {
-        expressReceiveMapper.updateIneffectiveToCancel(SendExpressStatusEnum.CANCEL.getFlag(), 2);
+    public Integer updateIneffectiveToCancel() {
+        return expressReceiveMapper.updateIneffectiveToCancel(SendExpressStatusEnum.CANCEL.getFlag(), SendExpressStatusEnum.INEFFECTIVE.getFlag(), 2);
     }
 }

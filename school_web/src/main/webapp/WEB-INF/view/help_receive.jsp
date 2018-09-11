@@ -196,9 +196,9 @@
             } else {
                 if (result.data != null) {
                     var orderNo = result.data;
-                    // window.location.href = "http://www.glove1573.cn/wxpay/pay?orderNo=" + orderNo;
+                    window.location.href = "http://www.glove1573.cn/wxpay/pay?orderNo=" + orderNo;
                 } else {
-                    // window.location.href = "http://www.glove1573.cn/express/1/list?status=0,1,2,3,4";
+                    window.location.href = "http://www.glove1573.cn/express/1/list?status=0,1,2,3,4";
                 }
             }
         });

@@ -281,7 +281,7 @@ public class ExpressController extends BaseEasyWebController {
         for (int i = 0; i < split.length; i++) {
             statuses[i] = Integer.parseInt(split[i]);
         }
-        List<ExpressReceive> receiveList = expressReceiveService.selectExpressList(statuses, phone);
+        List<ExpressReceive> receiveList = expressReceiveService.selectExpressList(statuses, customer.getId());
         List<ReceiveExpressListResponseVo> receiveExpressListResponseVos = new ArrayList<>();
         if (!CollectionUtils.isEmpty(receiveList)) {
             for (ExpressReceive expressReceive : receiveList) {

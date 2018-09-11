@@ -86,5 +86,5 @@ public interface ExpressSendService extends BaseService<ExpressSend, ExpressSend
      */
     List<PushMessageVo> findPushMessageByExpressStatus(SendExpressStatusEnum statusEnum);
 
-    void updateIneffectiveToCancel();
+    Integer updateIneffectiveToCancel();
 }

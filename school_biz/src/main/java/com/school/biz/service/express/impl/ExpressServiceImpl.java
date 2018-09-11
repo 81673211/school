@@ -152,14 +152,16 @@ public class ExpressServiceImpl implements ExpressService {
     }
 
     @Override
-    public void cleanPushMessageAndCancelExpress() {
+    public Integer cleanPushMessageAndCancelExpress() {
+        Integer count = 0;
         try {
-            redisTemplate.delete("redis:push_message:*");
-            expressSendService.updateIneffectiveToCancel();
-            expressReceiveService.updateIneffectiveToCancel();
+            redisTemplate.delete(redisTemplate.keys("redis:push_message:*"));
+            count += expressSendService.updateIneffectiveToCancel();
+            count += expressReceiveService.updateIneffectiveToCancel();
         } catch (Exception e) {
             log.error("cleanPushMessageAndCancelExpress error", e);
         }
+        return count;
     }
 
     private void getRemoveList(List<PushMessageVo> list, List<PushMessageVo> removeList, ValueOperations<String, String> opsForValue, String keyPrefix) {
