@@ -24,6 +24,8 @@ public class OrderInfo {
 
     private String tradeSummary;
 
+    private String merchParam;
+
     private Integer status;
 
     private String notifyUrl;
@@ -110,6 +112,14 @@ public class OrderInfo {
 
     public void setTradeSummary(String tradeSummary) {
         this.tradeSummary = tradeSummary == null ? null : tradeSummary.trim();
+    }
+
+    public String getMerchParam() {
+        return merchParam;
+    }
+
+    public void setMerchParam(String merchParam) {
+        this.merchParam = merchParam == null ? null : merchParam.trim();
     }
 
     public Integer getStatus() {
