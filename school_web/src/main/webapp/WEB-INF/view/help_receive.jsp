@@ -43,8 +43,8 @@
                             <c:if test="${item.id != 1}">
                                 <option value="${item.id}">${item.name}</option>
                             </c:if>
-                            <option value="1">其它</option>
                         </c:forEach>
+                        <option value="1">其它</option>
                     </c:if>
                 </select>
             </div>
