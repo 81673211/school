@@ -85,7 +85,7 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
             if (!CollectionUtils.isEmpty(list)) {
                 ExpressReceive receive = (ExpressReceive) list.get(0);
                 if (receive.getExpressStatus() != (ReceiveExpressStatusEnum.INEFFECTIVE.getFlag()) ||
-                    receive.getExpressStatus() != (ReceiveExpressStatusEnum.CANCEL.getFlag())) {
+                        receive.getExpressStatus() != (ReceiveExpressStatusEnum.CANCEL.getFlag())) {
                     String msg = "edit receive express error,because the express status already pass,code:" + code;
                     log.error(msg);
                     throw new RuntimeException(msg);
@@ -153,7 +153,6 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
 
     @Override
     public void updateReceiveExpressStatus(Long id, Integer status) {
-        //TODO 快件状态检查，检查状态是否遵循定义的流程，如果按照非流程处理则抛出异常,比如：修改快件状态时，需要去提前检查快件当前状态是否满足修改的条件
         ExpressReceive expressReceive = new ExpressReceive();
         expressReceive.setId(id);
         expressReceive.setExpressStatus(status);
@@ -298,5 +297,10 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
     @Override
     public Integer updateIneffectiveToCancel() {
         return expressReceiveMapper.updateIneffectiveToCancel(SendExpressStatusEnum.CANCEL.getFlag(), SendExpressStatusEnum.INEFFECTIVE.getFlag(), 2);
+    }
+
+    @Override
+    public void updateServiceAmt(BigDecimal payAmount, Long expressId) {
+        expressReceiveMapper.addServiceAmt(payAmount, expressId);
     }
 }

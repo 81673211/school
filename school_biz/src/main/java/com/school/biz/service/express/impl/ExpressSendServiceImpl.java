@@ -231,4 +231,9 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
     public Integer updateIneffectiveToCancel() {
         return expressSendMapper.updateIneffectiveToCancel(SendExpressStatusEnum.CANCEL.getFlag(), SendExpressStatusEnum.INEFFECTIVE.getFlag(), 2);
     }
+
+    @Override
+    public void updateServiceAmt(BigDecimal payAmount, Long id) {
+        expressSendMapper.addServiceAmt(payAmount, id);
+    }
 }

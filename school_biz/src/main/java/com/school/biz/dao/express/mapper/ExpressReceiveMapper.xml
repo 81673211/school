@@ -360,4 +360,8 @@
          update express_receive t set t.express_status=#{cancel,jdbcType=INTEGER}
          where DATEDIFF(now(),t.created_time)>#{diff,jdbcType=INTEGER} and t.express_status=#{ineffective,jdbcType=INTEGER}
     </update>
+
+    <update id="addServiceAmt">
+        update express_receive t set t.service_amt = t.service_amt + #{amount,jdbcType=DECIMAL} where t.id=#{id,jdbcType=BIGINT}
+    </update>
 </mapper>
