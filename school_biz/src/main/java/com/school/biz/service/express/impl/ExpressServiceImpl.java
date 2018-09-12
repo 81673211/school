@@ -101,7 +101,7 @@ public class ExpressServiceImpl implements ExpressService {
             } else if (expressType == ExpressTypeEnum.RECEIVE.getFlag()) {
                 ExpressReceive expressReceive = expressReceiveService.getReceiveExpress(expressId);
                 //当前收件状态为 补单待支付
-                if (expressReceive.getExpressStatus().equals(ReceiveExpressStatusEnum.INEFFECTIVE.getFlag())) {
+                if (expressReceive.getExpressStatus().equals(ReceiveExpressStatusEnum.SUPPLEMENT.getFlag())) {
                     BigDecimal payAmount = getSupplementAmount(orderInfo);
                     if (payAmount.compareTo(BigDecimal.ZERO) == 1) {
                         //修改服务费
