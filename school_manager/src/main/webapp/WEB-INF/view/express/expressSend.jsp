@@ -97,7 +97,10 @@
                         <td>{{el.totalReOrderAmt}}</td>
                         <td>{{el.createdTime|date('yyyy-MM-dd HH:mm:ss')}}</td>
                         <td>{{el.remark}}</td>
-                        <td>{{@expressSendStatusMap[el.expressStatus]}}</td>
+                        <td>
+                        	<div :if="el.expressStatus == 7">{{@expressSendStatusMap[el.expressStatus]}}</div>
+                        	<div :if="el.expressStatus == !7" style="color: green;">{{@expressSendStatusMap[el.expressStatus]}}</div>
+                        </td>
                         <td class="but_xq">
                             <btn:hasUrlPerm link="${reOrderUrl}">
 	                           	<a :if="el.reOrderNum == 0 && !el.code " class="ml-5 btn btn-primary-outline size-S radius" :click="@methods.reOrder(el.id,@methods.reOrderUrl)">补单</a>
