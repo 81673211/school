@@ -98,7 +98,7 @@
                         <td>{{el.createdTime|date('yyyy-MM-dd HH:mm:ss')}}</td>
                         <td>{{el.remark}}</td>
                         <td>
-                        	 <div :if="el.expressStatus == 7">{{@expressSendStatusMap[el.expressStatus]}}</div>
+                        	<div :if="el.expressStatus == 7">{{@expressSendStatusMap[el.expressStatus]}}</div>
                         	<div :if="el.expressStatus == !7" style="color: green;">{{@expressSendStatusMap[el.expressStatus]}}</div>
                         </td>
                         <td class="but_xq">
