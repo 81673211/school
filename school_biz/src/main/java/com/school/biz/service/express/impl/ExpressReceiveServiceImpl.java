@@ -6,9 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import com.school.biz.dao.express.ExpressCompanyMapper;
 import com.school.biz.dao.express.ExpressReceiveMapper;
@@ -73,15 +75,37 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
     @Override
     public void createReceiveExpress(ExpressReceive expressReceive) {
         try {
-            boxExpressCompany(expressReceive);
-            Long count = expressReceiveMapper.insertSelective(expressReceive);
-            if (!(count > 0L)) {
-                String message =
-                        "create receive express error,when insert table 'express_receive' the number of affected rows is 0";
-                log.error(message);
-                throw new ExpressException(message);
+            String code = expressReceive.getCode();
+            List list = new ArrayList();
+            if (StringUtils.isNotBlank(code)) {
+                Map<String, Object> codeMap = new HashMap<>(1);
+                codeMap.put("code", code);
+                list = expressReceiveMapper.selectByParams(codeMap);
             }
-            expressLogService.log(expressReceive, ExpressLogActionEnum.RECEIVE_EXPRESS_CREATE);
+            if (!CollectionUtils.isEmpty(list)) {
+                ExpressReceive receive = (ExpressReceive) list.get(0);
+                if (receive.getExpressStatus() != (ReceiveExpressStatusEnum.INEFFECTIVE.getFlag()) ||
+                    receive.getExpressStatus() != (ReceiveExpressStatusEnum.CANCEL.getFlag())) {
+                    String msg = "edit receive express error,because the express status already pass,code:" + code;
+                    log.error(msg);
+                    throw new RuntimeException(msg);
+                } else {
+                    expressReceive.setId(receive.getId());
+                    expressReceive.setExpressStatus(ReceiveExpressStatusEnum.INEFFECTIVE.getFlag());
+                    expressReceiveMapper.updateByPrimaryKeySelective(expressReceive);
+                    expressLogService.log(expressReceive, ExpressLogActionEnum.RECEIVE_EXPRESS_UPDATE);
+                }
+            } else {
+                boxExpressCompany(expressReceive);
+                Long count = expressReceiveMapper.insertSelective(expressReceive);
+                if (!(count > 0L)) {
+                    String message =
+                            "create receive express error,when insert table 'express_receive' the number of affected rows is 0";
+                    log.error(message);
+                    throw new ExpressException(message);
+                }
+                expressLogService.log(expressReceive, ExpressLogActionEnum.RECEIVE_EXPRESS_CREATE);
+            }
         } catch (Exception e) {
             String message = "throw exception when create receive express";
             log.error(message, e);
