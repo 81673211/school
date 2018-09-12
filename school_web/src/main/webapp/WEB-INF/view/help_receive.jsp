@@ -20,8 +20,12 @@
 <section class="section">
     <form class="box" onsubmit="return false;">
         <div class="control">
+            <label for="helpReceiveCode">取件码</label>
+            <input id="helpReceiveCode" type="text" class="input" placeholder="如有取件码请优先正确填写取件码">
+        </div>
+        <div class="control">
             <label for="code">快递单号 </label>
-            <input id="code" type="text" class="input">
+            <input id="code" type="text" class="input" placeholder="如没有取件码请正确填写快递单号">
         </div>
         <div class="control">
             <label for="receiverName">收件人姓名 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i>
@@ -73,14 +77,11 @@
                                                  style="font-size: 5px;color:red"></i> </label>
             <input id="helpReceiveAddr" type="text" class="input">
         </div>
-        <div class="control">
-            <label for="helpReceiveCode">取件码</label>
-            <input id="helpReceiveCode" type="text" class="input">
-        </div>
+
 
         <div class="control">
-            <label for="remark">备注</label>
-            <textarea style="width: 100%;" class="textarea" cols="10" id="remark" placeholder="有什么想对我们备注的就写在这里吧！比如：预约配送时间等。限200字！"
+            <label for="remark">更多信息</label>
+            <textarea style="width: 100%;" class="textarea" cols="10" id="remark" placeholder="请将快递公司发您的取件短信内容复制粘贴在此处。限200字！"
                       maxlength="200"></textarea>
         </div>
 
@@ -143,6 +144,12 @@
       alert("参数错误");
       return false;
     }
+
+    if (code == '' && helpReceiveCode == '') {
+      alert("取件码和快递单号二者须填其一");
+      return false;
+    }
+
     var data = {openId: openId};
 
     if (code != '') {
