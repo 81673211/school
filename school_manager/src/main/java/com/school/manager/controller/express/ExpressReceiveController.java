@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -159,6 +160,14 @@ public class ExpressReceiveController extends BaseEasyWebController {
             return AjaxResult.fail("保存失败");
         }
     }
+
+    @RequestMapping(value = "/supplement.do", method = RequestMethod.GET)
+    public ModelAndView supplement(Long id) {
+        ModelAndView view = new ModelAndView("express/receiveSupplement");
+        view.addObject("expressReceive", expressReceiveService.getReceiveExpress(id));
+        return view;
+    }
+
 
     /**
      * 删除

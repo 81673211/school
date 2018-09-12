@@ -33,7 +33,7 @@ public class ConstantUrl {
     // 收件删除
     public static final String EXPRESS_RECEIVE_DEL_URL = "/express/expressReceive/del.do";
     //收件补单
-    public static final String EXPRESS_RECEIVE_SUPPLEMENT_URL = "/express/expressReceive/del.do";
+    public static final String EXPRESS_RECEIVE_SUPPLEMENT_URL = "/express/expressReceive/supplement.do";
 
     /**
      * 寄件
