@@ -6,6 +6,7 @@ insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_re
 insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_remark) values (3, '收件编辑', '/express/expressReceive/edit.do', (select ri.id from resource_info ri where ri.res_url='/express/expressReceive/list.do'),(select mi.id from menu_info mi where mi.resource_name = '收件列表'),NULL);
 insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_remark) values (4, '收件保存', '/express/expressReceive/save.do', (select ri.id from resource_info ri where ri.res_url='/express/expressReceive/list.do'),(select mi.id from menu_info mi where mi.resource_name = '收件列表'),NULL);
 insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_remark) values (5, '收件删除', '/express/expressReceive/del.do', (select ri.id from resource_info ri where ri.res_url='/express/expressReceive/list.do'),(select mi.id from menu_info mi where mi.resource_name = '收件列表'),NULL);
+insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_remark) values (6, '补单', '/express/expressReceive/reOrder.do', (select ri.id from resource_info ri where ri.res_url='/express/expressReceive/list.do'),(select mi.id from menu_info mi where mi.resource_name = '收件列表'),NULL);
 
 /** 寄件列表 */
 insert into resource_info (id, res_name, res_url, parent_res_id, menu_id, res_remark) values (31, '寄件列表', '/express/expressSend/list.do', 0,(select mi.id from menu_info mi where mi.resource_name = '寄件列表'),NULL);
