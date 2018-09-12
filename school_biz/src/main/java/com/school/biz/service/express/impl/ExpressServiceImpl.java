@@ -110,7 +110,7 @@ public class ExpressServiceImpl implements ExpressService {
                     //判断该快件是否所有补单的都支付完毕
                     if (supplementService.checkIsPayOff(expressId)) {
                         //改为已经补单
-                        expressReceiveService.updateReceiveExpressStatus(expressId, SendExpressStatusEnum.HAS_SUPPLEMENT.getFlag());
+                        expressReceiveService.updateReceiveExpressStatus(expressId, ReceiveExpressStatusEnum.HAS_SUPPLEMENT.getFlag());
                     }
                 } else {
                     //收件非补单支付

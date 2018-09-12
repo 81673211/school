@@ -17,7 +17,9 @@ public enum ReceiveExpressStatusEnum {
     WAIT_PICKUP(6, "等待取件"),
     PICKUP_ING(7, "正在取件"),
     INEFFECTIVE(8, "未生效"),
-    CANCEL(9, "已取消");
+    CANCEL(9, "已取消"),
+    HAS_SUPPLEMENT(10, "已补单");
+
     private int flag;
     private String message;
 
