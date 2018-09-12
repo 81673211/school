@@ -69,8 +69,7 @@ public class ExpressReceiveController extends BaseEasyWebController {
     protected void onList(PageInfo pageInfo, Map<String, Object> searchParams, HttpServletRequest request,
                           ModelAndView mav) throws FuBusinessException {
         try {
-            List<ExpressReceive> list = expressReceiveService.queryPage(searchParams);
-            mav.addObject("listData", JSON.toJSON(list));
+            mav.addObject("listData", JSON.toJSON(expressReceiveService.queryPage(searchParams)));
             mav.addObject("expressReceiveStatusMap", JSON.toJSON(ReceiveExpressStatusEnum.getAllStatusEnum()));
             mav.addObject("expressTypeMap", JSON.toJSON(ReceiveExpressTypeEnum.getAllTypeEnum()));
             mav.addObject("helpDistributionTypeMap", JSON.toJSON(HelpDistributionTypeEnum.getAllTypeEnum()));
@@ -81,6 +80,7 @@ public class ExpressReceiveController extends BaseEasyWebController {
             mav.addObject(ConstantUrl.DETAIL_URL, ConstantUrl.EXPRESS_RECEIVE_DETAIL_URL);// 详情url
             mav.addObject(ConstantUrl.EDIT_URL, ConstantUrl.EXPRESS_RECEIVE_EDIT_URL);// 编辑url
             mav.addObject(ConstantUrl.DEL_URL, ConstantUrl.EXPRESS_RECEIVE_DEL_URL);// 删除url
+            mav.addObject(ConstantUrl.SUPPLEMENT_URL, ConstantUrl.EXPRESS_RECEIVE_SUPPLEMENT_URL);// 补单url
         } catch (Exception e) {
             log.error("收件查询出现错误：" + e.getMessage());
             throw webExp(e);
