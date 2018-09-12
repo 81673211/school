@@ -68,6 +68,8 @@
                         <th width="50">取件码</th>
                         <th width="50">取件地址</th>
                         <th width="50">配送方式</th>
+                        <th width="50">已支付</th>
+                        <th width="50">已补单</th>
                         <th width="50">创建时间</th>
                         <th width="50">备注</th>
                         <th width="30">状态</th>
@@ -86,6 +88,8 @@
                         <td>{{el.helpReceiveCode}}</td>
                         <td>{{el.helpReceiveAddr}}</td>
                         <td><div :if="el.expressType==0">{{@expressWayMap[el.expressWay]}}</div><div :if="el.expressType==1">{{@helpDistributionTypeMap[el.helpDistributionType]}}</div></td>
+                        <td>{{el.serviceAmt}}</td>
+                        <td>0</td>
                         <td>{{el.createdTime|date('yyyy-MM-dd HH:mm:ss')}}</td>
                         <td>{{el.remark}}</td>
                         <td>{{@expressReceiveStatusMap[el.expressStatus]}}</td>
@@ -95,6 +99,9 @@
                             </btn:hasUrlPerm>
                             <btn:hasUrlPerm link="${editUrl}">
                             	<a class="ml-5 btn btn-primary-outline size-S radius" :click="@methods.edit(el.id, @methods.editUrl)">编辑</a>
+                            </btn:hasUrlPerm>
+                            <btn:hasUrlPerm link="${supplementUrl}">
+                                <a class="btn btn-primary-outline size-S radius" :click="@methods.detail(el.id,@methods.supplementUrl)">补单</a>
                             </btn:hasUrlPerm>
                             <btn:hasUrlPerm link="${delUrl}">
                             	<a class="ml-5 btn btn-danger-outline size-S radius" :click="@methods.del(el.id, @methods.delUrl)">删除</a>
