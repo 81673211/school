@@ -1,11 +1,13 @@
 package com.school.web.vo.request;
 
-import lombok.Data;
-import org.springframework.validation.annotation.Validated;
+import java.math.BigDecimal;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
+
+import org.springframework.validation.annotation.Validated;
+
+import lombok.Data;
 
 /**
  * @author jame
@@ -23,7 +25,7 @@ public class HelpReceiveExpressCreateVo {
     private Long companyId;
     @NotNull(message = "取件地址不能为空")
     private String helpReceiveAddr;
-    @NotNull(message = "快递单号或取件码不能为空")
+
     private String code;
     @NotNull(message = "配送方式不能为空")
     private String distributionType;
