@@ -20,7 +20,7 @@
 <section class="section">
     <form class="box" onsubmit="return false;">
         <div class="control">
-            <label for="code">快递单号或取件码 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>
+            <label for="code">快递单号 </label>
             <input id="code" type="text" class="input">
         </div>
         <div class="control">
@@ -73,6 +73,10 @@
                                                  style="font-size: 5px;color:red"></i> </label>
             <input id="helpReceiveAddr" type="text" class="input">
         </div>
+        <div class="control">
+            <label for="helpReceiveCode">取件码</label>
+            <input id="helpReceiveCode" type="text" class="input">
+        </div>
 
         <div class="control">
             <label for="remark">备注</label>
@@ -94,108 +98,109 @@
 
 <script>
 
-    function calcServiceAmt() {
-        var openId = $("#openId").val();
-        var expressWeight = $("#expressWeight").val();
-        var distributionType = $("#distributionType").val();
-        var data = {openId: openId};
-        data.expressWeight = expressWeight;
-        data.distributionType = distributionType;
-        if (distributionType != '' && expressWeight > 0) {
-            $.get("/calc/1/help/serviceAmt", data, function (result) {
-                if (result.status != 200) {
-                    alert(result.msg);
-                } else {
-                    $("#serviceAmt").html(result.data);
-                }
-            });
+  function calcServiceAmt() {
+    var openId = $("#openId").val();
+    var expressWeight = $("#expressWeight").val();
+    var distributionType = $("#distributionType").val();
+    var data = {openId: openId};
+    data.expressWeight = expressWeight;
+    data.distributionType = distributionType;
+    if (distributionType != '' && expressWeight > 0) {
+      $.get("/calc/1/help/serviceAmt", data, function (result) {
+        if (result.status != 200) {
+          alert(result.msg);
         } else {
-            $("#serviceAmt").html("0.00");
+          $("#serviceAmt").html(result.data);
         }
+      });
+    } else {
+      $("#serviceAmt").html("0.00");
     }
+  }
 
-    window.alert = function (name) {
-        var iframe = document.createElement("IFRAME");
-        iframe.style.display = "none";
-        iframe.setAttribute("src", 'data:text/plain,');
-        document.documentElement.appendChild(iframe);
-        window.frames[0].window.alert(name);
-        iframe.parentNode.removeChild(iframe);
-    };
+  window.alert = function (name) {
+    var iframe = document.createElement("IFRAME");
+    iframe.style.display = "none";
+    iframe.setAttribute("src", 'data:text/plain,');
+    document.documentElement.appendChild(iframe);
+    window.frames[0].window.alert(name);
+    iframe.parentNode.removeChild(iframe);
+  };
 
-    $("#confirm").click(function () {
-        var openId = $("#openId").val();
-        var code = $("#code").val();
-        var receiverName = $("#receiverName").val();
-        var receiverPhone = $("#receiverPhone").val();
-        var companyId = $("#company").val();
-        var helpReceiveAddr = $("#helpReceiveAddr").val();
-        var expressWeight = $("#expressWeight").val();
-        var distributionType = $("#distributionType").val();
-        var remark = $("#remark").val();
+  $("#confirm").click(function () {
+    var openId = $("#openId").val();
+    var code = $("#code").val();
+    var receiverName = $("#receiverName").val();
+    var receiverPhone = $("#receiverPhone").val();
+    var companyId = $("#company").val();
+    var helpReceiveAddr = $("#helpReceiveAddr").val();
+    var helpReceiveCode = $("#helpReceiveCode").val();
+    var expressWeight = $("#expressWeight").val();
+    var distributionType = $("#distributionType").val();
+    var remark = $("#remark").val();
 
-        if (openId == '') {
-            alert("参数错误");
-            return false;
-        }
-        var data = {openId: openId};
+    if (openId == '') {
+      alert("参数错误");
+      return false;
+    }
+    var data = {openId: openId};
 
-        if (code != '') {
-            data.code = code;
+    if (code != '') {
+      data.code = code;
+    }
+    if (receiverName != '') {
+      data.receiverName = receiverName;
+    } else {
+      alert("请输入收件人姓名");
+      return false;
+    }
+    if (receiverPhone != '') {
+      data.receiverPhone = receiverPhone;
+    } else {
+      alert("请输入收件人电话");
+      return false;
+    }
+    if (companyId != '') {
+      data.companyId = companyId;
+    } else {
+      alert("请选择快递公司");
+      return false;
+    }
+    if (helpReceiveAddr != '') {
+      data.helpReceiveAddr = helpReceiveAddr;
+    } else {
+      alert("请输入详细取件地址");
+      return false;
+    }
+    if (distributionType != '') {
+      data.distributionType = distributionType;
+    } else {
+      alert("请选择配送方式");
+      return false;
+    }
+    if (helpReceiveCode != '') {
+      data.helpReceiveCode = helpReceiveCode;
+    }
+    if (expressWeight != '') {
+      data.expressWeight = expressWeight;
+    } else {
+      alert("请输入物品重量");
+      return false;
+    }
+    data.remark = remark;
+    $.post("/express/1/help/create", data, function (result) {
+      if (result.status != 200) {
+        alert(result.msg);
+      } else {
+        if (result.data != null) {
+          var orderNo = result.data;
+          window.location.href = "http://www.glove1573.cn/wxpay/pay?orderNo=" + orderNo;
         } else {
-            alert("请输入快递单号");
-            return false;
+          window.location.href = "http://www.glove1573.cn/express/1/list?status=0,1,2,3,4";
         }
-        if (receiverName != '') {
-            data.receiverName = receiverName;
-        } else {
-            alert("请输入收件人姓名");
-            return false;
-        }
-        if (receiverPhone != '') {
-            data.receiverPhone = receiverPhone;
-        } else {
-            alert("请输入收件人电话");
-            return false;
-        }
-        if (companyId != '') {
-            data.companyId = companyId;
-        } else {
-            alert("请选择快递公司");
-            return false;
-        }
-        if (helpReceiveAddr != '') {
-            data.helpReceiveAddr = helpReceiveAddr;
-        } else {
-            alert("请输入详细取件地址");
-            return false;
-        }
-        if (distributionType != '') {
-            data.distributionType = distributionType;
-        } else {
-            alert("请选择配送方式");
-            return false;
-        }
-        if (expressWeight != '') {
-            data.expressWeight = expressWeight;
-        } else {
-            alert("请输入物品重量");
-            return false;
-        }
-        data.remark = remark;
-        $.post("/express/1/help/create", data, function (result) {
-            if (result.status != 200) {
-                alert(result.msg);
-            } else {
-                if (result.data != null) {
-                    var orderNo = result.data;
-                    window.location.href = "http://www.glove1573.cn/wxpay/pay?orderNo=" + orderNo;
-                } else {
-                    window.location.href = "http://www.glove1573.cn/express/1/list?status=0,1,2,3,4";
-                }
-            }
-        });
+      }
     });
+  });
 
 </script>
 </body>
