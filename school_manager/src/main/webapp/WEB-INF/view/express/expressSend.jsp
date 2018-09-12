@@ -99,7 +99,7 @@
                         <td>{{el.remark}}</td>
                         <td>{{@expressSendStatusMap[el.expressStatus]}}</td>
                         <td class="but_xq">
-                            <btn:hasUrlPerm link="${refundUrl}">
+                            <btn:hasUrlPerm link="${reOrderUrl}">
 	                           	<a :if="el.reOrderNum == 0 && !el.code " class="ml-5 btn btn-primary-outline size-S radius" :click="@methods.reOrder(el.id,@methods.reOrderUrl)">补单</a>
 	                        </btn:hasUrlPerm>
                             <btn:hasUrlPerm link="${refundUrl}">
