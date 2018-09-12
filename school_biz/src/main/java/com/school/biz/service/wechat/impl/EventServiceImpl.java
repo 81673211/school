@@ -63,9 +63,20 @@ public class EventServiceImpl implements EventService {
             } else if (WechatEventTypeEnum.VIEW.getCode().equals(event)) {
                 return SUCCESS;
             }
+            return SUCCESS;
+        } else if (WechatMsgTypeEnum.TEXT.getCode().equals(msgType) ||
+                   WechatMsgTypeEnum.IMAGE.getCode().equals(msgType) ||
+                   WechatMsgTypeEnum.VOICE.getCode().equals(msgType) ||
+                   WechatMsgTypeEnum.VIDEO.getCode().equals(msgType)) {
+            TextMessage textMessage = new TextMessage();
+            textMessage.setMsgType(WechatMsgTypeEnum.TEXT.getCode());
+            textMessage.setToUserName(openId);
+            textMessage.setFromUserName(paramMap.get("ToUserName"));
+            textMessage.setCreateTime(System.currentTimeMillis());
+            textMessage.setContent("亲爱的同学，终于等到你，如有任何疑问或建议，请到【个人中心】-> 【意见及建议】给我们留言，或直接致电客服小妹：028-37591588，我们竭诚为您服务！");
+            return WechatMessageUtil.textMessageToXml(textMessage);
         } else {
             return SUCCESS;
         }
-        return SUCCESS;
     }
 }
