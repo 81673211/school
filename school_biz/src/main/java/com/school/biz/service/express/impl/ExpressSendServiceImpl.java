@@ -235,5 +235,11 @@ public class ExpressSendServiceImpl extends BaseServiceImpl<ExpressSend, Express
     @Override
     public void updateServiceAmt(BigDecimal payAmount, Long id) {
         expressSendMapper.addServiceAmt(payAmount, id);
+        expressSendMapper.addReOrderServiceAmt(payAmount, id);
+    }
+
+    @Override
+    public void updateReOrderAmt(BigDecimal expressAmt, Long expressId) {
+        expressSendMapper.addReOrderAmt(expressAmt, expressId);
     }
 }

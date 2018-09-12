@@ -95,4 +95,12 @@ public interface ExpressSendService extends BaseService<ExpressSend, ExpressSend
      * @param id
      */
     void updateServiceAmt(BigDecimal payAmount, Long id);
+
+    /**
+     * 修改补单服务费
+     *
+     * @param expressAmt
+     * @param expressId
+     */
+    void updateReOrderAmt(BigDecimal expressAmt, Long expressId);
 }

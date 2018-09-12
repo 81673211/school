@@ -1,17 +1,5 @@
 package com.school.biz.service.express.impl;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
-
 import com.school.biz.dao.express.ExpressCompanyMapper;
 import com.school.biz.dao.express.ExpressReceiveMapper;
 import com.school.biz.dao.region.RegionMapper;
@@ -22,21 +10,25 @@ import com.school.biz.domain.entity.order.OrderInfo;
 import com.school.biz.domain.entity.region.Region;
 import com.school.biz.domain.entity.user.AdminUser;
 import com.school.biz.domain.vo.PushMessageVo;
-import com.school.biz.enumeration.DistributionTypeEnum;
-import com.school.biz.enumeration.ExpressLogActionEnum;
-import com.school.biz.enumeration.ExpressTypeEnum;
-import com.school.biz.enumeration.PushMessageEnum;
-import com.school.biz.enumeration.ReceiveExpressStatusEnum;
-import com.school.biz.enumeration.ReceiveExpressTypeEnum;
-import com.school.biz.enumeration.SendExpressStatusEnum;
+import com.school.biz.enumeration.*;
 import com.school.biz.exception.ExpressException;
 import com.school.biz.service.base.impl.BaseServiceImpl;
 import com.school.biz.service.calc.CalcCostService;
 import com.school.biz.service.express.ExpressReceiveService;
 import com.school.biz.service.log.ExpressLogService;
 import com.school.biz.service.order.OrderInfoService;
-
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author jame
@@ -302,5 +294,6 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
     @Override
     public void updateServiceAmt(BigDecimal payAmount, Long expressId) {
         expressReceiveMapper.addServiceAmt(payAmount, expressId);
+        expressReceiveMapper.addReOrderServiceAmt(payAmount, expressId);
     }
 }

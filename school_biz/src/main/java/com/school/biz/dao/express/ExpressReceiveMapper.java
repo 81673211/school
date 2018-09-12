@@ -45,4 +45,12 @@ public interface ExpressReceiveMapper extends BaseDao {
      * @param id
      */
     void addServiceAmt(BigDecimal amount, Long id);
+
+    /**
+     * 累加补单服务费
+     *
+     * @param amount
+     * @param id
+     */
+    void addReOrderServiceAmt(BigDecimal amount, Long id);
 }

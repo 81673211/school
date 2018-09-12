@@ -17,6 +17,7 @@ import com.school.biz.service.express.ExpressService;
 import com.school.biz.service.order.OrderInfoService;
 import com.school.biz.service.supplement.SupplementService;
 import com.school.biz.service.wechat.TemplateService;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -85,10 +86,14 @@ public class ExpressServiceImpl implements ExpressService {
                 }
                 //当前寄件状态为 补单待支付
                 else if (sendExpress.getExpressStatus().equals(SendExpressStatusEnum.SUPPLEMENT.getFlag())) {
-                    BigDecimal payAmount = getSupplementAmount(orderInfo);
-                    if (payAmount.compareTo(BigDecimal.ZERO) == 1) {
+                    AmountVo amountVo = getSupplementAmount(orderInfo);
+                    if (amountVo.getServiceAmt().compareTo(BigDecimal.ZERO) == 1) {
                         //修改服务费
-                        expressSendService.updateServiceAmt(payAmount, expressId);
+                        expressSendService.updateServiceAmt(amountVo.getServiceAmt(), expressId);
+                    }
+                    if (amountVo.getExpressAmt().compareTo(BigDecimal.ZERO) == 1) {
+                        //修改运费
+                        expressSendService.updateReOrderAmt(amountVo.getExpressAmt(), expressId);
                     }
                     //判断该快件是否所有补单的都支付完毕
                     if (supplementService.checkIsPayOff(expressId)) {
@@ -102,10 +107,10 @@ public class ExpressServiceImpl implements ExpressService {
                 ExpressReceive expressReceive = expressReceiveService.getReceiveExpress(expressId);
                 //当前收件状态为 补单待支付
                 if (expressReceive.getExpressStatus().equals(ReceiveExpressStatusEnum.SUPPLEMENT.getFlag())) {
-                    BigDecimal payAmount = getSupplementAmount(orderInfo);
-                    if (payAmount.compareTo(BigDecimal.ZERO) == 1) {
+                    AmountVo amountVo = getSupplementAmount(orderInfo);
+                    if (amountVo.getServiceAmt().compareTo(BigDecimal.ZERO) == 1) {
                         //修改服务费
-                        expressReceiveService.updateServiceAmt(payAmount, expressId);
+                        expressReceiveService.updateServiceAmt(amountVo.getServiceAmt(), expressId);
                     }
                     //判断该快件是否所有补单的都支付完毕
                     if (supplementService.checkIsPayOff(expressId)) {
@@ -126,18 +131,30 @@ public class ExpressServiceImpl implements ExpressService {
         }
     }
 
-    private BigDecimal getSupplementAmount(OrderInfo orderInfo) {
-        //计算服务费
+    private AmountVo getSupplementAmount(OrderInfo orderInfo) {
+        //计算费用
+        AmountVo amountVo = new AmountVo();
         List ids = orderInfoService.selectSupplementIdsById(orderInfo.getId());
         List<SupplementInfo> supplementInfos = supplementService.selectByIds(ids);
-        BigDecimal payAmount = BigDecimal.ZERO;
+        BigDecimal serviceAmt = BigDecimal.ZERO;
+        BigDecimal expressAmt = BigDecimal.ZERO;
         for (SupplementInfo supplementInfo : supplementInfos) {
             supplementService.updateIsPay(supplementInfo.getId());
             if (supplementInfo.getType().equals(SupplementTypeEnum.SERVICE_AMT.getCode())) {
-                payAmount.add(supplementInfo.getAmount());
+                serviceAmt.add(supplementInfo.getAmount());
+            } else {
+                expressAmt.add(supplementInfo.getAmount());
             }
         }
-        return payAmount;
+        amountVo.setServiceAmt(serviceAmt);
+        amountVo.setExpressAmt(expressAmt);
+        return amountVo;
+    }
+
+    @Data
+    public class AmountVo {
+        private BigDecimal serviceAmt = BigDecimal.ZERO;
+        private BigDecimal expressAmt = BigDecimal.ZERO;
     }
 
     private void alertAdmin(ExpressSend sendExpress) {

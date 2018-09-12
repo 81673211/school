@@ -351,8 +351,15 @@
         where DATEDIFF(now(),t.created_time)>#{diff,jdbcType=INTEGER} and t.express_status=#{ineffective,jdbcType=INTEGER}
     </update>
 
-
     <update id="addServiceAmt">
         update express_send t set t.service_amt = t.service_amt + #{amount,jdbcType=DECIMAL} where t.id=#{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="addReOrderServiceAmt">
+        update express_send t set t.re_order_service_amt = t.re_order_service_amt + #{amount,jdbcType=DECIMAL} where t.id=#{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="addReOrderAmt">
+        update express_send t set t.re_order_amt = t.re_order_amt + #{amount,jdbcType=DECIMAL} where t.id=#{id,jdbcType=BIGINT}
     </update>
 </mapper>
