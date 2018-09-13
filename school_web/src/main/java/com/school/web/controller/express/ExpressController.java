@@ -1,29 +1,8 @@
 package com.school.web.controller.express;
 
-import com.school.biz.domain.entity.customer.Customer;
-import com.school.biz.domain.entity.express.ExpressCompany;
-import com.school.biz.domain.entity.express.ExpressReceive;
-import com.school.biz.domain.entity.express.ExpressSend;
-import com.school.biz.domain.entity.region.Region;
-import com.school.biz.enumeration.*;
-import com.school.biz.service.calc.CalcCostService;
-import com.school.biz.service.customer.CustomerService;
-import com.school.biz.service.express.ExpressCompanyService;
-import com.school.biz.service.express.ExpressReceiveService;
-import com.school.biz.service.express.ExpressSendService;
-import com.school.biz.service.order.OrderInfoService;
-import com.school.biz.service.region.RegionService;
-import com.school.biz.service.wechat.TemplateService;
-import com.school.web.controller.base.BaseEasyWebController;
-import com.school.web.vo.request.ExpressGetVo;
-import com.school.web.vo.request.HelpReceiveExpressCreateVo;
-import com.school.web.vo.request.ReceiveExpressModifyVo;
-import com.school.web.vo.request.SendExpressCreateVo;
-import com.school.web.vo.response.DataResponse;
-import com.school.web.vo.response.ReceiveExpressListResponseVo;
-import com.school.web.vo.response.Response;
-import com.school.web.vo.response.SendExpressListResponseVo;
-import lombok.extern.slf4j.Slf4j;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +15,36 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.school.biz.domain.entity.customer.Customer;
+import com.school.biz.domain.entity.express.ExpressCompany;
+import com.school.biz.domain.entity.express.ExpressReceive;
+import com.school.biz.domain.entity.express.ExpressSend;
+import com.school.biz.domain.entity.region.Region;
+import com.school.biz.enumeration.DistributionTypeEnum;
+import com.school.biz.enumeration.ExpressTypeEnum;
+import com.school.biz.enumeration.ReceiveExpressStatusEnum;
+import com.school.biz.enumeration.ReceiveExpressTypeEnum;
+import com.school.biz.enumeration.SendExpressStatusEnum;
+import com.school.biz.enumeration.WechatTemplateEnum;
+import com.school.biz.service.calc.CalcCostService;
+import com.school.biz.service.customer.CustomerService;
+import com.school.biz.service.express.ExpressCompanyService;
+import com.school.biz.service.express.ExpressReceiveService;
+import com.school.biz.service.express.ExpressSendService;
+import com.school.biz.service.region.RegionService;
+import com.school.biz.service.supplement.SupplementService;
+import com.school.biz.service.wechat.TemplateService;
+import com.school.web.controller.base.BaseEasyWebController;
+import com.school.web.vo.request.ExpressGetVo;
+import com.school.web.vo.request.HelpReceiveExpressCreateVo;
+import com.school.web.vo.request.ReceiveExpressModifyVo;
+import com.school.web.vo.request.SendExpressCreateVo;
+import com.school.web.vo.response.DataResponse;
+import com.school.web.vo.response.ReceiveExpressListResponseVo;
+import com.school.web.vo.response.Response;
+import com.school.web.vo.response.SendExpressListResponseVo;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author jame
@@ -62,6 +69,8 @@ public class ExpressController extends BaseEasyWebController {
     private TemplateService templateService;
     @Autowired
     private CalcCostService calcCostService;
+    @Autowired
+    private SupplementService supplementService;
 
     /**
      * 寄件
@@ -288,6 +297,9 @@ public class ExpressController extends BaseEasyWebController {
                 ReceiveExpressListResponseVo vo = new ReceiveExpressListResponseVo();
                 BeanUtils.copyProperties(expressReceive, vo);
                 vo.setDistributionCost(calcCostService.calcReceiveDistributionCost(DistributionTypeEnum.DISTRIBUTION.getFlag()));
+                if (expressReceive.getExpressStatus() == ReceiveExpressStatusEnum.SUPPLEMENT.getFlag()) {
+                    vo.setReOrderAmt(supplementService.getNotPayAmout(expressReceive.getId(), ExpressTypeEnum.RECEIVE.getFlag()));
+                }
                 receiveExpressListResponseVos.add(vo);
             }
         }
@@ -333,9 +345,9 @@ public class ExpressController extends BaseEasyWebController {
                 for (ExpressSend expressSend : list) {
                     SendExpressListResponseVo vo = new SendExpressListResponseVo();
                     BeanUtils.copyProperties(expressSend, vo);
-//                    vo.setTransportPrice(
-//                            expressSendService.getSendTransportPrice(expressSend));
-//                    vo.setServiceAmt(expressSend.getServiceAmt());
+                    if (expressSend.getExpressStatus() == SendExpressStatusEnum.SUPPLEMENT.getFlag()) {
+                        vo.setReOrderAmt(supplementService.getNotPayAmout(expressSend.getId(), ExpressTypeEnum.SEND.getFlag()));
+                    }
                     vos.add(vo);
                 }
             }

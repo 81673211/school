@@ -69,7 +69,7 @@
                         <div>
                             <c:choose>
                                 <c:when test="${item.expressStatus == 3}">
-                                    <small class="muted">您还需要支付差价(￥<fmt:formatNumber
+                                    <small class="muted">您还需要支付补差(￥<fmt:formatNumber
                                             value="${item.reOrderAmt}" pattern="0.00"/>)
                                     </small>
                                 </c:when>
@@ -83,7 +83,7 @@
                         <c:choose>
                             <c:when test="${item.expressStatus == 3}">
                                 <div>
-                                    <button type="button" class="btn btn-sm info outline rounded" style="margin-bottom: 5px;width: 70px" onclick="launchRePay('${item.id}')">支付差价</button>
+                                    <button type="button" class="btn btn-sm info outline rounded" style="margin-bottom: 5px;width: 70px" onclick="launchRePay('${item.id}')">支付补差</button>
                                 </div>
                             </c:when>
                             <c:when test="${item.expressStatus == 7}">

@@ -11,7 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,12 +55,23 @@ public class SupplementServiceImpl extends BaseServiceImpl<SupplementInfo, Suppl
     }
 
     @Override
-    public List<SupplementInfo> selectNotPayByExpress(Long expressId, Integer expressType, Integer type) {
+    public List<SupplementInfo> selectNotPayByExpress(Long expressId, Integer expressType) {
         Map<String, Object> map = new HashMap<>();
         map.put("expressId", expressId);
         map.put("expressType", expressType);
-        map.put("type", type);
         map.put("isPay", false);
         return supplementMapper.selectByParams(map);
+    }
+
+    @Override
+    public BigDecimal getNotPayAmout(Long expressId, Integer expressType) {
+        BigDecimal amount = BigDecimal.ZERO;
+        List<SupplementInfo> supplementInfos = selectNotPayByExpress(expressId, expressType);
+        if (!CollectionUtils.isEmpty(supplementInfos)) {
+            for (SupplementInfo supplementInfo : supplementInfos) {
+                amount = amount.add(supplementInfo.getAmount());
+            }
+        }
+        return amount;
     }
 }

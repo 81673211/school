@@ -1,5 +1,6 @@
 package com.school.biz.service.supplement;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.school.biz.dao.supplement.SupplementMapper;
@@ -18,5 +19,7 @@ public interface SupplementService extends BaseService<SupplementInfo, Supplemen
 
     boolean checkIsPayOff(Long expressId);
 
-    List<SupplementInfo> selectNotPayByExpress(Long expressId, Integer expressType, Integer type);
+    List<SupplementInfo> selectNotPayByExpress(Long expressId, Integer expressType);
+
+    BigDecimal getNotPayAmout(Long expressId, Integer expressType);
 }

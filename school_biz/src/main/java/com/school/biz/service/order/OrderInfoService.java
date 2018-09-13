@@ -1,15 +1,16 @@
 package com.school.biz.service.order;
 
-import com.school.biz.dao.order.OrderInfoMapper;
-import com.school.biz.domain.entity.express.Express;
-import com.school.biz.domain.entity.express.ExpressSend;
-import com.school.biz.domain.entity.order.OrderInfo;
-import com.school.biz.service.base.BaseService;
-
-import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.school.biz.dao.order.OrderInfoMapper;
+import com.school.biz.domain.entity.express.ExpressReceive;
+import com.school.biz.domain.entity.express.ExpressSend;
+import com.school.biz.domain.entity.order.OrderInfo;
+import com.school.biz.service.base.BaseService;
 
 public interface OrderInfoService extends BaseService<OrderInfo, OrderInfoMapper> {
 
@@ -19,11 +20,9 @@ public interface OrderInfoService extends BaseService<OrderInfo, OrderInfoMapper
 
     String createSendReOrder(ExpressSend expressSend);
 
-    String createServiceReOrder(Express express);
-
-    String createFreightReOrder(Express express);
-
     String createReceiveOrder(Long expressId, String type);
+
+    String createReceiveReOrder(ExpressReceive expressReceive);
 
     List<OrderInfo> findByExpressReceiveId(Long expressId);
 

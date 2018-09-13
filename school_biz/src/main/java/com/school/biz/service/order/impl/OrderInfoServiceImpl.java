@@ -1,8 +1,10 @@
 package com.school.biz.service.order.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -53,14 +55,12 @@ import com.school.biz.util.SessionUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
-
 @Service
 @Transactional(rollbackFor = Exception.class)
 @Slf4j
 public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMapper> implements OrderInfoService {
 
+    private static final String SUPPLYMENT = "supplyment";
     @Autowired
     private OrderInfoMapper orderInfoMapper;
     @Autowired
@@ -102,10 +102,9 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
     public String createSendReOrder(ExpressSend expressSend) {
         OrderInfo orderInfo = initReOrderInfo(expressSend);
         if (!(orderInfoMapper.insertSelective(orderInfo) > 0)) {
-            String message =
-                    "create send order error,when insert table 'order_info' the number of affected rows is 0";
+            String message = "创建寄件补单订单时异常";
             log.error(message);
-            throw new RuntimeException(message);
+            throw new RuntimeException("创建订单时出了点问题");
         } else {
             return orderInfo.getOrderNo();
         }
@@ -201,7 +200,19 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
     private OrderInfo initReOrderInfo(ExpressSend expressSend) {
         OrderInfo orderInfo = new OrderInfo();
         orderInfo.setExpressType(ExpressTypeEnum.SEND.getFlag());
-        orderInfo.setAmount(expressSend.getReOrderAmt());
+
+        List<SupplementInfo> supplementInfos = supplementService.selectNotPayByExpress(expressSend.getId(), ExpressTypeEnum.SEND.getFlag());
+        BigDecimal serviceAmt = BigDecimal.ZERO;
+        Map<String, List<Long>> merchParam = new LinkedHashMap<>();
+        List<Long> supplementIds = new ArrayList<>();
+        for (SupplementInfo supplementInfo : supplementInfos) {
+            supplementIds.add(supplementInfo.getId());
+            serviceAmt = serviceAmt.add(supplementInfo.getAmount());
+        }
+        merchParam.put(SUPPLYMENT, supplementIds);
+        orderInfo.setMerchParam(JSON.toJSONString(merchParam));
+        orderInfo.setAmount(serviceAmt);
+
         orderInfo.setTradeSummary("寄件快递费补差");
         orderInfo.setExpressId(expressSend.getId());
         orderInfo.setExpressCode(expressSend.getCode());
@@ -500,34 +511,45 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
         String merchParam = orderInfo.getMerchParam();
         if (!StringUtils.isEmpty(merchParam)) {
             JSONObject jsonObject = JSON.parseObject(merchParam);
-            return jsonObject.getObject("supplyment", List.class);
+            return jsonObject.getObject(SUPPLYMENT, List.class);
         }
         return null;
     }
 
     @Override
-    public String createServiceReOrder(Express express) {
-        if (express instanceof ExpressSend) {
-
-        } else if (express instanceof ExpressReceive) {
-            ExpressReceive expressReceive = (ExpressReceive) express;
-            List<SupplementInfo> supplementInfos =
-                    supplementService.selectNotPayByExpress(expressReceive.getId(), ExpressTypeEnum.RECEIVE.getFlag(),
-                                                            SupplementTypeEnum.SERVICE_AMT.getCode());
-            if (CollectionUtils.isEmpty(supplementInfos)) {
-                log.error("支付补单时无待补单记录");
-                throw new RuntimeException("支付补单时无待补单记录");
-            }
-            // TODO: 2018/9/13
-//            BigDecimal serviceAmt =
-            for (SupplementInfo supplementInfo : supplementInfos) {
-
-            }
+    public String createReceiveReOrder(ExpressReceive expressReceive) {
+        OrderInfo orderInfo = initReOrderInfo(expressReceive);
+        if (!(orderInfoMapper.insertSelective(orderInfo) > 0)) {
+            String message = "创建收件补单订单时异常";
+            log.error(message);
+            throw new RuntimeException("创建订单时出了点问题");
         } else {
-            log.error("支付补单时发现未识别的快递类型, class:{}", express.getClass());
-            throw new RuntimeException("支付补单时发现未识别的快递类型");
+            return orderInfo.getOrderNo();
         }
-        return null;
+    }
+
+    private OrderInfo initReOrderInfo(ExpressReceive expressReceive) {
+        OrderInfo orderInfo = new OrderInfo();
+        orderInfo.setExpressType(ExpressTypeEnum.RECEIVE.getFlag());
+        orderInfo.setTradeSummary("收件服务费补单");
+        List<SupplementInfo> supplementInfos = supplementService.selectNotPayByExpress(expressReceive.getId(), ExpressTypeEnum.RECEIVE.getFlag());
+        BigDecimal serviceAmt = BigDecimal.ZERO;
+        Map<String, List<Long>> merchParam = new LinkedHashMap<>();
+        List<Long> supplementIds = new ArrayList<>();
+        for (SupplementInfo supplementInfo : supplementInfos) {
+            supplementIds.add(supplementInfo.getId());
+            serviceAmt = serviceAmt.add(supplementInfo.getAmount());
+        }
+        merchParam.put(SUPPLYMENT, supplementIds);
+        orderInfo.setMerchParam(JSON.toJSONString(merchParam));
+        orderInfo.setAmount(serviceAmt);
+        orderInfo.setExpressId(expressReceive.getId());
+        orderInfo.setExpressCode(expressReceive.getCode());
+        orderInfo.setCustomerId(expressReceive.getCustomerId());
+        orderInfo.setStatus(OrderStatusEnum.UNPAY.getCode());
+        orderInfo.setOrderNo(IdWorkerUtil.generateOrderNo(Constants.ORDER_NO_TYPE_REORDER));
+        orderInfo.setNotifyUrl(ConfigProperties.WXPAY_NOTIFY_URL);
+        return orderInfo;
     }
 
 }

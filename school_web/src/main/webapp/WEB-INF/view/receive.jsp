@@ -80,6 +80,11 @@
                                             value="${item.distributionCost}" pattern="0.00"/>)
                                     </small>
                                 </c:when>
+                                <c:when test="${item.expressStatus == 10}>">
+                                    <small class="muted">您还需要支付补差(￥<fmt:formatNumber
+                                            value="${item.reOrderAmt}" pattern="0.00"/>)
+                                    </small>
+                                </c:when>
                                 <c:otherwise>
                                     <span><br/></span>
                                 </c:otherwise>
@@ -124,10 +129,17 @@
                                     </div>
                                 </c:if>
                             </c:when>
-                            <c:when test="${item.expressStatus == 8 || item.expressStatus == 10 || item.expressStatus == 11}">
+                            <c:when test="${item.expressStatus == 8}">
                                 <div>
                                     <button type="button" class="btn btn-sm info outline rounded" style="width: 70px"
                                             onclick="launchPay(${item.id},'${item.helpDistributionType}')">支付
+                                    </button>
+                                </div>
+                            </c:when>
+                            <c:when test="${item.expressStatus == 10}">
+                                <div>
+                                    <button type="button" class="btn btn-sm info outline rounded" style="width: 70px"
+                                            onclick="launchRePay(${item.id})">支付补差
                                     </button>
                                 </div>
                             </c:when>
@@ -199,6 +211,25 @@
         }
     }
 
+    function launchRePay(expressId) {
+      if (confirm("确认支付?")) {
+        $.post("/order/1/reOrder/create",
+          {
+            "expressId": expressId,
+            "openId": '${openId}'
+          },
+          function (result) {
+            if (result.status != 200) {
+              alert(result.msg);
+              return;
+            } else {
+              var orderNo = result.msg;
+              window.location.href = "http://www.glove1573.cn/wxpay/pay?orderNo=" + orderNo;
+            }
+          }
+        );
+      }
+    }
 </script>
 </body>
 
