@@ -57,6 +57,12 @@
                                         <c:when test="${item.expressStatus == 8}">
                                             <label class="label label-sm primary outline rounded">未生效</label>
                                         </c:when>
+                                        <c:when test="${item.expressStatus == 10}">
+                                            <label class="label label-sm primary outline rounded">补单未支付</label>
+                                        </c:when>
+                                        <c:when test="${item.expressStatus == 11}">
+                                            <label class="label label-sm primary outline rounded">补单已支付</label>
+                                        </c:when>
                                         <c:otherwise>
                                             <label class="label label-sm primary outline rounded"> </label>
                                         </c:otherwise>
@@ -118,7 +124,7 @@
                                     </div>
                                 </c:if>
                             </c:when>
-                            <c:when test="${item.expressStatus == 8}">
+                            <c:when test="${item.expressStatus == 8 || item.expressStatus == 10 || item.expressStatus == 11}">
                                 <div>
                                     <button type="button" class="btn btn-sm info outline rounded" style="width: 60px"
                                             onclick="launchPay(${item.id},'${item.helpDistributionType}')">支付

@@ -17,4 +17,6 @@ public interface SupplementService {
     void updateIsPay(Long id);
 
     boolean checkIsPayOff(Long expressId);
+
+    List<SupplementInfo> selectNotPayByExpress(Long expressId, Integer expressType, Integer type);
 }

@@ -6,6 +6,7 @@ import com.school.biz.service.order.OrderInfoService;
 import com.school.web.controller.base.BaseEasyWebController;
 import com.school.web.vo.request.OrderCreateVo;
 import com.school.web.vo.request.ReOrderCreateVo;
+import com.school.web.vo.request.ReceiveSerivceReOrderCreateVo;
 import com.school.web.vo.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,7 @@ public class OrderController extends BaseEasyWebController {
     }
 
     /**
-     * 创建寄件订单
+     * 创建寄件补单订单
      *
      * @param vo
      * @param bindingResult
@@ -93,6 +94,29 @@ public class OrderController extends BaseEasyWebController {
         } catch (Exception e) {
             log.error("创建订单失败，{}", e.getMessage());
             return response.writeFailure("创建订单失败, " + e.getMessage());
+        }
+    }
+
+    /**
+     * 创建收件补单订单
+     *
+     * @param vo
+     * @param bindingResult
+     * @return
+     */
+    @RequestMapping(value = "/1/serviceReOrder/create", method = RequestMethod.POST)
+    public Response receiveServiceReOrder(@Validated ReceiveSerivceReOrderCreateVo vo, BindingResult bindingResult) {
+        Response response = new Response();
+        checkValid(bindingResult, response);
+        if (response.getStatus() != HTTP_SUCCESS) {
+            return response;
+        }
+        try {
+            //todo
+            ExpressSend sendExpress = expressSendService.getSendExpress(vo.getExpressId());
+            return response.writeSuccess(orderInfoService.createSendReOrder(sendExpress));
+        } catch (Exception e) {
+            return response.writeFailure("创建订单失败");
         }
     }
 

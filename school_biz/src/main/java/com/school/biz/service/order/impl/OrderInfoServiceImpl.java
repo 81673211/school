@@ -25,12 +25,14 @@ import com.school.biz.domain.entity.express.ExpressReceive;
 import com.school.biz.domain.entity.express.ExpressSend;
 import com.school.biz.domain.entity.order.OrderInfo;
 import com.school.biz.domain.entity.order.RefundOrderInfo;
+import com.school.biz.domain.entity.supplement.SupplementInfo;
 import com.school.biz.enumeration.DistributionTypeEnum;
 import com.school.biz.enumeration.ExpressTypeEnum;
 import com.school.biz.enumeration.OrderStatusEnum;
 import com.school.biz.enumeration.ReceiveExpressTypeEnum;
 import com.school.biz.enumeration.RefundOrderStatusEnum;
 import com.school.biz.enumeration.SendExpressStatusEnum;
+import com.school.biz.enumeration.SupplementTypeEnum;
 import com.school.biz.extension.wxpay.sdk.WXPay;
 import com.school.biz.extension.wxpay.sdk.WXPayConfigImpl;
 import com.school.biz.extension.wxpay.sdk.WXPayConstants.SignType;
@@ -41,12 +43,15 @@ import com.school.biz.service.express.ExpressReceiveService;
 import com.school.biz.service.express.ExpressSendService;
 import com.school.biz.service.order.OrderInfoService;
 import com.school.biz.service.order.RefundOrderInfoService;
+import com.school.biz.service.supplement.SupplementService;
 import com.school.biz.util.AmountUtils;
 import com.school.biz.util.DateUtil;
 import com.school.biz.util.IdWorkerUtil;
 import com.school.biz.util.SessionUtils;
 
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 @Service
@@ -70,6 +75,8 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
     private ExpressSendService expressSendService;
     @Autowired
     private ExpressReceiveService expressReceiveService;
+    @Autowired
+    private SupplementService supplementService;
 
     @Override
     public OrderInfo findByOrderNo(String orderNo) {
@@ -480,6 +487,37 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
             JSONObject jsonObject = JSON.parseObject(merchParam);
             return jsonObject.getObject("supplyment", List.class);
         }
+        return null;
+    }
+
+    @Override
+    public String createServiceReOrder(Express express) {
+        if (express instanceof ExpressSend) {
+
+        } else if (express instanceof ExpressReceive) {
+            ExpressReceive expressReceive = (ExpressReceive) express;
+            List<SupplementInfo> supplementInfos =
+                    supplementService.selectNotPayByExpress(expressReceive.getId(), ExpressTypeEnum.RECEIVE.getFlag(),
+                                                            SupplementTypeEnum.SERVICE_AMT.getCode());
+            if (CollectionUtils.isEmpty(supplementInfos)) {
+                log.error("支付补单时无待补单记录");
+                throw new RuntimeException("支付补单时无待补单记录");
+            }
+            // TODO: 2018/9/13  
+//            BigDecimal serviceAmt = 
+            for (SupplementInfo supplementInfo : supplementInfos) {
+
+            }
+        } else {
+            log.error("支付补单时发现未识别的快递类型, class:{}", express.getClass());
+            throw new RuntimeException("支付补单时发现未识别的快递类型");
+        }
+        return null;
+    }
+
+    @Override
+    public String createFreightReOrder(Express express) {
+        // TODO: 2018/9/13
         return null;
     }
 }

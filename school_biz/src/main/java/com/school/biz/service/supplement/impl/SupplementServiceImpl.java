@@ -47,4 +47,14 @@ public class SupplementServiceImpl implements SupplementService {
         map.put("isPay", 0);
         return supplementMapper.selectByParams(map).isEmpty();
     }
+
+    @Override
+    public List<SupplementInfo> selectNotPayByExpress(Long expressId, Integer expressType, Integer type) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("expressId", expressId);
+        map.put("expressType", expressType);
+        map.put("type", type);
+        map.put("isPay", false);
+        return supplementMapper.selectByParams(map);
+    }
 }

@@ -101,22 +101,22 @@
 
     <select id="selectByParams" resultType="com.school.biz.domain.entity.supplement.SupplementInfo" parameterType="map">
         select * from supplement_info t where 1=1
-        <if test="expressId != null and expressId != '' ">
-            and t.express_id=#{expressId,jdbcType=INTEGER}
+        <if test="expressId != null">
+            and t.express_id=#{expressId,jdbcType=BIGINT}
         </if>
-        <if test="expressType != null and expressType != '' ">
+        <if test="expressType != null ">
             and t.express_type=#{expressType,jdbcType=INTEGER}
         </if>
-        <if test="type != null and type != '' ">
+        <if test="type != null ">
             and t.type=#{type,jdbcType=INTEGER}
         </if>
-        <if test="isPay != null and isPay != '' ">
+        <if test="isPay != null ">
             and t.is_pay=#{isPay,jdbcType=INTEGER}
         </if>
-        <if test="amount != null and amount != '' ">
+        <if test="amount != null  ">
             and t.amount=#{amount,jdbcType=DECIMAL}
         </if>
-        <if test="ids != null and ids !='' ">
+        <if test="ids != null and ids.size() > 0 ">
             and t.id in
             <foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
                 #{item}

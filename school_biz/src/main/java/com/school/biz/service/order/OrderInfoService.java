@@ -1,6 +1,7 @@
 package com.school.biz.service.order;
 
 import com.school.biz.dao.order.OrderInfoMapper;
+import com.school.biz.domain.entity.express.Express;
 import com.school.biz.domain.entity.express.ExpressSend;
 import com.school.biz.domain.entity.order.OrderInfo;
 import com.school.biz.service.base.BaseService;
@@ -17,6 +18,10 @@ public interface OrderInfoService extends BaseService<OrderInfo, OrderInfoMapper
     String createSendOrder(ExpressSend expressSend);
 
     String createSendReOrder(ExpressSend expressSend);
+
+    String createServiceReOrder(Express express);
+
+    String createFreightReOrder(Express express);
 
     String createReceiveOrder(Long expressId, String type);
 
