@@ -29,6 +29,7 @@
         <result column="express_weight" property="expressWeight" jdbcType="DECIMAL"/>
         <result column="help_distribution_type" property="helpDistributionType" jdbcType="VARCHAR"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="re_order_service_amt" property="reOrderServiceAmt" jdbcType="DECIMAL"/>
     </resultMap>
     <sql id="Base_Column_List">
         id,
@@ -57,7 +58,8 @@
         help_receive_addr,
         express_weight,
         help_distribution_type,
-        remark
+        remark,
+        re_order_service_amt
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
@@ -145,6 +147,9 @@
             <if test="remark != null">
                 remark,
             </if>
+            <if test="reOrderServiceAmt != null">
+                re_order_service_amt,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="code != null">
@@ -215,6 +220,9 @@
             </if>
             <if test="remark != null">
                 #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="reOrderServiceAmt != null">
+                #{reOrderServiceAmt,jdbcType=DECIMAL},
             </if>
         </trim>
     </insert>
@@ -292,6 +300,9 @@
             </if>
             <if test="remark != null">
                 remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="reOrderServiceAmt != null">
+                re_order_service_amt= #{reOrderServiceAmt,jdbcType=DECIMAL},
             </if>
         </set>
         where id = #{id,jdbcType=BIGINT}

@@ -22,6 +22,7 @@ public class Express {
     private Long customerId;
     private Date endTime;
     private BigDecimal serviceAmt;
+    private BigDecimal reOrderServiceAmt;
     private Integer expressType;
     private BigDecimal expressWeight;
     private String remark;
