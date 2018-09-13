@@ -8,7 +8,6 @@ public class ConstantUrl {
     public static final String DETAIL_URL = "detailUrl";
     public static final String EDIT_URL = "editUrl";
     public static final String DEL_URL = "delUrl";
-    public static final String SUPPLEMENT_URL = "supplementUrl";
 
     /** 订单管理 */
     /**
@@ -33,7 +32,7 @@ public class ConstantUrl {
     // 收件删除
     public static final String EXPRESS_RECEIVE_DEL_URL = "/express/expressReceive/del.do";
     //收件补单
-    public static final String EXPRESS_RECEIVE_SUPPLEMENT_URL = "/express/expressReceive/supplement.do";
+    public static final String EXPRESS_RECEIVE_REORDER_URL = "/express/expressReceive/reOrder.do";
 
     /**
      * 寄件

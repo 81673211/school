@@ -87,7 +87,7 @@ public class ExpressReceiveController extends BaseEasyWebController {
             mav.addObject(ConstantUrl.DETAIL_URL, ConstantUrl.EXPRESS_RECEIVE_DETAIL_URL);// 详情url
             mav.addObject(ConstantUrl.EDIT_URL, ConstantUrl.EXPRESS_RECEIVE_EDIT_URL);// 编辑url
             mav.addObject(ConstantUrl.DEL_URL, ConstantUrl.EXPRESS_RECEIVE_DEL_URL);// 删除url
-            mav.addObject(ConstantUrl.SUPPLEMENT_URL, ConstantUrl.EXPRESS_RECEIVE_SUPPLEMENT_URL);// 补单url
+            mav.addObject("reOrderUrl", ConstantUrl.EXPRESS_RECEIVE_REORDER_URL);// 补单url
         } catch (Exception e) {
             log.error("收件查询出现错误：" + e.getMessage());
             throw webExp(e);
@@ -210,16 +210,16 @@ public class ExpressReceiveController extends BaseEasyWebController {
      */
     @ResponseBody
     @RequestMapping(value = "/reOrder.do", method = RequestMethod.POST)
-    public Object reOrder(HttpServletRequest request, Long expressReceiveId, BigDecimal reOrderAmt) {
+    public Object reOrder(HttpServletRequest request, Long expressReceiveId, BigDecimal reOrderServiceAmt) {
         try {
             if (expressReceiveId == null) {
                 throw new Exception("快递ID不能为空");
             }
-            if (reOrderAmt == null || !(reOrderAmt.compareTo(new BigDecimal(0)) > 0)) {
+            if (reOrderServiceAmt == null || !(reOrderServiceAmt.compareTo(new BigDecimal(0)) > 0)) {
                 throw new Exception("补单金额不正确");
             }
 
-            orderInfoService.expressSendReOrder(request, expressReceiveId, reOrderAmt);
+            orderInfoService.expressReceiveReOrder(request, expressReceiveId, reOrderServiceAmt);
 
             return AjaxResult.success("创建收件补单成功");
         } catch (Exception e) {

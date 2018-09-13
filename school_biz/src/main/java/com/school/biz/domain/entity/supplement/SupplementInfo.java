@@ -15,9 +15,23 @@ public class SupplementInfo {
     private Long id;
     private BigDecimal amount;
     private Integer expressType;
-    private Integer expressId;
+    private Long expressId;
     private Integer type;
     private Integer isPay;
     private Date createdTime;
     private Integer isDeleted;
+    
+    public SupplementInfo() {
+    	super();
+    }
+
+	public SupplementInfo(BigDecimal amount, Integer expressType, Long expressId, Integer type, Date createdTime) {
+		super();
+		this.amount = amount;
+		this.expressType = expressType;
+		this.expressId = expressId;
+		this.type = type;
+		this.createdTime = createdTime;
+	}
+    
 }

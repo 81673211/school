@@ -202,7 +202,7 @@ public class ExpressSendController extends BaseEasyWebController {
         ModelAndView mav = new ModelAndView();
         ExpressSend expressSend = expressSendService.get(id);
 
-        mav.setViewName("express/reOrder");
+        mav.setViewName("express/expressSendReOrder");
         mav.addObject("expressSend", expressSend);
         return mav;
     }
@@ -212,20 +212,29 @@ public class ExpressSendController extends BaseEasyWebController {
      */
     @ResponseBody
     @RequestMapping(value = "/reOrder.do", method = RequestMethod.POST)
-    public Object reOrder(HttpServletRequest request, Long expressSendId, BigDecimal reOrderAmt) {
+    public Object expressSendreOrder(HttpServletRequest request, Long expressSendId, BigDecimal reOrderAmt, BigDecimal reOrderServiceAmt) {
         try {
             if (expressSendId == null) {
                 throw new Exception("快递ID不能为空");
             }
-            if (reOrderAmt == null || !(reOrderAmt.compareTo(new BigDecimal(0)) > 0)) {
-                throw new Exception("补单金额不正确");
+            
+            if(reOrderAmt == null && reOrderServiceAmt == null){
+            	throw new Exception("两个补单金额不能同时为空");
+            }
+            
+            if (reOrderAmt != null && !(reOrderAmt.compareTo(new BigDecimal(0)) > 0)) {
+                throw new Exception("快递补单金额不正确");
+            }
+            
+            if(reOrderServiceAmt != null && !(reOrderServiceAmt.compareTo(new BigDecimal(0)) > 0)){
+            	throw new Exception("服务费补单金额不正确");
             }
 
-            orderInfoService.expressSendReOrder(request, expressSendId, reOrderAmt);
+            orderInfoService.expressSendReOrder(request, expressSendId, reOrderAmt, reOrderServiceAmt);
 
-            return AjaxResult.success("创建补单成功");
+            return AjaxResult.success("创建寄件补单成功");
         } catch (Exception e) {
-            log.error("创建补单失败");
+            log.error("创建寄件补单失败");
             return AjaxResult.fail(e.getMessage());
         }
     }

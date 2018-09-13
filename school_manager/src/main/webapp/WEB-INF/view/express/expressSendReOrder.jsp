@@ -20,21 +20,27 @@
     <div class="mt-30">
         <form id="reOrderForm" action="${ctx}/express/expressSend/reOrder.do" method="post">
              <div class="row cl mb-15">
-                <label class="form-label col-xs-3 col-sm-3 text-r">补单对象：</label>
-                <div class="formControls col-xs-9 col-sm-9">
+                <label class="form-label col-xs-4 col-sm-4 text-r">补单对象：</label>
+                <div class="formControls col-xs-8 col-sm-8">
                 	<input type="hidden" id="expressSendId" name="expressSendId" value="${expressSend.id}">
                     <p>${expressSend.senderName}&emsp;(手机号：${expressSend.senderPhone})</p>
                 </div>
             </div>
              <div class="row cl mb-15">
-                <label class="form-label col-xs-3 col-sm-3 text-r">补单金额：</label>
-                <div class="formControls col-xs-9 col-sm-9">
+                <label class="form-label col-xs-4 col-sm-4 text-r">快递补单金额：</label>
+                <div class="formControls col-xs-8 col-sm-8">
                     <input class="input-text" autocomplete="off" placeholder="" name="reOrderAmt" value="" type="text">
+                </div>
+            </div>
+             <div class="row cl mb-15">
+                <label class="form-label col-xs-4 col-sm-4 text-r">服务费补单金额：</label>
+                <div class="formControls col-xs-8 col-sm-8">
+                    <input class="input-text" autocomplete="off" placeholder="" name="reOrderServiceAmt" value="" type="text">
                 </div>
             </div>
         </form>
     </div>    
 <script type="text/javascript" src="${ctx}/static/lib/requirejs/requirejs.js" data-main="${ctx}/static/requirejs.config.js"></script>
-<script type="text/javascript" src="${ctx}/static/model/express/reOrder.js"></script>
+<script type="text/javascript" src="${ctx}/static/model/express/expressSendReOrder.js"></script>
 </body>
 </html>

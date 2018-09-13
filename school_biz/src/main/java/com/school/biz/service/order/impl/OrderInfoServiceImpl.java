@@ -8,12 +8,13 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.school.biz.constant.ConfigProperties;
 import com.school.biz.constant.Constants;
 import com.school.biz.dao.express.ExpressReceiveMapper;
@@ -29,6 +30,7 @@ import com.school.biz.domain.entity.supplement.SupplementInfo;
 import com.school.biz.enumeration.DistributionTypeEnum;
 import com.school.biz.enumeration.ExpressTypeEnum;
 import com.school.biz.enumeration.OrderStatusEnum;
+import com.school.biz.enumeration.ReceiveExpressStatusEnum;
 import com.school.biz.enumeration.ReceiveExpressTypeEnum;
 import com.school.biz.enumeration.RefundOrderStatusEnum;
 import com.school.biz.enumeration.SendExpressStatusEnum;
@@ -399,13 +401,24 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
      * @throws Exception
      */
     @Override
-    public void expressSendReOrder(HttpServletRequest request, Long expressSendId, BigDecimal reOrderAmt) throws Exception {
+    public void expressSendReOrder(HttpServletRequest request, Long expressSendId, BigDecimal reOrderAmt,BigDecimal reOrderServiceAmt) throws Exception {
         ExpressSend expressSend = expressSendMapper.selectByPrimaryKey(expressSendId);
         if (expressSend == null) {
             throw new Exception("订单号不存在");
         }
+        // 如果快递补单费用不为空
+        if(reOrderAmt != null){
+        	SupplementInfo supplementInfo = new SupplementInfo(reOrderAmt, ExpressTypeEnum.SEND.getFlag(), expressSendId, SupplementTypeEnum.EXPRESS_AMT.getCode(), new Date());
+        	supplementService.save(supplementInfo);
+        }
+
+        // 如果服务费补单费用不为空
+        if(reOrderServiceAmt != null){
+        	SupplementInfo supplementInfo = new SupplementInfo(reOrderServiceAmt,ExpressTypeEnum.SEND.getFlag(),expressSendId,SupplementTypeEnum.SERVICE_AMT.getCode(),new Date());
+        	supplementService.save(supplementInfo);
+        }
+
         // 更改快递状态为等待补单支付
-        expressSend.setReOrderAmt(reOrderAmt);
         expressSend.setExpressStatus(SendExpressStatusEnum.SUPPLEMENT.getFlag());
         expressSendService.saveOrUpdate(expressSend, SessionUtils.getSessionUser(request));
     }
@@ -416,14 +429,16 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
      * @throws Exception
      */
     @Override
-    public void expressReceiveReOrder(HttpServletRequest request, Long expressReceiveId, BigDecimal reOrderAmt) throws Exception {
+    public void expressReceiveReOrder(HttpServletRequest request, Long expressReceiveId, BigDecimal reOrderServiceAmt) throws Exception {
     	ExpressReceive expressReceive = expressReceiveMapper.selectByPrimaryKey(expressReceiveId);
     	if (expressReceive == null) {
     		throw new Exception("订单号不存在");
     	}
+    	// 保存supplementInfo
+    	SupplementInfo supplementInfo = new SupplementInfo(reOrderServiceAmt, ExpressTypeEnum.RECEIVE.getFlag(), expressReceiveId, SupplementTypeEnum.SERVICE_AMT.getCode(), new Date());
+    	supplementService.save(supplementInfo);
     	// 更改快递状态为等待补单支付
-//    	expressReceive.setReOrderAmt(reOrderAmt);
-//    	expressReceive.setExpressStatus(ReceiveExpressStatusEnum.SUPPLEMENT.getFlag());
+    	expressReceive.setExpressStatus(ReceiveExpressStatusEnum.SUPPLEMENT.getFlag());
     	expressReceiveService.saveOrUpdate(expressReceive, SessionUtils.getSessionUser(request));
     }
 
@@ -503,8 +518,8 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
                 log.error("支付补单时无待补单记录");
                 throw new RuntimeException("支付补单时无待补单记录");
             }
-            // TODO: 2018/9/13  
-//            BigDecimal serviceAmt = 
+            // TODO: 2018/9/13
+//            BigDecimal serviceAmt =
             for (SupplementInfo supplementInfo : supplementInfos) {
 
             }
@@ -515,9 +530,4 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
         return null;
     }
 
-    @Override
-    public String createFreightReOrder(Express express) {
-        // TODO: 2018/9/13
-        return null;
-    }
 }
