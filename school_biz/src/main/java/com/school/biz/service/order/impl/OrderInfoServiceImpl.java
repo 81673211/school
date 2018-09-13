@@ -318,18 +318,16 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
     private boolean isRefundFeeIllegal(ExpressSend expressSend, List<OrderInfo> orderInfos, BigDecimal refundFee) {
         boolean flag = true;
 
-        // 门槛费：服务费+服务费补单
+        // 取出订单服务费
         BigDecimal serviceAmt = expressSend.getServiceAmt();
-        BigDecimal reOrderServiceAmt = expressSend.getReOrderServiceAmt();
-        BigDecimal serviceFee = serviceAmt.add(reOrderServiceAmt);
 
-        // 最大可退金额=每笔可退金额之和-（服务费+服务费补单）
+        // 最大可退金额=每笔可退金额之和-服务费
         BigDecimal refundCurrMaxAmt = new BigDecimal("0");
         // 取出每笔成功订单（订单金额-已退款金额），即每笔订单可退金额
         for (OrderInfo orderInfo : orderInfos) {
             refundCurrMaxAmt = refundCurrMaxAmt.add(orderInfo.getAmount().subtract(orderInfo.getRefundAmt()));
         }
-        BigDecimal finalRefundAmt = refundCurrMaxAmt.subtract(serviceFee);
+        BigDecimal finalRefundAmt = refundCurrMaxAmt.subtract(serviceAmt);
 
         if (refundFee.compareTo(finalRefundAmt) == 1) {
             flag = false;
