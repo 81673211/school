@@ -141,8 +141,8 @@ requirejs(['requirejs.config'], function () {
          	model.methods.reOrder=function(id,reOrderUrl){
             	layer.open({
 					type: 2,
-                    title:"补单",
-                    area: ['460px', '210px'],
+                    title:"寄件补单",
+                    area: ['460px', '300px'],
                     btn: ['确定','取消'],
 					content : [getCtx() + reOrderUrl + "?id="+id,'no'],
 					yes : function(index, layero) {

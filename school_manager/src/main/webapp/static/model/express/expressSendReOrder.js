@@ -9,16 +9,6 @@ requirejs([ 'requirejs.config' ], function() {
 		$(function() {
 			var model = vm_reOrder;
 			$("#reOrderForm").validate({
-            	rules: {
-                    refundAmt:{
-                    	required:true
-                    }
-                },
-                messages:{
-                	refundAmt:{
-                		required:'请填写补单金额'
-                	}
-                }
             });
 			model.methods.validAndSubmit = function(callback) {
 				if ($("#reOrderForm").valid()) {
