@@ -52,19 +52,13 @@ public class ExpressSendVo {
     private BigDecimal totalRefundAmt;
     
     /**
-     * 补单总金额
+     * 快递补单总金额
      */
     private BigDecimal totalReOrderAmt;
-    
     /**
-     * 退款笔数
+     * 服务费补单总金额
      */
-    private Integer refundNum;
-    
-    /**
-     * 补单笔数
-     */
-    private Integer reOrderNum;
+    private BigDecimal totalReOrderServiceAmt;
     
     private String receiverProvinceName;
     private String receiverCityName;

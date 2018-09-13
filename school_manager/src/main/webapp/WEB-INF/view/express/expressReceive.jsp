@@ -71,7 +71,7 @@
                         <th width="50">取件地址</th>
                         <th width="50">配送方式</th>
                         <th width="50">已支付</th>
-                        <th width="50">已补单</th>
+                        <th width="30">已补单(服务费)</th>
                         <th width="50">创建时间</th>
                         <th width="50">备注</th>
                         <th width="30">状态</th>
