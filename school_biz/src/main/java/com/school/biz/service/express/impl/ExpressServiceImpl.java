@@ -7,6 +7,7 @@ import com.school.biz.domain.entity.express.ExpressReceive;
 import com.school.biz.domain.entity.express.ExpressSend;
 import com.school.biz.domain.entity.order.OrderInfo;
 import com.school.biz.domain.entity.order.RefundOrderInfo;
+import com.school.biz.domain.entity.supplement.SupplementInfo;
 import com.school.biz.domain.vo.PushMessageVo;
 import com.school.biz.enumeration.*;
 import com.school.biz.service.customer.CustomerService;
@@ -14,7 +15,9 @@ import com.school.biz.service.express.ExpressReceiveService;
 import com.school.biz.service.express.ExpressSendService;
 import com.school.biz.service.express.ExpressService;
 import com.school.biz.service.order.OrderInfoService;
+import com.school.biz.service.supplement.SupplementService;
 import com.school.biz.service.wechat.TemplateService;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -22,6 +25,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -48,6 +52,8 @@ public class ExpressServiceImpl implements ExpressService {
     private CustomerService customerService;
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
+    @Autowired
+    private SupplementService supplementService;
 
     @Override
     public void updateExpressByPay(OrderInfo orderInfo) throws RuntimeException {
@@ -80,14 +86,41 @@ public class ExpressServiceImpl implements ExpressService {
                 }
                 //当前寄件状态为 补单待支付
                 else if (sendExpress.getExpressStatus().equals(SendExpressStatusEnum.SUPPLEMENT.getFlag())) {
-                    //改为准备寄出
-                    expressSendService.updateSendExpressStatus(expressId, SendExpressStatusEnum.WAIT_SEND.getFlag());
+                    AmountVo amountVo = getSupplementAmount(orderInfo);
+                    if (amountVo.getServiceAmt().compareTo(BigDecimal.ZERO) == 1) {
+                        //修改服务费
+                        expressSendService.updateServiceAmt(amountVo.getServiceAmt(), expressId);
+                    }
+                    if (amountVo.getExpressAmt().compareTo(BigDecimal.ZERO) == 1) {
+                        //修改运费
+                        expressSendService.updateReOrderAmt(amountVo.getExpressAmt(), expressId);
+                    }
+                    //判断该快件是否所有补单的都支付完毕
+                    if (supplementService.checkIsPayOff(expressId)) {
+                        //改为已经补单
+                        expressSendService.updateSendExpressStatus(expressId, SendExpressStatusEnum.HAS_SUPPLEMENT.getFlag());
+                    }
                 } else {
                     log.error("updateExpressByPay error,no know expressStatus:" + sendExpress.getExpressStatus());
                 }
             } else if (expressType == ExpressTypeEnum.RECEIVE.getFlag()) {
-                //收件只有选择配送的时候才有支付
-                expressReceiveService.updateReceiveExpress(orderInfo.getExpressId());
+                ExpressReceive expressReceive = expressReceiveService.getReceiveExpress(expressId);
+                //当前收件状态为 补单待支付
+                if (expressReceive.getExpressStatus().equals(ReceiveExpressStatusEnum.SUPPLEMENT.getFlag())) {
+                    AmountVo amountVo = getSupplementAmount(orderInfo);
+                    if (amountVo.getServiceAmt().compareTo(BigDecimal.ZERO) == 1) {
+                        //修改服务费
+                        expressReceiveService.updateServiceAmt(amountVo.getServiceAmt(), expressId);
+                    }
+                    //判断该快件是否所有补单的都支付完毕
+                    if (supplementService.checkIsPayOff(expressId)) {
+                        //改为已经补单
+                        expressReceiveService.updateReceiveExpressStatus(expressId, ReceiveExpressStatusEnum.HAS_SUPPLEMENT.getFlag());
+                    }
+                } else {
+                    //收件非补单支付
+                    expressReceiveService.updateReceiveExpress(expressId);
+                }
                 alertAdmin(orderInfo);
             } else {
                 log.error("not support express type:" + expressId);
@@ -96,6 +129,32 @@ public class ExpressServiceImpl implements ExpressService {
             log.error("updateExpressByPay error", e);
             throw new RuntimeException(e);
         }
+    }
+
+    private AmountVo getSupplementAmount(OrderInfo orderInfo) {
+        //计算费用
+        AmountVo amountVo = new AmountVo();
+        List ids = orderInfoService.selectSupplementIdsById(orderInfo.getId());
+        List<SupplementInfo> supplementInfos = supplementService.selectByIds(ids);
+        BigDecimal serviceAmt = BigDecimal.ZERO;
+        BigDecimal expressAmt = BigDecimal.ZERO;
+        for (SupplementInfo supplementInfo : supplementInfos) {
+            supplementService.updateIsPay(supplementInfo.getId());
+            if (supplementInfo.getType().equals(SupplementTypeEnum.SERVICE_AMT.getCode())) {
+                serviceAmt.add(supplementInfo.getAmount());
+            } else {
+                expressAmt.add(supplementInfo.getAmount());
+            }
+        }
+        amountVo.setServiceAmt(serviceAmt);
+        amountVo.setExpressAmt(expressAmt);
+        return amountVo;
+    }
+
+    @Data
+    public class AmountVo {
+        private BigDecimal serviceAmt = BigDecimal.ZERO;
+        private BigDecimal expressAmt = BigDecimal.ZERO;
     }
 
     private void alertAdmin(ExpressSend sendExpress) {

@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,6 +46,7 @@ import com.school.biz.util.IdWorkerUtil;
 import com.school.biz.util.SessionUtils;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -270,7 +272,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
         ExpressSend expressSend = expressSendMapper.selectByPrimaryKey(expressSendId);
 
         // 根据快递号查询其所有支付成功订单（按支付金额降序）
-        Map<String, Object> map = new HashMap<String,Object>();
+        Map<String, Object> map = new HashMap<String, Object>();
         map.put("expressId", expressSend.getId());
         map.put("expressType", ExpressTypeEnum.SEND.getFlag());
         List<OrderInfo> orderInfos = orderInfoMapper.findSuccessOrdersByExpressIdAndExpressType(map);
@@ -409,7 +411,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
         BigDecimal serviceAmt = expressSend.getServiceAmt();
 
         // 查询寄件总金额
-        Map<String, Object> map = new HashMap<String,Object>();
+        Map<String, Object> map = new HashMap<String, Object>();
         map.put("expressId", expressSend.getId());
         map.put("expressType", ExpressTypeEnum.SEND.getFlag());
         List<OrderInfo> orderInfos = orderInfoMapper.findSuccessOrdersByExpressIdAndExpressType(map);
@@ -419,7 +421,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
         }
 
         // 查询退款总金额
-        Map<String, Object> map2 = new HashMap<String,Object>();
+        Map<String, Object> map2 = new HashMap<String, Object>();
         map2.put("expressId", expressSend.getId());
         map2.put("expressType", ExpressTypeEnum.SEND.getFlag());
         List<RefundOrderInfo> refundOrderInfos = refundOrderInfoMapper.findSuccessRefundOrdersByExpressIdAndExpressType(map2);
@@ -448,5 +450,16 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
         map.put("expressNo", expressNo);
         map.put("expressType", ExpressTypeEnum.SEND.getFlag());
         orderInfoMapper.fillExpressNo(map);
+    }
+
+    @Override
+    public List selectSupplementIdsById(Long id) {
+        OrderInfo orderInfo = orderInfoMapper.selectByPrimaryKey(id);
+        String merchParam = orderInfo.getMerchParam();
+        if (!StringUtils.isEmpty(merchParam)) {
+            JSONObject jsonObject = JSON.parseObject(merchParam);
+            return jsonObject.getObject("supplyment", List.class);
+        }
+        return null;
     }
 }

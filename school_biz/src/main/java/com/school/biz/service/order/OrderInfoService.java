@@ -18,7 +18,7 @@ public interface OrderInfoService extends BaseService<OrderInfo, OrderInfoMapper
 
     String createSendReOrder(ExpressSend expressSend);
 
-    String createReceiveOrder(Long expressId,String type);
+    String createReceiveOrder(Long expressId, String type);
 
     List<OrderInfo> findByExpressReceiveId(Long expressId);
 
@@ -62,8 +62,17 @@ public interface OrderInfoService extends BaseService<OrderInfo, OrderInfoMapper
 
     /**
      * 填充订单中的快递号
+     *
      * @param id
      * @param code
      */
-	void fillExpressNo(Long id, String code);
+    void fillExpressNo(Long id, String code);
+
+    /**
+     * 查找订单对应的补单记录
+     *
+     * @param id
+     * @return
+     */
+    List selectSupplementIdsById(Long id);
 }
