@@ -86,7 +86,7 @@ requirejs(['requirejs.config'], function () {
                         }
                         var json = {'oldPassword':oldpwd, 'newPassword':newpwd};
                         $.ajax({
-                        	url:getCtx()+'/managers/user/doUpdateUserPwd.do',
+                        	url:getCtx()+'/managers/user/doUpdateUserPwd',
                         	type:'post',
                         	dataType:'json',
                         	data:json,
