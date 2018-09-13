@@ -5,7 +5,7 @@
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="amount" property="amount" jdbcType="DECIMAL"/>
         <result column="express_type" property="expressType" jdbcType="INTEGER"/>
-        <result column="express_id" property="expressId" jdbcType="INTEGER"/>
+        <result column="express_id" property="expressId" jdbcType="BIGINT"/>
         <result column="type" property="type" jdbcType="INTEGER"/>
         <result column="is_pay" property="isPay" jdbcType="INTEGER"/>
         <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
@@ -59,7 +59,7 @@
                 #{expressType,jdbcType=INTEGER},
             </if>
             <if test="expressId != null">
-                #{expressId,jdbcType=INTEGER},
+                #{expressId,jdbcType=BIGINT},
             </if>
             <if test="type != null">
                 #{type,jdbcType=INTEGER},
@@ -76,7 +76,7 @@
                 express_type = #{expressType,jdbcType=INTEGER},
             </if>
             <if test="expressId != null">
-                express_id = #{expressId,jdbcType=INTEGER},
+                express_id = #{expressId,jdbcType=BIGINT},
             </if>
             <if test="type != null">
                 type = #{type,jdbcType=INTEGER},
@@ -102,7 +102,7 @@
     <select id="selectByParams" resultType="com.school.biz.domain.entity.supplement.SupplementInfo" parameterType="map">
         select * from supplement_info t where 1=1
         <if test="expressId != null and expressId != '' ">
-            and t.express_id=#{expressId,jdbcType=INTEGER}
+            and t.express_id=#{expressId,jdbcType=BIGINT}
         </if>
         <if test="expressType != null and expressType != '' ">
             and t.express_type=#{expressType,jdbcType=INTEGER}
