@@ -37,6 +37,7 @@ import com.school.biz.extension.wxpay.sdk.WXPayConstants.SignType;
 import com.school.biz.extension.wxpay.sdk.WXPayUtil;
 import com.school.biz.service.base.impl.BaseServiceImpl;
 import com.school.biz.service.calc.CalcCostService;
+import com.school.biz.service.express.ExpressReceiveService;
 import com.school.biz.service.express.ExpressSendService;
 import com.school.biz.service.order.OrderInfoService;
 import com.school.biz.service.order.RefundOrderInfoService;
@@ -67,6 +68,8 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
     private ExpressSendMapper expressSendMapper;
     @Autowired
     private ExpressSendService expressSendService;
+    @Autowired
+    private ExpressReceiveService expressReceiveService;
 
     @Override
     public OrderInfo findByOrderNo(String orderNo) {
@@ -384,12 +387,12 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
     }
 
     /**
-     * 补单
+     * 寄件补单
      *
      * @throws Exception
      */
     @Override
-    public void reOrder(HttpServletRequest request, Long expressSendId, BigDecimal reOrderAmt) throws Exception {
+    public void expressSendReOrder(HttpServletRequest request, Long expressSendId, BigDecimal reOrderAmt) throws Exception {
         ExpressSend expressSend = expressSendMapper.selectByPrimaryKey(expressSendId);
         if (expressSend == null) {
             throw new Exception("订单号不存在");
@@ -398,6 +401,23 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
         expressSend.setReOrderAmt(reOrderAmt);
         expressSend.setExpressStatus(SendExpressStatusEnum.SUPPLEMENT.getFlag());
         expressSendService.saveOrUpdate(expressSend, SessionUtils.getSessionUser(request));
+    }
+    
+    /**
+     * 收件补单
+     *
+     * @throws Exception
+     */
+    @Override
+    public void expressReceiveReOrder(HttpServletRequest request, Long expressReceiveId, BigDecimal reOrderAmt) throws Exception {
+    	ExpressReceive expressReceive = expressReceiveMapper.selectByPrimaryKey(expressReceiveId);
+    	if (expressReceive == null) {
+    		throw new Exception("订单号不存在");
+    	}
+    	// 更改快递状态为等待补单支付
+//    	expressReceive.setReOrderAmt(reOrderAmt);
+//    	expressReceive.setExpressStatus(ReceiveExpressStatusEnum.SUPPLEMENT.getFlag());
+    	expressReceiveService.saveOrUpdate(expressReceive, SessionUtils.getSessionUser(request));
     }
 
     /**

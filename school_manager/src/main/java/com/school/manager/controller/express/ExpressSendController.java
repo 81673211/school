@@ -221,7 +221,7 @@ public class ExpressSendController extends BaseEasyWebController {
                 throw new Exception("补单金额不正确");
             }
 
-            orderInfoService.reOrder(request, expressSendId, reOrderAmt);
+            orderInfoService.expressSendReOrder(request, expressSendId, reOrderAmt);
 
             return AjaxResult.success("创建补单成功");
         } catch (Exception e) {

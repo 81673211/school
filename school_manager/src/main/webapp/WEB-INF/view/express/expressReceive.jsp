@@ -92,7 +92,10 @@
                         <td>0</td>
                         <td>{{el.createdTime|date('yyyy-MM-dd HH:mm:ss')}}</td>
                         <td>{{el.remark}}</td>
-                        <td>{{@expressReceiveStatusMap[el.expressStatus]}}</td>
+                        <td>
+                        	<div :if="el.expressStatus == 8">{{@expressReceiveStatusMap[el.expressStatus]}}</div>
+                        	<div :if="el.expressStatus != 8" style="color: green;">{{@expressReceiveStatusMap[el.expressStatus]}}</div>
+                        </td>
                         <td class="but_xq">
                         	<btn:hasUrlPerm link="${detailUrl}">
 	                           	<a class="btn btn-primary-outline size-S radius" :click="@methods.detail(el.id,@methods.detailUrl)">详情</a>

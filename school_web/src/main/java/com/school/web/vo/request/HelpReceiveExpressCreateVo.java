@@ -25,13 +25,13 @@ public class HelpReceiveExpressCreateVo {
     private Long companyId;
     @NotNull(message = "取件地址不能为空")
     private String helpReceiveAddr;
-
-    private String code;
     @NotNull(message = "配送方式不能为空")
     private String distributionType;
     @Min(value = 1, message = "填写的重量最小为1KG")
     private BigDecimal expressWeight;
-    //取件码，可不填
+    @NotNull(message = "取件码不能为空")
     private String helpReceiveCode;
+
+    private String code;
     private String remark;
 }

@@ -20,12 +20,12 @@
 <section class="section">
     <form class="box" onsubmit="return false;">
         <div class="control">
-            <label for="helpReceiveCode">取件码</label>
-            <input id="helpReceiveCode" type="text" class="input" placeholder="如有取件码请优先正确填写取件码">
+            <label for="code">快递单号 </label>
+            <input id="code" type="text" class="input">
         </div>
         <div class="control">
-            <label for="code">快递单号 </label>
-            <input id="code" type="text" class="input" placeholder="如没有取件码请正确填写快递单号">
+            <label for="helpReceiveCode">取件码 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i> </label>
+            <input id="helpReceiveCode" type="text" class="input">
         </div>
         <div class="control">
             <label for="receiverName">收件人姓名 <i class="icon icon-asterisk" style="font-size: 5px;color:red"></i>
@@ -145,11 +145,6 @@
       return false;
     }
 
-    if (code == '' && helpReceiveCode == '') {
-      alert("取件码和快递单号二者须填其一");
-      return false;
-    }
-
     var data = {openId: openId};
 
     if (code != '') {
@@ -187,6 +182,9 @@
     }
     if (helpReceiveCode != '') {
       data.helpReceiveCode = helpReceiveCode;
+    } else {
+      alert("请输入取件码");
+      return false;
     }
     if (expressWeight != '') {
       data.expressWeight = expressWeight;
