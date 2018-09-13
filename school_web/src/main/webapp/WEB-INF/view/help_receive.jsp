@@ -75,15 +75,16 @@
         <div class="control">
             <label for="helpReceiveAddr">取件地址 <i class="icon icon-asterisk"
                                                  style="font-size: 5px;color:red"></i> </label>
-            <input id="helpReceiveAddr" type="text" class="input">
+            <input id="helpReceiveAddr" type="text" class="input" placeholder="可将快递公司发送的的短信内容复制粘贴在此处!">
         </div>
 
 
         <div class="control">
-            <label for="remark">更多信息</label>
-            <textarea style="width: 100%;" class="textarea" cols="10" id="remark" placeholder="请将快递公司发您的取件短信内容复制粘贴在此处。限200字！"
+            <label for="remark">备注</label>
+            <textarea style="width: 100%;" class="textarea" cols="10" id="remark" placeholder="有什么想对我们备注的就写在这里吧！比如：预约配送时间或校内别的配送地址等。限200字！"
                       maxlength="200"></textarea>
         </div>
+
 
         <div class="text-right" style="margin-top: 20px; margin-bottom: 20px">
             ￥服务费:<span class="price" id="serviceAmt">0.00</span>元
