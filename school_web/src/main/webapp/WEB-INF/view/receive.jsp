@@ -85,34 +85,34 @@
                             <c:when test="${item.expressStatus == 0}">
                                 <div>
                                     <button type="button" class="btn btn-sm info outline rounded"
-                                            style="margin-bottom: 5px;width: 60px"
+                                            style="margin-bottom: 5px;width: 70px"
                                             onclick="launchPay(${item.id},'box')">配送入柜
                                     </button>
                                 </div>
                                 <c:if test="${item.expressType == 1}">
                                     <div>
                                         <button type="button" class="btn btn-sm info outline rounded"
-                                                style="margin-bottom: 5px;width: 60px"
+                                                style="margin-bottom: 5px;width: 70px"
                                                 onclick="launchPay(${item.id},'door')">送货上门
                                         </button>
                                     </div>
                                 </c:if>
                                 <div>
-                                    <button type="button" class="btn btn-sm warning outline rounded" style="width: 60px"
+                                    <button type="button" class="btn btn-sm warning outline rounded" style="width: 70px"
                                             onclick="receiveWay(${item.id},0)">自提
                                     </button>
                                 </div>
                             </c:when>
                             <c:when test="${item.expressStatus == 1}">
                                 <div>
-                                    <button type="button" class="btn btn-sm info outline rounded" style="width: 60px"
+                                    <button type="button" class="btn btn-sm info outline rounded" style="width: 70px"
                                             onclick="launchPay(${item.id},'box')">配送入柜
                                     </button>
                                 </div>
                                 <c:if test="${item.expressType == 1}">
                                     <div>
                                         <button type="button" class="btn btn-sm info outline rounded"
-                                                style="width: 60px"
+                                                style="width: 70px"
                                                 onclick="launchPay(${item.id},'door')">送货上门
                                         </button>
                                     </div>
@@ -120,7 +120,7 @@
                             </c:when>
                             <c:when test="${item.expressStatus == 8}">
                                 <div>
-                                    <button type="button" class="btn btn-sm info outline rounded" style="width: 60px"
+                                    <button type="button" class="btn btn-sm info outline rounded" style="width: 70px"
                                             onclick="launchPay(${item.id},'${item.helpDistributionType}')">支付
                                     </button>
                                 </div>
