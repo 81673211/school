@@ -10,4 +10,6 @@ package com.school.biz.service.message;
 public interface SmsService {
 
     void sendVerifyCode(String phone, String verifyCode);
+
+    void sendActivaty918(String phone);
 }

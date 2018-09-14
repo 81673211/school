@@ -160,4 +160,9 @@
         and t.is_deleted=0
         order by t.id desc
     </select>
+
+    <select id="selectRegistered" resultType="java.lang.String">
+      select phone from customer t
+      where t.is_deleted=0 and is_subscribed=1 and phone is not null
+    </select>
 </mapper>

@@ -182,6 +182,11 @@ public class CustomerServiceImpl extends BaseServiceImpl<Customer, CustomerMappe
     }
 
     @Override
+    public List<String> selectRegisteredPhone() {
+        return customerMapper.selectRegistered();
+    }
+
+    @Override
     public void saveOrUpdate(Customer customer) {
         if (customer.getId() == null) {
             this.save(customer);

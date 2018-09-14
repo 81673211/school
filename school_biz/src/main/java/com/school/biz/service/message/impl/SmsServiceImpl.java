@@ -1,5 +1,6 @@
 package com.school.biz.service.message.impl;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
@@ -28,10 +29,17 @@ public class SmsServiceImpl implements SmsService {
 
     @Override
     public void sendVerifyCode(String phone, String verifyCode) {
-        send(phone, verifyCode);
+        JSONObject codeJson = new JSONObject();
+        codeJson.put("code", verifyCode);
+        send(phone, "SMS_143710633", codeJson.toJSONString());
     }
 
-    private void send(String phone, String verifyCode) {
+    @Override
+    public void sendActivaty918(String phone) {
+        send(phone, "SMS_144853287", null);
+    }
+
+    private void send(String phone, String templateCode, String content) {
         //设置超时时间-可自行调整
         System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
         System.setProperty("sun.net.client.defaultReadTimeout", "10000");
@@ -59,12 +67,13 @@ public class SmsServiceImpl implements SmsService {
         //必填:短信签名-可在短信控制台中找到
         request.setSignName("一二三速递");
         //必填:短信模板-可在短信控制台中找到，发送国际/港澳台消息时，请使用国际/港澳台短信模版
-        request.setTemplateCode("SMS_143710633");
+        request.setTemplateCode(templateCode);
         //可选:模板中的变量替换JSON串,如模板内容为"亲爱的${name},您的验证码为${code}"时,此处的值为
         //友情提示:如果JSON中需要带换行符,请参照标准的JSON协议对换行符的要求,比如短信内容中包含\r\n的情况在JSON中需要表示成\\r\\n,否则会导致JSON在服务端解析失败
-        JSONObject codeJson = new JSONObject();
-        codeJson.put("code", verifyCode);
-        request.setTemplateParam(codeJson.toJSONString());
+
+        if (StringUtils.isNotBlank(content)) {
+            request.setTemplateParam(content);
+        }
 
         //可选:outId为提供给业务方扩展字段,最终在短信回执消息中将此值带回给调用者
         //request.setOutId("yourOutId");

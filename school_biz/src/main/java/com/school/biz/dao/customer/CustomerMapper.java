@@ -25,4 +25,6 @@ public interface CustomerMapper extends BaseDao {
     List<Customer> queryPage(Map<String, Object> paramMap);
 
     Customer selectByOpenId(@Param("openId") String openId);
+
+    List<String> selectRegistered();
 }
