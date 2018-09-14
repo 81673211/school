@@ -53,6 +53,9 @@
                                         <c:when test="${item.expressStatus == 7}">
                                             <label class="label label-sm primary outline rounded">未生效</label>
                                         </c:when>
+                                        <c:when test="${item.expressStatus == 8}">
+                                            <label class="label label-sm primary outline rounded">补单已支付</label>
+                                        </c:when>
                                     </c:choose>
                                 </span>
                             </div>
