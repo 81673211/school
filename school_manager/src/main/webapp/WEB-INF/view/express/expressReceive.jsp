@@ -91,7 +91,7 @@
                         <td>{{el.helpReceiveAddr}}</td>
                         <td><div :if="el.expressType==0">{{@expressWayMap[el.expressWay]}}</div><div :if="el.expressType==1">{{@helpDistributionTypeMap[el.helpDistributionType]}}</div></td>
                         <td>{{el.serviceAmt}}</td>
-                        <td>0</td>
+                        <td>{{el.reOrderServiceAmt}}</td>
                         <td>{{el.createdTime|date('yyyy-MM-dd HH:mm:ss')}}</td>
                         <td>{{el.remark}}</td>
                         <td>
