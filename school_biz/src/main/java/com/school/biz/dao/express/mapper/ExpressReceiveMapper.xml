@@ -377,7 +377,7 @@
     </update>
 
     <update id="addReOrderServiceAmt">
-        update express_send t set t.re_order_service_amt = t.re_order_service_amt + #{amount,jdbcType=DECIMAL} where t.id=#{id,jdbcType=BIGINT}
+        update express_receive t set t.re_order_service_amt = t.re_order_service_amt + #{amount,jdbcType=DECIMAL} where t.id=#{id,jdbcType=BIGINT}
     </update>
 
 </mapper>

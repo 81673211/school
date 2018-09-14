@@ -44,7 +44,7 @@ public interface ExpressReceiveMapper extends BaseDao {
      * @param amount
      * @param id
      */
-    void addServiceAmt(BigDecimal amount, Long id);
+    void addServiceAmt(@Param("amount") BigDecimal amount, @Param("id") Long id);
 
     /**
      * 累加补单服务费
@@ -52,5 +52,5 @@ public interface ExpressReceiveMapper extends BaseDao {
      * @param amount
      * @param id
      */
-    void addReOrderServiceAmt(BigDecimal amount, Long id);
+    void addReOrderServiceAmt(@Param("amount") BigDecimal amount, @Param("id") Long id);
 }
