@@ -141,9 +141,9 @@ public class ExpressServiceImpl implements ExpressService {
         for (SupplementInfo supplementInfo : supplementInfos) {
             supplementService.updateIsPay(supplementInfo.getId());
             if (supplementInfo.getType().equals(SupplementTypeEnum.SERVICE_AMT.getCode())) {
-                serviceAmt.add(supplementInfo.getAmount());
+                serviceAmt = serviceAmt.add(supplementInfo.getAmount());
             } else {
-                expressAmt.add(supplementInfo.getAmount());
+                expressAmt = expressAmt.add(supplementInfo.getAmount());
             }
         }
         amountVo.setServiceAmt(serviceAmt);
