@@ -1,14 +1,16 @@
 package com.school.biz.service.order;
 
-import com.school.biz.dao.order.OrderInfoMapper;
-import com.school.biz.domain.entity.express.ExpressSend;
-import com.school.biz.domain.entity.order.OrderInfo;
-import com.school.biz.service.base.BaseService;
-
-import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.school.biz.dao.order.OrderInfoMapper;
+import com.school.biz.domain.entity.express.ExpressReceive;
+import com.school.biz.domain.entity.express.ExpressSend;
+import com.school.biz.domain.entity.order.OrderInfo;
+import com.school.biz.service.base.BaseService;
 
 public interface OrderInfoService extends BaseService<OrderInfo, OrderInfoMapper> {
 
@@ -18,7 +20,9 @@ public interface OrderInfoService extends BaseService<OrderInfo, OrderInfoMapper
 
     String createSendReOrder(ExpressSend expressSend);
 
-    String createReceiveOrder(Long expressId,String type);
+    String createReceiveOrder(Long expressId, String type);
+
+    String createReceiveReOrder(ExpressReceive expressReceive);
 
     List<OrderInfo> findByExpressReceiveId(Long expressId);
 
@@ -40,8 +44,11 @@ public interface OrderInfoService extends BaseService<OrderInfo, OrderInfoMapper
     // 退款
     void refund(HttpServletRequest request, Long expressSendId, BigDecimal refundFee) throws Exception;
 
-    // 补单
-    void reOrder(HttpServletRequest request, Long expressSendId, BigDecimal reOrderAmt) throws Exception;
+    // 寄件补单
+    void expressSendReOrder(HttpServletRequest request, Long expressSendId, BigDecimal reOrderAmt,BigDecimal reOrderServiceAmt) throws Exception;
+    
+    // 收件补单
+    void expressReceiveReOrder(HttpServletRequest request, Long expressSendId, BigDecimal reOrderServiceAmt) throws Exception;
 
 
     /**
@@ -62,8 +69,17 @@ public interface OrderInfoService extends BaseService<OrderInfo, OrderInfoMapper
 
     /**
      * 填充订单中的快递号
+     *
      * @param id
      * @param code
      */
-	void fillExpressNo(Long id, String code);
+    void fillExpressNo(Long id, String code);
+
+    /**
+     * 查找订单对应的补单记录
+     *
+     * @param id
+     * @return
+     */
+    List selectSupplementIdsById(Long id);
 }

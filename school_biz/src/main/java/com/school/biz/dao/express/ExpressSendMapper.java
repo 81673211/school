@@ -5,6 +5,7 @@ import com.school.biz.domain.entity.express.ExpressSend;
 import com.school.biz.domain.vo.express.ExpressSendVo;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -39,4 +40,28 @@ public interface ExpressSendMapper extends BaseDao {
     List<Map> findPushOpenIdByExpressStatus(@Param("status") Integer status);
 
     int updateIneffectiveToCancel(@Param("cancel") Integer cancel, @Param("ineffective") Integer ineffective, @Param("diff") Integer diff);
+
+    /**
+     * 累加服务费
+     *
+     * @param amount
+     * @param id
+     */
+    void addServiceAmt(@Param("amount") BigDecimal amount,@Param("id") Long id);
+
+    /**
+     * 累加补单服务费
+     *
+     * @param amount
+     * @param id
+     */
+    void addReOrderServiceAmt(@Param("amount") BigDecimal amount, @Param("id") Long id);
+
+    /**
+     * 累加补单运费
+     *
+     * @param amount
+     * @param id
+     */
+    void addReOrderAmt(@Param("amount") BigDecimal amount, @Param("id") Long id);
 }

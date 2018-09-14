@@ -114,6 +114,27 @@ requirejs(['requirejs.config'], function () {
                 });
             };
             
+            /*
+             * 补单
+             */
+         	model.methods.reOrder=function(id,reOrderUrl){
+            	layer.open({
+					type: 2,
+                    title:"收件补单",
+                    area: ['460px', '210px'],
+                    btn: ['确定','取消'],
+					content : [getCtx() + reOrderUrl + "?id="+id,'no'],
+					yes : function(index, layero) {
+						// 调用iframe层的表单提交方法
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                        iframeWin.vm_expressReceiveReOrder.methods.validAndSubmit(function(){
+                        	queryVal();
+                        });
+					},
+					btn2 : function(){}
+				});
+          	};
+            
         });
     });
 });

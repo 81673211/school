@@ -24,6 +24,7 @@ public class ReceiveExpressListResponseVo {
     private BigDecimal distributionCost;
     private Integer expressType;
     private String helpDistributionType;
+    private BigDecimal reOrderAmt;
 
     public Long getId() {
         return id;
@@ -159,5 +160,13 @@ public class ReceiveExpressListResponseVo {
 
     public void setHelpDistributionType(String helpDistributionType) {
         this.helpDistributionType = helpDistributionType;
+    }
+
+    public BigDecimal getReOrderAmt() {
+        return reOrderAmt;
+    }
+
+    public void setReOrderAmt(BigDecimal reOrderAmt) {
+        this.reOrderAmt = reOrderAmt;
     }
 }

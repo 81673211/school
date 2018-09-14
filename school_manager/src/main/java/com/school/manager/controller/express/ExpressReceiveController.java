@@ -1,5 +1,6 @@
 package com.school.manager.controller.express;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -16,6 +18,7 @@ import com.alibaba.fastjson.JSON;
 import com.school.biz.constant.ConstantUrl;
 import com.school.biz.domain.entity.customer.Customer;
 import com.school.biz.domain.entity.express.ExpressCompany;
+import com.school.biz.domain.entity.express.ExpressReceive;
 import com.school.biz.domain.entity.express.ExpressReceive;
 import com.school.biz.enumeration.ExpressLogActionEnum;
 import com.school.biz.enumeration.ExpressTypeEnum;
@@ -29,6 +32,7 @@ import com.school.biz.service.customer.CustomerService;
 import com.school.biz.service.express.ExpressCompanyService;
 import com.school.biz.service.express.ExpressReceiveService;
 import com.school.biz.service.log.ExpressLogService;
+import com.school.biz.service.order.OrderInfoService;
 import com.school.biz.service.wechat.TemplateService;
 import com.school.biz.util.pager.PageInfo;
 import com.school.manager.controller.base.BaseEasyWebController;
@@ -56,6 +60,9 @@ public class ExpressReceiveController extends BaseEasyWebController {
 
     @Autowired
     private TemplateService templateService;
+    
+    @Autowired
+    private OrderInfoService orderInfoService;
 
     {
         listView = "express/expressReceive";
@@ -69,8 +76,7 @@ public class ExpressReceiveController extends BaseEasyWebController {
     protected void onList(PageInfo pageInfo, Map<String, Object> searchParams, HttpServletRequest request,
                           ModelAndView mav) throws FuBusinessException {
         try {
-            List<ExpressReceive> list = expressReceiveService.queryPage(searchParams);
-            mav.addObject("listData", JSON.toJSON(list));
+            mav.addObject("listData", JSON.toJSON(expressReceiveService.queryPage(searchParams)));
             mav.addObject("expressReceiveStatusMap", JSON.toJSON(ReceiveExpressStatusEnum.getAllStatusEnum()));
             mav.addObject("expressTypeMap", JSON.toJSON(ReceiveExpressTypeEnum.getAllTypeEnum()));
             mav.addObject("helpDistributionTypeMap", JSON.toJSON(HelpDistributionTypeEnum.getAllTypeEnum()));
@@ -81,6 +87,7 @@ public class ExpressReceiveController extends BaseEasyWebController {
             mav.addObject(ConstantUrl.DETAIL_URL, ConstantUrl.EXPRESS_RECEIVE_DETAIL_URL);// 详情url
             mav.addObject(ConstantUrl.EDIT_URL, ConstantUrl.EXPRESS_RECEIVE_EDIT_URL);// 编辑url
             mav.addObject(ConstantUrl.DEL_URL, ConstantUrl.EXPRESS_RECEIVE_DEL_URL);// 删除url
+            mav.addObject("reOrderUrl", ConstantUrl.EXPRESS_RECEIVE_REORDER_URL);// 补单url
         } catch (Exception e) {
             log.error("收件查询出现错误：" + e.getMessage());
             throw webExp(e);
@@ -160,6 +167,14 @@ public class ExpressReceiveController extends BaseEasyWebController {
         }
     }
 
+    @RequestMapping(value = "/supplement.do", method = RequestMethod.GET)
+    public ModelAndView supplement(Long id) {
+        ModelAndView view = new ModelAndView("express/receiveSupplement");
+        view.addObject("expressReceive", expressReceiveService.getReceiveExpress(id));
+        return view;
+    }
+
+
     /**
      * 删除
      */
@@ -174,6 +189,42 @@ public class ExpressReceiveController extends BaseEasyWebController {
         } catch (Exception e) {
             log.error("删除收件出错：" + e.getMessage());
             return AjaxResult.fail("删除失败");
+        }
+    }
+    
+    /**
+     * 补单页面
+     */
+    @RequestMapping(value = "/reOrder.do", method = RequestMethod.GET)
+    public ModelAndView toReorder(Long id, HttpServletRequest request) {
+        ModelAndView mav = new ModelAndView();
+        ExpressReceive expressReceive = expressReceiveService.get(id);
+
+        mav.setViewName("express/expressReceiveReOrder");
+        mav.addObject("expressReceive", expressReceive);
+        return mav;
+    }
+
+    /**
+     * 补单
+     */
+    @ResponseBody
+    @RequestMapping(value = "/reOrder.do", method = RequestMethod.POST)
+    public Object reOrder(HttpServletRequest request, Long expressReceiveId, BigDecimal reOrderServiceAmt) {
+        try {
+            if (expressReceiveId == null) {
+                throw new Exception("快递ID不能为空");
+            }
+            if (reOrderServiceAmt == null || !(reOrderServiceAmt.compareTo(new BigDecimal(0)) > 0)) {
+                throw new Exception("补单金额不正确");
+            }
+
+            orderInfoService.expressReceiveReOrder(request, expressReceiveId, reOrderServiceAmt);
+
+            return AjaxResult.success("创建收件补单成功");
+        } catch (Exception e) {
+            log.error("创建收件补单失败：" + e.getMessage());
+            return AjaxResult.fail(e.getMessage());
         }
     }
 }

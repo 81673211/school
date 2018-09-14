@@ -27,7 +27,5 @@ public class SendExpressListResponseVo {
     private String receiverProvince;
     private String receiverCity;
     private String receiverDistrict;
-    private BigDecimal transportPrice;
-    private BigDecimal serviceAmt;
     private BigDecimal reOrderAmt;
 }

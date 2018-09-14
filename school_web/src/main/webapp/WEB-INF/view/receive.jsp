@@ -57,6 +57,12 @@
                                         <c:when test="${item.expressStatus == 8}">
                                             <label class="label label-sm primary outline rounded">未生效</label>
                                         </c:when>
+                                        <c:when test="${item.expressStatus == 10}">
+                                            <label class="label label-sm primary outline rounded">补单未支付</label>
+                                        </c:when>
+                                        <c:when test="${item.expressStatus == 11}">
+                                            <label class="label label-sm primary outline rounded">补单已支付</label>
+                                        </c:when>
                                         <c:otherwise>
                                             <label class="label label-sm primary outline rounded"> </label>
                                         </c:otherwise>
@@ -72,6 +78,11 @@
                                 <c:when test="${item.expressStatus == 0 || item.expressStatus == 1}">
                                     <small class="muted">如选择配送，需要支付(￥<fmt:formatNumber
                                             value="${item.distributionCost}" pattern="0.00"/>)
+                                    </small>
+                                </c:when>
+                                <c:when test="${item.expressStatus == 10}">
+                                    <small class="muted">您还需要支付补差(￥<fmt:formatNumber
+                                            value="${item.reOrderAmt}" pattern="0.00"/>)
                                     </small>
                                 </c:when>
                                 <c:otherwise>
@@ -122,6 +133,13 @@
                                 <div>
                                     <button type="button" class="btn btn-sm info outline rounded" style="width: 70px"
                                             onclick="launchPay(${item.id},'${item.helpDistributionType}')">支付
+                                    </button>
+                                </div>
+                            </c:when>
+                            <c:when test="${item.expressStatus == 10}">
+                                <div>
+                                    <button type="button" class="btn btn-sm info outline rounded" style="width: 70px"
+                                            onclick="launchRePay(${item.id})">支付补差
                                     </button>
                                 </div>
                             </c:when>
@@ -193,6 +211,25 @@
         }
     }
 
+    function launchRePay(expressId) {
+      if (confirm("确认支付?")) {
+        $.post("/order/1/reOrder/create",
+          {
+            "expressId": expressId,
+            "openId": '${openId}'
+          },
+          function (result) {
+            if (result.status != 200) {
+              alert(result.msg);
+              return;
+            } else {
+              var orderNo = result.msg;
+              window.location.href = "http://www.glove1573.cn/wxpay/pay?orderNo=" + orderNo;
+            }
+          }
+        );
+      }
+    }
 </script>
 </body>
 

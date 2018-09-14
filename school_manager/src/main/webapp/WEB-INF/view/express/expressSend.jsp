@@ -71,10 +71,11 @@
                         <th width="20">服务费</th>
                         <th width="20">已支付</th>
                         <th width="20">已退款</th>
-                        <th width="20">已补单</th>
-                        <th width="60">创建时间</th>
-                        <th width="60">备注</th>
-                        <th width="30">状态</th>
+                        <th width="30">已补单(快递)</th>
+                        <th width="30">已补单(服务费)</th>
+                        <th width="50">创建时间</th>
+                        <th width="40">备注</th>
+                        <th width="50">状态</th>
                         <th width="50">操作</th>
                     </tr>
                 </thead>
@@ -95,18 +96,19 @@
                         <td>{{el.totalAmt}}</td>
                         <td>{{el.totalRefundAmt}}</td>
                         <td>{{el.totalReOrderAmt}}</td>
+                        <td>{{el.totalReOrderServiceAmt}}</td>
                         <td>{{el.createdTime|date('yyyy-MM-dd HH:mm:ss')}}</td>
                         <td>{{el.remark}}</td>
                         <td>
-                        	 <div :if="el.expressStatus == 7">{{@expressSendStatusMap[el.expressStatus]}}</div>
+                        	<div :if="el.expressStatus == 7">{{@expressSendStatusMap[el.expressStatus]}}</div>
                         	<div :if="el.expressStatus != 7" style="color: green;">{{@expressSendStatusMap[el.expressStatus]}}</div>
                         </td>
                         <td class="but_xq">
                             <btn:hasUrlPerm link="${reOrderUrl}">
-	                           	<a :if="el.reOrderNum == 0 && !el.code " class="ml-5 btn btn-primary-outline size-S radius" :click="@methods.reOrder(el.id,@methods.reOrderUrl)">补单</a>
+	                           	<a :if="el.expressStatus != 5 " class="ml-5 btn btn-primary-outline size-S radius" :click="@methods.reOrder(el.id,@methods.reOrderUrl)">补单</a>
 	                        </btn:hasUrlPerm>
                             <btn:hasUrlPerm link="${refundUrl}">
-	                           	<a :if="el.refundNum == 0 && !el.code" class="ml-5 btn btn-primary-outline size-S radius" :click="@methods.refund(el.id,@methods.refundUrl)">退款</a>
+	                           	<a :if="el.expressStatus != 5 " class="ml-5 btn btn-primary-outline size-S radius" :click="@methods.refund(el.id,@methods.refundUrl)">退款</a>
 	                        </btn:hasUrlPerm>
                         	<btn:hasUrlPerm link="${detailUrl}">
 	                           	<a class="ml-5 btn btn-primary-outline size-S radius" :click="@methods.detail(el.id,@methods.detailUrl)">详情</a>

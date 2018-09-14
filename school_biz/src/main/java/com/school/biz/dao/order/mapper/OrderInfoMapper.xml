@@ -12,17 +12,18 @@
     <result column="refund_amt" property="refundAmt" jdbcType="DECIMAL" />
     <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
     <result column="trade_summary" property="tradeSummary" jdbcType="VARCHAR" />
+    <result column="merch_param" property="merchParam" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="INTEGER" />
     <result column="notify_url" property="notifyUrl" jdbcType="VARCHAR" />
     <result column="suc_time" property="sucTime" jdbcType="TIMESTAMP" />
     <result column="version" property="version" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, order_no, customer_id, express_type, express_id, express_code, amount, refund_amt,
-    created_time, trade_summary, status, notify_url, suc_time, version
+    id, order_no, customer_id, express_type, express_id, express_code, amount, refund_amt, 
+    created_time, trade_summary, merch_param, status, notify_url, suc_time, version
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select
+    select 
     <include refid="Base_Column_List" />
     from order_info
     where id = #{id,jdbcType=BIGINT}
@@ -34,14 +35,16 @@
   <insert id="insert" parameterType="com.school.biz.domain.entity.order.OrderInfo" >
     insert into order_info (id, order_no, customer_id, 
       express_type, express_id, express_code, 
-      amount, refund_amt, created_time,
-      trade_summary, status, notify_url,
-      suc_time, version)
+      amount, refund_amt, created_time, 
+      trade_summary, merch_param, status, 
+      notify_url, suc_time, version
+      )
     values (#{id,jdbcType=BIGINT}, #{orderNo,jdbcType=VARCHAR}, #{customerId,jdbcType=BIGINT}, 
       #{expressType,jdbcType=INTEGER}, #{expressId,jdbcType=BIGINT}, #{expressCode,jdbcType=VARCHAR}, 
-      #{amount,jdbcType=DECIMAL}, #{refundAmt,jdbcType=DECIMAL}, #{createdTime,jdbcType=TIMESTAMP},
-      #{tradeSummary,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{notifyUrl,jdbcType=VARCHAR},
-      #{sucTime,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER})
+      #{amount,jdbcType=DECIMAL}, #{refundAmt,jdbcType=DECIMAL}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{tradeSummary,jdbcType=VARCHAR}, #{merchParam,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{notifyUrl,jdbcType=VARCHAR}, #{sucTime,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.school.biz.domain.entity.order.OrderInfo" >
     insert into order_info
@@ -75,6 +78,9 @@
       </if>
       <if test="tradeSummary != null" >
         trade_summary,
+      </if>
+      <if test="merchParam != null" >
+        merch_param,
       </if>
       <if test="status != null" >
         status,
@@ -120,6 +126,9 @@
       <if test="tradeSummary != null" >
         #{tradeSummary,jdbcType=VARCHAR},
       </if>
+      <if test="merchParam != null" >
+        #{merchParam,jdbcType=VARCHAR},
+      </if>
       <if test="status != null" >
         #{status,jdbcType=INTEGER},
       </if>
@@ -164,6 +173,9 @@
       <if test="tradeSummary != null" >
         trade_summary = #{tradeSummary,jdbcType=VARCHAR},
       </if>
+      <if test="merchParam != null" >
+        merch_param = #{merchParam,jdbcType=VARCHAR},
+      </if>
       <if test="status != null" >
         status = #{status,jdbcType=INTEGER},
       </if>
@@ -190,13 +202,14 @@
       refund_amt = #{refundAmt,jdbcType=DECIMAL},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       trade_summary = #{tradeSummary,jdbcType=VARCHAR},
+      merch_param = #{merchParam,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
       notify_url = #{notifyUrl,jdbcType=VARCHAR},
       suc_time = #{sucTime,jdbcType=TIMESTAMP},
       version = #{version,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
-
+  
   <select id="queryPage" resultType="com.school.biz.domain.entity.order.OrderInfo" parameterType="map">
     select o.* from order_info o
     <where>
