@@ -80,7 +80,7 @@
                                             value="${item.distributionCost}" pattern="0.00"/>)
                                     </small>
                                 </c:when>
-                                <c:when test="${item.expressStatus == 10}>">
+                                <c:when test="${item.expressStatus == 10}">
                                     <small class="muted">您还需要支付补差(￥<fmt:formatNumber
                                             value="${item.reOrderAmt}" pattern="0.00"/>)
                                     </small>
