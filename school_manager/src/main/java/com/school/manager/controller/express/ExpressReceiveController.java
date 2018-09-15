@@ -151,9 +151,9 @@ public class ExpressReceiveController extends BaseEasyWebController {
             if (customer != null && StringUtils.isNotBlank(customer.getOpenId())) {
                 Integer status = expressReceive.getExpressStatus();
                 if (ReceiveExpressStatusEnum.PROXY_RECIEVED.getFlag() == status) {
-                    templateService.send(WechatTemplateEnum.RECEIVE_EXPRESS_ARRIVAL.getType(),
-                                         customer.getOpenId(),
-                                         expressReceive, ExpressTypeEnum.RECEIVE.getFlag());
+//                    templateService.send(WechatTemplateEnum.RECEIVE_EXPRESS_ARRIVAL.getType(),
+//                                         customer.getOpenId(),
+//                                         expressReceive, ExpressTypeEnum.RECEIVE.getFlag());
                 } else if (ReceiveExpressStatusEnum.FINISHED.getFlag() == status) {
                     templateService.send(WechatTemplateEnum.RECEIVE_EXPRESS_FINISH.getType(),
                                          customer.getOpenId(), expressReceive,
