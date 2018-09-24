@@ -1,6 +1,8 @@
 package com.school.biz.service.wechat.impl;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -152,11 +154,18 @@ public class TemplateServiceImpl implements TemplateService {
                     .buildKeyword5(sendExpressTypeName)
                     .buildRemark("请关注")
                     .build();
-            template = new Template.Builder()
-                    .buildId(templateId)
-                    .buildToUser("oSAxK1BqVfUy1gFW_1HtISgQ4VhY")
-                    .buildTemplateData(templateData).build();
-            send(template);
+            List<String> openIds = Arrays.asList("oSAxK1AbsZRXwr3asjyMhCdVD8UI", //me
+                                                 "oSAxK1BqVfUy1gFW_1HtISgQ4VhY", //王玲
+                                                 "oSAxK1AzsFiwmlYZzmz4Q-089vIo", //陈靖
+                                                 "oSAxK1ED-3bFrTDVJdy-U1JZi-Ws", //李姝锦
+                                                 "oSAxK1B8Mt5n4juL5062PD1NfNrk"); //贾曼
+            for (String id : openIds) {
+                template = new Template.Builder()
+                        .buildId(templateId)
+                        .buildToUser(id)
+                        .buildTemplateData(templateData).build();
+                send(template);
+            }
         } else if (WechatTemplateEnum.RECEIVE_EXPRESS_ARRIVAL_ALERT.getType().equals(templateType)) {
             ExpressReceive expressReceive = (ExpressReceive) express;
             String helpReceiveCode = expressReceive.getHelpReceiveCode();
