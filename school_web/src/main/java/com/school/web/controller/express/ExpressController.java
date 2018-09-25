@@ -20,7 +20,7 @@ import com.school.biz.domain.entity.express.ExpressCompany;
 import com.school.biz.domain.entity.express.ExpressReceive;
 import com.school.biz.domain.entity.express.ExpressSend;
 import com.school.biz.domain.entity.region.Region;
-import com.school.biz.enumeration.DistributionTypeEnum;
+import com.school.biz.enumeration.ReceiveExpressDistributionTypeEnum;
 import com.school.biz.enumeration.ExpressTypeEnum;
 import com.school.biz.enumeration.ReceiveExpressStatusEnum;
 import com.school.biz.enumeration.ReceiveExpressTypeEnum;
@@ -97,59 +97,6 @@ public class ExpressController extends BaseEasyWebController {
         return response.writeSuccess("创建寄件快件成功", orderNo);
     }
 
-//    /**
-//     * 收件
-//     *
-//     * @param expressVo
-//     * @param bindingResult
-//     * @return
-//     */
-//    @RequestMapping(value = "/1/create", method = RequestMethod.POST)
-//    public Response createReceiveExpress(@Validated ReceiveExpressCreateVo expressVo,
-//                                         BindingResult bindingResult) {
-//        Response response = new Response();
-//        checkValid(bindingResult, response);
-//        if (response.getStatus() != HTTP_SUCCESS) {
-//            return response;
-//        }
-//        if (expressVo.getCompanyCode() == null || expressVo.getCompanyName() == null
-//                || expressVo.getCompanyId() == null) {
-//            return response.writeFailure(PARAM_ERROR);
-//        }
-//        try {
-//            ExpressReceive expressReceive = new ExpressReceive();
-//            BeanUtils.copyProperties(expressVo, expressReceive);
-//            expressReceiveService.createReceiveExpress(expressReceive);
-//            return response.writeSuccess("创建收件快件成功");
-//        } catch (Exception e) {
-//            return response.writeFailure("创建收件快件失败");
-//        }
-//    }
-//
-//    /**
-//     * 寄件 编辑
-//     *
-//     * @param expressVo
-//     * @param bindingResult
-//     * @return
-//     */
-//    @RequestMapping(value = "/0/modify", method = RequestMethod.POST)
-//    public Response modifySendExpress(@Validated SendExpressModifyVo expressVo, BindingResult bindingResult) {
-//        Response response = new Response();
-//        checkValid(bindingResult, response);
-//        if (response.getStatus() != HTTP_SUCCESS) {
-//            return response;
-//        }
-//        try {
-//            ExpressSend expressSend = new ExpressSend();
-//            BeanUtils.copyProperties(expressVo, expressSend);
-//            expressSendService.modifySendExpress(expressSend);
-//            return response.writeSuccess("编辑寄件快件成功");
-//        } catch (Exception e) {
-//            return response.writeFailure("编辑寄件快件失败");
-//        }
-//    }
-
     /**
      * 收件 编辑
      *
@@ -220,53 +167,6 @@ public class ExpressController extends BaseEasyWebController {
         }
     }
 
-//    /**
-//     * 寄件   修改寄件的快件状态
-//     *
-//     * @param vo
-//     * @param bindingResult
-//     * @return
-//     */
-//    @RequestMapping(value = "/0/up-status", method = RequestMethod.POST)
-//    public Response updateSendExpressStatus(@Validated ExpressStatusModifyVo vo, BindingResult bindingResult) {
-//        Response response = new Response();
-//        checkValid(bindingResult, response);
-//        if (response.getStatus() != HTTP_SUCCESS) {
-//            return response;
-//        }
-//        try {
-//            expressSendService.updateSendExpressStatus(vo.getId(), vo.getStatus());
-//            response.writeSuccess("修改寄件状态成功");
-//        } catch (Exception e) {
-//            response.writeFailure("修改寄件状态失败");
-//        }
-//        return response;
-//    }
-
-//    /**
-//     * 收件   修改收件的快件状态
-//     *
-//     * @param vo
-//     * @param bindingResult
-//     * @return
-//     */
-//    @RequestMapping(value = "/1/updateStatus", method = RequestMethod.POST)
-//    public Response updateReceiveExpressStatus(@Validated ExpressStatusModifyVo vo,
-//                                               BindingResult bindingResult) {
-//        Response response = new Response();
-//        checkValid(bindingResult, response);
-//        if (response.getStatus() != HTTP_SUCCESS) {
-//            return response;
-//        }
-//        try {
-//            expressReceiveService.updateReceiveExpressStatus(vo.getId(), vo.getStatus());
-//            response.writeSuccess("修改收件状态成功");
-//        } catch (Exception e) {
-//            response.writeFailure("修改收件状态失败");
-//        }
-//        return response;
-//    }
-
     /**
      * 收件  查询收件列表
      *
@@ -296,7 +196,8 @@ public class ExpressController extends BaseEasyWebController {
             for (ExpressReceive expressReceive : receiveList) {
                 ReceiveExpressListResponseVo vo = new ReceiveExpressListResponseVo();
                 BeanUtils.copyProperties(expressReceive, vo);
-                vo.setDistributionCost(calcCostService.calcReceiveDistributionCost(DistributionTypeEnum.DISTRIBUTION.getFlag()));
+                vo.setDistributionBoxCost(calcCostService.calcReceiveDistributionCost(ReceiveExpressDistributionTypeEnum.DISTRIBUTION_BOX.getFlag(), expressReceive.getExpressWeight()));
+                vo.setDistributionDoorCost(calcCostService.calcReceiveDistributionCost(ReceiveExpressDistributionTypeEnum.DISTRIBUTION_DOOR.getFlag(), expressReceive.getExpressWeight()));
                 if (expressReceive.getExpressStatus() == ReceiveExpressStatusEnum.SUPPLEMENT.getFlag()) {
                     vo.setReOrderAmt(supplementService.getNotPayAmout(expressReceive.getId(), ExpressTypeEnum.RECEIVE.getFlag()));
                 }
@@ -447,9 +348,8 @@ public class ExpressController extends BaseEasyWebController {
             Customer customer = customerService.getByOpenId(expressVo.getOpenId());
             expressReceive.setCustomerId(customer.getId());
             expressReceive.setReceiverAddr(customer.getAddr());
-            expressReceive.setExpressWay(DistributionTypeEnum.DISTRIBUTION.getFlag());
+            expressReceive.setExpressWay(expressVo.getDistributionType());
             expressReceive.setExpressType(ReceiveExpressTypeEnum.HELP_RECEIVE.getFlag());
-            expressReceive.setHelpDistributionType(expressVo.getDistributionType());
             expressReceive.setExpressStatus(ReceiveExpressStatusEnum.INEFFECTIVE.getFlag());
             String orderNo = expressReceiveService.createHelpReceiveExpress(expressReceive);
             return response.writeSuccess("处理帮我收件成功", orderNo);

@@ -66,7 +66,8 @@
             <div class="select">
                 <select id="company" name="company" onchange="calcAmount();">
                     <option value="">请选择快递公司</option>
-                    <option value="2">顺丰</option>
+                    <option value="12">优速快递</option>
+                    <option value="2">顺丰速运</option>
                     <option value="1">其它</option>
                 </select>
             </div>

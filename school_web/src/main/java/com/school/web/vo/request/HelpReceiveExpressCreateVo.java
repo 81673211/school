@@ -26,7 +26,7 @@ public class HelpReceiveExpressCreateVo {
     @NotNull(message = "取件地址不能为空")
     private String helpReceiveAddr;
     @NotNull(message = "配送方式不能为空")
-    private String distributionType;
+    private int distributionType;
     @Min(value = 1, message = "填写的重量最小为1KG")
     private BigDecimal expressWeight;
     @NotNull(message = "取件码不能为空")

@@ -33,7 +33,7 @@ public class ReceiveExpressArrivalTemplateData extends TemplateData {
         private TemplateDataItem keyword1 = new TemplateDataItem(
                 new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()));
         private TemplateDataItem keyword2;
-        private TemplateDataItem first = new TemplateDataItem("您有一个待收快递已到代收点");
+        private TemplateDataItem first = new TemplateDataItem("您有一个待收快递已到一二三速递集散中心");
         private TemplateDataItem remark;
 
         public Builder buildKeyword2(String keyword2) {

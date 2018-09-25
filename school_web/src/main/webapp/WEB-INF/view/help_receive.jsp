@@ -44,7 +44,7 @@
                 <select id="company" name="company">
                     <c:if test="${companyList != null and companyList.size() > 0}">
                         <c:forEach items="${companyList}" varStatus="var" var="item">
-                            <c:if test="${item.id != 1}">
+                            <c:if test="${item.id != 1 && item.id != 12}">
                                 <option value="${item.id}">${item.name}</option>
                             </c:if>
                         </c:forEach>
@@ -59,8 +59,8 @@
             <div class="select">
                 <select id="distributionType" onchange="calcServiceAmt();">
                     <option value="">请选择配送方式</option>
-                    <option value="box">配送入柜</option>
-                    <option value="door">送货上门</option>
+                    <option value="1">配送入柜</option>
+                    <option value="2">送货上门</option>
                 </select>
             </div>
         </div>

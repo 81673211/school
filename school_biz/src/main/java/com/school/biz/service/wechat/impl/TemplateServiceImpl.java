@@ -86,7 +86,7 @@ public class TemplateServiceImpl implements TemplateService {
         if (WechatTemplateEnum.RECEIVE_EXPRESS_ARRIVAL.getType().equals(templateType)) {
             templateData = new ReceiveExpressArrivalTemplateData.Builder()
                     .buildKeyword2(express.getCompanyName())
-                    .buildRemark("快递单号：${code} \r请到待收快件页面选择配送或自提"
+                    .buildRemark("快递单号：${code} \r请到待收快件页面选择取件方式"
                                          .replace("${code}", express.getCode())).build();
             template = new Template.Builder()
                     .buildId(templateId)

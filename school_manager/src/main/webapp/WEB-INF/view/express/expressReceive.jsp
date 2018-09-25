@@ -69,6 +69,7 @@
                         <th width="50">类型</th>
                         <th width="50">取件码</th>
                         <th width="50">取件地址</th>
+                        <th width="50">重量</th>
                         <th width="50">配送方式</th>
                         <th width="50">已支付</th>
                         <th width="30">已补单(服务费)</th>
@@ -89,7 +90,8 @@
                         <td>{{@expressTypeMap[el.expressType]}}</td>
                         <td>{{el.helpReceiveCode}}</td>
                         <td>{{el.helpReceiveAddr}}</td>
-                        <td><div :if="el.expressType==0">{{@expressWayMap[el.expressWay]}}</div><div :if="el.expressType==1">{{@helpDistributionTypeMap[el.helpDistributionType]}}</div></td>
+                        <td>{{el.expressWeight}}</td>
+                        <td>{{@expressWayMap[el.expressWay]}}</td>
                         <td>{{el.serviceAmt}}</td>
                         <td>{{el.reOrderServiceAmt}}</td>
                         <td>{{el.createdTime|date('yyyy-MM-dd HH:mm:ss')}}</td>

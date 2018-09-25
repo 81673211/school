@@ -29,7 +29,7 @@ import com.school.biz.domain.entity.express.ExpressSend;
 import com.school.biz.domain.entity.order.OrderInfo;
 import com.school.biz.domain.entity.order.RefundOrderInfo;
 import com.school.biz.domain.entity.supplement.SupplementInfo;
-import com.school.biz.enumeration.DistributionTypeEnum;
+import com.school.biz.enumeration.ReceiveExpressDistributionTypeEnum;
 import com.school.biz.enumeration.ExpressTypeEnum;
 import com.school.biz.enumeration.OrderStatusEnum;
 import com.school.biz.enumeration.ReceiveExpressStatusEnum;
@@ -111,13 +111,13 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
     }
 
     @Override
-    public String createReceiveOrder(Long expressId, String type) {
+    public String createReceiveOrder(Long expressId, Integer expressWay) {
         List<OrderInfo> orderInfos = findByExpressReceiveId(expressId);
         if (checkExpressAlreadyPay(orderInfos)) {
             return null;
         }
         ExpressReceive expressReceive = expressReceiveMapper.selectByPrimaryKey(expressId);
-        OrderInfo orderInfo = initOrderInfo(expressReceive, type);
+        OrderInfo orderInfo = initOrderInfo(expressReceive, expressWay);
         int result = orderInfoMapper.insertSelective(orderInfo);
         if (result <= 0) {
             String message =
@@ -157,10 +157,10 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
      * 初始化订单对象
      *
      * @param express
-     * @param receiveCostType 收件的付费类型，box=入柜；door=送货上门
+     * @param expressWay 收件的付费类型，box=入柜；door=送货上门
      * @return
      */
-    private OrderInfo initOrderInfo(Express express, String receiveCostType) {
+    private OrderInfo initOrderInfo(Express express, Integer expressWay) {
         OrderInfo orderInfo = new OrderInfo();
         if (express instanceof ExpressSend) {
             ExpressSend expressSend = (ExpressSend) express;
@@ -172,9 +172,9 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
             ExpressReceive expressReceive = (ExpressReceive) express;
             orderInfo.setExpressType(ExpressTypeEnum.RECEIVE.getFlag());
             if (express.getExpressType().equals(ReceiveExpressTypeEnum.HELP_RECEIVE.getFlag())) {
-                orderInfo.setAmount(calcCostService.calcHelpReceiveDistributionCost(receiveCostType, expressReceive.getExpressWeight()));
+                orderInfo.setAmount(calcCostService.calcHelpReceiveDistributionCost(expressWay, expressReceive.getExpressWeight()));
             } else {
-                orderInfo.setAmount(calcCostService.calcReceiveDistributionCost(DistributionTypeEnum.DISTRIBUTION.getFlag()));
+                orderInfo.setAmount(calcCostService.calcReceiveDistributionCost(expressWay, expressReceive.getExpressWeight()));
             }
             orderInfo.setTradeSummary("收件服务费");
         } else {
@@ -418,15 +418,15 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
             throw new Exception("订单号不存在");
         }
         // 如果快递补单费用不为空
-        if(reOrderAmt != null){
-        	SupplementInfo supplementInfo = new SupplementInfo(reOrderAmt, ExpressTypeEnum.SEND.getFlag(), expressSendId, SupplementTypeEnum.EXPRESS_AMT.getCode(), new Date());
+        if (reOrderAmt != null){
+            SupplementInfo supplementInfo = new SupplementInfo(reOrderAmt, ExpressTypeEnum.SEND.getFlag(), expressSendId, SupplementTypeEnum.EXPRESS_AMT.getCode(), new Date());
         	supplementService.save(supplementInfo);
         }
 
         // 如果服务费补单费用不为空
-        if(reOrderServiceAmt != null){
-        	SupplementInfo supplementInfo = new SupplementInfo(reOrderServiceAmt,ExpressTypeEnum.SEND.getFlag(),expressSendId,SupplementTypeEnum.SERVICE_AMT.getCode(),new Date());
-        	supplementService.save(supplementInfo);
+        if (reOrderServiceAmt != null){
+            SupplementInfo supplementInfo = new SupplementInfo(reOrderServiceAmt,ExpressTypeEnum.SEND.getFlag(),expressSendId,SupplementTypeEnum.SERVICE_AMT.getCode(),new Date());
+            supplementService.save(supplementInfo);
         }
 
         // 更改快递状态为等待补单支付
@@ -441,16 +441,16 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
      */
     @Override
     public void expressReceiveReOrder(HttpServletRequest request, Long expressReceiveId, BigDecimal reOrderServiceAmt) throws Exception {
-    	ExpressReceive expressReceive = expressReceiveMapper.selectByPrimaryKey(expressReceiveId);
-    	if (expressReceive == null) {
+        ExpressReceive expressReceive = expressReceiveMapper.selectByPrimaryKey(expressReceiveId);
+        if (expressReceive == null) {
     		throw new Exception("订单号不存在");
-    	}
-    	// 保存supplementInfo
-    	SupplementInfo supplementInfo = new SupplementInfo(reOrderServiceAmt, ExpressTypeEnum.RECEIVE.getFlag(), expressReceiveId, SupplementTypeEnum.SERVICE_AMT.getCode(), new Date());
-    	supplementService.save(supplementInfo);
-    	// 更改快递状态为等待补单支付
-    	expressReceive.setExpressStatus(ReceiveExpressStatusEnum.SUPPLEMENT.getFlag());
-    	expressReceiveService.saveOrUpdate(expressReceive, SessionUtils.getSessionUser(request));
+        }
+        // 保存supplementInfo
+        SupplementInfo supplementInfo = new SupplementInfo(reOrderServiceAmt, ExpressTypeEnum.RECEIVE.getFlag(), expressReceiveId, SupplementTypeEnum.SERVICE_AMT.getCode(), new Date());
+        supplementService.save(supplementInfo);
+        // 更改快递状态为等待补单支付
+        expressReceive.setExpressStatus(ReceiveExpressStatusEnum.SUPPLEMENT.getFlag());
+        expressReceiveService.saveOrUpdate(expressReceive, SessionUtils.getSessionUser(request));
     }
 
     /**

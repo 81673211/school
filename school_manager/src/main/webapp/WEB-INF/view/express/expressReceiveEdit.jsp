@@ -18,7 +18,7 @@
     <title>编辑收件</title>
 </head>
 <body :controller="expressReceiveEdit">
-    <div class="mt-30">
+    <div class="mt-10">
         <form id="expressReceiveForm" action="${ctx}/express/expressReceive/save.do" method="post">
              <div class="row cl mb-15">
                 <label class="form-label col-xs-3 col-sm-3 text-r">快递单号：</label>
@@ -71,6 +71,12 @@
 	                		<option value="${expressCompany.code}" <c:if test="${expressCompany.code == expressReceive.companyCode}">selected="selected"</c:if>>${expressCompany.name}</option>
                 		</c:forEach>
                 	</select>
+                </div>
+            </div>
+            <div class="row cl mb-15">
+                <label class="form-label col-xs-3 col-sm-3 text-r">重量：</label>
+                <div class="formControls col-xs-9 col-sm-9">
+                    <input class="input-text" autocomplete="off" placeholder="" name="expressWeight" value="${expressReceive.expressWeight}" type="text">
                 </div>
             </div>
              <div class="row cl mb-15">

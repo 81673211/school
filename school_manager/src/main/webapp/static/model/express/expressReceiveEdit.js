@@ -10,15 +10,18 @@ requirejs([ 'requirejs.config' ], function() {
 			var model = vm_expressReceiveEdit;
 			$("#expressReceiveForm").validate({
             	rules: {
-            		code:{
-            			required:true
-            		},
-            		receiverPhone:{
-            			required:true
-            		},
-                    status:{
-                    	required:true
-                    }
+									code:{
+										required:true
+									},
+									receiverPhone:{
+										required:true
+									},
+									status:{
+										required:true
+									},
+									expressWeight:{
+                    required:true
+									}
                 },
                 messages:{
                 	code:{
@@ -29,7 +32,10 @@ requirejs([ 'requirejs.config' ], function() {
                 	},
                 	status:{
                 		required:'请选择状态'
-                	}
+                	},
+                  expressWeight:{
+                    required:'重量必填'
+                  }
                 }
             });
 			model.methods.validAndSubmit = function(callback) {

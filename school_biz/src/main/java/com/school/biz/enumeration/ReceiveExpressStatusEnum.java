@@ -19,7 +19,8 @@ public enum ReceiveExpressStatusEnum {
     INEFFECTIVE(8, "未生效"),
     CANCEL(9, "已取消"),
     SUPPLEMENT(10, "补单待支付"),
-    HAS_SUPPLEMENT(11, "补单已支付");
+    HAS_SUPPLEMENT(11, "补单已支付"),
+    DOORING(12, "正在派送");
 
 
     private int flag;

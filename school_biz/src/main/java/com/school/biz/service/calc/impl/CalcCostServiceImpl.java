@@ -2,7 +2,8 @@ package com.school.biz.service.calc.impl;
 
 import com.school.biz.constant.RedisKeyNS;
 import com.school.biz.domain.entity.express.ExpressSend;
-import com.school.biz.enumeration.DistributionTypeEnum;
+import com.school.biz.enumeration.ReceiveExpressDistributionTypeEnum;
+import com.school.biz.enumeration.SendExpressCollectTypeEnum;
 import com.school.biz.service.calc.CalcCostService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -25,9 +26,10 @@ public class CalcCostServiceImpl implements CalcCostService {
     private RedisTemplate<String, String> redisTemplate;
 
     @Override
-    public BigDecimal calcReceiveDistributionCost(Integer expressWay) {
-        if (expressWay.equals(DistributionTypeEnum.DISTRIBUTION.getFlag())) {
-            return BigDecimal.valueOf(1);
+    public BigDecimal calcReceiveDistributionCost(int expressWay, BigDecimal expressWeight) {
+        if (expressWay == ReceiveExpressDistributionTypeEnum.DISTRIBUTION_BOX.getFlag() ||
+            expressWay == ReceiveExpressDistributionTypeEnum.DISTRIBUTION_DOOR.getFlag()) {
+            return calcHelpReceiveDistributionCost(expressWay, expressWeight).subtract(BigDecimal.valueOf(0.5));
         } else {
             return BigDecimal.ZERO;
         }
@@ -35,7 +37,7 @@ public class CalcCostServiceImpl implements CalcCostService {
 
     @Override
     public BigDecimal calcSendDistributionCost(Integer expressWay, BigDecimal expressWeight) {
-        if (expressWay.equals(DistributionTypeEnum.DISTRIBUTION.getFlag())) {
+        if (expressWay.equals(SendExpressCollectTypeEnum.DOOR.getFlag())) {
             double weight = expressWeight.doubleValue();
             if (weight <= 2) {
                 return BigDecimal.valueOf(2.5);
@@ -59,8 +61,16 @@ public class CalcCostServiceImpl implements CalcCostService {
     public BigDecimal calcSendTransportCost(ExpressSend expressSend) {
         Long districtId = expressSend.getReceiverDistrictId();
         Long companyId = expressSend.getCompanyId();
+        String companyShortName;
+        if (companyId == 2) {
+            companyShortName = ":sf";
+        } else if (companyId == 12) {
+            companyShortName = ":ys";
+        } else {
+            companyShortName = ":other";
+        }
         String cacheFee = (String) redisTemplate.opsForHash()
-                .get(RedisKeyNS.CACHE_SEND_EXPRESS_FEE, districtId + (companyId == 2 ? ":sf" : ":other"));
+                .get(RedisKeyNS.CACHE_SEND_EXPRESS_FEE, districtId + companyShortName);
         BigDecimal fee;
         if (StringUtils.isBlank(cacheFee)) {
             fee = BigDecimal.valueOf(12.0);
@@ -71,9 +81,10 @@ public class CalcCostServiceImpl implements CalcCostService {
     }
 
     @Override
-    public BigDecimal calcHelpReceiveDistributionCost(String type, BigDecimal expressWeight) {
-        double weight = expressWeight.doubleValue();
-        if ("box".equals(type)) {
+    public BigDecimal calcHelpReceiveDistributionCost(int type, BigDecimal expressWeight) {
+        //兼容老数据
+        double weight = expressWeight == null ? BigDecimal.ONE.doubleValue() : expressWeight.doubleValue();
+        if (ReceiveExpressDistributionTypeEnum.DISTRIBUTION_BOX.getFlag() == type) {
             if (weight <= 2) {
                 return BigDecimal.valueOf(1.5);
             } else if (2 < weight && weight < 5) {
@@ -86,7 +97,7 @@ public class CalcCostServiceImpl implements CalcCostService {
                 log.error("calcHelpReceiveDistributionCost error,wrong expressWeight:" + expressWeight.toString());
                 return BigDecimal.valueOf(20);
             }
-        } else if ("door".equals(type)) {
+        } else if (ReceiveExpressDistributionTypeEnum.DISTRIBUTION_DOOR.getFlag() == type) {
             if (weight <= 2) {
                 return BigDecimal.valueOf(2.5);
             } else if (2 < weight && weight < 5) {

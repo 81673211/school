@@ -24,6 +24,7 @@ import com.school.biz.enumeration.ExpressLogActionEnum;
 import com.school.biz.enumeration.ExpressTypeEnum;
 import com.school.biz.enumeration.ExpressWayEnum;
 import com.school.biz.enumeration.HelpDistributionTypeEnum;
+import com.school.biz.enumeration.ReceiveExpressDistributionTypeEnum;
 import com.school.biz.enumeration.ReceiveExpressStatusEnum;
 import com.school.biz.enumeration.ReceiveExpressTypeEnum;
 import com.school.biz.enumeration.WechatTemplateEnum;
@@ -80,7 +81,7 @@ public class ExpressReceiveController extends BaseEasyWebController {
             mav.addObject("expressReceiveStatusMap", JSON.toJSON(ReceiveExpressStatusEnum.getAllStatusEnum()));
             mav.addObject("expressTypeMap", JSON.toJSON(ReceiveExpressTypeEnum.getAllTypeEnum()));
             mav.addObject("helpDistributionTypeMap", JSON.toJSON(HelpDistributionTypeEnum.getAllTypeEnum()));
-            mav.addObject("expressWayMap", JSON.toJSON(ExpressWayEnum.getAllTypeEnum()));
+            mav.addObject("expressWayMap", JSON.toJSON(ReceiveExpressDistributionTypeEnum.getAllTypeEnum()));
             mav.addObject(PAGE_PARAM_PAGECOUNT, pageInfo.getTotalPage());
             mav.addObject(PAGE_PARAM_TOTALCOUNT, pageInfo.getTotalRecord());
 
@@ -151,9 +152,9 @@ public class ExpressReceiveController extends BaseEasyWebController {
             if (customer != null && StringUtils.isNotBlank(customer.getOpenId())) {
                 Integer status = expressReceive.getExpressStatus();
                 if (ReceiveExpressStatusEnum.PROXY_RECIEVED.getFlag() == status) {
-//                    templateService.send(WechatTemplateEnum.RECEIVE_EXPRESS_ARRIVAL.getType(),
-//                                         customer.getOpenId(),
-//                                         expressReceive, ExpressTypeEnum.RECEIVE.getFlag());
+                    templateService.send(WechatTemplateEnum.RECEIVE_EXPRESS_ARRIVAL.getType(),
+                                         customer.getOpenId(),
+                                         expressReceive, ExpressTypeEnum.RECEIVE.getFlag());
                 } else if (ReceiveExpressStatusEnum.FINISHED.getFlag() == status) {
                     templateService.send(WechatTemplateEnum.RECEIVE_EXPRESS_FINISH.getType(),
                                          customer.getOpenId(), expressReceive,

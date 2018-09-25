@@ -53,7 +53,7 @@ public class OAuthInterceptor implements HandlerInterceptor {
             log.info("openId not found");
             return false;
         }
-        handleAuthResult(oauthService.check(openId), request, response);
+//        handleAuthResult(oauthService.check(openId), request, response);
         return true;
     }
 

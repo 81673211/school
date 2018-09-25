@@ -1,7 +1,8 @@
 package com.school.web.controller.calc;
 
 import com.school.biz.domain.entity.express.ExpressSend;
-import com.school.biz.enumeration.DistributionTypeEnum;
+import com.school.biz.enumeration.ReceiveExpressDistributionTypeEnum;
+import com.school.biz.enumeration.SendExpressCollectTypeEnum;
 import com.school.biz.service.calc.CalcCostService;
 import com.school.web.controller.base.BaseEasyWebController;
 import com.school.web.vo.request.CalcHelpReceiveServiceAmtVo;
@@ -59,7 +60,7 @@ public class CalcController extends BaseEasyWebController {
             return response;
         }
         return response.writeSuccess("获取寄件服务费成功",
-                calcCostService.calcSendDistributionCost(DistributionTypeEnum.DISTRIBUTION.getFlag(), calcSendServiceAmtVo.getExpressWeight()));
+                calcCostService.calcSendDistributionCost(SendExpressCollectTypeEnum.DOOR.getFlag(), calcSendServiceAmtVo.getExpressWeight()));
     }
 
 

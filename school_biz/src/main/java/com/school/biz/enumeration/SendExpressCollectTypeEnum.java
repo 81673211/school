@@ -3,16 +3,16 @@ package com.school.biz.enumeration;
 /**
  * @author jame
  * @date 2018/7/31
- * @desc 配送方式枚举
+ * @desc 寄件时揽件方式枚举
  */
-public enum DistributionTypeEnum {
+public enum SendExpressCollectTypeEnum {
 
-    SELF(0, "自提"),
-    DISTRIBUTION(1, "配送");
+    SELF(0, "自送到点"),
+    DOOR(1, "上门揽件");
     private int flag;
     private String message;
 
-    DistributionTypeEnum(int flag, String message) {
+    SendExpressCollectTypeEnum(int flag, String message) {
         this.flag = flag;
         this.message = message;
     }

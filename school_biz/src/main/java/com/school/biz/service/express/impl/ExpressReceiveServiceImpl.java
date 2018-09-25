@@ -56,7 +56,7 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
     public String createHelpReceiveExpress(ExpressReceive expressReceive) {
         try {
             createReceiveExpress(expressReceive);
-            return orderInfoService.createReceiveOrder(expressReceive.getId(), expressReceive.getHelpDistributionType());
+            return orderInfoService.createReceiveOrder(expressReceive.getId(), expressReceive.getExpressWay());
         } catch (Exception e) {
             String message = "throw exception when create help receive express";
             log.error(message, e);
@@ -108,19 +108,12 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
     @Override
     public void modifyReceiveExpress(ExpressReceive expressReceive) {
         //配送
-        if (expressReceive.getExpressWay() == DistributionTypeEnum.DISTRIBUTION.getFlag()) {
+        if (expressReceive.getExpressWay() == ReceiveExpressDistributionTypeEnum.DISTRIBUTION_BOX.getFlag()) {
             expressReceive.setExpressStatus(ReceiveExpressStatusEnum.WAIT_INTO_BOX.getFlag());
         } else {
             expressReceive.setExpressStatus(ReceiveExpressStatusEnum.WAIT_SELF.getFlag());
         }
-//        //0自提；1入柜，null表示还未选择过
-//        Integer expressWay = expressReceiveMapper.selectByPrimaryKey(expressReceive.getId())
-//                .getExpressWay();
-//        if ((expressWay == null || expressWay != DistributionTypeEnum.DISTRIBUTION.getFlag())
-//                && expressReceive.getExpressWay() == 1) {
-//            //修改后选择入柜方式才生成订单
-//            orderInfoService.createReceiveOrder(expressReceive.getId());
-//        }
+
         if (!(expressReceiveMapper.updateByPrimaryKeySelective(expressReceive) > 0)) {
             String message =
                     "modify receive express error,when update table 'express_receive' the number of affected rows is 0";
@@ -160,15 +153,24 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
     @Override
     public void updateReceiveExpress(Long expressId) {
         ExpressReceive expressReceive = expressReceiveMapper.selectByPrimaryKey(expressId);
-        expressReceive.setExpressWay(DistributionTypeEnum.DISTRIBUTION.getFlag());
         //帮我收件
+        Integer expressWay = expressReceive.getExpressWay();
+        BigDecimal expressWeight = expressReceive.getExpressWeight();
         if (expressReceive.getExpressType().equals(ReceiveExpressTypeEnum.HELP_RECEIVE.getFlag())) {
             expressReceive.setExpressStatus(ReceiveExpressStatusEnum.WAIT_PICKUP.getFlag());
-            expressReceive.setServiceAmt(calcCostService.calcHelpReceiveDistributionCost(expressReceive.getHelpDistributionType(), expressReceive.getExpressWeight()));
+            expressReceive.setServiceAmt(calcCostService.calcHelpReceiveDistributionCost(expressWay, expressWeight));
         } else {
             //快递点收件
-            expressReceive.setExpressStatus(ReceiveExpressStatusEnum.WAIT_INTO_BOX.getFlag());
-            expressReceive.setServiceAmt(calcCostService.calcReceiveDistributionCost(DistributionTypeEnum.DISTRIBUTION.getFlag()));
+            Integer status;
+            if (expressWay == ReceiveExpressDistributionTypeEnum.DISTRIBUTION_BOX.getFlag()) {
+                status = ReceiveExpressStatusEnum.WAIT_INTO_BOX.getFlag();
+            } else if (expressWay == ReceiveExpressDistributionTypeEnum.DISTRIBUTION_DOOR.getFlag()) {
+                status = ReceiveExpressStatusEnum.DOORING.getFlag();
+            } else {
+                throw new RuntimeException("配送方式异常");
+            }
+            expressReceive.setExpressStatus(status);
+            expressReceive.setServiceAmt(calcCostService.calcReceiveDistributionCost(expressWay, expressWeight));
         }
         int count = expressReceiveMapper.updateByPrimaryKeySelective(expressReceive);
         expressLogService.log(expressReceive, ExpressLogActionEnum.RECEIVE_EXPRESS_UPDATE);

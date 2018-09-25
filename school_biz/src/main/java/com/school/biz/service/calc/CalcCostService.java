@@ -17,14 +17,14 @@ public interface CalcCostService {
      * @param expressWay
      * @return
      */
-    BigDecimal calcReceiveDistributionCost(Integer expressWay);
+    BigDecimal calcReceiveDistributionCost(int expressWay, BigDecimal expressWeight);
 
     /**
      * 计算帮我收件类型的配送费用
      *
      * @return
      */
-    BigDecimal calcHelpReceiveDistributionCost(String type,BigDecimal expressWeight);
+    BigDecimal calcHelpReceiveDistributionCost(int type,BigDecimal expressWeight);
 
     /**
      * 计算寄件类型的配送费用

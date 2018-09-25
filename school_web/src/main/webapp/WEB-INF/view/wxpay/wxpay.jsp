@@ -40,7 +40,7 @@
           if ($("#expressType").val() == 1) {
             //收件
             window.location.href =
-              "http://www.glove1573.cn/express/1/list?status=0,1,2,3,4,6,7,8,10,11&openId=" + $("#openId").val();
+              "http://www.glove1573.cn/express/1/list?status=0,1,2,3,4,6,7,8,10,11,12&openId=" + $("#openId").val();
           } else {
             //寄件
             window.location.href = "http://www.glove1573.cn/express/0/list?openId=" + $("#openId").val();

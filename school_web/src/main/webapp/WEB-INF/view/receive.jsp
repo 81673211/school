@@ -63,6 +63,9 @@
                                         <c:when test="${item.expressStatus == 11}">
                                             <label class="label label-sm primary outline rounded">补单已支付</label>
                                         </c:when>
+                                        <c:when test="${item.expressStatus == 12}">
+                                            <label class="label label-sm primary outline rounded">正在派送</label>
+                                        </c:when>
                                         <c:otherwise>
                                             <label class="label label-sm primary outline rounded"> </label>
                                         </c:otherwise>
@@ -70,14 +73,16 @@
                                 </span>
                         </div>
                         <div>
-                            <small class="muted"><fmt:formatDate value="${item.createdTime}"
-                                                                 pattern="yyyy-MM-dd HH:mm"/></small>
+                            <small class="muted"><fmt:formatDate value="${item.createdTime}" pattern="yyyy-MM-dd HH:mm" /></small>
                         </div>
                         <div>
                             <c:choose>
                                 <c:when test="${item.expressStatus == 0 || item.expressStatus == 1}">
-                                    <small class="muted">如选择配送，需要支付(￥<fmt:formatNumber
-                                            value="${item.distributionCost}" pattern="0.00"/>)
+                                    <small class="muted">如选择入柜，需要支付(￥<fmt:formatNumber
+                                            value="${item.distributionBoxCost}" pattern="0.00"/>)
+                                    </small><br>
+                                    <small class="muted">如选择送货上门，需要支付(￥<fmt:formatNumber
+                                            value="${item.distributionDoorCost}" pattern="0.00"/>)
                                     </small>
                                 </c:when>
                                 <c:when test="${item.expressStatus == 10}">
@@ -86,7 +91,7 @@
                                     </small>
                                 </c:when>
                                 <c:otherwise>
-                                    <span><br/></span>
+                                    <span><br/><br/></span>
                                 </c:otherwise>
                             </c:choose>
                         </div>
@@ -97,17 +102,15 @@
                                 <div>
                                     <button type="button" class="btn btn-sm info outline rounded"
                                             style="margin-bottom: 5px;width: 70px"
-                                            onclick="launchPay(${item.id},'box')">配送入柜
+                                            onclick="launchPay(${item.id}, 1)">配送入柜
                                     </button>
                                 </div>
-                                <c:if test="${item.expressType == 1}">
-                                    <div>
-                                        <button type="button" class="btn btn-sm info outline rounded"
-                                                style="margin-bottom: 5px;width: 70px"
-                                                onclick="launchPay(${item.id},'door')">送货上门
-                                        </button>
-                                    </div>
-                                </c:if>
+                                <div>
+                                    <button type="button" class="btn btn-sm info outline rounded"
+                                            style="margin-bottom: 5px;width: 70px"
+                                            onclick="launchPay(${item.id}, 2)">送货上门
+                                    </button>
+                                </div>
                                 <div>
                                     <button type="button" class="btn btn-sm warning outline rounded" style="width: 70px"
                                             onclick="receiveWay(${item.id},0)">自提
@@ -117,22 +120,20 @@
                             <c:when test="${item.expressStatus == 1}">
                                 <div>
                                     <button type="button" class="btn btn-sm info outline rounded" style="width: 70px"
-                                            onclick="launchPay(${item.id},'box')">配送入柜
+                                            onclick="launchPay(${item.id}, 1)">配送入柜
                                     </button>
                                 </div>
-                                <c:if test="${item.expressType == 1}">
-                                    <div>
-                                        <button type="button" class="btn btn-sm info outline rounded"
-                                                style="width: 70px"
-                                                onclick="launchPay(${item.id},'door')">送货上门
-                                        </button>
-                                    </div>
-                                </c:if>
+                                <div>
+                                    <button type="button" class="btn btn-sm info outline rounded"
+                                            style="width: 70px"
+                                            onclick="launchPay(${item.id}, 2)">送货上门
+                                    </button>
+                                </div>
                             </c:when>
                             <c:when test="${item.expressStatus == 8}">
                                 <div>
                                     <button type="button" class="btn btn-sm info outline rounded" style="width: 70px"
-                                            onclick="launchPay(${item.id},'${item.helpDistributionType}')">支付
+                                            onclick="launchPay(${item.id},'${item.expressWay}')">支付
                                     </button>
                                 </div>
                             </c:when>

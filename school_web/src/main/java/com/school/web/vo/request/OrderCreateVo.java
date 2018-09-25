@@ -16,6 +16,6 @@ public class OrderCreateVo {
     @NotNull(message = "openId不能为空")
     private String openId;
     @NotNull(message = "配送类型不为空")
-    private String type;
+    private int type;
 
 }

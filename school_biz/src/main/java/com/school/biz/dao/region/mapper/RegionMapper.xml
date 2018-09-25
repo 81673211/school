@@ -6,6 +6,7 @@
         <result column="area_name" property="areaName" jdbcType="VARCHAR"/>
         <result column="parent_id" property="parentId" jdbcType="BIGINT"/>
         <result column="sf_fir_fee" property="sfFirFee" jdbcType="DECIMAL"/>
+        <result column="ys_fir_fee" property="ysFirFee" jdbcType="DECIMAL"/>
         <result column="other_fir_fee" property="otherFirFee" jdbcType="DECIMAL"/>
     </resultMap>
     <sql id="Base_Column_List">
@@ -13,6 +14,7 @@
         area_name,
         parent_id,
         sf_fir_fee,
+        ys_fir_fee,
         other_fir_fee
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">

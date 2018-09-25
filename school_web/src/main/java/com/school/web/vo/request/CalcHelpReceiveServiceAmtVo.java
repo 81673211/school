@@ -20,5 +20,5 @@ public class CalcHelpReceiveServiceAmtVo {
     private BigDecimal expressWeight;
 
     @NotNull(message = "配送方式不为空")
-    private String distributionType;
+    private int distributionType;
 }

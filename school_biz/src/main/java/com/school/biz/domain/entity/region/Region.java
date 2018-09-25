@@ -14,5 +14,6 @@ public class Region {
     private Long parentId;
 
     private BigDecimal sfFirFee;
+    private BigDecimal ysFirFee;
     private BigDecimal otherFirFee;
 }

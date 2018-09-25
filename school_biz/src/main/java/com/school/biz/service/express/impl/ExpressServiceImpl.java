@@ -74,24 +74,26 @@ public class ExpressServiceImpl implements ExpressService {
                     return;
                 }
                 //当前寄件状态为 已发起寄件 && 寄件方式为 配送
-                if (sendExpress.getExpressStatus().equals(SendExpressStatusEnum.INEFFECTIVE.getFlag()) && sendExpress.getExpressWay().equals(DistributionTypeEnum.DISTRIBUTION.getFlag())) {
+                if (sendExpress.getExpressStatus().equals(SendExpressStatusEnum.INEFFECTIVE.getFlag()) && sendExpress.getExpressWay().equals(
+                        SendExpressCollectTypeEnum.DOOR.getFlag())) {
                     //改为等待上门取件
                     expressSendService.updateSendExpressStatus(expressId, SendExpressStatusEnum.WAIT_SMQJ.getFlag());
                     alertAdmin(sendExpress);
                 }
                 //当前寄件状态为 已发起寄件 && 寄件方式为 自发
-                else if (sendExpress.getExpressStatus().equals(SendExpressStatusEnum.INEFFECTIVE.getFlag()) && sendExpress.getExpressWay().equals(DistributionTypeEnum.SELF.getFlag())) {
+                else if (sendExpress.getExpressStatus().equals(SendExpressStatusEnum.INEFFECTIVE.getFlag()) && sendExpress.getExpressWay().equals(
+                        SendExpressCollectTypeEnum.SELF.getFlag())) {
                     //改为已发起寄件
                     expressSendService.updateSendExpressStatus(expressId, SendExpressStatusEnum.CREATE.getFlag());
                 }
                 //当前寄件状态为 补单待支付
                 else if (sendExpress.getExpressStatus().equals(SendExpressStatusEnum.SUPPLEMENT.getFlag())) {
                     AmountVo amountVo = getSupplementAmount(orderInfo);
-                    if (amountVo.getServiceAmt().compareTo(BigDecimal.ZERO) == 1) {
+                    if (amountVo.getServiceAmt().compareTo(BigDecimal.ZERO) > 0) {
                         //修改服务费
                         expressSendService.updateServiceAmt(amountVo.getServiceAmt(), expressId);
                     }
-                    if (amountVo.getExpressAmt().compareTo(BigDecimal.ZERO) == 1) {
+                    if (amountVo.getExpressAmt().compareTo(BigDecimal.ZERO) > 0) {
                         //修改运费
                         expressSendService.updateReOrderAmt(amountVo.getExpressAmt(), expressId);
                     }
@@ -108,7 +110,7 @@ public class ExpressServiceImpl implements ExpressService {
                 //当前收件状态为 补单待支付
                 if (expressReceive.getExpressStatus().equals(ReceiveExpressStatusEnum.SUPPLEMENT.getFlag())) {
                     AmountVo amountVo = getSupplementAmount(orderInfo);
-                    if (amountVo.getServiceAmt().compareTo(BigDecimal.ZERO) == 1) {
+                    if (amountVo.getServiceAmt().compareTo(BigDecimal.ZERO) > 0) {
                         //修改服务费
                         expressReceiveService.updateServiceAmt(amountVo.getServiceAmt(), expressId);
                     }
