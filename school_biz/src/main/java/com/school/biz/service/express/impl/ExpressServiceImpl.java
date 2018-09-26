@@ -122,8 +122,8 @@ public class ExpressServiceImpl implements ExpressService {
                 } else {
                     //收件非补单支付
                     expressReceiveService.updateReceiveExpress(expressId);
+                    alertAdmin(orderInfo);
                 }
-                alertAdmin(orderInfo);
             } else {
                 log.error("not support express type:" + expressId);
             }
