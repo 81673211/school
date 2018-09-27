@@ -31,6 +31,7 @@ import com.school.biz.service.customer.CustomerService;
 import com.school.biz.service.express.ExpressCompanyService;
 import com.school.biz.service.express.ExpressReceiveService;
 import com.school.biz.service.express.ExpressSendService;
+import com.school.biz.service.order.OrderInfoService;
 import com.school.biz.service.region.RegionService;
 import com.school.biz.service.supplement.SupplementService;
 import com.school.biz.service.wechat.TemplateService;
@@ -71,6 +72,8 @@ public class ExpressController extends BaseEasyWebController {
     private CalcCostService calcCostService;
     @Autowired
     private SupplementService supplementService;
+    @Autowired
+    private OrderInfoService orderInfoService;
 
     /**
      * 寄件
@@ -105,9 +108,9 @@ public class ExpressController extends BaseEasyWebController {
      * @return
      */
     @RequestMapping(value = "/1/modify", method = RequestMethod.POST)
-    public Response modifySendExpress(@Validated ReceiveExpressModifyVo expressVo,
+    public Response modifyReceiveExpress(@Validated ReceiveExpressModifyVo expressVo,
                                       BindingResult bindingResult) {
-        Response response = new Response();
+        Response response = new DataResponse();
         checkValid(bindingResult, response);
         if (response.getStatus() != HTTP_SUCCESS) {
             return response;
@@ -116,10 +119,16 @@ public class ExpressController extends BaseEasyWebController {
             ExpressReceive expressReceive = new ExpressReceive();
             BeanUtils.copyProperties(expressVo, expressReceive);
             expressReceiveService.modifyReceiveExpress(expressReceive);
-            expressReceive = expressReceiveService.get(expressVo.getId());
-            templateService.send(WechatTemplateEnum.RECEIVE_EXPRESS_DISTRIBUTION_SELF.getType(),
-                    expressVo.getOpenId(), expressReceive, ExpressTypeEnum.RECEIVE.getFlag());
-            return response.writeSuccess("编辑收件快件成功");
+            if (expressReceive.getExpressWay() == ReceiveExpressDistributionTypeEnum.DISTRIBUTION_BOX.getFlag() ||
+                (expressReceive.getExpressWay() == ReceiveExpressDistributionTypeEnum.DISTRIBUTION_DOOR.getFlag())) {
+                String orderNo = orderInfoService.createReceiveOrder(expressVo.getId(), expressVo.getExpressWay());
+                return new DataResponse().writeSuccess(orderNo);
+            } else {
+                expressReceive = expressReceiveService.get(expressVo.getId());
+                templateService.send(WechatTemplateEnum.RECEIVE_EXPRESS_DISTRIBUTION_SELF.getType(),
+                                     expressVo.getOpenId(), expressReceive, ExpressTypeEnum.RECEIVE.getFlag());
+                return response.writeSuccess("编辑收件快件成功");
+            }
         } catch (Exception e) {
             return response.writeFailure("编辑收件快件失败");
         }
@@ -358,6 +367,4 @@ public class ExpressController extends BaseEasyWebController {
             return response.writeFailure("处理帮我收件失败");
         }
     }
-
-
 }

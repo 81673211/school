@@ -37,7 +37,7 @@ public class ReceiveExpressDistributionSelfTemplateData extends TemplateData {
         private TemplateDataItem keyword1;
         private TemplateDataItem keyword2;
         private TemplateDataItem keyword3 = new TemplateDataItem("无");
-        private TemplateDataItem keyword4 = new TemplateDataItem("铜锣湾");
+        private TemplateDataItem keyword4 = new TemplateDataItem("四川大学锦江学院学生公寓14栋背面，学生公寓15栋东侧");
         private TemplateDataItem keyword5 = new TemplateDataItem("每日9:00 - 19:00");
         private TemplateDataItem first = new TemplateDataItem("亲，这是您的快递自提信息");
         private TemplateDataItem remark = new TemplateDataItem("请尽快在规定时间内到上述地址取件");

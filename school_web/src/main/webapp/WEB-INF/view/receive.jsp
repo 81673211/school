@@ -193,11 +193,11 @@
 
     function launchPay(expressId, type) {
         if (confirm("确认配送?")) {
-            $.post("/order/1/create",
+            $.post("/express/1/modify",
                     {
-                        "expressId": expressId,
+                        "id": expressId,
                         "openId": '${openId}',
-                        "type": type
+                        "expressWay": type
                     },
                     function (result) {
                         if (result.status != 200) {

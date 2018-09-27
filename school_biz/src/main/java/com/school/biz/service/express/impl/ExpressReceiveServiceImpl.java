@@ -110,6 +110,8 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
         //配送
         if (expressReceive.getExpressWay() == ReceiveExpressDistributionTypeEnum.DISTRIBUTION_BOX.getFlag()) {
             expressReceive.setExpressStatus(ReceiveExpressStatusEnum.WAIT_INTO_BOX.getFlag());
+        } else if (expressReceive.getExpressWay() == ReceiveExpressDistributionTypeEnum.DISTRIBUTION_DOOR.getFlag()) {
+            expressReceive.setExpressStatus(ReceiveExpressStatusEnum.DOORING.getFlag());
         } else {
             expressReceive.setExpressStatus(ReceiveExpressStatusEnum.WAIT_SELF.getFlag());
         }
