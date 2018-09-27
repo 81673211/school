@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,23 +31,25 @@ import lombok.extern.slf4j.Slf4j;
 @Service(value = "NotExpressQuartz")
 public class NotExpressQuartz {
 
-	@Autowired
-	private ExpressService expressService;
-	
-	@Autowired
-	private TemplateService templateService;
+    @Autowired
+    private ExpressService expressService;
+
+    @Autowired
+    private TemplateService templateService;
 
     public void execute() throws Exception {
         log.info("==========NotExpressQuartz：未支付快递消息推送==========");
-        
+
         List<PushMessageVo> pushMessageVos = expressService.findPushMessageData();
         int dealNum = 0;
-        if(pushMessageVos != null && !pushMessageVos.isEmpty()){
-        	for (PushMessageVo pushMessageVo : pushMessageVos) {
-				templateService.send(pushMessageVo.getDesc(),pushMessageVo.getCreateTime(), pushMessageVo.getOpenId());
-				log.info("向用户openid:" + pushMessageVo.getOpenId() + "发送消息，模板为：" + pushMessageVo.getOpenId());
-				dealNum++;
-			}
+        if (pushMessageVos != null && !pushMessageVos.isEmpty()) {
+            for (PushMessageVo pushMessageVo : pushMessageVos) {
+                templateService.send(pushMessageVo.getDesc(), pushMessageVo.getCreateTime(),
+                                     pushMessageVo.getOpenId());
+                log.info("向用户openid:" + pushMessageVo.getOpenId() + "发送消息，模板为：" + pushMessageVo.getOpenId());
+                dealNum++;
+                TimeUnit.MILLISECONDS.sleep(500);
+            }
         }
         log.info("未决快递消息推送处理结果:" + "共向用户发送" + dealNum + "条消息。");
     }

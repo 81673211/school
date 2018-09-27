@@ -3,6 +3,8 @@ package com.school.biz.service.wechat.impl;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -79,121 +81,137 @@ public class TemplateServiceImpl implements TemplateService {
 
     @Override
     public void send(String templateType, String openId, Express express, int expressType) {
-        String templateId = ConfigProperties.p.getValue(templateType);
-        log.info("templateId:{}", templateId);
-        TemplateData templateData;
-        Template template;
-        if (WechatTemplateEnum.RECEIVE_EXPRESS_ARRIVAL.getType().equals(templateType)) {
-            templateData = new ReceiveExpressArrivalTemplateData.Builder()
-                    .buildKeyword2(express.getCompanyName())
-                    .buildRemark("快递单号：${code} \r请到待收快件页面选择取件方式"
-                                         .replace("${code}", express.getCode())).build();
-            template = new Template.Builder()
-                    .buildId(templateId)
-                    .buildToUser(openId)
-                    .buildTemplateData(templateData).build();
-            send(template);
-        } else if (WechatTemplateEnum.RECEIVE_EXPRESS_DISTRIBUTION_SELF.getType().equals(templateType)) {
-            templateData = new ReceiveExpressDistributionSelfTemplateData.Builder()
-                    .buildKeyword1(express.getCode())
-                    .buildKeyword2(express.getCompanyName()).build();
-            template = new Template.Builder()
-                    .buildId(templateId)
-                    .buildToUser(openId)
-                    .buildTemplateData(templateData).build();
-            send(template);
-        } else if (WechatTemplateEnum.RECEIVE_EXPRESS_FINISH.getType().equals(templateType)) {
-            templateData = new ReceiveExpressFinishTemplateData.Builder()
-                    .buildKeyword1("四川大学锦江学院学生公寓14栋背面，学生公寓15栋东侧")
-                    .buildKeyword2(express.getCode())
-                    .build();
-            template = new Template.Builder()
-                    .buildId(templateId)
-                    .buildToUser(openId)
-                    .buildTemplateData(templateData).build();
-            send(template);
-        } else if (WechatTemplateEnum.SEND_EXPRESS_ARRIVAL_ALERT.getType().equals(templateType)) {
-            ExpressSend expressSend = (ExpressSend) express;
-            Integer expressStatus = expressSend.getExpressStatus();
-            String status;
-            if (expressStatus == SendExpressStatusEnum.CREATE.getFlag()) {
-                status = "用户会送到集散中心";
-            } else {
-                status = "等待上门取件";
-            }
-            String info = "快递单号：" + expressSend.getCode() + ", " +
-                          "收件人姓名：" + expressSend.getReceiverName() + " " +
-                          "收件人电话：" + expressSend.getReceiverPhone() + " " +
-                          "寄件人姓名：" + expressSend.getSenderName() + " " +
-                          "寄件人电话：" + expressSend.getSenderPhone() + " " +
-                          "状态：" + status;
-            Integer sendExpressType = expressSend.getExpressType();
-            String sendExpressTypeName;
-            switch (sendExpressType) {
-                case 1:sendExpressTypeName = "文件";break;
-                case 2:sendExpressTypeName = "数码产品";break;
-                case 3:sendExpressTypeName = "日用品";break;
-                case 4:sendExpressTypeName = "服饰";break;
-                case 5:sendExpressTypeName = "食品";break;
-                case 6:sendExpressTypeName = "医药类产品";break;
-                default:sendExpressTypeName = "其它";
-            }
+        CompletableFuture.runAsync(new Runnable() {
+            @Override
+            public void run() {
+                String templateId = ConfigProperties.p.getValue(templateType);
+                log.info("templateId:{}", templateId);
+                TemplateData templateData;
+                Template template;
+                if (WechatTemplateEnum.RECEIVE_EXPRESS_ARRIVAL.getType().equals(templateType)) {
+                    templateData = new ReceiveExpressArrivalTemplateData.Builder()
+                            .buildKeyword2(express.getCompanyName())
+                            .buildRemark("快递单号：${code} \r请到待收快件页面选择取件方式"
+                                                 .replace("${code}", express.getCode())).build();
+                    template = new Template.Builder()
+                            .buildId(templateId)
+                            .buildToUser(openId)
+                            .buildTemplateData(templateData).build();
+                    send(template);
+                } else if (WechatTemplateEnum.RECEIVE_EXPRESS_DISTRIBUTION_SELF.getType().equals(templateType)) {
+                    templateData = new ReceiveExpressDistributionSelfTemplateData.Builder()
+                            .buildKeyword1(express.getCode())
+                            .buildKeyword2(express.getCompanyName()).build();
+                    template = new Template.Builder()
+                            .buildId(templateId)
+                            .buildToUser(openId)
+                            .buildTemplateData(templateData).build();
+                    send(template);
+                } else if (WechatTemplateEnum.RECEIVE_EXPRESS_FINISH.getType().equals(templateType)) {
+                    templateData = new ReceiveExpressFinishTemplateData.Builder()
+                            .buildKeyword1("四川大学锦江学院学生公寓14栋背面，学生公寓15栋东侧")
+                            .buildKeyword2(express.getCode())
+                            .build();
+                    template = new Template.Builder()
+                            .buildId(templateId)
+                            .buildToUser(openId)
+                            .buildTemplateData(templateData).build();
+                    send(template);
+                } else if (WechatTemplateEnum.SEND_EXPRESS_ARRIVAL_ALERT.getType().equals(templateType)) {
+                    ExpressSend expressSend = (ExpressSend) express;
+                    Integer expressStatus = expressSend.getExpressStatus();
+                    String status;
+                    if (expressStatus == SendExpressStatusEnum.CREATE.getFlag()) {
+                        status = "用户会送到集散中心";
+                    } else {
+                        status = "等待上门取件";
+                    }
+                    String info = "快递单号：" + expressSend.getCode() + ", " +
+                                  "收件人姓名：" + expressSend.getReceiverName() + " " +
+                                  "收件人电话：" + expressSend.getReceiverPhone() + " " +
+                                  "寄件人姓名：" + expressSend.getSenderName() + " " +
+                                  "寄件人电话：" + expressSend.getSenderPhone() + " " +
+                                  "状态：" + status;
+                    Integer sendExpressType = expressSend.getExpressType();
+                    String sendExpressTypeName;
+                    switch (sendExpressType) {
+                        case 1:sendExpressTypeName = "文件";break;
+                        case 2:sendExpressTypeName = "数码产品";break;
+                        case 3:sendExpressTypeName = "日用品";break;
+                        case 4:sendExpressTypeName = "服饰";break;
+                        case 5:sendExpressTypeName = "食品";break;
+                        case 6:sendExpressTypeName = "医药类产品";break;
+                        default:sendExpressTypeName = "其它";
+                    }
 
-            Region province = regionService.get(expressSend.getReceiverProvinceId());
-            Region city = regionService.get(expressSend.getReceiverCityId());
-            Region district = regionService.get((expressSend.getReceiverDistrictId()));
-            String receiverAddr = (province == null ? "" : province.getAreaName()) + " " +
-                                  (city == null ? "" : city.getAreaName()) + " " +
-                                  (district == null ? "" : district.getAreaName()) + " " +
-                                  expressSend.getReceiverAddr();
-            templateData = new SendExpressArrivalAlertTemplateData.Builder()
-                    .buildKeyword1(expressSend.getSenderName())
-                    .buildKeyword2(info)
-                    .buildKeyword3(receiverAddr)
-                    .buildKeyword4(expressSend.getCompanyName())
-                    .buildKeyword5(sendExpressTypeName)
-                    .buildRemark("请关注")
-                    .build();
-            List<String> openIds = Arrays.asList("oSAxK1AbsZRXwr3asjyMhCdVD8UI", //me
-                                                 "oSAxK1BqVfUy1gFW_1HtISgQ4VhY", //王玲
-                                                 "oSAxK1AzsFiwmlYZzmz4Q-089vIo", //陈靖
-                                                 "oSAxK1ED-3bFrTDVJdy-U1JZi-Ws", //李姝锦
-                                                 "oSAxK1B8Mt5n4juL5062PD1NfNrk"); //贾曼
-            for (String id : openIds) {
-                log.info("openId:{}", id);
-                template = new Template.Builder()
-                        .buildId(templateId)
-                        .buildToUser(id)
-                        .buildTemplateData(templateData).build();
-                send(template);
-            }
-        } else if (WechatTemplateEnum.RECEIVE_EXPRESS_ARRIVAL_ALERT.getType().equals(templateType)) {
-            ExpressReceive expressReceive = (ExpressReceive) express;
-            String helpReceiveCode = expressReceive.getHelpReceiveCode();
-            String realCode = helpReceiveCode == null ? "无" : helpReceiveCode;
-            String remark = "快递单号：" + expressReceive.getCode() + ", " +
-                            "收件人姓名：" + expressReceive.getReceiverName() + " " +
-                            "收件人电话：" + expressReceive.getReceiverPhone() + " " +
-                            "快递公司：" + expressReceive.getCompanyName() + " " +
-                            "取件码：" + realCode + " " +
-                            "取件地址：" + expressReceive.getHelpReceiveAddr();
-            templateData = new ReceiveExpressArrivalAlertTemplateData.Builder()
-                    .buildKeyword1(expressReceive.getReceiverName())
-                    .buildRemark(remark)
-                    .build();
+                    Region province = regionService.get(expressSend.getReceiverProvinceId());
+                    Region city = regionService.get(expressSend.getReceiverCityId());
+                    Region district = regionService.get((expressSend.getReceiverDistrictId()));
+                    String receiverAddr = (province == null ? "" : province.getAreaName()) + " " +
+                                          (city == null ? "" : city.getAreaName()) + " " +
+                                          (district == null ? "" : district.getAreaName()) + " " +
+                                          expressSend.getReceiverAddr();
+                    templateData = new SendExpressArrivalAlertTemplateData.Builder()
+                            .buildKeyword1(expressSend.getSenderName())
+                            .buildKeyword2(info)
+                            .buildKeyword3(receiverAddr)
+                            .buildKeyword4(expressSend.getCompanyName())
+                            .buildKeyword5(sendExpressTypeName)
+                            .buildRemark("请关注")
+                            .build();
+                    List<String> openIds = Arrays.asList("oSAxK1AbsZRXwr3asjyMhCdVD8UI", //me
+                                                         "oSAxK1BqVfUy1gFW_1HtISgQ4VhY", //王玲
+                                                         "oSAxK1AzsFiwmlYZzmz4Q-089vIo", //陈靖
+                                                         "oSAxK1ED-3bFrTDVJdy-U1JZi-Ws", //李姝锦
+                                                         "oSAxK1B8Mt5n4juL5062PD1NfNrk"); //贾曼
+                    for (String id : openIds) {
+                        log.info("openId:{}", id);
+                        template = new Template.Builder()
+                                .buildId(templateId)
+                                .buildToUser(id)
+                                .buildTemplateData(templateData).build();
+                        send(template);
+                        try {
+                            TimeUnit.MILLISECONDS.sleep(500);
+                        } catch (InterruptedException e) {
+                            log.error(e.getMessage());
+                        }
+                    }
+                } else if (WechatTemplateEnum.RECEIVE_EXPRESS_ARRIVAL_ALERT.getType().equals(templateType)) {
+                    ExpressReceive expressReceive = (ExpressReceive) express;
+                    String helpReceiveCode = expressReceive.getHelpReceiveCode();
+                    String realCode = helpReceiveCode == null ? "无" : helpReceiveCode;
+                    String remark = "快递单号：" + expressReceive.getCode() + ", " +
+                                    "收件人姓名：" + expressReceive.getReceiverName() + " " +
+                                    "收件人电话：" + expressReceive.getReceiverPhone() + " " +
+                                    "快递公司：" + expressReceive.getCompanyName() + " " +
+                                    "取件码：" + realCode + " " +
+                                    "取件地址：" + expressReceive.getHelpReceiveAddr();
+                    templateData = new ReceiveExpressArrivalAlertTemplateData.Builder()
+                            .buildKeyword1(expressReceive.getReceiverName())
+                            .buildRemark(remark)
+                            .build();
 
-            List<String> openIds = Arrays.asList("oSAxK1AbsZRXwr3asjyMhCdVD8UI", //me
-                                                 "oSAxK1BqVfUy1gFW_1HtISgQ4VhY", //王玲
-                                                 "oSAxK1AzsFiwmlYZzmz4Q-089vIo", //陈靖
-                                                 "oSAxK1ED-3bFrTDVJdy-U1JZi-Ws", //李姝锦
-                                                 "oSAxK1B8Mt5n4juL5062PD1NfNrk"); //贾曼
-            for (String id : openIds) {
-                template = new Template.Builder()
-                        .buildId(templateId)
-                        .buildToUser(id)
-                        .buildTemplateData(templateData).build();
-                send(template);
+                    List<String> openIds = Arrays.asList("oSAxK1AbsZRXwr3asjyMhCdVD8UI", //me
+                                                         "oSAxK1BqVfUy1gFW_1HtISgQ4VhY", //王玲
+                                                         "oSAxK1AzsFiwmlYZzmz4Q-089vIo", //陈靖
+                                                         "oSAxK1ED-3bFrTDVJdy-U1JZi-Ws", //李姝锦
+                                                         "oSAxK1B8Mt5n4juL5062PD1NfNrk"); //贾曼
+                    for (String id : openIds) {
+                        template = new Template.Builder()
+                                .buildId(templateId)
+                                .buildToUser(id)
+                                .buildTemplateData(templateData).build();
+                        send(template);
+                        try {
+                            TimeUnit.MILLISECONDS.sleep(500);
+                        } catch (InterruptedException e) {
+                            log.error(e.getMessage());
+                        }
+                    }
+                }
             }
-        }
+        });
+
     }
 }
