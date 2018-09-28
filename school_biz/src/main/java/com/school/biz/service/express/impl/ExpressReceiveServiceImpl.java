@@ -1,8 +1,10 @@
 package com.school.biz.service.express.impl;
 
+import com.school.biz.component.MessageHelper;
 import com.school.biz.dao.express.ExpressCompanyMapper;
 import com.school.biz.dao.express.ExpressReceiveMapper;
 import com.school.biz.dao.region.RegionMapper;
+import com.school.biz.domain.entity.customer.Customer;
 import com.school.biz.domain.entity.express.Express;
 import com.school.biz.domain.entity.express.ExpressCompany;
 import com.school.biz.domain.entity.express.ExpressReceive;
@@ -17,6 +19,8 @@ import com.school.biz.service.calc.CalcCostService;
 import com.school.biz.service.express.ExpressReceiveService;
 import com.school.biz.service.log.ExpressLogService;
 import com.school.biz.service.order.OrderInfoService;
+import com.school.biz.service.wechat.TemplateService;
+
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +55,10 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
     private CalcCostService calcCostService;
     @Autowired
     private ExpressLogService expressLogService;
+    @Autowired
+    private MessageHelper messageHelper;
+    @Autowired
+    private TemplateService templateService;
 
     @Override
     public String createHelpReceiveExpress(ExpressReceive expressReceive) {
@@ -258,13 +266,18 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
     }
 
     @Override
-    public void saveOrUpdate(ExpressReceive expressReceive, AdminUser adminUser) {
+    public void saveOrUpdate(ExpressReceive expressReceive, Customer customer, AdminUser adminUser) {
         if (expressReceive.getId() == null) {
             this.save(expressReceive);
             expressLogService.log(expressReceive, ExpressLogActionEnum.RECEIVE_EXPRESS_CREATE, adminUser);
+            messageHelper.sendReceiveExpressCreatedMessage(customer, expressReceive);
         } else {
             this.update(expressReceive);
             expressLogService.log(get(expressReceive.getId()), ExpressLogActionEnum.RECEIVE_EXPRESS_UPDATE, adminUser);
+            if (ReceiveExpressStatusEnum.FINISHED.getFlag() == expressReceive.getExpressStatus()) {
+                templateService.send(WechatTemplateEnum.RECEIVE_EXPRESS_FINISH.getType(),
+                                     customer.getOpenId(), expressReceive, ExpressTypeEnum.RECEIVE.getFlag());
+            }
         }
     }
 

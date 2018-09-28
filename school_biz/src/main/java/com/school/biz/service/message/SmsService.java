@@ -12,4 +12,6 @@ public interface SmsService {
     void sendVerifyCode(String phone, String verifyCode);
 
     void sendActivaty918(String phone);
+
+    void sendReceiveExpressCreatedSms(String phone, String name);
 }

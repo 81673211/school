@@ -450,7 +450,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
         supplementService.save(supplementInfo);
         // 更改快递状态为等待补单支付
         expressReceive.setExpressStatus(ReceiveExpressStatusEnum.SUPPLEMENT.getFlag());
-        expressReceiveService.saveOrUpdate(expressReceive, SessionUtils.getSessionUser(request));
+        expressReceiveService.saveOrUpdate(expressReceive, null, SessionUtils.getSessionUser(request));
     }
 
     /**

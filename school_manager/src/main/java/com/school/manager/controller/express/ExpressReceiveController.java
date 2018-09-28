@@ -19,22 +19,17 @@ import com.school.biz.constant.ConstantUrl;
 import com.school.biz.domain.entity.customer.Customer;
 import com.school.biz.domain.entity.express.ExpressCompany;
 import com.school.biz.domain.entity.express.ExpressReceive;
-import com.school.biz.domain.entity.express.ExpressReceive;
 import com.school.biz.enumeration.ExpressLogActionEnum;
-import com.school.biz.enumeration.ExpressTypeEnum;
-import com.school.biz.enumeration.ExpressWayEnum;
 import com.school.biz.enumeration.HelpDistributionTypeEnum;
 import com.school.biz.enumeration.ReceiveExpressDistributionTypeEnum;
 import com.school.biz.enumeration.ReceiveExpressStatusEnum;
 import com.school.biz.enumeration.ReceiveExpressTypeEnum;
-import com.school.biz.enumeration.WechatTemplateEnum;
 import com.school.biz.exception.FuBusinessException;
 import com.school.biz.service.customer.CustomerService;
 import com.school.biz.service.express.ExpressCompanyService;
 import com.school.biz.service.express.ExpressReceiveService;
 import com.school.biz.service.log.ExpressLogService;
 import com.school.biz.service.order.OrderInfoService;
-import com.school.biz.service.wechat.TemplateService;
 import com.school.biz.util.pager.PageInfo;
 import com.school.manager.controller.base.BaseEasyWebController;
 import com.school.manager.util.SessionUtils;
@@ -58,9 +53,6 @@ public class ExpressReceiveController extends BaseEasyWebController {
 
     @Autowired
     private ExpressLogService expressLogService;
-
-    @Autowired
-    private TemplateService templateService;
     
     @Autowired
     private OrderInfoService orderInfoService;
@@ -148,19 +140,7 @@ public class ExpressReceiveController extends BaseEasyWebController {
                     expressReceive.setReceiverAddr(customer.getAddr());
                 }
             }
-            expressReceiveService.saveOrUpdate(expressReceive, SessionUtils.getSessionUser(request));
-            if (customer != null && StringUtils.isNotBlank(customer.getOpenId())) {
-                Integer status = expressReceive.getExpressStatus();
-                if (ReceiveExpressStatusEnum.PROXY_RECIEVED.getFlag() == status) {
-                    templateService.send(WechatTemplateEnum.RECEIVE_EXPRESS_ARRIVAL.getType(),
-                                         customer.getOpenId(),
-                                         expressReceive, ExpressTypeEnum.RECEIVE.getFlag());
-                } else if (ReceiveExpressStatusEnum.FINISHED.getFlag() == status) {
-                    templateService.send(WechatTemplateEnum.RECEIVE_EXPRESS_FINISH.getType(),
-                                         customer.getOpenId(), expressReceive,
-                                         ExpressTypeEnum.RECEIVE.getFlag());
-                }
-            }
+            expressReceiveService.saveOrUpdate(expressReceive, customer, SessionUtils.getSessionUser(request));
             return AjaxResult.success("保存成功", JSON.toJSON(expressReceive));
         } catch (Exception e) {
             log.error("保存收件出错：" + e.getMessage());

@@ -39,6 +39,17 @@ public class SmsServiceImpl implements SmsService {
         send(phone, "SMS_144853287", null);
     }
 
+    @Override
+    public void sendReceiveExpressCreatedSms(String phone, String name) {
+        JSONObject codeJson = new JSONObject();
+        if (StringUtils.isNotBlank(name)) {
+            codeJson.put("name", name);
+        } else {
+            codeJson.put("name", "");
+        }
+        send(phone, "SMS_146801210", codeJson.toJSONString());
+    }
+
     private void send(String phone, String templateCode, String content) {
         //设置超时时间-可自行调整
         System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
