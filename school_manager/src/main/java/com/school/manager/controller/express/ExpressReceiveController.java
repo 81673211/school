@@ -126,10 +126,14 @@ public class ExpressReceiveController extends BaseEasyWebController {
     @RequestMapping("/save.do")
     public AjaxResult save(HttpServletRequest request, ExpressReceive expressReceive) {
         try {
+            log.error("expressReceiveSave:{}", JSON.toJSONString(expressReceive));
             ExpressCompany expressCompany = expressCompanyService.findByCode(expressReceive.getCompanyCode());
             expressReceive.setCompanyId(expressCompany.getId());
             expressReceive.setCompanyName(expressCompany.getName());
             Customer customer = customerService.getByPhone(expressReceive.getReceiverPhone());
+            if (customer == null && expressReceive.getCustomerId() != null) {
+                customer = customerService.get(expressReceive.getCustomerId());
+            }
             if (customer != null) {
                 expressReceive.setCustomerId(customer.getId());
                 // 如果未填写收件人姓名、地址，则自动补全

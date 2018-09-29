@@ -20,6 +20,7 @@
 <body :controller="expressReceiveEdit">
     <div class="mt-10">
         <form id="expressReceiveForm" action="${ctx}/express/expressReceive/save.do" method="post">
+            <input name="customerId" value="${expressReceive.customerId}" type="hidden"/>
              <div class="row cl mb-15">
                 <label class="form-label col-xs-3 col-sm-3 text-r">快递单号：</label>
                 <div class="formControls col-xs-9 col-sm-9">
