@@ -1,6 +1,7 @@
 package com.school.biz.service.wechat.impl;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -14,6 +15,7 @@ import com.alibaba.fastjson.JSON;
 import com.school.biz.constant.ConfigProperties;
 import com.school.biz.domain.bo.wechat.template.ReceiveExpressArrivalAlertTemplateData;
 import com.school.biz.domain.bo.wechat.template.ReceiveExpressArrivalTemplateData;
+import com.school.biz.domain.bo.wechat.template.ReceiveExpressDistributionAlertTemplateData;
 import com.school.biz.domain.bo.wechat.template.ReceiveExpressDistributionSelfTemplateData;
 import com.school.biz.domain.bo.wechat.template.ReceiveExpressFinishTemplateData;
 import com.school.biz.domain.bo.wechat.template.SendExpressArrivalAlertTemplateData;
@@ -59,8 +61,8 @@ public class TemplateServiceImpl implements TemplateService {
         String accessToken = accessTokenService.get();
         String templateSendUrl = TEMPLATE_SEND_URL.replace("${ACCESS_TOKEN}", accessToken);
         try {
-            log.info(JSON.toJSONString(template));
             HttpUtil.post(templateSendUrl, JSON.toJSONString(template), "UTF-8", false);
+            log.info(JSON.toJSONString(template));
         } catch (IOException e) {
             log.error(e.getMessage());
             throw new RuntimeException(e);
@@ -159,24 +161,7 @@ public class TemplateServiceImpl implements TemplateService {
                             .buildKeyword5(sendExpressTypeName)
                             .buildRemark("请关注")
                             .build();
-                    List<String> openIds = Arrays.asList("oSAxK1AbsZRXwr3asjyMhCdVD8UI", //me
-                                                         "oSAxK1BqVfUy1gFW_1HtISgQ4VhY", //王玲
-                                                         "oSAxK1AzsFiwmlYZzmz4Q-089vIo", //陈靖
-                                                         "oSAxK1ED-3bFrTDVJdy-U1JZi-Ws", //李姝锦
-                                                         "oSAxK1B8Mt5n4juL5062PD1NfNrk"); //贾曼
-                    for (String id : openIds) {
-                        log.info("openId:{}", id);
-                        template = new Template.Builder()
-                                .buildId(templateId)
-                                .buildToUser(id)
-                                .buildTemplateData(templateData).build();
-                        send(template);
-                        try {
-                            TimeUnit.MILLISECONDS.sleep(500);
-                        } catch (InterruptedException e) {
-                            log.error(e.getMessage());
-                        }
-                    }
+                    batchSend(templateId, templateData);
                 } else if (WechatTemplateEnum.RECEIVE_EXPRESS_ARRIVAL_ALERT.getType().equals(templateType)) {
                     ExpressReceive expressReceive = (ExpressReceive) express;
                     String helpReceiveCode = expressReceive.getHelpReceiveCode();
@@ -192,26 +177,48 @@ public class TemplateServiceImpl implements TemplateService {
                             .buildRemark(remark)
                             .build();
 
-                    List<String> openIds = Arrays.asList("oSAxK1AbsZRXwr3asjyMhCdVD8UI", //me
-                                                         "oSAxK1BqVfUy1gFW_1HtISgQ4VhY", //王玲
-                                                         "oSAxK1AzsFiwmlYZzmz4Q-089vIo", //陈靖
-                                                         "oSAxK1ED-3bFrTDVJdy-U1JZi-Ws", //李姝锦
-                                                         "oSAxK1B8Mt5n4juL5062PD1NfNrk"); //贾曼
-                    for (String id : openIds) {
-                        template = new Template.Builder()
-                                .buildId(templateId)
-                                .buildToUser(id)
-                                .buildTemplateData(templateData).build();
-                        send(template);
-                        try {
-                            TimeUnit.MILLISECONDS.sleep(500);
-                        } catch (InterruptedException e) {
-                            log.error(e.getMessage());
-                        }
+                    batchSend(templateId, templateData);
+                } else if (WechatTemplateEnum.RECEIVE_EXPRESS_DISTRIBUTION_ALERT.getType().equals(templateType)) {
+                    ExpressReceive expressReceive = (ExpressReceive) express;
+                    Integer expressWay = expressReceive.getExpressWay();
+                    String remarkDistribution;
+                    switch (expressWay) {
+                        case 0: remarkDistribution = "自提"; break;
+                        case 1: remarkDistribution = "配送入柜"; break;
+                        case 3: remarkDistribution = "送货上门"; break;
+                        default: remarkDistribution = "自提"; break;
                     }
+                    String remark = "配送方式：" + remarkDistribution;
+                    templateData = new ReceiveExpressDistributionAlertTemplateData.Builder()
+                            .buildKeyword3(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(expressReceive.getCreatedTime()))
+                            .buildRemark(remark)
+                            .build();
+
+                    batchSend(templateId, templateData);
                 }
             }
         });
 
+    }
+
+    private void batchSend(String templateId, TemplateData templateData) {
+        List<String> openIds = Arrays.asList("oSAxK1AbsZRXwr3asjyMhCdVD8UI", //me
+                                             "oSAxK1BqVfUy1gFW_1HtISgQ4VhY", //王玲
+                                             "oSAxK1AzsFiwmlYZzmz4Q-089vIo", //陈靖
+                                             "oSAxK1ED-3bFrTDVJdy-U1JZi-Ws", //李姝锦
+                                             "oSAxK1B8Mt5n4juL5062PD1NfNrk"); //贾曼
+        Template template;
+        for (String id : openIds) {
+            template = new Template.Builder()
+                    .buildId(templateId)
+                    .buildToUser(id)
+                    .buildTemplateData(templateData).build();
+            send(template);
+            try {
+                TimeUnit.MILLISECONDS.sleep(500);
+            } catch (InterruptedException e) {
+                log.error(e.getMessage());
+            }
+        }
     }
 }

@@ -169,11 +169,18 @@ public class ExpressServiceImpl implements ExpressService {
 
     private void alertAdmin(OrderInfo orderInfo) {
         ExpressReceive receiveExpress = expressReceiveService.getReceiveExpress(orderInfo.getExpressId());
-        if (receiveExpress != null && ReceiveExpressTypeEnum.HELP_RECEIVE.getFlag() == receiveExpress.getExpressType()) {
-            Customer customer = customerService.get(receiveExpress.getCustomerId());
-            if (customer != null) {
-                templateService.send(WechatTemplateEnum.RECEIVE_EXPRESS_ARRIVAL_ALERT.getType(),
-                        customer.getOpenId(), receiveExpress, ExpressTypeEnum.RECEIVE.getFlag());
+        if (receiveExpress != null) {
+            if (ReceiveExpressTypeEnum.HELP_RECEIVE.getFlag() == receiveExpress.getExpressType()) {
+                Customer customer = customerService.get(receiveExpress.getCustomerId());
+                if (customer != null) {
+                    templateService.send(WechatTemplateEnum.RECEIVE_EXPRESS_ARRIVAL_ALERT.getType(),
+                                         customer.getOpenId(), receiveExpress, ExpressTypeEnum.RECEIVE.getFlag());
+                }
+            } else {
+                if (ReceiveExpressDistributionTypeEnum.DISTRIBUTION_DOOR.getFlag() == receiveExpress.getExpressWay() ||
+                        ReceiveExpressDistributionTypeEnum.DISTRIBUTION_BOX.getFlag() == receiveExpress.getExpressWay()) {
+                    templateService.send(WechatTemplateEnum.RECEIVE_EXPRESS_DISTRIBUTION_ALERT.getType(), null, receiveExpress, ExpressTypeEnum.RECEIVE.getFlag());
+                }
             }
         }
     }

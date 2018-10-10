@@ -1,18 +1,20 @@
 package com.school.biz.service.calc.impl;
 
-import com.school.biz.constant.RedisKeyNS;
-import com.school.biz.domain.entity.express.ExpressSend;
-import com.school.biz.enumeration.ReceiveExpressDistributionTypeEnum;
-import com.school.biz.enumeration.SendExpressCollectTypeEnum;
-import com.school.biz.service.calc.CalcCostService;
-import lombok.extern.slf4j.Slf4j;
+import java.math.BigDecimal;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
+import com.school.biz.constant.RedisKeyNS;
+import com.school.biz.domain.entity.express.ExpressSend;
+import com.school.biz.enumeration.ReceiveExpressDistributionTypeEnum;
+import com.school.biz.enumeration.SendExpressCollectTypeEnum;
+import com.school.biz.service.calc.CalcCostService;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author jame
@@ -39,23 +41,16 @@ public class CalcCostServiceImpl implements CalcCostService {
     public BigDecimal calcSendDistributionCost(Integer expressWay, BigDecimal expressWeight) {
         if (expressWay.equals(SendExpressCollectTypeEnum.DOOR.getFlag())) {
             double weight = expressWeight.doubleValue();
-            if (weight <= 2) {
-                return BigDecimal.valueOf(2.5);
-            } else if (2 < weight && weight < 5) {
-                return BigDecimal.valueOf(3);
-            } else if (5 <= weight && weight < 10) {
-                return BigDecimal.valueOf(6);
-            } else if (weight >= 10) {
-                return BigDecimal.valueOf((weight - 10) * 2).setScale(0, BigDecimal.ROUND_UP).add(BigDecimal.valueOf(11));
+            if (weight < 10) {
+                return BigDecimal.ZERO;
             } else {
-                log.error("calcSendDistributionCost error,wrong expressWeight:" + expressWeight.toString());
-                return BigDecimal.valueOf(20);
+                return BigDecimal.valueOf((weight - 10) * 2).setScale(0, BigDecimal.ROUND_UP).add(
+                        BigDecimal.valueOf(11));
             }
         } else {
             return BigDecimal.ZERO;
         }
     }
-
 
     @Override
     public BigDecimal calcSendTransportCost(ExpressSend expressSend) {
@@ -70,7 +65,8 @@ public class CalcCostServiceImpl implements CalcCostService {
             companyShortName = ":other";
         }
         String cacheFee = (String) redisTemplate.opsForHash()
-                .get(RedisKeyNS.CACHE_SEND_EXPRESS_FEE, districtId + companyShortName);
+                                                .get(RedisKeyNS.CACHE_SEND_EXPRESS_FEE,
+                                                     districtId + companyShortName);
         BigDecimal fee;
         if (StringUtils.isBlank(cacheFee)) {
             fee = BigDecimal.valueOf(12.0);
@@ -92,9 +88,11 @@ public class CalcCostServiceImpl implements CalcCostService {
             } else if (5 <= weight && weight < 10) {
                 return BigDecimal.valueOf(5);
             } else if (weight >= 10) {
-                return BigDecimal.valueOf((weight - 10) * 2).setScale(0, BigDecimal.ROUND_UP).add(BigDecimal.valueOf(10));
+                return BigDecimal.valueOf((weight - 10) * 2).setScale(0, BigDecimal.ROUND_UP).add(
+                        BigDecimal.valueOf(10));
             } else {
-                log.error("calcHelpReceiveDistributionCost error,wrong expressWeight:" + expressWeight.toString());
+                log.error("calcHelpReceiveDistributionCost error,wrong expressWeight:" + expressWeight
+                        .toString());
                 return BigDecimal.valueOf(20);
             }
         } else if (ReceiveExpressDistributionTypeEnum.DISTRIBUTION_DOOR.getFlag() == type) {
@@ -105,9 +103,11 @@ public class CalcCostServiceImpl implements CalcCostService {
             } else if (5 <= weight && weight < 10) {
                 return BigDecimal.valueOf(6);
             } else if (weight >= 10) {
-                return BigDecimal.valueOf((weight - 10) * 2).setScale(0, BigDecimal.ROUND_UP).add(BigDecimal.valueOf(11));
+                return BigDecimal.valueOf((weight - 10) * 2).setScale(0, BigDecimal.ROUND_UP).add(
+                        BigDecimal.valueOf(11));
             } else {
-                log.error("calcHelpReceiveDistributionCost error,wrong expressWeight:" + expressWeight.toString());
+                log.error("calcHelpReceiveDistributionCost error,wrong expressWeight:" + expressWeight
+                        .toString());
                 return BigDecimal.valueOf(20);
             }
         } else {
