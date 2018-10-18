@@ -32,7 +32,7 @@ public class NotPayOrderQuartz {
     @Autowired
     private ExpressService expressService;
 
-    public void execute() throws Exception {
+    public void execute() {
         log.info("==========NotPayOrderQuartz：未决流水查询==========");
         List<OrderInfo> notPayOrderList = orderInfoService.getNotPayOrder();
 
@@ -44,7 +44,7 @@ public class NotPayOrderQuartz {
             for (OrderInfo orderInfo : notPayOrderList) {
                 HashMap<String, String> data = new HashMap<String, String>();
                 data.put("out_trade_no", orderInfo.getOrderNo());
-                data.put("nonce_str", WXPayUtil.generateUUID());
+                data.put("nonce_str", WXPayUtil.generateNonceStr());
 
                 try {
                     WXPayConfigImpl config = WXPayConfigImpl.getInstance();
@@ -52,9 +52,7 @@ public class NotPayOrderQuartz {
 
                     Map<String, String> result = wxpay.orderQuery(data);
                     log.info("result:" + JSON.toJSONString(result));
-                    String localSign = WXPayUtil.generateSignature(result, ConfigProperties.WXPAY_KEY,
-                                                                   SignType.HMACSHA256);
-                    if (!localSign.equals(result.get("sign"))) {
+                    if (!WXPayUtil.isSignatureValid(result, ConfigProperties.WXPAY_KEY, SignType.HMACSHA256)) {
                         log.error("NotPayOrderQuartz验签失败");
                         continue;
                     }

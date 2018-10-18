@@ -16,6 +16,12 @@ public class Suggestion {
 
     private Long id;
 
+    private Long customerId;
+
+    private String customerName;
+
+    private String customerPhone;
+
     private String openId;
 
     private String content;

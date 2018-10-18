@@ -1,30 +1,35 @@
 package com.school.biz.extension.wxpay.sdk;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.StringWriter;
-import java.util.*;
-import java.security.MessageDigest;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.crypto.Mac;
+
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.security.MessageDigest;
+import java.security.SecureRandom;
+
+import java.util.*;
+
 import com.school.biz.extension.wxpay.sdk.WXPayConstants.SignType;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-
 public class WXPayUtil {
+
+    private static final String SYMBOLS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    private static final Random RANDOM = new SecureRandom();
 
     /**
      * XML格式字符串转换为Map
@@ -36,8 +41,7 @@ public class WXPayUtil {
     public static Map<String, String> xmlToMap(String strXML) throws Exception {
         try {
             Map<String, String> data = new HashMap<String, String>();
-            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            DocumentBuilder documentBuilder = WXPayXmlUtil.newDocumentBuilder();
             InputStream stream = new ByteArrayInputStream(strXML.getBytes("UTF-8"));
             org.w3c.dom.Document doc = documentBuilder.parse(stream);
             doc.getDocumentElement().normalize();
@@ -56,7 +60,9 @@ public class WXPayUtil {
             }
             return data;
         } catch (Exception ex) {
-            WXPayUtil.getLogger().warn("Invalid XML, can not convert to map. Error message: {}. XML content: {}", ex.getMessage(), strXML);
+            WXPayUtil.getLogger().warn(
+                    "Invalid XML, can not convert to map. Error message: {}. XML content: {}", ex.getMessage(),
+                    strXML);
             throw ex;
         }
 
@@ -70,12 +76,10 @@ public class WXPayUtil {
      * @throws Exception
      */
     public static String mapToXml(Map<String, String> data) throws Exception {
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder documentBuilder= documentBuilderFactory.newDocumentBuilder();
-        org.w3c.dom.Document document = documentBuilder.newDocument();
+        org.w3c.dom.Document document = WXPayXmlUtil.newDocument();
         org.w3c.dom.Element root = document.createElement("xml");
         document.appendChild(root);
-        for (String key: data.keySet()) {
+        for (String key : data.keySet()) {
             String value = data.get(key);
             if (value == null) {
                 value = "";
@@ -96,12 +100,10 @@ public class WXPayUtil {
         String output = writer.getBuffer().toString(); //.replaceAll("\n|\r", "");
         try {
             writer.close();
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
         }
         return output;
     }
-
 
     /**
      * 生成带有 sign 的 XML 格式字符串
@@ -122,12 +124,12 @@ public class WXPayUtil {
      * @param signType 签名类型
      * @return 含有sign字段的XML
      */
-    public static String generateSignedXml(final Map<String, String> data, String key, SignType signType) throws Exception {
+    public static String generateSignedXml(final Map<String, String> data, String key, SignType signType)
+            throws Exception {
         String sign = generateSignature(data, key, signType);
         data.put(WXPayConstants.FIELD_SIGN, sign);
         return mapToXml(data);
     }
-
 
     /**
      * 判断签名是否正确
@@ -139,7 +141,7 @@ public class WXPayUtil {
      */
     public static boolean isSignatureValid(String xmlStr, String key) throws Exception {
         Map<String, String> data = xmlToMap(xmlStr);
-        if (!data.containsKey(WXPayConstants.FIELD_SIGN) ) {
+        if (!data.containsKey(WXPayConstants.FIELD_SIGN)) {
             return false;
         }
         String sign = data.get(WXPayConstants.FIELD_SIGN);
@@ -167,8 +169,9 @@ public class WXPayUtil {
      * @return 签名是否正确
      * @throws Exception
      */
-    public static boolean isSignatureValid(Map<String, String> data, String key, SignType signType) throws Exception {
-        if (!data.containsKey(WXPayConstants.FIELD_SIGN) ) {
+    public static boolean isSignatureValid(Map<String, String> data, String key, SignType signType)
+            throws Exception {
+        if (!data.containsKey(WXPayConstants.FIELD_SIGN)) {
             return false;
         }
         String sign = data.get(WXPayConstants.FIELD_SIGN);
@@ -194,7 +197,8 @@ public class WXPayUtil {
      * @param signType 签名方式
      * @return 签名
      */
-    public static String generateSignature(final Map<String, String> data, String key, SignType signType) throws Exception {
+    public static String generateSignature(final Map<String, String> data, String key, SignType signType)
+            throws Exception {
         Set<String> keySet = data.keySet();
         String[] keyArray = keySet.toArray(new String[keySet.size()]);
         Arrays.sort(keyArray);
@@ -204,20 +208,17 @@ public class WXPayUtil {
                 continue;
             }
             if (data.get(k).trim().length() > 0) // 参数值为空，则不参与签名
-                sb.append(k).append("=").append(data.get(k).trim()).append("&");
+            { sb.append(k).append("=").append(data.get(k).trim()).append("&"); }
         }
         sb.append("key=").append(key);
         if (SignType.MD5.equals(signType)) {
             return MD5(sb.toString()).toUpperCase();
-        }
-        else if (SignType.HMACSHA256.equals(signType)) {
+        } else if (SignType.HMACSHA256.equals(signType)) {
             return HMACSHA256(sb.toString(), key);
-        }
-        else {
+        } else {
             throw new Exception(String.format("Invalid sign_type: %s", signType));
         }
     }
-
 
     /**
      * 获取随机字符串 Nonce Str
@@ -225,9 +226,12 @@ public class WXPayUtil {
      * @return String 随机字符串
      */
     public static String generateNonceStr() {
-        return UUID.randomUUID().toString().replaceAll("-", "").substring(0, 32);
+        char[] nonceChars = new char[32];
+        for (int index = 0; index < nonceChars.length; ++index) {
+            nonceChars[index] = SYMBOLS.charAt(RANDOM.nextInt(SYMBOLS.length()));
+        }
+        return new String(nonceChars);
     }
-
 
     /**
      * 生成 MD5
@@ -236,7 +240,7 @@ public class WXPayUtil {
      * @return MD5结果
      */
     public static String MD5(String data) throws Exception {
-        java.security.MessageDigest md = MessageDigest.getInstance("MD5");
+        MessageDigest md = MessageDigest.getInstance("MD5");
         byte[] array = md.digest(data.getBytes("UTF-8"));
         StringBuilder sb = new StringBuilder();
         for (byte item : array) {
@@ -278,7 +282,7 @@ public class WXPayUtil {
      * @return
      */
     public static long getCurrentTimestamp() {
-        return System.currentTimeMillis()/1000;
+        return System.currentTimeMillis() / 1000;
     }
 
     /**
@@ -287,14 +291,6 @@ public class WXPayUtil {
      */
     public static long getCurrentTimestampMs() {
         return System.currentTimeMillis();
-    }
-
-    /**
-     * 生成 uuid， 即用来标识一笔单，也用做 nonce_str
-     * @return
-     */
-    public static String generateUUID() {
-        return UUID.randomUUID().toString().replaceAll("-", "").substring(0, 32);
     }
 
 }

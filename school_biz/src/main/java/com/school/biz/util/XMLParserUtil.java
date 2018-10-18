@@ -64,45 +64,4 @@ public class XMLParserUtil {
 			throw e;
 		}
 	}
-
-	/**
-	 * @author liuhang
-	 * @param e 传入的父级element对象
-	 * @param element_name element节点名
-	 * @return returnElement 返回给定节点名的element子节点
-	 */
-	public static Element  getChildElement(Element e,String element_name)
-	{
-		Element returnElement = null;
-		List<Element>  el_list = e.elements();
-		if(el_list != null && !el_list.isEmpty())
-		{
-			for(Element tempelement : el_list)
-			{
-				if(tempelement.getName().equals(element_name))
-				{
-					returnElement = tempelement;
-					break;
-				}
-			}
-		}
-		return returnElement;
-	}
-	public static void main(String[] args) {
-		// long start = System.currentTimeMillis();
-		String data = "<data a=\"\" b=\"456\">" + "	head	<t0 bbb=\"2\">"
-				+ "         dsaf" + "      </t0>"
-				+ "      <t1 ><t11>t1111111</t11><t12>t122222222</t12></t1>"
-				+ "      <t2>t1111111copy</t2>"
-				+ "  dfsafffffffffffffff </data>";
-
-		try {
-			Map<String, String> resultMap = new HashMap<String, String>();
-			XMLParserUtil.parse(data, resultMap);
-			// for (String key : resultMap.keySet()) {
-			// }
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-		}
-	}
 }

@@ -14,4 +14,8 @@ public interface SmsService {
     void sendActivaty918(String phone);
 
     void sendReceiveExpressCreatedSms(String phone, String name);
+
+    void sendActivaty1010(String phone);
+
+    void sendActivaty1011(String phone);
 }

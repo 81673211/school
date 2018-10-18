@@ -3,12 +3,15 @@
 <mapper namespace="com.school.biz.dao.help.SuggestionMapper">
     <resultMap id="BaseResultMap" type="com.school.biz.domain.entity.help.Suggestion">
         <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="customer_id" property="customerId" jdbcType="BIGINT"/>
+        <result column="customer_name" property="customerName" jdbcType="VARCHAR"/>
+        <result column="customer_phone" property="customerPhone" jdbcType="VARCHAR"/>
         <result column="open_id" property="openId" jdbcType="VARCHAR"/>
         <result column="content" property="content" jdbcType="VARCHAR"/>
         <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, open_id, content, created_time
+    id, customer_id, customer_name, customer_phone, open_id, content, created_time
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
@@ -21,6 +24,15 @@
           parameterType="com.school.biz.domain.entity.help.Suggestion">
     insert into suggestion
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="customerId != null">
+        customer_id,
+      </if>
+      <if test="customerName != null and customerName != ''">
+        customer_name,
+      </if>
+      <if test="customerPhone != null and customerPhone != ''">
+        customer_phone,
+      </if>
       <if test="openId != null and openId != ''">
         open_id,
       </if>
@@ -29,6 +41,15 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="customerId != null">
+        #{customerId, jdbcType=BIGINT},
+      </if>
+      <if test="customerName != null and customerName != ''">
+        #{customerName, jdbcType=VARCHAR},
+      </if>
+      <if test="customerPhone != null and customerPhone != ''">
+        #{customerPhone, jdbcType=VARCHAR},
+      </if>
       <if test="openId != null and openId != ''">
         #{openId,jdbcType=VARCHAR},
       </if>

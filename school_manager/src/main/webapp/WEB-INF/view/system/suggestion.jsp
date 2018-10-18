@@ -45,6 +45,8 @@
                 <thead>
                     <tr class="text-c">
                         <th width="25">编号</th>
+                        <th width="50">客户名字</th>
+                        <th width="100">客户电话</th>
                         <th width="500">意见内容</th>
                         <th width="100">创建时间</th>
                         <th width="50">操作</th>
@@ -53,6 +55,8 @@
                 <tbody>
                     <tr class="text-c" :for="index,el in @data">
                         <td>{{index+1}}</td>
+                        <td>{{el.customerName}}</td>
+                        <td>{{el.customerPhone}}</td>
                         <td>{{el.content}}</td>
                         <td>{{el.createdTime|date('yyyy-MM-dd HH:mm:ss')}}</td>
                         <td class="but_xq">

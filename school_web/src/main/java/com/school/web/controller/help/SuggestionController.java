@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.school.biz.constant.RedisKeyNS;
+import com.school.biz.domain.entity.customer.Customer;
 import com.school.biz.domain.entity.help.Suggestion;
+import com.school.biz.service.customer.CustomerService;
 import com.school.biz.service.help.SuggestionService;
 import com.school.web.vo.response.Response;
 
@@ -33,6 +35,8 @@ public class SuggestionController {
     private SuggestionService suggestionService;
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
+    @Autowired
+    private CustomerService customerService;
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView index(@RequestParam(value = "openId") String openId) {
@@ -52,7 +56,14 @@ public class SuggestionController {
         if (Objects.equals(cacheVal, "1")) {
             return new Response().writeFailure("一分钟内请不要重复提交");
         }
+        Customer customer = customerService.getByOpenId(openId);
+        if (customer == null) {
+            throw new RuntimeException("请关注一二三速递公众号");
+        }
         Suggestion suggestion = new Suggestion();
+        suggestion.setCustomerId(customer.getId());
+        suggestion.setCustomerName(customer.getName());
+        suggestion.setCustomerPhone(customer.getPhone());
         suggestion.setOpenId(openId);
         suggestion.setContent(content);
         suggestionService.create(suggestion);

@@ -21,7 +21,7 @@ import com.school.web.vo.response.Response;
  * <br><b>Date:</b> 2018/9/14 22:57
  */
 @Controller
-@RequestMapping("/backDoor")
+@RequestMapping("/backDoor11231313131")
 public class BackDoorController {
 
     @Autowired
@@ -36,6 +36,36 @@ public class BackDoorController {
         if (!CollectionUtils.isEmpty(phones)) {
             for (String phone : phones) {
                 smsService.sendActivaty918(phone);
+                TimeUnit.MILLISECONDS.sleep(500);
+            }
+        }
+        return new Response().writeSuccess("success");
+    }
+
+    @RequestMapping("/1010")
+    @ResponseBody
+    public Response send1010(int type) throws InterruptedException {
+        if (type == 0) {
+            smsService.sendActivaty1010("13882176139");
+        } else {
+            List<String> phones = customerService.selectRegisteredPhone();
+            if (!CollectionUtils.isEmpty(phones)) {
+                for (String phone : phones) {
+                    smsService.sendActivaty1010(phone);
+                    TimeUnit.MILLISECONDS.sleep(500);
+                }
+            }
+        }
+        return new Response().writeSuccess("success");
+    }
+
+    @RequestMapping("/1011")
+    @ResponseBody
+    public Response send1011() throws InterruptedException {
+        List<String> phones = customerService.selectRegisteredPhone();
+        if (!CollectionUtils.isEmpty(phones)) {
+            for (String phone : phones) {
+                smsService.sendActivaty1011(phone);
                 TimeUnit.MILLISECONDS.sleep(500);
             }
         }

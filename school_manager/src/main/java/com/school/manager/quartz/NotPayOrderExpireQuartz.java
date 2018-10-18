@@ -41,7 +41,7 @@ public class NotPayOrderExpireQuartz {
             for (OrderInfo orderInfo : notPayOrderList) {
                 HashMap<String, String> data = new HashMap<String, String>();
                 data.put("out_trade_no", orderInfo.getOrderNo());
-                data.put("nonce_str", WXPayUtil.generateUUID());
+                data.put("nonce_str", WXPayUtil.generateNonceStr());
 
                 try {
                     WXPayConfigImpl config = WXPayConfigImpl.getInstance();
@@ -49,9 +49,7 @@ public class NotPayOrderExpireQuartz {
 
                     Map<String, String> result = wxpay.closeOrder(data);
                     log.info("result:" + JSON.toJSONString(result));
-                    String localSign = WXPayUtil.generateSignature(result, ConfigProperties.WXPAY_KEY,
-                                                                   SignType.HMACSHA256);
-                    if (!localSign.equals(result.get("sign"))) {
+                    if (!WXPayUtil.isSignatureValid(result, ConfigProperties.WXPAY_KEY, SignType.HMACSHA256)) {
                         log.error("NotPayOrderExpireQuartz验签失败");
                         continue;
                     }

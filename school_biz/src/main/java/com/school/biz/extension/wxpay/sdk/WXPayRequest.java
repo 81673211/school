@@ -1,5 +1,7 @@
 package com.school.biz.extension.wxpay.sdk;
 
+import static com.school.biz.extension.wxpay.sdk.WXPayConstants.USER_AGENT;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -24,24 +26,23 @@ import java.net.UnknownHostException;
 import java.security.KeyStore;
 import java.security.SecureRandom;
 
+
 public class WXPayRequest {
     private WXPayConfig config;
-
-    public WXPayRequest(WXPayConfig config) throws Exception {
+    public WXPayRequest(WXPayConfig config) throws Exception{
 
         this.config = config;
     }
 
     /**
      * 请求，只请求一次，不做重试
-     *
      * @param domain
      * @param urlSuffix
      * @param uuid
      * @param data
      * @param connectTimeoutMs
      * @param readTimeoutMs
-     * @param useCert          是否使用证书，针对退款、撤销等操作
+     * @param useCert 是否使用证书，针对退款、撤销等操作
      * @return
      * @throws Exception
      */
@@ -77,7 +78,8 @@ public class WXPayRequest {
                     null,
                     null
             );
-        } else {
+        }
+        else {
             connManager = new BasicHttpClientConnectionManager(
                     RegistryBuilder.<ConnectionSocketFactory>create()
                             .register("http", PlainConnectionSocketFactory.getSocketFactory())
@@ -101,7 +103,7 @@ public class WXPayRequest {
 
         StringEntity postEntity = new StringEntity(data, "UTF-8");
         httpPost.addHeader("Content-Type", "text/xml");
-        httpPost.addHeader("User-Agent", "wxpay sdk java v1.0 " + config.getMchID());  // TODO: 很重要，用来检测 sdk 的使用情况，要不要加上商户信息？
+        httpPost.addHeader("User-Agent", USER_AGENT + " " + config.getMchID());
         httpPost.setEntity(postEntity);
 
         HttpResponse httpResponse = httpClient.execute(httpPost);
@@ -119,12 +121,12 @@ public class WXPayRequest {
         boolean firstHasConnectTimeout = false;
         boolean firstHasReadTimeout = false;
         IWXPayDomain.DomainInfo domainInfo = config.getWXPayDomain().getDomain(config);
-        if (domainInfo == null) {
+        if(domainInfo == null){
             throw new Exception("WXPayConfig.getWXPayDomain().getDomain() is empty or null");
         }
         try {
             String result = requestOnce(domainInfo.domain, urlSuffix, uuid, data, connectTimeoutMs, readTimeoutMs, useCert);
-            elapsedTimeMillis = WXPayUtil.getCurrentTimestampMs() - startTimestampMs;
+            elapsedTimeMillis = WXPayUtil.getCurrentTimestampMs()-startTimestampMs;
             config.getWXPayDomain().report(domainInfo.domain, elapsedTimeMillis, null);
             WXPayReport.getInstance(config).report(
                     uuid,
@@ -137,10 +139,11 @@ public class WXPayRequest {
                     firstHasConnectTimeout,
                     firstHasReadTimeout);
             return result;
-        } catch (UnknownHostException ex) {  // dns 解析错误，或域名不存在
+        }
+        catch (UnknownHostException ex) {  // dns 解析错误，或域名不存在
             exception = ex;
             firstHasDnsErr = true;
-            elapsedTimeMillis = WXPayUtil.getCurrentTimestampMs() - startTimestampMs;
+            elapsedTimeMillis = WXPayUtil.getCurrentTimestampMs()-startTimestampMs;
             WXPayUtil.getLogger().warn("UnknownHostException for domainInfo {}", domainInfo);
             WXPayReport.getInstance(config).report(
                     uuid,
@@ -153,10 +156,11 @@ public class WXPayRequest {
                     firstHasConnectTimeout,
                     firstHasReadTimeout
             );
-        } catch (ConnectTimeoutException ex) {
+        }
+        catch (ConnectTimeoutException ex) {
             exception = ex;
             firstHasConnectTimeout = true;
-            elapsedTimeMillis = WXPayUtil.getCurrentTimestampMs() - startTimestampMs;
+            elapsedTimeMillis = WXPayUtil.getCurrentTimestampMs()-startTimestampMs;
             WXPayUtil.getLogger().warn("connect timeout happened for domainInfo {}", domainInfo);
             WXPayReport.getInstance(config).report(
                     uuid,
@@ -169,10 +173,11 @@ public class WXPayRequest {
                     firstHasConnectTimeout,
                     firstHasReadTimeout
             );
-        } catch (SocketTimeoutException ex) {
+        }
+        catch (SocketTimeoutException ex) {
             exception = ex;
             firstHasReadTimeout = true;
-            elapsedTimeMillis = WXPayUtil.getCurrentTimestampMs() - startTimestampMs;
+            elapsedTimeMillis = WXPayUtil.getCurrentTimestampMs()-startTimestampMs;
             WXPayUtil.getLogger().warn("timeout happened for domainInfo {}", domainInfo);
             WXPayReport.getInstance(config).report(
                     uuid,
@@ -184,9 +189,10 @@ public class WXPayRequest {
                     firstHasDnsErr,
                     firstHasConnectTimeout,
                     firstHasReadTimeout);
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             exception = ex;
-            elapsedTimeMillis = WXPayUtil.getCurrentTimestampMs() - startTimestampMs;
+            elapsedTimeMillis = WXPayUtil.getCurrentTimestampMs()-startTimestampMs;
             WXPayReport.getInstance(config).report(
                     uuid,
                     elapsedTimeMillis,
@@ -205,7 +211,6 @@ public class WXPayRequest {
 
     /**
      * 可重试的，非双向认证的请求
-     *
      * @param urlSuffix
      * @param uuid
      * @param data
@@ -213,12 +218,10 @@ public class WXPayRequest {
      */
     public String requestWithoutCert(String urlSuffix, String uuid, String data, boolean autoReport) throws Exception {
         return this.request(urlSuffix, uuid, data, config.getHttpConnectTimeoutMs(), config.getHttpReadTimeoutMs(), false, autoReport);
-        //return requestWithoutCert(urlSuffix, uuid, data, config.getHttpConnectTimeoutMs(), config.getHttpReadTimeoutMs(), autoReport);
     }
 
     /**
      * 可重试的，非双向认证的请求
-     *
      * @param urlSuffix
      * @param uuid
      * @param data
@@ -226,51 +229,12 @@ public class WXPayRequest {
      * @param readTimeoutMs
      * @return
      */
-    public String requestWithoutCert(String urlSuffix, String uuid, String data, int connectTimeoutMs, int readTimeoutMs, boolean autoReport) throws Exception {
+    public String requestWithoutCert(String urlSuffix, String uuid, String data, int connectTimeoutMs, int readTimeoutMs,  boolean autoReport) throws Exception {
         return this.request(urlSuffix, uuid, data, connectTimeoutMs, readTimeoutMs, false, autoReport);
-
-        /*
-        String result;
-        Exception exception;
-        boolean shouldRetry = false;
-
-        boolean useCert = false;
-        try {
-            result = requestOnce(domain, urlSuffix, uuid, data, connectTimeoutMs, readTimeoutMs, useCert);
-            return result;
-        }
-        catch (UnknownHostException ex) {  // dns 解析错误，或域名不存在
-            exception = ex;
-            WXPayUtil.getLogger().warn("UnknownHostException for domain {}, try to use {}", domain, this.primaryDomain);
-            shouldRetry = true;
-        }
-        catch (ConnectTimeoutException ex) {
-            exception = ex;
-            WXPayUtil.getLogger().warn("connect timeout happened for domain {}, try to use {}", domain, this.primaryDomain);
-            shouldRetry = true;
-        }
-        catch (SocketTimeoutException ex) {
-            exception = ex;
-            shouldRetry = false;
-        }
-        catch (Exception ex) {
-            exception = ex;
-            shouldRetry = false;
-        }
-
-        if (shouldRetry) {
-            result = requestOnce(this.primaryDomain, urlSuffix, uuid, data, connectTimeoutMs, readTimeoutMs, useCert);
-            return result;
-        }
-        else {
-            throw exception;
-        }
-        */
     }
 
     /**
      * 可重试的，双向认证的请求
-     *
      * @param urlSuffix
      * @param uuid
      * @param data
@@ -278,12 +242,10 @@ public class WXPayRequest {
      */
     public String requestWithCert(String urlSuffix, String uuid, String data, boolean autoReport) throws Exception {
         return this.request(urlSuffix, uuid, data, config.getHttpConnectTimeoutMs(), config.getHttpReadTimeoutMs(), true, autoReport);
-        //return requestWithCert(urlSuffix, uuid, data, config.getHttpConnectTimeoutMs(), config.getHttpReadTimeoutMs(), autoReport);
     }
 
     /**
      * 可重试的，双向认证的请求
-     *
      * @param urlSuffix
      * @param uuid
      * @param data
@@ -293,38 +255,5 @@ public class WXPayRequest {
      */
     public String requestWithCert(String urlSuffix, String uuid, String data, int connectTimeoutMs, int readTimeoutMs, boolean autoReport) throws Exception {
         return this.request(urlSuffix, uuid, data, connectTimeoutMs, readTimeoutMs, true, autoReport);
-
-        /*
-        String result;
-        Exception exception;
-        boolean shouldRetry = false;
-
-        boolean useCert = true;
-        try {
-            result = requestOnce(domain, urlSuffix, uuid, data, connectTimeoutMs, readTimeoutMs, useCert);
-            return result;
-        }
-        catch (ConnectTimeoutException ex) {
-            exception = ex;
-            WXPayUtil.getLogger().warn(String.format("connect timeout happened for domain {}, try to use {}", domain, this.primaryDomain));
-            shouldRetry = true;
-        }
-        catch (SocketTimeoutException ex) {
-            exception = ex;
-            shouldRetry = false;
-        }
-        catch (Exception ex) {
-            exception = ex;
-            shouldRetry = false;
-        }
-
-        if (shouldRetry && this.primaryDomain != null) {
-            result = requestOnce(this.primaryDomain, urlSuffix, uuid, data, connectTimeoutMs, readTimeoutMs, useCert, autoReport);
-            return result;
-        }
-        else {
-            throw exception;
-        }
-        */
     }
 }

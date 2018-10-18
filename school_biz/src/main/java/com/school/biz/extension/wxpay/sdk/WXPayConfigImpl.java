@@ -7,12 +7,12 @@ import java.io.InputStream;
 
 import com.school.biz.constant.ConfigProperties;
 
-public class WXPayConfigImpl extends WXPayConfig{
+public class WXPayConfigImpl extends WXPayConfig {
 
     private byte[] certData;
     private static WXPayConfigImpl INSTANCE;
 
-    private WXPayConfigImpl() throws Exception{
+    private WXPayConfigImpl() throws Exception {
         String certPath = ConfigProperties.WXPAY_CERT_PATH;
         File file = new File(certPath);
         InputStream certStream = new FileInputStream(file);
@@ -21,13 +21,9 @@ public class WXPayConfigImpl extends WXPayConfig{
         certStream.close();
     }
 
-    public static WXPayConfigImpl getInstance() throws Exception{
+    public static WXPayConfigImpl getInstance() throws Exception {
         if (INSTANCE == null) {
-            synchronized (WXPayConfigImpl.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new WXPayConfigImpl();
-                }
-            }
+            INSTANCE = new WXPayConfigImpl();
         }
         return INSTANCE;
     }
@@ -49,7 +45,6 @@ public class WXPayConfigImpl extends WXPayConfig{
         certBis = new ByteArrayInputStream(this.certData);
         return certBis;
     }
-
 
     public int getHttpConnectTimeoutMs() {
         return 2000;

@@ -1,5 +1,6 @@
 package com.school.biz.extension.wxpay.sdk;
 
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,14 +63,6 @@ public class WXPay {
         if (this.config.getCertStream() == null) {
             throw new Exception("cert stream in config is empty");
         }
-//        if (this.config.getPrimaryDomain() == null || this.config.getPrimaryDomain().trim().length() == 0) {
-//            throw new Exception("primary domain in config is empty");
-//        }
-//
-//        // todo 海外就填两个相同的？ 下面的逻辑待考虑
-//        if (this.config.getAlternateDomain() == null || this.config.getAlternateDomain().trim().length() == 0) {
-//            throw new Exception("alternate domain in config is empty");
-//        }
         if (this.config.getWXPayDomain() == null){
             throw new Exception("config.getWXPayDomain() is null");
         }
@@ -94,7 +87,7 @@ public class WXPay {
     public Map<String, String> fillRequestData(Map<String, String> reqData) throws Exception {
         reqData.put("appid", config.getAppID());
         reqData.put("mch_id", config.getMchID());
-        reqData.put("nonce_str", WXPayUtil.generateUUID());
+        reqData.put("nonce_str", WXPayUtil.generateNonceStr());
         if (SignType.MD5.equals(this.signType)) {
             reqData.put("sign_type", WXPayConstants.MD5);
         }

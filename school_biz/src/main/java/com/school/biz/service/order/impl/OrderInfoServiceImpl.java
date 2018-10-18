@@ -58,7 +58,8 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Transactional(rollbackFor = Exception.class)
 @Slf4j
-public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMapper> implements OrderInfoService {
+public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMapper>
+        implements OrderInfoService {
 
     private static final String SUPPLYMENT = "supplyment";
     @Autowired
@@ -166,15 +167,18 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
             ExpressSend expressSend = (ExpressSend) express;
             orderInfo.setExpressType(ExpressTypeEnum.SEND.getFlag());
             orderInfo.setAmount(calcCostService.calcSendTransportCost(expressSend).add(
-                    calcCostService.calcSendDistributionCost(expressSend.getExpressWay(), expressSend.getExpressWeight())));
+                    calcCostService.calcSendDistributionCost(expressSend.getExpressWay(),
+                                                             expressSend.getExpressWeight())));
             orderInfo.setTradeSummary("寄件快递费");
         } else if (express instanceof ExpressReceive) {
             ExpressReceive expressReceive = (ExpressReceive) express;
             orderInfo.setExpressType(ExpressTypeEnum.RECEIVE.getFlag());
             if (express.getExpressType().equals(ReceiveExpressTypeEnum.HELP_RECEIVE.getFlag())) {
-                orderInfo.setAmount(calcCostService.calcHelpReceiveDistributionCost(expressWay, expressReceive.getExpressWeight()));
+                orderInfo.setAmount(calcCostService.calcHelpReceiveDistributionCost(expressWay, expressReceive
+                        .getExpressWeight()));
             } else {
-                orderInfo.setAmount(calcCostService.calcReceiveDistributionCost(expressWay, expressReceive.getExpressWeight()));
+                orderInfo.setAmount(calcCostService.calcReceiveDistributionCost(expressWay, expressReceive
+                        .getExpressWeight()));
             }
             orderInfo.setTradeSummary("收件服务费");
         } else {
@@ -201,7 +205,9 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
         OrderInfo orderInfo = new OrderInfo();
         orderInfo.setExpressType(ExpressTypeEnum.SEND.getFlag());
 
-        List<SupplementInfo> supplementInfos = supplementService.selectNotPayByExpress(expressSend.getId(), ExpressTypeEnum.SEND.getFlag());
+        List<SupplementInfo> supplementInfos = supplementService.selectNotPayByExpress(expressSend.getId(),
+                                                                                       ExpressTypeEnum.SEND
+                                                                                               .getFlag());
         BigDecimal serviceAmt = BigDecimal.ZERO;
         Map<String, List<Long>> merchParam = new LinkedHashMap<>();
         List<Long> supplementIds = new ArrayList<>();
@@ -329,7 +335,8 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
     /**
      * 判断退款金额是否合法
      */
-    private boolean isRefundFeeIllegal(ExpressSend expressSend, List<OrderInfo> orderInfos, BigDecimal refundFee) {
+    private boolean isRefundFeeIllegal(ExpressSend expressSend, List<OrderInfo> orderInfos,
+                                       BigDecimal refundFee) {
         boolean flag = true;
 
         // 取出订单服务费
@@ -357,7 +364,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
 
         HashMap<String, String> data = new HashMap<String, String>();
         data.put("out_trade_no", orderInfo.getOrderNo());
-        data.put("nonce_str", WXPayUtil.generateUUID());
+        data.put("nonce_str", WXPayUtil.generateNonceStr());
         data.put("out_refund_no", refundOrderInfo.getRefundOrderNo());
         data.put("total_fee", AmountUtils.changeY2F(orderInfo.getAmount().toString()));
         data.put("refund_fee", AmountUtils.changeY2F(refundFee.toString()));
@@ -368,9 +375,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
             Map<String, String> result = wxpay.refund(data);
             log.info("result:" + JSON.toJSONString(result));
             if ("SUCCESS".equals(result.get("result_code"))) {
-                String localSign = WXPayUtil.generateSignature(result, ConfigProperties.WXPAY_KEY,
-                        SignType.HMACSHA256);
-                if (!localSign.equals(result.get("sign"))) {
+                if (!WXPayUtil.isSignatureValid(result, ConfigProperties.WXPAY_KEY, SignType.HMACSHA256)) {
                     log.error("微信退款验签失败");
                 }
                 // 修改订单累计退款金额
@@ -412,20 +417,27 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
      * @throws Exception
      */
     @Override
-    public void expressSendReOrder(HttpServletRequest request, Long expressSendId, BigDecimal reOrderAmt,BigDecimal reOrderServiceAmt) throws Exception {
+    public void expressSendReOrder(HttpServletRequest request, Long expressSendId, BigDecimal reOrderAmt,
+                                   BigDecimal reOrderServiceAmt) throws Exception {
         ExpressSend expressSend = expressSendMapper.selectByPrimaryKey(expressSendId);
         if (expressSend == null) {
             throw new Exception("订单号不存在");
         }
         // 如果快递补单费用不为空
-        if (reOrderAmt != null){
-            SupplementInfo supplementInfo = new SupplementInfo(reOrderAmt, ExpressTypeEnum.SEND.getFlag(), expressSendId, SupplementTypeEnum.EXPRESS_AMT.getCode(), new Date());
-        	supplementService.save(supplementInfo);
+        if (reOrderAmt != null) {
+            SupplementInfo supplementInfo = new SupplementInfo(reOrderAmt, ExpressTypeEnum.SEND.getFlag(),
+                                                               expressSendId,
+                                                               SupplementTypeEnum.EXPRESS_AMT.getCode(),
+                                                               new Date());
+            supplementService.save(supplementInfo);
         }
 
         // 如果服务费补单费用不为空
-        if (reOrderServiceAmt != null){
-            SupplementInfo supplementInfo = new SupplementInfo(reOrderServiceAmt,ExpressTypeEnum.SEND.getFlag(),expressSendId,SupplementTypeEnum.SERVICE_AMT.getCode(),new Date());
+        if (reOrderServiceAmt != null) {
+            SupplementInfo supplementInfo = new SupplementInfo(reOrderServiceAmt,
+                                                               ExpressTypeEnum.SEND.getFlag(), expressSendId,
+                                                               SupplementTypeEnum.SERVICE_AMT.getCode(),
+                                                               new Date());
             supplementService.save(supplementInfo);
         }
 
@@ -433,20 +445,24 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
         expressSend.setExpressStatus(SendExpressStatusEnum.SUPPLEMENT.getFlag());
         expressSendService.saveOrUpdate(expressSend, SessionUtils.getSessionUser(request));
     }
-    
+
     /**
      * 收件补单
      *
      * @throws Exception
      */
     @Override
-    public void expressReceiveReOrder(HttpServletRequest request, Long expressReceiveId, BigDecimal reOrderServiceAmt) throws Exception {
+    public void expressReceiveReOrder(HttpServletRequest request, Long expressReceiveId,
+                                      BigDecimal reOrderServiceAmt) throws Exception {
         ExpressReceive expressReceive = expressReceiveMapper.selectByPrimaryKey(expressReceiveId);
         if (expressReceive == null) {
-    		throw new Exception("订单号不存在");
+            throw new Exception("订单号不存在");
         }
         // 保存supplementInfo
-        SupplementInfo supplementInfo = new SupplementInfo(reOrderServiceAmt, ExpressTypeEnum.RECEIVE.getFlag(), expressReceiveId, SupplementTypeEnum.SERVICE_AMT.getCode(), new Date());
+        SupplementInfo supplementInfo = new SupplementInfo(reOrderServiceAmt, ExpressTypeEnum.RECEIVE.getFlag(),
+                                                           expressReceiveId,
+                                                           SupplementTypeEnum.SERVICE_AMT.getCode(),
+                                                           new Date());
         supplementService.save(supplementInfo);
         // 更改快递状态为等待补单支付
         expressReceive.setExpressStatus(ReceiveExpressStatusEnum.SUPPLEMENT.getFlag());
@@ -477,7 +493,8 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
         Map<String, Object> map2 = new HashMap<String, Object>();
         map2.put("expressId", expressSend.getId());
         map2.put("expressType", ExpressTypeEnum.SEND.getFlag());
-        List<RefundOrderInfo> refundOrderInfos = refundOrderInfoMapper.findSuccessRefundOrdersByExpressIdAndExpressType(map2);
+        List<RefundOrderInfo> refundOrderInfos =
+                refundOrderInfoMapper.findSuccessRefundOrdersByExpressIdAndExpressType(map2);
         BigDecimal refundTotalAmt = new BigDecimal("0");
         for (RefundOrderInfo refundOrderInfo : refundOrderInfos) {
             refundTotalAmt = refundTotalAmt.add(refundOrderInfo.getAmount());
@@ -532,7 +549,9 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
         OrderInfo orderInfo = new OrderInfo();
         orderInfo.setExpressType(ExpressTypeEnum.RECEIVE.getFlag());
         orderInfo.setTradeSummary("收件服务费补单");
-        List<SupplementInfo> supplementInfos = supplementService.selectNotPayByExpress(expressReceive.getId(), ExpressTypeEnum.RECEIVE.getFlag());
+        List<SupplementInfo> supplementInfos = supplementService.selectNotPayByExpress(expressReceive.getId(),
+                                                                                       ExpressTypeEnum.RECEIVE
+                                                                                               .getFlag());
         BigDecimal serviceAmt = BigDecimal.ZERO;
         Map<String, List<Long>> merchParam = new LinkedHashMap<>();
         List<Long> supplementIds = new ArrayList<>();

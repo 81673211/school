@@ -50,6 +50,22 @@ public class SmsServiceImpl implements SmsService {
         send(phone, "SMS_146801210", codeJson.toJSONString());
     }
 
+    @Override
+    public void sendActivaty1010(String phone) {
+        JSONObject codeJson = new JSONObject();
+        codeJson.put("count", " ");
+        codeJson.put("secret", "一二三速递三二一");
+        send(phone, "SMS_147417290", codeJson.toJSONString());
+    }
+
+    @Override
+    public void sendActivaty1011(String phone) {
+        JSONObject codeJson = new JSONObject();
+        codeJson.put("count", "第二次");
+        codeJson.put("secret", "一二三速递");
+        send(phone, "SMS_147417290", codeJson.toJSONString());
+    }
+
     private void send(String phone, String templateCode, String content) {
         //设置超时时间-可自行调整
         System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
