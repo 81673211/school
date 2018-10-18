@@ -95,6 +95,7 @@ public class ExpressController extends BaseEasyWebController {
         expressSend.setCustomerId(customer.getId());
         expressSend.setSenderPhone(customer.getPhone());
         expressSend.setSenderName(customer.getName());
+        expressSend.setSenderAddr(customer.getAddr());
         expressSend.setExpressStatus(SendExpressStatusEnum.INEFFECTIVE.getFlag());
         String orderNo = expressSendService.createSendExpress(expressSend);
         return response.writeSuccess("创建寄件快件成功", orderNo);
