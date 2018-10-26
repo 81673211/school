@@ -20,6 +20,7 @@ import com.school.biz.domain.entity.customer.Customer;
 import com.school.biz.domain.entity.express.ExpressCompany;
 import com.school.biz.domain.entity.express.ExpressReceive;
 import com.school.biz.enumeration.ExpressLogActionEnum;
+import com.school.biz.enumeration.ExpressTypeEnum;
 import com.school.biz.enumeration.HelpDistributionTypeEnum;
 import com.school.biz.enumeration.ReceiveExpressDistributionTypeEnum;
 import com.school.biz.enumeration.ReceiveExpressStatusEnum;
@@ -78,9 +79,11 @@ public class ExpressReceiveController extends BaseEasyWebController {
             mav.addObject(PAGE_PARAM_TOTALCOUNT, pageInfo.getTotalRecord());
 
             mav.addObject(ConstantUrl.DETAIL_URL, ConstantUrl.EXPRESS_RECEIVE_DETAIL_URL);// 详情url
+            mav.addObject(ConstantUrl.REFUND_URL, ConstantUrl.EXPRESS_RECEIVE_REFUND_URL);// 退款url
+            mav.addObject(ConstantUrl.DETAIL_URL, ConstantUrl.EXPRESS_RECEIVE_DETAIL_URL);// 详情url
             mav.addObject(ConstantUrl.EDIT_URL, ConstantUrl.EXPRESS_RECEIVE_EDIT_URL);// 编辑url
             mav.addObject(ConstantUrl.DEL_URL, ConstantUrl.EXPRESS_RECEIVE_DEL_URL);// 删除url
-            mav.addObject("reOrderUrl", ConstantUrl.EXPRESS_RECEIVE_REORDER_URL);// 补单url
+            mav.addObject(ConstantUrl.RE_ORDER_URL, ConstantUrl.EXPRESS_RECEIVE_REORDER_URL);// 补单url
         } catch (Exception e) {
             log.error("收件查询出现错误：" + e.getMessage());
             throw webExp(e);
@@ -212,4 +215,42 @@ public class ExpressReceiveController extends BaseEasyWebController {
             return AjaxResult.fail(e.getMessage());
         }
     }
+
+
+
+    /**
+     * 退款页面
+     */
+    @RequestMapping(value = "/refund.do", method = RequestMethod.GET)
+    public ModelAndView toRefund(Long id) {
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("express/expressReceiveRefund");
+        mav.addObject("expressReceive", expressReceiveService.get(id));
+        return mav;
+    }
+
+    /**
+     * 退款申请
+     * @throws Exception
+     */
+    @ResponseBody
+    @RequestMapping(value = "/refund.do", method = RequestMethod.POST)
+    public Object refund(HttpServletRequest request, Long expressReceiveId, BigDecimal refundAmt) {
+        try {
+            if (expressReceiveId == null) {
+                throw new Exception("快递ID不能为空");
+            }
+            if (refundAmt == null || refundAmt.compareTo(new BigDecimal(0)) <= 0) {
+                throw new Exception("退款金额不正确");
+            }
+
+            orderInfoService.refund(request, expressReceiveId, ExpressTypeEnum.RECEIVE.getFlag(), refundAmt);
+
+            return AjaxResult.success("退款申请成功");
+        } catch (Exception e) {
+            log.error("退款申请失败:" + e.getMessage());
+            return AjaxResult.fail(e.getMessage());
+        }
+    }
+
 }

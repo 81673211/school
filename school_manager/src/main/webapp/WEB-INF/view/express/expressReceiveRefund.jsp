@@ -15,16 +15,16 @@
         }
     });
     </script>
-    <title>订单退款</title>
+    <title>寄件订单退款</title>
 </head>
 <body :controller="refundOrder">
     <div class="mt-30">
-        <form id="orderRefundForm" action="${ctx}/express/expressSend/refund.do" method="post">
+        <form id="orderRefundForm" action="${ctx}/express/expressReceive/refund.do" method="post">
              <div class="row cl mb-15">
                 <label class="form-label col-xs-3 col-sm-3 text-r">退款对象：</label>
                 <div class="formControls col-xs-9 col-sm-9">
-                	<input type="hidden" id="expressSendId" name="expressSendId" value="${expressSend.id}">
-                    <p>${expressSend.senderName}&emsp;(手机号：${expressSend.senderPhone})</p>
+                	<input type="hidden" id="expressReceiveId" name="expressReceiveId" value="${expressReceive.id}">
+                    <p>${expressReceive.receiverName}&emsp;(手机号：${expressReceive.receiverPhone})</p>
                 </div>
             </div>
              <div class="row cl mb-15">

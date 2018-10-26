@@ -26,7 +26,8 @@
               detailUrl:"${detailUrl}",//详情url
               editUrl:"${editUrl}",//编辑url
               delUrl:"${delUrl}",//删除url
-              reOrderUrl:"${reOrderUrl}"//补单url
+              reOrderUrl:"${reOrderUrl}",//补单url
+              refundUrl:"${refundUrl}"//退款url
           }
       });
     </script>
@@ -103,6 +104,9 @@
                         <td class="but_xq">
                             <btn:hasUrlPerm link="${reOrderUrl}">
                                 <a :if="el.expressStatus != 5" class="btn btn-primary-outline size-S radius" :click="@methods.reOrder(el.id,@methods.reOrderUrl)">补单</a>
+                            </btn:hasUrlPerm>
+                            <btn:hasUrlPerm link="${refundUrl}">
+                                <a :if="el.expressStatus != 5" class="ml-5 btn btn-primary-outline size-S radius" :click="@methods.refund(el.id,@methods.refundUrl)">退款</a>
                             </btn:hasUrlPerm>
                         	<btn:hasUrlPerm link="${detailUrl}">
 	                           	<a class="ml-5 btn btn-primary-outline size-S radius" :click="@methods.detail(el.id,@methods.detailUrl)">详情</a>

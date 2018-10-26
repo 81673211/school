@@ -41,8 +41,7 @@ public interface OrderInfoService extends BaseService<OrderInfo, OrderInfoMapper
 
     void saveOrUpdate(OrderInfo orderInfo);
 
-    // 退款
-    void refund(HttpServletRequest request, Long expressSendId, BigDecimal refundFee) throws Exception;
+    void refund(HttpServletRequest request, Long expressId, int expressType, BigDecimal refundFee);
 
     // 寄件补单
     void expressSendReOrder(HttpServletRequest request, Long expressSendId, BigDecimal reOrderAmt,BigDecimal reOrderServiceAmt) throws Exception;

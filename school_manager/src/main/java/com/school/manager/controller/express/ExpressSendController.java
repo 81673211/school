@@ -19,6 +19,7 @@ import com.school.biz.constant.ConstantUrl;
 import com.school.biz.domain.entity.express.ExpressCompany;
 import com.school.biz.domain.entity.express.ExpressSend;
 import com.school.biz.enumeration.ExpressLogActionEnum;
+import com.school.biz.enumeration.ExpressTypeEnum;
 import com.school.biz.enumeration.SendExpressStatusEnum;
 import com.school.biz.exception.FuBusinessException;
 import com.school.biz.service.express.ExpressCompanyService;
@@ -72,8 +73,8 @@ public class ExpressSendController extends BaseEasyWebController {
             mav.addObject(ConstantUrl.DETAIL_URL, ConstantUrl.EXPRESS_SEND_DETAIL_URL);// 详情url
             mav.addObject(ConstantUrl.EDIT_URL, ConstantUrl.EXPRESS_SEND_EDIT_URL);// 编辑url
             mav.addObject(ConstantUrl.DEL_URL, ConstantUrl.EXPRESS_SEND_DEL_URL);// 删除url
-            mav.addObject("refundUrl", ConstantUrl.EXPRESS_SEND_REFUND_URL);// 跳转退款url
-            mav.addObject("reOrderUrl", ConstantUrl.EXPRESS_SEND_REORDER_URL);// 跳转补单url
+            mav.addObject(ConstantUrl.REFUND_URL, ConstantUrl.EXPRESS_SEND_REFUND_URL);// 跳转退款url
+            mav.addObject(ConstantUrl.RE_ORDER_URL, ConstantUrl.EXPRESS_SEND_REORDER_URL);// 跳转补单url
         } catch (Exception e) {
             log.error("寄件查询出现错误：" + e.getMessage());
             throw webExp(e);
@@ -164,28 +165,26 @@ public class ExpressSendController extends BaseEasyWebController {
         ModelAndView mav = new ModelAndView();
         ExpressSend expressSend = expressSendService.get(id);
 
-        mav.setViewName("express/refund");
+        mav.setViewName("express/expressSendRefund");
         mav.addObject("expressSend", expressSend);
         return mav;
     }
 
     /**
      * 退款申请
-     * @throws Exception
      */
     @ResponseBody
     @RequestMapping(value = "/refund.do", method = RequestMethod.POST)
-    public Object refund(HttpServletRequest request, Long expressSendId, BigDecimal refundAmt,
-                         BigDecimal currentOrderRefundAmt) throws Exception {
+    public Object refund(HttpServletRequest request, Long expressSendId, BigDecimal refundAmt) {
         try {
             if (expressSendId == null) {
                 throw new Exception("快递ID不能为空");
             }
-            if (refundAmt == null || !(refundAmt.compareTo(new BigDecimal(0)) > 0)) {
+            if (refundAmt == null || refundAmt.compareTo(new BigDecimal(0)) <= 0) {
                 throw new Exception("退款金额不正确");
             }
 
-            orderInfoService.refund(request, expressSendId, refundAmt);
+            orderInfoService.refund(request, expressSendId, ExpressTypeEnum.SEND.getFlag(), refundAmt);
 
             return AjaxResult.success("退款申请成功");
         } catch (Exception e) {

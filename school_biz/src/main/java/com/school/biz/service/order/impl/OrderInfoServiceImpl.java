@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import com.alibaba.fastjson.JSON;
@@ -29,7 +30,6 @@ import com.school.biz.domain.entity.express.ExpressSend;
 import com.school.biz.domain.entity.order.OrderInfo;
 import com.school.biz.domain.entity.order.RefundOrderInfo;
 import com.school.biz.domain.entity.supplement.SupplementInfo;
-import com.school.biz.enumeration.ReceiveExpressDistributionTypeEnum;
 import com.school.biz.enumeration.ExpressTypeEnum;
 import com.school.biz.enumeration.OrderStatusEnum;
 import com.school.biz.enumeration.ReceiveExpressStatusEnum;
@@ -295,25 +295,28 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
     }
 
     @Override
-    public void refund(HttpServletRequest request, Long expressSendId, BigDecimal refundFee) throws Exception {
+    public void refund(HttpServletRequest request, Long expressId, int expressType, BigDecimal refundFee) {
         Long operId = SessionUtils.getSessionUser(request).getId();
 
-        ExpressSend expressSend = expressSendMapper.selectByPrimaryKey(expressSendId);
-
         // 根据快递号查询其所有支付成功订单（按支付金额降序）
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("expressId", expressSend.getId());
-        map.put("expressType", ExpressTypeEnum.SEND.getFlag());
+        Map<String, Object> map = new HashMap<>();
+        map.put("expressId", expressId);
+        map.put("expressType", expressType);
         List<OrderInfo> orderInfos = orderInfoMapper.findSuccessOrdersByExpressIdAndExpressType(map);
-
-        if (orderInfos == null || orderInfos.size() < 1) {
-            throw new Exception("该快递没有成功交易记录");
+        if (CollectionUtils.isEmpty(orderInfos)) {
+            throw new RuntimeException("该快递没有成功交易记录");
         }
 
+        Express express;
+        if (expressType == ExpressTypeEnum.SEND.getFlag()) {
+            express = expressSendMapper.selectByPrimaryKey(expressId);
+        } else {
+            express = expressReceiveMapper.selectByPrimaryKey(expressId);
+        }
         // 判断退款费用是否合法
-        boolean isRefundFeeIllegal = this.isRefundFeeIllegal(expressSend, orderInfos, refundFee);
+        boolean isRefundFeeIllegal = this.isRefundFeeIllegal(express, orderInfos, refundFee);
         if (!isRefundFeeIllegal) {
-            throw new Exception("退款金额不能大于（快递金额-服务费）");
+            throw new RuntimeException("退款金额不能大于（快递金额-服务费）");
         }
 
         /**
@@ -322,42 +325,41 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
          *  如果退款金额比该轮次订单金额小，则退退款金额，且跳出循环。
          */
         for (OrderInfo orderInfo : orderInfos) {
-            if (refundFee.compareTo(orderInfo.getAmount()) == 1) {
+            if (refundFee.compareTo(orderInfo.getAmount()) > 0) {
                 this.refundOrderInfo(orderInfo, orderInfo.getAmount(), operId);
             } else {
                 this.refundOrderInfo(orderInfo, refundFee, operId);
                 break;
             }
         }
-
     }
 
     /**
      * 判断退款金额是否合法
      */
-    private boolean isRefundFeeIllegal(ExpressSend expressSend, List<OrderInfo> orderInfos,
+    private boolean isRefundFeeIllegal(Express express, List<OrderInfo> orderInfos,
                                        BigDecimal refundFee) {
         boolean flag = true;
 
-        // 取出订单服务费
-        BigDecimal serviceAmt = expressSend.getServiceAmt();
-
-        // 最大可退金额=每笔可退金额之和-服务费
+        // 最大可退金额=每笔可退金额之和,若是寄件，还须除掉服务费
         BigDecimal refundCurrMaxAmt = new BigDecimal("0");
         // 取出每笔成功订单（订单金额-已退款金额），即每笔订单可退金额
         for (OrderInfo orderInfo : orderInfos) {
             refundCurrMaxAmt = refundCurrMaxAmt.add(orderInfo.getAmount().subtract(orderInfo.getRefundAmt()));
         }
-        BigDecimal finalRefundAmt = refundCurrMaxAmt.subtract(serviceAmt);
-
-        if (refundFee.compareTo(finalRefundAmt) == 1) {
+        BigDecimal finalRefundAmt = refundCurrMaxAmt;
+        if (express instanceof ExpressSend) {
+            // 取出订单服务费
+            BigDecimal serviceAmt = express.getServiceAmt();
+            finalRefundAmt = refundCurrMaxAmt.subtract(serviceAmt);
+        }
+        if (refundFee.compareTo(finalRefundAmt) > 0) {
             flag = false;
         }
-
         return flag;
     }
 
-    private void refundOrderInfo(OrderInfo orderInfo, BigDecimal refundFee, Long operId) throws Exception {
+    private void refundOrderInfo(OrderInfo orderInfo, BigDecimal refundFee, Long operId) {
         // 插入退款订单
         RefundOrderInfo refundOrderInfo = this.createRefundOrder(orderInfo, refundFee);
         refundOrderInfo.setOperId(operId);
@@ -383,11 +385,11 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
                 orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
             } else {
                 refundOrderInfoService.update(refundOrderInfo);
-                throw new Exception("微信退款失败:" + result.get("err_code_des"));
+                throw new RuntimeException("微信退款失败:" + result.get("err_code_des"));
             }
         } catch (Exception e) {
             log.error("微信退款失败：" + e.getMessage());
-            throw new Exception("微信退款失败");
+            throw new RuntimeException("微信退款失败");
         }
     }
 
