@@ -1,6 +1,7 @@
 package com.school.manager.controller.express;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -75,6 +76,13 @@ public class ExpressReceiveController extends BaseEasyWebController {
             mav.addObject("expressTypeMap", JSON.toJSON(ReceiveExpressTypeEnum.getAllTypeEnum()));
             mav.addObject("helpDistributionTypeMap", JSON.toJSON(HelpDistributionTypeEnum.getAllTypeEnum()));
             mav.addObject("expressWayMap", JSON.toJSON(ReceiveExpressDistributionTypeEnum.getAllTypeEnum()));
+
+            List<ExpressCompany> companies = expressCompanyService.findAllCooperate();
+            Map<String, Long> companyMap = new HashMap<>();
+            for (ExpressCompany company : companies) {
+                companyMap.put(company.getName(), company.getId());
+            }
+            mav.addObject("companyMap", JSON.toJSON(companyMap));
             mav.addObject(PAGE_PARAM_PAGECOUNT, pageInfo.getTotalPage());
             mav.addObject(PAGE_PARAM_TOTALCOUNT, pageInfo.getTotalRecord());
 

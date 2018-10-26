@@ -14,7 +14,9 @@
           expressTypeMap:${expressTypeMap},
           helpDistributionTypeMap:${helpDistributionTypeMap},
           expressWayMap:${expressWayMap},
+          companyMap:${companyMap},
           inputStatus:"${searchParams.status}",
+          inputCompany:"${searchParams.companyId}",
           inputText:"${searchParams.keyword}",
           methods:{
               query:'func',//搜索事件
@@ -45,7 +47,16 @@
                  	<option value="">全部</option>
                     <option :for="(k,v) in @expressReceiveStatusMap" :attr="{value:k}">{{v}}</option> 
                  </select>
-             </span>
+                </span>
+            </div>
+            <div class="revi-staus f-l">
+                <span class="f-l lh-30">快递公司：</span>
+                <span class="select-box radius f-l" style="width: 120px;">
+                 <select class="select" size="1" name="companyId" :duplex="@inputCompany">
+                 	<option value="">全部</option>
+                    <option :for="(k,v) in @companyMap" :attr="{value:v}">{{k}}</option>
+                 </select>
+                </span>
             </div>
             <div class="tran-serch f-l ml-50">
                 <input type="text" name="keywordSearch" id="" placeholder="快递单号/收寄人姓名/电话" style="width:200px" class="input-text" :duplex="@inputText">
@@ -126,12 +137,10 @@
 		<div class="pag-box withdarwal-pag" id="page">
 			<form method="post" id="searchForm"
 				action="${ctx}/express/expressReceive/list.do">
-				<input name="search_status" id="testForm_state"
-					type="hidden"  :attr="{value:@inputStatus}" />
-				<input name="search_type" id="testForm_type" type="hidden"
-					:attr="{value:@inputType}" />
-				<input name="search_keyword" id="testForm_text" type="hidden"
-					:attr="{value:@inputText}" />
+				<input name="search_status" id="testForm_state" type="hidden"  :attr="{value:@inputStatus}" />
+                <input name="search_companyId" id="testForm_companyId" type="hidden" :attr="{value:@inputCompany}" />
+				<input name="search_type" id="testForm_type" type="hidden" :attr="{value:@inputType}" />
+				<input name="search_keyword" id="testForm_text" type="hidden" :attr="{value:@inputText}" />
 			</form>
 			<page:createPager pageSize="${pageSize}" totalPage="${pageCount}"
 					totalCount="${totalCount}" curPage="${pageNo}" formId="searchForm" />
