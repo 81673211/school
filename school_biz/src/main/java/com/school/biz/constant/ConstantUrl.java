@@ -53,14 +53,10 @@ public class ConstantUrl {
     public static final String EXPRESS_SEND_REFUND_URL = "/express/expressSend/refund.do";
 
     /**
-     * 柜子取件
+     * 批量导入收件
      */
-    // 柜子取件详情
-    public static final String EXPRESS_BOX_INFO_DETAIL_URL = "/expressBoxInfo/detail.do";
-    // 柜子取件编辑
-    public static final String EXPRESS_BOX_INFO_EDIT_URL = "/expressBoxInfo/edit.do";
-    // 柜子取件删除
-    public static final String EXPRESS_BOX_INFO_DEL_URL = "/expressBoxInfo/del.do";
+    // 批量导入收件
+    public static final String EXPRESS_BOX_INFO_EDIT_URL = "/express/expressReceive/batchCreate.do";
 
     /** 快递公司管理 */
     /**

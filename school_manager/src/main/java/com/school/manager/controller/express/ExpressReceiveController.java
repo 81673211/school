@@ -1,6 +1,8 @@
 package com.school.manager.controller.express;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,11 +10,17 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
@@ -27,8 +35,10 @@ import com.school.biz.enumeration.ReceiveExpressDistributionTypeEnum;
 import com.school.biz.enumeration.ReceiveExpressStatusEnum;
 import com.school.biz.enumeration.ReceiveExpressTypeEnum;
 import com.school.biz.exception.FuBusinessException;
+import com.school.biz.service.MailService;
 import com.school.biz.service.customer.CustomerService;
 import com.school.biz.service.express.ExpressCompanyService;
+import com.school.biz.service.express.ExpressReceiveBatchService;
 import com.school.biz.service.express.ExpressReceiveService;
 import com.school.biz.service.log.ExpressLogService;
 import com.school.biz.service.order.OrderInfoService;
@@ -46,18 +56,18 @@ public class ExpressReceiveController extends BaseEasyWebController {
 
     @Autowired
     private ExpressReceiveService expressReceiveService;
-
+    @Autowired
+    private ExpressReceiveBatchService expressReceiveBatchService;
     @Autowired
     private ExpressCompanyService expressCompanyService;
-
     @Autowired
     private CustomerService customerService;
-
     @Autowired
     private ExpressLogService expressLogService;
-    
     @Autowired
     private OrderInfoService orderInfoService;
+    @Autowired
+    private MailService mailService;
 
     {
         listView = "express/expressReceive";
@@ -170,7 +180,6 @@ public class ExpressReceiveController extends BaseEasyWebController {
         return view;
     }
 
-
     /**
      * 删除
      */
@@ -178,7 +187,8 @@ public class ExpressReceiveController extends BaseEasyWebController {
     @RequestMapping("/del.do")
     public AjaxResult del(Long id, HttpServletRequest request) {
         try {
-            expressLogService.log(expressReceiveService.getReceiveExpress(id), ExpressLogActionEnum.RECEIVE_EXPRESS_DEL,
+            expressLogService.log(expressReceiveService.getReceiveExpress(id),
+                                  ExpressLogActionEnum.RECEIVE_EXPRESS_DEL,
                                   SessionUtils.getSessionUser(request));
             expressReceiveService.deleteById(id);
             return AjaxResult.success("删除成功");
@@ -187,7 +197,7 @@ public class ExpressReceiveController extends BaseEasyWebController {
             return AjaxResult.fail("删除失败");
         }
     }
-    
+
     /**
      * 补单页面
      */
@@ -224,8 +234,6 @@ public class ExpressReceiveController extends BaseEasyWebController {
         }
     }
 
-
-
     /**
      * 退款页面
      */
@@ -261,4 +269,73 @@ public class ExpressReceiveController extends BaseEasyWebController {
         }
     }
 
+    /**
+     * 批量导入收件页面
+     */
+    @RequestMapping(value = "/goBatchCreate.do", method = RequestMethod.GET)
+    public ModelAndView goBatchCreate() {
+        return new ModelAndView("express/expressReceiveBatchCreate");
+    }
+
+    /**
+     * 批量导入收件页面
+     */
+    @RequestMapping(value = "/batchCreate.do")
+    public ModelAndView batchCreate(MultipartFile file, String email) throws IOException {
+        List<ExpressReceive> expressReceives = readFile(file);
+        List<String> result = expressReceiveBatchService.batchCreateReceiveExpress(expressReceives);
+        if (!StringUtils.isBlank(email)) {
+            log.info(JSON.toJSONString(result));
+            mailService.sendMail(email, "批量导入结果", JSON.toJSONString(result));
+        }
+        return new ModelAndView("express/expressReceiveBatchCreate");
+    }
+
+    private List<ExpressReceive> readFile(MultipartFile file) throws IOException {
+        List<ExpressReceive> expressReceives = new ArrayList<>();
+        Workbook book = getExcelWorkbook(file);
+        Sheet sheet = getSheetByNum(book);
+        int lastRowNum = sheet.getLastRowNum();
+        ExpressReceive expressReceive;
+        for (int i = 1; i <= lastRowNum; i++) {
+            Row row = sheet.getRow(i);
+            if (row != null) {
+                expressReceive = new ExpressReceive();
+                Cell cell;
+                for (int j = 0; j < 3; j++) {
+                    cell = row.getCell(j);
+                    if (cell != null) {
+                        String cellValue = cell.getStringCellValue();
+                        switch (j) {
+                            case 0:
+                                expressReceive.setCompanyCode(cellValue);
+                                break;
+                            case 1:
+                                expressReceive.setCode(cellValue);
+                                break;
+                            case 2:
+                                expressReceive.setReceiverPhone(cellValue);
+                                break;
+                                default:break;
+                        }
+                    }
+                }
+                expressReceives.add(expressReceive);
+            }
+        }
+        return expressReceives;
+    }
+
+    private Sheet getSheetByNum(Workbook book){
+        Sheet sheet;
+        try {
+            sheet = book.getSheetAt(0);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return sheet;
+    }
+    private Workbook getExcelWorkbook(MultipartFile file) throws IOException {
+        return  new XSSFWorkbook(file.getInputStream());
+    }
 }

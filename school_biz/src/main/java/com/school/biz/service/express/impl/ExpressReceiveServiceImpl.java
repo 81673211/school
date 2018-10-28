@@ -225,28 +225,28 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
     /**
      * 封装快件对应的物流公司
      *
-     * @param expressSend
+     * @param express
      */
-    private void boxExpressCompany(Express expressSend) throws ExpressException {
+    private void boxExpressCompany(Express express) throws ExpressException {
         Map<String, Object> param = new HashMap<>();
-        if (expressSend.getCompanyId() != null && expressSend.getCompanyId() != 0) {
-            param.put("companyId", expressSend.getCompanyId());
-        } else if (expressSend.getCompanyCode() != null) {
-            param.put("companyCode", expressSend.getCompanyCode());
-        } else if (expressSend.getCompanyName() != null) {
-            param.put("companyName", expressSend.getCompanyName());
+        if (express.getCompanyId() != null && express.getCompanyId() != 0) {
+            param.put("companyId", express.getCompanyId());
+        } else if (express.getCompanyCode() != null) {
+            param.put("companyCode", express.getCompanyCode());
+        } else if (express.getCompanyName() != null) {
+            param.put("companyName", express.getCompanyName());
         }
         List<ExpressCompany> list = expressCompanyMapper.selectByParams(param);
         if (list.isEmpty()) {
-            String errorMsg = "未找到对应的快递公司，快递公司编号:" + expressSend.getCompanyCode() + "，快递公司名称:" + expressSend
+            String errorMsg = "未找到对应的快递公司，快递公司编号:" + express.getCompanyCode() + "，快递公司名称:" + express
                     .getCompanyName();
             log.error(errorMsg);
             throw new ExpressException(errorMsg);
         }
         ExpressCompany expressCompany = list.get(0);
-        expressSend.setCompanyId(expressCompany.getId());
-        expressSend.setCompanyCode(expressCompany.getCode());
-        expressSend.setCompanyName(expressCompany.getName());
+        express.setCompanyId(expressCompany.getId());
+        express.setCompanyCode(expressCompany.getCode());
+        express.setCompanyName(expressCompany.getName());
     }
 
     @Override

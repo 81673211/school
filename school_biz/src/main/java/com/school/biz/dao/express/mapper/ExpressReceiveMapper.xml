@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.school.biz.dao.express.ExpressReceiveMapper">
-    <resultMap id="BaseResultMap" type="com.school.biz.domain.entity.express.ExpressReceive">
-        <id column="id" property="id" jdbcType="BIGINT"/>
-        <result column="code" property="code" jdbcType="VARCHAR"/>
-        <result column="sender_phone" property="senderPhone" jdbcType="VARCHAR"/>
-        <result column="sender_name" property="senderName" jdbcType="VARCHAR"/>
-        <result column="sender_addr" property="senderAddr" jdbcType="VARCHAR"/>
-        <result column="receiver_phone" property="receiverPhone" jdbcType="VARCHAR"/>
-        <result column="receiver_name" property="receiverName" jdbcType="VARCHAR"/>
-        <result column="receiver_addr" property="receiverAddr" jdbcType="VARCHAR"/>
-        <result column="sender_province_id" property="senderProvinceId" jdbcType="BIGINT"/>
-        <result column="sender_city_id" property="senderCityId" jdbcType="BIGINT"/>
-        <result column="sender_district_id" property="senderDistrictId" jdbcType="BIGINT"/>
-        <result column="company_id" property="companyId" jdbcType="BIGINT"/>
-        <result column="company_code" property="companyCode" jdbcType="VARCHAR"/>
-        <result column="company_name" property="companyName" jdbcType="VARCHAR"/>
-        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
-        <result column="is_deleted" property="isDeleted" jdbcType="BIT"/>
-        <result column="express_status" property="expressStatus" jdbcType="INTEGER"/>
-        <result column="express_way" property="expressWay" jdbcType="INTEGER"/>
-        <result column="into_box_time" property="intoBoxTime" jdbcType="TIMESTAMP"/>
-        <result column="customer_id" property="customerId" jdbcType="BIGINT"/>
-        <result column="service_amt" property="serviceAmt" jdbcType="DECIMAL"/>
-        <result column="express_type" property="expressType" jdbcType="INTEGER"/>
-        <result column="help_receive_code" property="helpReceiveCode" jdbcType="VARCHAR"/>
-        <result column="help_receive_addr" property="helpReceiveAddr" jdbcType="VARCHAR"/>
-        <result column="express_weight" property="expressWeight" jdbcType="DECIMAL"/>
-        <result column="help_distribution_type" property="helpDistributionType" jdbcType="VARCHAR"/>
-        <result column="remark" property="remark" jdbcType="VARCHAR"/>
-        <result column="re_order_service_amt" property="reOrderServiceAmt" jdbcType="DECIMAL"/>
-    </resultMap>
-    <sql id="Base_Column_List">
+  <resultMap id="BaseResultMap" type="com.school.biz.domain.entity.express.ExpressReceive">
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="sender_phone" property="senderPhone" jdbcType="VARCHAR" />
+    <result column="sender_name" property="senderName" jdbcType="VARCHAR" />
+    <result column="sender_addr" property="senderAddr" jdbcType="VARCHAR" />
+    <result column="receiver_phone" property="receiverPhone" jdbcType="VARCHAR" />
+    <result column="receiver_name" property="receiverName" jdbcType="VARCHAR" />
+    <result column="receiver_addr" property="receiverAddr" jdbcType="VARCHAR" />
+    <result column="sender_province_id" property="senderProvinceId" jdbcType="BIGINT" />
+    <result column="sender_city_id" property="senderCityId" jdbcType="BIGINT" />
+    <result column="sender_district_id" property="senderDistrictId" jdbcType="BIGINT" />
+    <result column="company_id" property="companyId" jdbcType="BIGINT" />
+    <result column="company_code" property="companyCode" jdbcType="VARCHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
+    <result column="express_status" property="expressStatus" jdbcType="INTEGER" />
+    <result column="express_way" property="expressWay" jdbcType="INTEGER" />
+    <result column="into_box_time" property="intoBoxTime" jdbcType="TIMESTAMP" />
+    <result column="customer_id" property="customerId" jdbcType="BIGINT" />
+    <result column="service_amt" property="serviceAmt" jdbcType="DECIMAL" />
+    <result column="express_type" property="expressType" jdbcType="INTEGER" />
+    <result column="help_receive_code" property="helpReceiveCode" jdbcType="VARCHAR" />
+    <result column="help_receive_addr" property="helpReceiveAddr" jdbcType="VARCHAR" />
+    <result column="express_weight" property="expressWeight" jdbcType="DECIMAL" />
+    <result column="help_distribution_type" property="helpDistributionType" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="re_order_service_amt" property="reOrderServiceAmt" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List">
         id,
         code,
         sender_phone,
@@ -61,326 +61,380 @@
         remark,
         re_order_service_amt
     </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
-        select
-        <include refid="Base_Column_List"/>
-        from express_receive
-        where id = #{id,jdbcType=BIGINT}
-    </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    select
+    <include refid="Base_Column_List" />
+    from express_receive
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from express_receive
         where id = #{id,jdbcType=BIGINT}
     </delete>
-    <insert id="insert" parameterType="com.school.biz.domain.entity.express.ExpressReceive">
+  <insert id="insert" parameterType="com.school.biz.domain.entity.express.ExpressReceive">
 
-    </insert>
-    <insert id="insertSelective" keyProperty="id" useGeneratedKeys="true"
-            parameterType="com.school.biz.domain.entity.express.ExpressReceive">
-        insert into express_receive
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="code != null">
-                code,
-            </if>
-            <if test="senderPhone != null">
-                sender_phone,
-            </if>
-            <if test="senderName != null">
-                sender_name,
-            </if>
-            <if test="senderAddr != null">
-                sender_addr,
-            </if>
-            <if test="receiverPhone != null">
-                receiver_phone,
-            </if>
-            <if test="receiverName != null">
-                receiver_name,
-            </if>
-            <if test="receiverAddr != null">
-                receiver_addr,
-            </if>
-            <if test="senderProvinceId != null">
-                sender_province_id,
-            </if>
-            <if test="senderCityId != null">
-                sender_city_id,
-            </if>
-            <if test="senderDistrictId != null">
-                sender_district_id,
-            </if>
-            <if test="companyId != null">
-                company_id,
-            </if>
-            <if test="companyCode != null">
-                company_code,
-            </if>
-            <if test="companyName != null">
-                company_name,
-            </if>
-            <if test="expressStatus != null">
-                express_status,
-            </if>
-            <if test="expressWay != null">
-                express_way,
-            </if>
-            <if test="customerId != null">
-                customer_id,
-            </if>
-            <if test="serviceAmt != null">
-                service_amt,
-            </if>
-            <if test="expressType != null">
-                express_type,
-            </if>
-            <if test="helpReceiveCode != null">
-                help_receive_code,
-            </if>
-            <if test="helpReceiveAddr != null">
-                help_receive_addr,
-            </if>
-            <if test="expressWeight != null">
-                express_weight,
-            </if>
-            <if test="helpDistributionType != null">
-                help_distribution_type,
-            </if>
-            <if test="remark != null">
-                remark,
-            </if>
-            <if test="reOrderServiceAmt != null">
-                re_order_service_amt,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="code != null">
-                #{code,jdbcType=VARCHAR},
-            </if>
-            <if test="senderPhone != null">
-                #{senderPhone,jdbcType=VARCHAR},
-            </if>
-            <if test="senderName != null">
-                #{senderName,jdbcType=VARCHAR},
-            </if>
-            <if test="senderAddr != null">
-                #{senderAddr,jdbcType=VARCHAR},
-            </if>
-            <if test="receiverPhone != null">
-                #{receiverPhone,jdbcType=VARCHAR},
-            </if>
-            <if test="receiverName != null">
-                #{receiverName,jdbcType=VARCHAR},
-            </if>
-            <if test="receiverAddr != null">
-                #{receiverAddr,jdbcType=VARCHAR},
-            </if>
-            <if test="senderProvinceId != null">
-                #{senderProvinceId,jdbcType=BIGINT},
-            </if>
-            <if test="senderCityId != null">
-                #{senderCityId,jdbcType=BIGINT},
-            </if>
-            <if test="senderDistrictId != null">
-                #{senderDistrictId,jdbcType=BIGINT},
-            </if>
-            <if test="companyId != null">
-                #{companyId,jdbcType=BIGINT},
-            </if>
-            <if test="companyCode != null">
-                #{companyCode,jdbcType=VARCHAR},
-            </if>
-            <if test="companyName != null">
-                #{companyName,jdbcType=VARCHAR},
-            </if>
-            <if test="expressStatus != null">
-                #{expressStatus,jdbcType=INTEGER},
-            </if>
-            <if test="expressWay != null">
-                #{expressWay,jdbcType=INTEGER},
-            </if>
-            <if test="customerId != null">
-                #{customerId,jdbcType=INTEGER},
-            </if>
-            <if test="serviceAmt != null">
-                #{serviceAmt,jdbcType=DECIMAL},
-            </if>
-            <if test="expressType != null">
-                #{expressType,jdbcType=INTEGER},
-            </if>
-            <if test="helpReceiveCode != null">
-                #{helpReceiveCode,jdbcType=VARCHAR},
-            </if>
-            <if test="helpReceiveAddr != null">
-                #{helpReceiveAddr,jdbcType=VARCHAR},
-            </if>
-            <if test="expressWeight != null">
-                #{expressWeight,jdbcType=DECIMAL},
-            </if>
-            <if test="helpDistributionType != null">
-                #{helpDistributionType,jdbcType=VARCHAR},
-            </if>
-            <if test="remark != null">
-                #{remark,jdbcType=VARCHAR},
-            </if>
-            <if test="reOrderServiceAmt != null">
-                #{reOrderServiceAmt,jdbcType=DECIMAL},
-            </if>
-        </trim>
-    </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.school.biz.domain.entity.express.ExpressReceive">
-        update express_receive
-        <set>
-            <if test="code != null">
-                code = #{code,jdbcType=VARCHAR},
-            </if>
-            <if test="senderPhone != null">
-                sender_phone = #{senderPhone,jdbcType=VARCHAR},
-            </if>
-            <if test="senderName != null">
-                sender_name = #{senderName,jdbcType=VARCHAR},
-            </if>
-            <if test="senderAddr != null">
-                sender_addr = #{senderAddr,jdbcType=VARCHAR},
-            </if>
-            <if test="receiverPhone != null">
-                receiver_phone = #{receiverPhone,jdbcType=VARCHAR},
-            </if>
-            <if test="receiverName != null">
-                receiver_name = #{receiverName,jdbcType=VARCHAR},
-            </if>
-            <if test="receiverAddr != null">
-                receiver_addr = #{receiverAddr,jdbcType=VARCHAR},
-            </if>
-            <if test="senderProvinceId != null">
-                sender_province_id = #{senderProvinceId,jdbcType=BIGINT},
-            </if>
-            <if test="senderCityId != null">
-                sender_city_id = #{senderCityId,jdbcType=BIGINT},
-            </if>
-            <if test="senderDistrictId != null">
-                sender_district_id = #{senderDistrictId,jdbcType=BIGINT},
-            </if>
-            <if test="companyId != null">
-                company_id = #{companyId,jdbcType=BIGINT},
-            </if>
-            <if test="companyCode != null">
-                company_code = #{companyCode,jdbcType=VARCHAR},
-            </if>
-            <if test="companyName != null">
-                company_name = #{companyName,jdbcType=VARCHAR},
-            </if>
-            <if test="isDeleted != null">
-                is_deleted = #{isDeleted,jdbcType=BIT},
-            </if>
-            <if test="expressStatus != null">
-                express_status = #{expressStatus,jdbcType=INTEGER},
-            </if>
-            <if test="expressWay != null">
-                express_way = #{expressWay,jdbcType=INTEGER},
-            </if>
-            <if test="intoBoxTime != null">
-                into_box_time = #{intoBoxTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="serviceAmt != null">
-                service_amt = #{serviceAmt,jdbcType=DECIMAL},
-            </if>
-            <if test="expressType != null">
-                express_type = #{expressType,jdbcType=INTEGER},
-            </if>
-            <if test="helpReceiveCode != null">
-                help_receive_code = #{helpReceiveCode,jdbcType=VARCHAR},
-            </if>
-            <if test="helpReceiveAddr != null">
-                help_receive_addr = #{helpReceiveAddr,jdbcType=VARCHAR},
-            </if>
-            <if test="expressWeight != null">
-                express_weight = #{expressWeight,jdbcType=DECIMAL},
-            </if>
-            <if test="helpDistributionType != null">
-                help_distribution_type = #{helpDistributionType,jdbcType=VARCHAR},
-            </if>
-            <if test="remark != null">
-                remark = #{remark,jdbcType=VARCHAR},
-            </if>
-            <if test="reOrderServiceAmt != null">
-                re_order_service_amt= #{reOrderServiceAmt,jdbcType=DECIMAL},
-            </if>
-        </set>
-        where id = #{id,jdbcType=BIGINT}
-    </update>
-    <update id="updateByPrimaryKey" parameterType="com.school.biz.domain.entity.express.ExpressReceive">
+  </insert>
+  <insert id="insertSelective" keyProperty="id" useGeneratedKeys="true"
+          parameterType="com.school.biz.domain.entity.express.ExpressReceive">
+    insert into express_receive
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        code,
+      </if>
+      <if test="senderPhone != null">
+        sender_phone,
+      </if>
+      <if test="senderName != null">
+        sender_name,
+      </if>
+      <if test="senderAddr != null">
+        sender_addr,
+      </if>
+      <if test="receiverPhone != null">
+        receiver_phone,
+      </if>
+      <if test="receiverName != null">
+        receiver_name,
+      </if>
+      <if test="receiverAddr != null">
+        receiver_addr,
+      </if>
+      <if test="senderProvinceId != null">
+        sender_province_id,
+      </if>
+      <if test="senderCityId != null">
+        sender_city_id,
+      </if>
+      <if test="senderDistrictId != null">
+        sender_district_id,
+      </if>
+      <if test="companyId != null">
+        company_id,
+      </if>
+      <if test="companyCode != null">
+        company_code,
+      </if>
+      <if test="companyName != null">
+        company_name,
+      </if>
+      <if test="expressStatus != null">
+        express_status,
+      </if>
+      <if test="expressWay != null">
+        express_way,
+      </if>
+      <if test="customerId != null">
+        customer_id,
+      </if>
+      <if test="serviceAmt != null">
+        service_amt,
+      </if>
+      <if test="expressType != null">
+        express_type,
+      </if>
+      <if test="helpReceiveCode != null">
+        help_receive_code,
+      </if>
+      <if test="helpReceiveAddr != null">
+        help_receive_addr,
+      </if>
+      <if test="expressWeight != null">
+        express_weight,
+      </if>
+      <if test="helpDistributionType != null">
+        help_distribution_type,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="reOrderServiceAmt != null">
+        re_order_service_amt,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="senderPhone != null">
+        #{senderPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="senderName != null">
+        #{senderName,jdbcType=VARCHAR},
+      </if>
+      <if test="senderAddr != null">
+        #{senderAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverPhone != null">
+        #{receiverPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverName != null">
+        #{receiverName,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverAddr != null">
+        #{receiverAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="senderProvinceId != null">
+        #{senderProvinceId,jdbcType=BIGINT},
+      </if>
+      <if test="senderCityId != null">
+        #{senderCityId,jdbcType=BIGINT},
+      </if>
+      <if test="senderDistrictId != null">
+        #{senderDistrictId,jdbcType=BIGINT},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=BIGINT},
+      </if>
+      <if test="companyCode != null">
+        #{companyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="expressStatus != null">
+        #{expressStatus,jdbcType=INTEGER},
+      </if>
+      <if test="expressWay != null">
+        #{expressWay,jdbcType=INTEGER},
+      </if>
+      <if test="customerId != null">
+        #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="serviceAmt != null">
+        #{serviceAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="expressType != null">
+        #{expressType,jdbcType=INTEGER},
+      </if>
+      <if test="helpReceiveCode != null">
+        #{helpReceiveCode,jdbcType=VARCHAR},
+      </if>
+      <if test="helpReceiveAddr != null">
+        #{helpReceiveAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="expressWeight != null">
+        #{expressWeight,jdbcType=DECIMAL},
+      </if>
+      <if test="helpDistributionType != null">
+        #{helpDistributionType,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="reOrderServiceAmt != null">
+        #{reOrderServiceAmt,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.school.biz.domain.entity.express.ExpressReceive">
+    update express_receive
+    <set>
+      <if test="code != null">
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="senderPhone != null">
+        sender_phone = #{senderPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="senderName != null">
+        sender_name = #{senderName,jdbcType=VARCHAR},
+      </if>
+      <if test="senderAddr != null">
+        sender_addr = #{senderAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverPhone != null">
+        receiver_phone = #{receiverPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverName != null">
+        receiver_name = #{receiverName,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverAddr != null">
+        receiver_addr = #{receiverAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="senderProvinceId != null">
+        sender_province_id = #{senderProvinceId,jdbcType=BIGINT},
+      </if>
+      <if test="senderCityId != null">
+        sender_city_id = #{senderCityId,jdbcType=BIGINT},
+      </if>
+      <if test="senderDistrictId != null">
+        sender_district_id = #{senderDistrictId,jdbcType=BIGINT},
+      </if>
+      <if test="companyId != null">
+        company_id = #{companyId,jdbcType=BIGINT},
+      </if>
+      <if test="companyCode != null">
+        company_code = #{companyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=BIT},
+      </if>
+      <if test="expressStatus != null">
+        express_status = #{expressStatus,jdbcType=INTEGER},
+      </if>
+      <if test="expressWay != null">
+        express_way = #{expressWay,jdbcType=INTEGER},
+      </if>
+      <if test="intoBoxTime != null">
+        into_box_time = #{intoBoxTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="serviceAmt != null">
+        service_amt = #{serviceAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="expressType != null">
+        express_type = #{expressType,jdbcType=INTEGER},
+      </if>
+      <if test="helpReceiveCode != null">
+        help_receive_code = #{helpReceiveCode,jdbcType=VARCHAR},
+      </if>
+      <if test="helpReceiveAddr != null">
+        help_receive_addr = #{helpReceiveAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="expressWeight != null">
+        express_weight = #{expressWeight,jdbcType=DECIMAL},
+      </if>
+      <if test="helpDistributionType != null">
+        help_distribution_type = #{helpDistributionType,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="reOrderServiceAmt != null">
+        re_order_service_amt= #{reOrderServiceAmt,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.school.biz.domain.entity.express.ExpressReceive">
 
-    </update>
+  </update>
 
-    <select id="queryPage" resultType="com.school.biz.domain.entity.express.ExpressReceive" parameterType="map">
+  <select id="queryPage" resultType="com.school.biz.domain.entity.express.ExpressReceive" parameterType="map">
 
-    </select>
+  </select>
 
-    <!-- 管理台列表查询 -->
-    <select id="queryForManagerPage" resultType="com.school.biz.domain.entity.express.ExpressReceive"
-            parameterType="map">
-        select er.* from express_receive er
-        <where>
-            <if test="keyword != null and keyword != '' ">
-                and (er.code like concat('%',#{keyword},'%')
-                or er.sender_name like concat('%',#{keyword},'%')
-                or er.sender_phone like concat('%',#{keyword},'%')
-                or er.receiver_name like concat('%',#{keyword},'%')
-                or er.receiver_phone like concat('%',#{keyword},'%'))
-            </if>
-            <if test="status != null and status != ''">
-                and er.express_status = #{status,jdbcType=INTEGER}
-            </if>
-            <if test="companyId != null">
-                and er.company_id = #{companyId,jdbcType=BIGINT}
-            </if>
-        </where>
-        ORDER BY er.id desc
-    </select>
+  <!-- 管理台列表查询 -->
+  <select id="queryForManagerPage" resultType="com.school.biz.domain.entity.express.ExpressReceive"
+          parameterType="map">
+    select er.* from express_receive er
+    <where>
+      <if test="keyword != null and keyword != '' ">
+        and (er.code like concat('%',#{keyword},'%')
+        or er.sender_name like concat('%',#{keyword},'%')
+        or er.sender_phone like concat('%',#{keyword},'%')
+        or er.receiver_name like concat('%',#{keyword},'%')
+        or er.receiver_phone like concat('%',#{keyword},'%'))
+      </if>
+      <if test="status != null and status != ''">
+        and er.express_status = #{status,jdbcType=INTEGER}
+      </if>
+      <if test="companyId != null">
+        and er.company_id = #{companyId,jdbcType=BIGINT}
+      </if>
+    </where>
+    ORDER BY er.id desc
+  </select>
 
 
-    <select id="selectByParams" resultType="com.school.biz.domain.entity.express.ExpressReceive" parameterType="map">
-        select * from express_receive t where 1=1
-        <if test="phone != null and phone != '' ">
-            and t.receiver_phone=#{phone,jdbcType=VARCHAR}
-        </if>
-        <if test="customerId != null ">
-            and t.customer_id=#{customerId,jdbcType=BIGINT}
-        </if>
-        <if test="code != null and code != '' ">
-            and t.code=#{code,jdbcType=VARCHAR}
-        </if>
-        <if test="status != null">
-            and t.express_status in
-            <foreach collection="status" index="index" item="item" open="(" separator="," close=")">
-                #{item}
-            </foreach>
-        </if>
-        and t.is_deleted=0
-        order by t.id desc
-    </select>
+  <select id="selectByParams" resultType="com.school.biz.domain.entity.express.ExpressReceive"
+          parameterType="map">
+    select * from express_receive t where 1=1
+    <if test="phone != null and phone != '' ">
+      and t.receiver_phone=#{phone,jdbcType=VARCHAR}
+    </if>
+    <if test="customerId != null ">
+      and t.customer_id=#{customerId,jdbcType=BIGINT}
+    </if>
+    <if test="code != null and code != '' ">
+      and t.code=#{code,jdbcType=VARCHAR}
+    </if>
+    <if test="status != null">
+      and t.express_status in
+      <foreach collection="status" index="index" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+    and t.is_deleted=0
+    order by t.id desc
+  </select>
 
-    <update id="bindCustomerByPhone">
+  <update id="bindCustomerByPhone">
         update express_receive
         SET customer_id = #{customerId, jdbcType=BIGINT}
         where receiver_phone = #{phone,jdbcType=VARCHAR} AND customer_id is null
     </update>
 
-    <select id="findPushOpenIdByExpressStatus" parameterType="java.lang.Integer" resultType="map">
+  <select id="findPushOpenIdByExpressStatus" parameterType="java.lang.Integer" resultType="map">
         select c.open_id,t.created_time from express_receive t inner join customer c on c.id=t.customer_id
         where 1=1 and t.express_status=#{status,jdbcType=INTEGER} and t.is_deleted=0 and TIMESTAMPDIFF(MINUTE,t.created_time,now())>10
     </select>
 
-    <update id="updateIneffectiveToCancel">
+  <update id="updateIneffectiveToCancel">
          update express_receive t set t.express_status=#{cancel,jdbcType=INTEGER}
          where DATEDIFF(now(),t.created_time)>#{diff,jdbcType=INTEGER} and t.express_status=#{ineffective,jdbcType=INTEGER}
     </update>
 
-    <update id="addServiceAmt">
+  <update id="addServiceAmt">
         update express_receive t set t.service_amt = t.service_amt + #{amount,jdbcType=DECIMAL} where t.id=#{id,jdbcType=BIGINT}
     </update>
 
-    <update id="addReOrderServiceAmt">
+  <update id="addReOrderServiceAmt">
         update express_receive t set t.re_order_service_amt = t.re_order_service_amt + #{amount,jdbcType=DECIMAL} where t.id=#{id,jdbcType=BIGINT}
     </update>
 
+  <select id="count" parameterType="java.util.List" resultType="java.lang.Long">
+    select count(*) from express_receive t
+    where t.is_deleted=0
+    <if test="codes != null">
+      and t.code in
+      <foreach collection="codes" index="index" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+  </select>
+
+  <select id="list" parameterType="java.util.List" resultMap="BaseResultMap">
+    select t.code, t.company_id, t.receiver_phone from express_receive t
+    where t.is_deleted=0
+    <if test="codes != null">
+      and t.code in
+      <foreach collection="codes" index="index" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+  </select>
+
+
+  <insert id="batchInsert" parameterType="java.util.List">
+    INSERT INTO express_receive (
+    code,
+    company_id,
+    company_code,
+    company_name,
+    customer_id,
+    receiver_phone,
+    receiver_name,
+    receiver_addr,
+    express_status,
+    express_type,
+    express_weight)
+    VALUES
+    <foreach collection="list" item="item" index="index" separator=",">
+      (
+      #{item.code,jdbcType=VARCHAR},
+      #{item.companyId,jdbcType=BIGINT},
+      #{item.companyCode,jdbcType=VARCHAR},
+      #{item.companyName,jdbcType=VARCHAR},
+      #{item.customerId,jdbcType=BIGINT},
+      #{item.receiverPhone,jdbcType=VARCHAR},
+      #{item.receiverName,jdbcType=VARCHAR},
+      #{item.receiverAddr,jdbcType=VARCHAR},
+      #{item.expressStatus,jdbcType=INTEGER},
+      #{item.expressType,jdbcType=INTEGER},
+      #{item.expressWeight,jdbcType=DECIMAL}
+      )
+    </foreach>
+  </insert>
 </mapper>

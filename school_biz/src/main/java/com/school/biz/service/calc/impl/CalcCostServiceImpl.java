@@ -29,9 +29,8 @@ public class CalcCostServiceImpl implements CalcCostService {
 
     @Override
     public BigDecimal calcReceiveDistributionCost(int expressWay, BigDecimal expressWeight) {
-        if (expressWay == ReceiveExpressDistributionTypeEnum.DISTRIBUTION_BOX.getFlag() ||
-            expressWay == ReceiveExpressDistributionTypeEnum.DISTRIBUTION_DOOR.getFlag()) {
-            return calcHelpReceiveDistributionCost(expressWay, expressWeight).subtract(BigDecimal.valueOf(0.5));
+        if (expressWay == ReceiveExpressDistributionTypeEnum.DISTRIBUTION_DOOR.getFlag()) {
+            return calcHelpReceiveDistributionCost(expressWay, expressWeight).subtract(BigDecimal.valueOf(1));
         } else {
             return BigDecimal.ZERO;
         }

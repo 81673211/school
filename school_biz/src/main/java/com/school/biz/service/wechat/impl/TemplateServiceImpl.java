@@ -185,10 +185,15 @@ public class TemplateServiceImpl implements TemplateService {
                     switch (expressWay) {
                         case 0: remarkDistribution = "自提"; break;
                         case 1: remarkDistribution = "配送入柜"; break;
-                        case 3: remarkDistribution = "送货上门"; break;
+                        case 2: remarkDistribution = "送货上门"; break;
                         default: remarkDistribution = "自提"; break;
                     }
-                    String remark = "配送方式：" + remarkDistribution;
+                    String remark = "快递单号：" + expressReceive.getCode() + ", " +
+                                    "收件人姓名：" + expressReceive.getReceiverName() + " " +
+                                    "收件人电话：" + expressReceive.getReceiverPhone() + " " +
+                                    "收件人地址：" + expressReceive.getReceiverAddr() + " " +
+                                    "配送方式：" + remarkDistribution + " " +
+                                    "快递公司：" + expressReceive.getCompanyName();
                     templateData = new ReceiveExpressDistributionAlertTemplateData.Builder()
                             .buildKeyword3(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(expressReceive.getCreatedTime()))
                             .buildRemark(remark)
