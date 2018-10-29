@@ -511,6 +511,31 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfo, OrderInfoMa
     }
 
     @Override
+    public boolean isRefundAll(ExpressReceive expressReceive) {
+        boolean flag = true;
+        log.info("=======检测是否退全款========");
+        // 取出订单服务费
+        BigDecimal serviceAmt = expressReceive.getServiceAmt();
+
+        // 查询退款总金额
+        Map<String, Object> map2 = new HashMap<String, Object>();
+        map2.put("expressId", expressReceive.getId());
+        map2.put("expressType", ExpressTypeEnum.RECEIVE.getFlag());
+        List<RefundOrderInfo> refundOrderInfos =
+                refundOrderInfoMapper.findSuccessRefundOrdersByExpressIdAndExpressType(map2);
+        BigDecimal refundTotalAmt = new BigDecimal("0");
+        for (RefundOrderInfo refundOrderInfo : refundOrderInfos) {
+            refundTotalAmt = refundTotalAmt.add(refundOrderInfo.getAmount());
+        }
+
+        // 如果 服务费>退款金额，则不是退全款
+        if (serviceAmt.compareTo(refundTotalAmt) > 0) {
+            flag = false;
+        }
+        return flag;
+    }
+
+    @Override
     public BigDecimal findAllPriceByExpress(Long expressId) {
         return orderInfoMapper.findAllPriceByExpress(expressId);
     }

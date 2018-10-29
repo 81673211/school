@@ -31,6 +31,8 @@ public class CalcCostServiceImpl implements CalcCostService {
     public BigDecimal calcReceiveDistributionCost(int expressWay, BigDecimal expressWeight) {
         if (expressWay == ReceiveExpressDistributionTypeEnum.DISTRIBUTION_DOOR.getFlag()) {
             return calcHelpReceiveDistributionCost(expressWay, expressWeight).subtract(BigDecimal.valueOf(1));
+        } else if (expressWay == ReceiveExpressDistributionTypeEnum.DISTRIBUTION_BOX.getFlag()) {
+            return BigDecimal.valueOf(0.5);
         } else {
             return BigDecimal.ZERO;
         }

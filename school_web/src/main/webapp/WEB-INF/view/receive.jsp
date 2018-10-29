@@ -102,7 +102,7 @@
                                 <div>
                                     <button type="button" class="btn btn-sm info outline rounded"
                                             style="margin-bottom: 5px;width: 70px"
-                                            onclick="receiveWay(${item.id}, 1)">配送入柜
+                                            onclick="launchPay(${item.id}, 1)">配送入柜
                                     </button>
                                 </div>
                                 <div>
@@ -184,7 +184,7 @@
     }
 
     function receiveWay(id, way) {
-        var msg = (way == 0 ? "确认自提?" : "确认入柜?");
+        var msg = "确认自提?";
         if (confirm(msg)) {
             $.post("/express/1/modify", {"openId": '${openId}', "id": id, "expressWay": way}, function (result) {
                 window.location.reload();

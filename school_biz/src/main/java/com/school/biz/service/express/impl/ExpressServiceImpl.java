@@ -187,17 +187,35 @@ public class ExpressServiceImpl implements ExpressService {
 
     @Override
     public void updateExpressByRefund(RefundOrderInfo refundOrderInfo) throws RuntimeException {
-        ExpressSend sendExpress = expressSendService.getSendExpress(refundOrderInfo.getExpressId());
-        if (sendExpress == null) {
-            log.error("not find send express record,expressId:" + refundOrderInfo.getExpressId());
-            return;
+        Integer expressType = refundOrderInfo.getExpressType();
+        if (ExpressTypeEnum.RECEIVE.getFlag() == expressType) {
+            ExpressReceive receiveExpress = expressReceiveService.getReceiveExpress(
+                    refundOrderInfo.getExpressId());
+            if (receiveExpress == null) {
+                log.error("not find receive express record,expressId:" + refundOrderInfo.getExpressId());
+                return;
+            }
+            //是否全额退款
+            boolean flag = orderInfoService.isRefundAll(receiveExpress);
+            log.info("是否退全款：" + flag);
+            if (flag) {
+                expressReceiveService.updateReceiveExpressStatus(receiveExpress.getId(),
+                                                                 SendExpressStatusEnum.CANCEL.getFlag());
+            }
+        } else {
+            ExpressSend sendExpress = expressSendService.getSendExpress(refundOrderInfo.getExpressId());
+            if (sendExpress == null) {
+                log.error("not find send express record,expressId:" + refundOrderInfo.getExpressId());
+                return;
+            }
+            //是否全额退款
+            boolean flag = orderInfoService.isRefundAll(sendExpress);
+            log.info("是否退全款：" + flag);
+            if (flag) {
+                expressSendService.updateSendExpressStatus(sendExpress.getId(), SendExpressStatusEnum.CANCEL.getFlag());
+            }
         }
-        //是否全额退款
-        boolean flag = orderInfoService.isRefundAll(sendExpress);
-        log.info("是否退全款：" + flag);
-        if (flag) {
-            expressSendService.updateSendExpressStatus(sendExpress.getId(), SendExpressStatusEnum.CANCEL.getFlag());
-        }
+
     }
 
     @Override

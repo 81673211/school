@@ -66,6 +66,8 @@ public interface OrderInfoService extends BaseService<OrderInfo, OrderInfoMapper
      */
     boolean isRefundAll(ExpressSend expressSend);
 
+    boolean isRefundAll(ExpressReceive expressReceive);
+
     /**
      * 填充订单中的快递号
      *
