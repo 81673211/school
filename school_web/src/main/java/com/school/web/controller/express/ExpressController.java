@@ -123,9 +123,6 @@ public class ExpressController extends BaseEasyWebController {
             if (expressReceive.getExpressWay() == ReceiveExpressDistributionTypeEnum.DISTRIBUTION_BOX.getFlag() ||
                 (expressReceive.getExpressWay() == ReceiveExpressDistributionTypeEnum.DISTRIBUTION_DOOR.getFlag())) {
                 String orderNo = orderInfoService.createReceiveOrder(expressVo.getId(), expressVo.getExpressWay());
-                expressReceive = expressReceiveService.get(expressVo.getId());
-                templateService.send(WechatTemplateEnum.RECEIVE_EXPRESS_DISTRIBUTION_ALERT.getType(),
-                                     expressVo.getOpenId(), expressReceive, ExpressTypeEnum.RECEIVE.getFlag());
                 return new DataResponse().writeSuccess(orderNo);
             } else {
                 return response.writeSuccess("编辑收件快件成功");

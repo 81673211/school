@@ -190,6 +190,17 @@ public class ExpressReceiveServiceImpl extends BaseServiceImpl<ExpressReceive, E
             log.error(msg);
             throw new RuntimeException(msg);
         }
+
+        if (ReceiveExpressTypeEnum.HELP_RECEIVE.getFlag() == expressReceive.getExpressType()) {
+            templateService.send(WechatTemplateEnum.RECEIVE_EXPRESS_ARRIVAL_ALERT.getType(),
+                                 null, expressReceive, ExpressTypeEnum.RECEIVE.getFlag());
+        } else {
+            if (ReceiveExpressDistributionTypeEnum.DISTRIBUTION_DOOR.getFlag() == expressReceive.getExpressWay() ||
+                ReceiveExpressDistributionTypeEnum.DISTRIBUTION_BOX.getFlag() == expressReceive.getExpressWay()) {
+                templateService.send(WechatTemplateEnum.RECEIVE_EXPRESS_DISTRIBUTION_ALERT.getType(),
+                                     null, expressReceive, ExpressTypeEnum.RECEIVE.getFlag());
+            }
+        }
     }
 
     @Override

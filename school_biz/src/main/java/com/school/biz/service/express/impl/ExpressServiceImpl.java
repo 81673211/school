@@ -122,7 +122,6 @@ public class ExpressServiceImpl implements ExpressService {
                 } else {
                     //收件非补单支付
                     expressReceiveService.updateReceiveExpress(expressId);
-                    alertAdmin(orderInfo);
                 }
             } else {
                 log.error("not support express type:" + expressId);
@@ -164,24 +163,6 @@ public class ExpressServiceImpl implements ExpressService {
         if (customer != null) {
             templateService.send(WechatTemplateEnum.SEND_EXPRESS_ARRIVAL_ALERT.getType(),
                     customer.getOpenId(), sendExpress, ExpressTypeEnum.SEND.getFlag());
-        }
-    }
-
-    private void alertAdmin(OrderInfo orderInfo) {
-        ExpressReceive receiveExpress = expressReceiveService.getReceiveExpress(orderInfo.getExpressId());
-        if (receiveExpress != null) {
-            if (ReceiveExpressTypeEnum.HELP_RECEIVE.getFlag() == receiveExpress.getExpressType()) {
-                Customer customer = customerService.get(receiveExpress.getCustomerId());
-                if (customer != null) {
-                    templateService.send(WechatTemplateEnum.RECEIVE_EXPRESS_ARRIVAL_ALERT.getType(),
-                                         customer.getOpenId(), receiveExpress, ExpressTypeEnum.RECEIVE.getFlag());
-                }
-            } else {
-                if (ReceiveExpressDistributionTypeEnum.DISTRIBUTION_DOOR.getFlag() == receiveExpress.getExpressWay() ||
-                        ReceiveExpressDistributionTypeEnum.DISTRIBUTION_BOX.getFlag() == receiveExpress.getExpressWay()) {
-                    templateService.send(WechatTemplateEnum.RECEIVE_EXPRESS_DISTRIBUTION_ALERT.getType(), null, receiveExpress, ExpressTypeEnum.RECEIVE.getFlag());
-                }
-            }
         }
     }
 
