@@ -210,8 +210,7 @@ public class TemplateServiceImpl implements TemplateService {
         List<String> openIds = Arrays.asList("oSAxK1AbsZRXwr3asjyMhCdVD8UI", //me
                                              "oSAxK1BqVfUy1gFW_1HtISgQ4VhY", //王玲
                                              "oSAxK1AzsFiwmlYZzmz4Q-089vIo", //陈靖
-                                             "oSAxK1ED-3bFrTDVJdy-U1JZi-Ws", //李姝锦
-                                             "oSAxK1B8Mt5n4juL5062PD1NfNrk"); //贾曼
+                                             "oSAxK1ED-3bFrTDVJdy-U1JZi-Ws"); //贾曼
         Template template;
         for (String id : openIds) {
             template = new Template.Builder()
