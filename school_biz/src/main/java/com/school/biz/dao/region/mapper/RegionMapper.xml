@@ -7,6 +7,9 @@
         <result column="parent_id" property="parentId" jdbcType="BIGINT"/>
         <result column="sf_fir_fee" property="sfFirFee" jdbcType="DECIMAL"/>
         <result column="ys_fir_fee" property="ysFirFee" jdbcType="DECIMAL"/>
+        <result column="zt_fir_fee" property="ztFirFee" jdbcType="DECIMAL"/>
+        <result column="yd_fir_fee" property="ydFirFee" jdbcType="DECIMAL"/>
+        <result column="bs_fir_fee" property="bsFirFee" jdbcType="DECIMAL"/>
         <result column="other_fir_fee" property="otherFirFee" jdbcType="DECIMAL"/>
     </resultMap>
     <sql id="Base_Column_List">
@@ -15,6 +18,9 @@
         parent_id,
         sf_fir_fee,
         ys_fir_fee,
+        zt_fir_fee,
+        yd_fir_fee,
+        bs_fir_fee,
         other_fir_fee
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">

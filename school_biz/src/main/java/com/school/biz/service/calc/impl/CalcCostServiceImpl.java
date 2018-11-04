@@ -60,6 +60,12 @@ public class CalcCostServiceImpl implements CalcCostService {
         String companyShortName;
         if (companyId == 2) {
             companyShortName = ":sf";
+        } else if (companyId == 6) {
+            companyShortName = ":yd";
+        } else if (companyId == 7) {
+            companyShortName = ":zt";
+        } else if (companyId == 8) {
+            companyShortName = ":bs";
         } else if (companyId == 12) {
             companyShortName = ":ys";
         } else {

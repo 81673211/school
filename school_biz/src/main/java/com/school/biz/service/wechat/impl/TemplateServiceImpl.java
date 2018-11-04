@@ -133,6 +133,7 @@ public class TemplateServiceImpl implements TemplateService {
                                   "收件人电话：" + expressSend.getReceiverPhone() + " " +
                                   "寄件人姓名：" + expressSend.getSenderName() + " " +
                                   "寄件人电话：" + expressSend.getSenderPhone() + " " +
+                                  "寄件人地址：" + expressSend.getSenderAddr() + " " +
                                   "状态：" + status;
                     Integer sendExpressType = expressSend.getExpressType();
                     String sendExpressTypeName;
@@ -167,6 +168,7 @@ public class TemplateServiceImpl implements TemplateService {
                     String helpReceiveCode = expressReceive.getHelpReceiveCode();
                     String realCode = helpReceiveCode == null ? "无" : helpReceiveCode;
                     String remark = "快递单号：" + expressReceive.getCode() + ", " +
+                                    "收件人地址：" + expressReceive.getReceiverAddr() + ", " +
                                     "收件人姓名：" + expressReceive.getReceiverName() + " " +
                                     "收件人电话：" + expressReceive.getReceiverPhone() + " " +
                                     "快递公司：" + expressReceive.getCompanyName() + " " +
@@ -209,8 +211,7 @@ public class TemplateServiceImpl implements TemplateService {
     private void batchSend(String templateId, TemplateData templateData) {
         List<String> openIds = Arrays.asList("oSAxK1AbsZRXwr3asjyMhCdVD8UI", //me
                                              "oSAxK1BqVfUy1gFW_1HtISgQ4VhY", //王玲
-                                             "oSAxK1AzsFiwmlYZzmz4Q-089vIo", //陈靖
-                                             "oSAxK1ED-3bFrTDVJdy-U1JZi-Ws"); //贾曼
+                                             "oSAxK1ED-3bFrTDVJdy-U1JZi-Ws"); //李姝锦
         Template template;
         for (String id : openIds) {
             template = new Template.Builder()

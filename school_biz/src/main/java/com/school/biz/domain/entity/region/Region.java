@@ -15,5 +15,8 @@ public class Region {
 
     private BigDecimal sfFirFee;
     private BigDecimal ysFirFee;
+    private BigDecimal ztFirFee;
+    private BigDecimal ydFirFee;
+    private BigDecimal bsFirFee;
     private BigDecimal otherFirFee;
 }

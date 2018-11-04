@@ -63,9 +63,12 @@ public class RegionCache {
             for (Region region : regions) {
                 BigDecimal sfFee = region.getSfFirFee();
                 if (sfFee != null) {
+                    feeMap.put(region.getId() + ":other", region.getOtherFirFee().toString());
                     feeMap.put(region.getId() + ":sf", sfFee.toString());
                     feeMap.put(region.getId() + ":ys", region.getYsFirFee().toString());
-                    feeMap.put(region.getId() + ":other", region.getOtherFirFee().toString());
+                    feeMap.put(region.getId() + ":zt", region.getZtFirFee().toString());
+                    feeMap.put(region.getId() + ":yd", region.getYdFirFee().toString());
+                    feeMap.put(region.getId() + ":bs", region.getBsFirFee().toString());
                 }
 
             }
