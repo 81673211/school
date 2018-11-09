@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -168,6 +169,7 @@ public class TemplateServiceImpl implements TemplateService {
                     String helpReceiveCode = expressReceive.getHelpReceiveCode();
                     String realCode = helpReceiveCode == null ? "无" : helpReceiveCode;
                     String remark = "快递单号：" + expressReceive.getCode() + ", " +
+                                    "配送方式：" + getDistributionType(expressReceive.getHelpDistributionType()) + ", " +
                                     "收件人地址：" + expressReceive.getReceiverAddr() + ", " +
                                     "收件人姓名：" + expressReceive.getReceiverName() + " " +
                                     "收件人电话：" + expressReceive.getReceiverPhone() + " " +
@@ -208,9 +210,19 @@ public class TemplateServiceImpl implements TemplateService {
 
     }
 
+    private String getDistributionType(String orig) {
+        if (StringUtils.isBlank(orig)) {
+            return "";
+        } else if ("door".equals(orig)) {
+            return "送货上门";
+        } else {
+            return "入柜";
+        }
+    }
+
     private void batchSend(String templateId, TemplateData templateData) {
-        List<String> openIds = Arrays.asList("oSAxK1AbsZRXwr3asjyMhCdVD8UI", //me
-                                             "oSAxK1BqVfUy1gFW_1HtISgQ4VhY", //王玲
+        List<String> openIds = Arrays.asList("oSAxK1BqVfUy1gFW_1HtISgQ4VhY", //王玲
+                                             "oSAxK1EzD7Qk6txf9nHKYOzHD8Vk", //别踩井盖
                                              "oSAxK1ED-3bFrTDVJdy-U1JZi-Ws"); //李姝锦
         Template template;
         for (String id : openIds) {

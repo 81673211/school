@@ -12,7 +12,6 @@
           data:${listData},
           expressReceiveStatusMap:${expressReceiveStatusMap},
           expressTypeMap:${expressTypeMap},
-          helpDistributionTypeMap:${helpDistributionTypeMap},
           expressWayMap:${expressWayMap},
           companyMap:${companyMap},
           inputStatus:"${searchParams.status}",

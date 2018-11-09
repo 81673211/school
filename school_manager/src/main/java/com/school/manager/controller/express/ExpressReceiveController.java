@@ -30,7 +30,6 @@ import com.school.biz.domain.entity.express.ExpressCompany;
 import com.school.biz.domain.entity.express.ExpressReceive;
 import com.school.biz.enumeration.ExpressLogActionEnum;
 import com.school.biz.enumeration.ExpressTypeEnum;
-import com.school.biz.enumeration.HelpDistributionTypeEnum;
 import com.school.biz.enumeration.ReceiveExpressDistributionTypeEnum;
 import com.school.biz.enumeration.ReceiveExpressStatusEnum;
 import com.school.biz.enumeration.ReceiveExpressTypeEnum;
@@ -84,7 +83,6 @@ public class ExpressReceiveController extends BaseEasyWebController {
             mav.addObject("listData", JSON.toJSON(expressReceiveService.queryPage(searchParams)));
             mav.addObject("expressReceiveStatusMap", JSON.toJSON(ReceiveExpressStatusEnum.getAllStatusEnum()));
             mav.addObject("expressTypeMap", JSON.toJSON(ReceiveExpressTypeEnum.getAllTypeEnum()));
-            mav.addObject("helpDistributionTypeMap", JSON.toJSON(HelpDistributionTypeEnum.getAllTypeEnum()));
             mav.addObject("expressWayMap", JSON.toJSON(ReceiveExpressDistributionTypeEnum.getAllTypeEnum()));
 
             List<ExpressCompany> companies = expressCompanyService.findAllCooperate();
