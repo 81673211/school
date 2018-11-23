@@ -221,9 +221,8 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     private void batchSend(String templateId, TemplateData templateData) {
-        List<String> openIds = Arrays.asList("oSAxK1BqVfUy1gFW_1HtISgQ4VhY", //王玲
-                                             "oSAxK1EzD7Qk6txf9nHKYOzHD8Vk", //别踩井盖
-                                             "oSAxK1ED-3bFrTDVJdy-U1JZi-Ws"); //李姝锦
+        List<String> openIds = Arrays.asList("oSAxK1I852OOyFfOn0K_cuyLQ9JU",  //13890341111
+                                             "oSAxK1IauWtSFCF94H1N1HpuYVe4"); //18009005245
         Template template;
         for (String id : openIds) {
             template = new Template.Builder()
