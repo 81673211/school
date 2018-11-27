@@ -222,7 +222,8 @@ public class TemplateServiceImpl implements TemplateService {
 
     private void batchSend(String templateId, TemplateData templateData) {
         List<String> openIds = Arrays.asList("oSAxK1I852OOyFfOn0K_cuyLQ9JU",  //13890341111
-                                             "oSAxK1IauWtSFCF94H1N1HpuYVe4"); //18009005245
+                                             "oSAxK1IauWtSFCF94H1N1HpuYVe4",  //18009005245
+                                             "oSAxK1AdEPlRdb8XHpYcT58uDieM"); //15700627990
         Template template;
         for (String id : openIds) {
             template = new Template.Builder()
